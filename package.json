@@ -1,0 +1,15 @@
+{
+  "name": "opentok",
+  "description": "OpenTokSDK for node.js",
+  "version": "0.1.0",
+  "homepage": "http://github.com/bsstoner/opentok",
+  "repository": "http://github.com/bsstoner/opentok.git",
+  "author": "Brian Stoner <bsstoner@gmail.com> (http://brianstoner.com)",
+  "main": "./lib/opentok",
+  "directories": {
+    "lib": "lib"
+  },
+  "engines": {
+    "node": "*"
+  }
+}
