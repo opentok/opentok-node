@@ -5,8 +5,8 @@ var http = require('http')
 
   // opentok:
   , opentok = require('opentok')
-  , OPENTOK_API_KEY = 'xxxx' // add your API key here
-  , OPENTOK_API_SECRET = 'xxxx' // and your secret here
+  , OPENTOK_API_KEY = 'XXXX' // add your API key here
+  , OPENTOK_API_SECRET = 'XXXX' // and your secret here
   , globalSession;
 
 
@@ -34,7 +34,10 @@ server = http.createServer(function(req, res){
         renderExampleHTML(
           OPENTOK_API_KEY,
           globalSession.sessionId,
-          ot.generateToken()
+          ot.generateToken({
+            'connection_data': "userid_" + new Date().getTime(),
+            'role': "publisher"
+          })
         )
       );
       res.end();

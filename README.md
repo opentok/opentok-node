@@ -16,9 +16,11 @@ versions of node.js < 0.4.0
       , globalSession;
 
     // creating an instance of the SDK:
+
     var ot = new opentok.OpenTokSDK('apikey','apisecret')
 
     // creating a video chat session for everyone:
+
     ot.createSession('localhost',{},function(session){
       globalSession = session
     })
@@ -32,12 +34,19 @@ versions of node.js < 0.4.0
     // you can pass other tokbox params to generateToken, like what role that user should have (default is PUBLISHER):
 
     ot.generateToken({
-      sessionId:globalSession.sessionId,
-      role: opentok.RoleConstants.MODERATOR
-    })
+      session: globalSession,
+      role: "moderator",
+      connection_data: "userid_" + new Date().getTime()
+    });
 
 
   There is a basic working example in examples/app.js
+
+## Release Notes
+
+ *v0.1.2*
+
+   - Added support for any parameters to be passed into generateToken()
 
 ## Questions?
 
