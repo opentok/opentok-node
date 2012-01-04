@@ -3,9 +3,6 @@
   node.js version of OpenTok's Server Side SDK, ported from their
 Python/Ruby versions.
 
-  NOTE:  This uses the newer node.js https module, I haven't tested it in 
-versions of node.js < 0.4.0
-
 ## Install
 
     npm install opentok
@@ -42,11 +39,6 @@ versions of node.js < 0.4.0
 
   There is a basic working example in examples/app.js
 
-## Release Notes
-
- *v0.1.2*
-
-   - Added support for any parameters to be passed into generateToken()
 
 ## Questions?
 
