@@ -48,3 +48,6 @@ Python/Ruby versions.
   OpenTok Dev Mailing List:
   http://groups.google.com/group/opentok-developers
 
+## Want to contribute?
+### To run test suite:
+    jasmine-node --coffee --autotest spec/
