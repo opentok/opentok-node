@@ -6,8 +6,7 @@ var http = require('http')
   // opentok:
   , opentok = require('opentok')
   , OPENTOK_API_KEY = 'XXXX' // add your API key here
-  , OPENTOK_API_SECRET = 'XXXX' // and your secret here
-  , globalSession;
+  , OPENTOK_API_SECRET = 'XXXX'; // and your secret here
 
 
 // create a single instance of opentok sdk.
@@ -18,12 +17,6 @@ var ot = new opentok.OpenTokSDK(OPENTOK_API_KEY,OPENTOK_API_SECRET)
 //
 // ot.setEnvironment("staging.tokbox.com")
 
-// for our example, we're just creating a single global session, and will generate
-// a unique token for each page request
-ot.createSession('localhost',{},function(session){
-  globalSession = session;
-})
-
 server = http.createServer(function(req, res){
   var path = url.parse(req.url).pathname;
 
@@ -33,7 +26,7 @@ server = http.createServer(function(req, res){
       res.write(
         renderExampleHTML(
           OPENTOK_API_KEY,
-          globalSession.sessionId,
+          ot.sessionId,
           ot.generateToken({
             'connection_data': "userid_" + new Date().getTime(),
             'role': "publisher"
@@ -81,5 +74,14 @@ renderExampleHTML = function(apikey, sessionId, token){
   ].join("");
 }
 
-server.listen(8000);
+
+console.log("Connecting to TokBox to establish session");
+
+// for our example, we're just creating a single global session, and will generate
+// a unique token for each page request
+
+ot.createSession('localhost',{},function(sessionId){
+  server.listen(8000);
+  console.log("Session Created, server running on port 8000");
+})
 
