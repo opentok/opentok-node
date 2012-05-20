@@ -78,6 +78,14 @@ describe "Staging Environment", ->
       expect(token).not.toBeNull()
       expect(token.length).toBeGreaterThan(5)
 
+    it "should generate token containing input Data", ->
+      token = opentok.generateToken({sessionId:sessionId, role:OpenTok.RoleConstants.PUBLISHER, connection_data:"hello"})
+      token = token.substr(4,token.length)
+      tokenBuffer =  new Buffer(token,"base64").toString('ascii')
+      expect(tokenBuffer.split(OpenTok.RoleConstants.PUBLISHER).length).toBeGreaterThan(1)
+      expect(tokenBuffer.split('hello').length).toBeGreaterThan(1)
+
+
 describe "Production Environment", ->
   stagingKey = '11421872'
   stagingSecret = '296cebc2fc4104cd348016667ffa2a3909ec636f'
@@ -117,3 +125,7 @@ describe "Production Environment", ->
       p2p = chunks.substr(start.index + 5, (end.index - start.index - 5))
       result = p2p.match('enabled')
       queryFinished = true
+
+  describe 'Archiving', ->
+    sessionId = '1_MX4xMTQyMTg3Mn5-MjAxMi0wNS0xNyAwNToyMTowMy4xNzIxODcrMDA6MDB-MC45MjcwODMxNDIxNDd-'
+    console.log("TESTING ARCHIVING")
