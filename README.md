@@ -43,7 +43,7 @@ var opentok = new OpenTok.OpenTokSDK(key, secret, {API_URL:'https://api.opentok.
 ### Creating Sessions
 Use your `OpenTokSDK` object to create a `session_id`. See <http://www.tokbox.com/opentok/api/tools/documentation/api/server_side_libraries.html#create_session> for more details.
 `create_session` takes 2-3 parameters:  
-> location [string] -  give Opentok a hint on where you are running your application by specifiying an IP (e.g. '127.0.0.1')
+> location [string] -  give Opentok a hint on where you are running your application by specifiying an IP (e.g. '127.0.0.1')  
 > properties [object] - OPTIONAL. Set peer to peer as `enabled` or `disabled`  
 > callback [fn(sessionId)] - This is a function that handles the server response after session has been created. The result sessionId is a string.
 
