@@ -136,6 +136,6 @@ otArchive.downloadArchiveURL(vidID, function(resp){
 
 ## Want to contribute?
 ### To run test suite:
-    jasmine-node --coffee --autotest spec/
+    jasmine-node --coffee spec/
 
 
