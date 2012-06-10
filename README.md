@@ -91,9 +91,9 @@ To Download archived video, you must have an Archive ID (from the client), and a
 ### Get Archive Manifest
 With your **moderator token** and a OpenTokSDK object, you can generate a OpenTokArchive object, which contains information for all videos in the Archive  
 `OpenTokSDK.get_archive_manifest()` takes in 3 parameters: **archiveId** and **moderator token**, and a callback function
-> archive_id [string] - REQUIRED. Get this from the client that created the archive.
-> token [string] - REQUIRED. Get this from the client or the generate_token method.
-> handler [fn(tbarchive)] - REQUIRED. This function is triggered after it receives the Archive Manifest. The parameter is an `OpenTokArchive` object. The *resources* property of this object is array of `OpenTokArchiveVideoResource` objects, and each `OpenTokArchiveVideoResource` object represents a video in the archive.
+> archive_id [string] - REQUIRED. Get this from the client that created the archive.  
+> token [string] - REQUIRED. Get this from the client or the generate_token method.  
+> handler [fn(tbarchive)] - REQUIRED. This function is triggered after it receives the Archive Manifest. The parameter is an `OpenTokArchive` object. The *resources* property of this object is array of `OpenTokArchiveVideoResource` objects, and each `OpenTokArchiveVideoResource` object represents a video in the archive.  
 
 Example: (opentok is an OpentokSDK object)
 <pre>
@@ -117,7 +117,7 @@ opentok.get_archive_manifest(archiveId, token, function(tbarchive){
 
 ### Get Download URL
 `OpenTokArchive` objects have a `downloadArchiveURL(video_id, handler)` method that will return a URL string for downloading the video in the archive. Video files are FLV format.
-> video_id [string] - REQUIRED. The Video ID returned from OpenTokArchiveVideoResource.getId()
+> video_id [string] - REQUIRED. The Video ID returned from OpenTokArchiveVideoResource.getId()  
 > handler [fn(url)] - REQUIRED. This function is triggered after it receives the URL for video. The result is a URL string.  
 
 Example:
