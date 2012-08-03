@@ -46,7 +46,6 @@ Use your `OpenTokSDK` object to create a `session_id`. See <http://www.tokbox.co
 > location [string] -  give Opentok a hint on where you are running your application by specifiying an IP (e.g. '127.0.0.1')  
 > properties [object] - OPTIONAL. Set peer to peer as `enabled` or `disabled`  
 > callback [fn(sessionId)] - This is a function that handles the server response after session has been created. The result sessionId is a string.
->>>>>>> f79c4b3be1c5415f46ed84e0d6ee750591f426e1
 
 Example: P2P disabled (default)
 <pre>
@@ -62,7 +61,7 @@ Example: P2P enabled
 <pre>
 var location = '127.0.0.1'; // use an IP of 'localhost'
 var sessionId = '';
-opentok.create_session(location, {'p2p.preference':'enabled'}, function(result){
+opentok.createSession(location, {'p2p.preference':'enabled'}, function(result){
   sessionId = result;
 });
 </pre>
