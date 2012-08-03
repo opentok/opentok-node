@@ -2,7 +2,7 @@
 
 OpenTok is a free set of APIs from TokBox that enables websites to weave live group video communication into their online experience. With OpenTok you have the freedom and flexibility to create the most engaging web experience for your users. OpenTok is currently available as a JavaScript and ActionScript 3.0 library. Check out <http://www.tokbox.com/> and <http://www.tokbox.com/opentok/tools/js/gettingstarted> for more information.
 
-This is the official OpenTok NodeJS Module.
+This is the OpenTok NodeJS Module.
 
 ## Installation
 
@@ -42,7 +42,7 @@ opentok = new OpenTok.OpenTokSDK(key, secret, {API_URL:'https://api.opentok.com/
 
 ### Creating Sessions
 Use your `OpenTokSDK` object to create `session_id`  
-`create_session` takes 2-3 parameters:  
+`createSession` takes 2-3 parameters:  
 > location (string) -  give Opentok a hint on where you are running your application  
 > properties (object) - OPTIONAL. Set peer to peer as `enabled` or `disabled`  
 > callback (sessionId) - This is a function that handles the server response after session has been created  
@@ -50,9 +50,9 @@ Use your `OpenTokSDK` object to create `session_id`
 Example: P2P disabled by default
 <pre>
 location = 'localhost'
-sessionId = ''
-opentok.create_session(location, function(result){
+opentok.createSession(location, function(result){
   sessionId = result;
+  // Do things with sessionId
 });
 </pre>
 
@@ -60,14 +60,14 @@ Example: P2P enabled
 <pre>
 location = 'localhost'
 sessionId = ''
-opentok.create_session(location, {'p2p.preference':'enabled'}, function(result){
+opentok.createSession(location, {'p2p.preference':'enabled'}, function(result){
   sessionId = result;
 });
 </pre>
 
 ### Generating Token
 With the generated session_id and an OpenTokSDK object, you can start generating tokens for each user.  
-`generate_token` takes in an object with 1-4 properties, and RETURNS a token:  
+`generateToken` takes in an object with 1-4 properties, and RETURNS a token:  
 > session_id (string) - REQUIRED. This token is tied to the session it is generated with  
 > role (string) - OPTIONAL. subscriber, publisher, or moderator  
 > expire_time (int) - OPTIONAL. Time when token will expire in unix timestamp  
@@ -75,7 +75,7 @@ With the generated session_id and an OpenTokSDK object, you can start generating
 
 Example:
 <pre>
-token = opentok.generate_token({sessionId:session_id, role:OpenTok.RoleConstants.PUBLISHER, connection_data:"hello"})
+token = opentok.generateToken({sessionId:session_id, role:OpenTok.RoleConstants.PUBLISHER, connection_data:"hello"})
 </pre>
 
 ### Downloading Archive Videos
@@ -90,7 +90,7 @@ To Download archived video, you must have an Archive ID which you get from the j
 
 ### Get Archive Manifest
 With your **moderator token** and OpentokSDK Object, you can generate OpenTokArchive Object, which contains information for all videos in the Archive  
-`get_archive_manifest()` takes in 3 parameters: **archiveId** and **moderator token**, and a handler function
+`getArchiveManifest()` takes in 3 parameters: **archiveId** and **moderator token**, and a handler function
 > archive_id (string) - REQUIRED. 
 > token - REQUIRED.  
 > handler (tbarchive) - REQUIRED. This function is triggered after it receives the Archive Manifest. The parameter is an `OpenTokArchive` object. The *resources* property of this object is array of `OpenTokArchiveVideoResource` objects, and each `OpenTokArchiveVideoResource` object represents a video in the archive.
@@ -100,7 +100,7 @@ Example:(Make sure you have the OpentokSDK Object)
 token = 'moderator_token'
 archiveId = '5f74aee5-ab3f-421b-b124-ed2a698ee939' #Obtained from Javascript Library
 
-opentok.get_archive_manifest(archiveId, token, function(tbarchive){
+opentok.getArchiveManifest(archiveId, token, function(tbarchive){
   otArchive = tbarchive
 });
 </pre>
@@ -111,7 +111,7 @@ opentok.get_archive_manifest(archiveId, token, function(tbarchive){
 
 Example:
 <pre>
-opentok.get_archive_manifest(archiveId, token, function(tbarchive){
+opentok.getArchiveManifest(archiveId, token, function(tbarchive){
   vid1 = tbarchive.resources[0].getId()
 });
 </pre>
