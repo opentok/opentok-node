@@ -1,20 +1,15 @@
 OpenTok = require('../lib/opentok')
 
-describe "Staging Environment", ->
-  stagingKey = '14971292'
-  stagingSecret = 'ecbe2b25afec7887bd72fe4763b87add8ce02658'
-  opentok = new OpenTok.OpenTokSDK(stagingKey, stagingSecret, {API_URL:'staging.tokbox.com'})
-
-  it "should pass in apikey, secret, and api_url", ->
-    expect(opentok.partnerId).toEqual(stagingKey)
-    expect(opentok.partnerSecret).toEqual(stagingSecret)
-    expect(opentok.api_url).toEqual('staging.tokbox.com')
+describe "Production Environment", ->
+  apiKey = '14971292'
+  apiSecret = 'ecbe2b25afec7887bd72fe4763b87add8ce02658'
+  opentok = new OpenTok.OpenTokSDK(apiKey, apiSecret)
 
   it "should auto set api_url defaults", ->
-    opentok = new OpenTok.OpenTokSDK(stagingKey, stagingSecret)
-    expect(opentok.partnerId).toEqual(stagingKey)
-    expect(opentok.partnerSecret).toEqual(stagingSecret)
-    expect(opentok.api_url).toEqual('staging.tokbox.com')
+    opentok = new OpenTok.OpenTokSDK(apiKey, apiSecret)
+    expect(opentok.partnerId).toEqual(apiKey)
+    expect(opentok.partnerSecret).toEqual(apiSecret)
+    expect(opentok.api_url).toEqual('api.opentok.com')
 
   it "should create session", ->
     sessionId = null
@@ -61,31 +56,6 @@ describe "Staging Environment", ->
       expect(tokenBuffer.split(OpenTok.RoleConstants.PUBLISHER).length).toBeGreaterThan(1)
       expect(tokenBuffer.split('hello').length).toBeGreaterThan(1)
       expect(tokenBuffer.split(sessionId).length).toBeGreaterThan(1)
-
-
-describe "Production Environment", ->
-  stagingKey = '11421872'
-  stagingSecret = '296cebc2fc4104cd348016667ffa2a3909ec636f'
-  opentok = new OpenTok.OpenTokSDK(stagingKey, stagingSecret, {API_URL:'https://api.opentok.com/hl'})
-
-  it "should pass in apikey, secret, and api_url", ->
-    expect(opentok.partnerId).toEqual(stagingKey)
-    expect(opentok.partnerSecret).toEqual(stagingSecret)
-    expect(opentok.api_url).toEqual('api.opentok.com')
-
-  it "should create session", ->
-    sessionId = null
-    queryFinished = false
-
-    waitsFor ->
-      return queryFinished
-    runs ->
-      expect(sessionId).not.toBeNull()
-      expect(sessionId.length).toBeGreaterThan(5)
-
-    opentok.createSession 'localhost', (result) ->
-      sessionId = result
-      queryFinished = true
 
   describe 'Archiving', ->
     sessionId = '1_MX4xNDk3MTI5Mn5-MjAxMi0wNS0yMCAwMTowMzozMS41MDEzMDArMDA6MDB-MC40NjI0MjI4MjU1MDF-'

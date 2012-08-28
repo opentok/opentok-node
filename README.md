@@ -20,24 +20,17 @@ To install as a regular npm package just type `npm install opentok`
 
 ### API key and API secret
 
-Request your API key and API secret at <http://www.tokbox.com/opentok/api/tools/js/apikey>. You can use the staging environment for development. This package uses this staging environment by default.
+Request your API key and API secret at <http://www.tokbox.com/opentok/api/tools/js/apikey>.
 
 ### OpenTokSDK
 
 In order to use any of the server side functions, you must first create an `OpenTokSDK` object with your developer credentials.  
-You must pass in your *API key* and *API secret*. If your app is in production, you must also pass in a object containing the `API_URL` property.  
-For more information about production apps, check out <http://www.tokbox.com/opentok/api/tools/documentation/overview/production.html#launching>.
+You must pass in your *API key* and *API secret*.
 
-Example: ( Staging )
 <pre>
 var key = '';    // Replace with your API key  
 var secret = '';  // Replace with your API secret  
 var opentok = new OpenTok.OpenTokSDK(key, secret);
-</pre>
-
-Example: ( Production )
-<pre>
-var opentok = new OpenTok.OpenTokSDK(key, secret, {API_URL:'https://api.opentok.com/hl'});
 </pre>
 
 ### Creating Sessions

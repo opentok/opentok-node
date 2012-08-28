@@ -12,11 +12,6 @@ var http = require('http')
 // create a single instance of opentok sdk.
 var ot = new opentok.OpenTokSDK(OPENTOK_API_KEY,OPENTOK_API_SECRET)
 
-// set the tokbox host, for dev: staging.tokbox.com, for prod: api.opentok.com
-// it defaults to staging.tokbox.com, so you only need to set it in prod:
-//
-// ot.setEnvironment("staging.tokbox.com")
-
 server = http.createServer(function(req, res){
   var path = url.parse(req.url).pathname;
 
@@ -60,7 +55,7 @@ renderExampleHTML = function(apikey, sessionId, token){
     '<html>\n',
       '<head>\n',
         '<title>OpenTok Hello World</title>\n',
-        '<script src="http://staging.tokbox.com/v0.91/js/TB.min.js"></script>\n',
+        '<script src="http://static.opentok.com/v0.91/js/TB.min.js"></script>\n',
         '<script>\n',
           'var apikey = "',apikey,'"\n',
           '  , sessionId = "',sessionId,'"\n',
