@@ -1,7 +1,7 @@
 {
   "name": "opentok",
   "description": "OpenTokSDK for node.js",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "homepage": "https://github.com/bsstoner/opentok",
   "repository": "https://github.com/bsstoner/opentok.git",
   "author": "Brian Stoner <bsstoner@gmail.com> (http://brianstoner.com)",
