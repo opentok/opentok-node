@@ -18,6 +18,12 @@ To install as a regular npm package just type `npm install opentok`
 
 ## How to use
 
+### Require the `opentok` module
+
+Add the following code to the top of any file using the `opentok` module:
+
+    var OpenTok = require('opentok');
+
 ### API key and API secret
 
 Request your API key and API secret at <http://www.tokbox.com/opentok/api/tools/js/apikey>.
