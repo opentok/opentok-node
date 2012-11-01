@@ -9,7 +9,7 @@ This is the OpenTok NodeJS Module.
 To install using npm, add OpenTok to `package.json` and run `npm install`:
 <pre>
 "dependencies" : {  
-    "opentok" : "0.2.x",  
+    "opentok" : "0.3.x",  
     ...
 } 
 </pre>
