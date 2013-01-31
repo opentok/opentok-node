@@ -11,7 +11,24 @@ describe "Production Environment", ->
     expect(opentok.partnerSecret).toEqual(apiSecret)
     expect(opentok.api_url).toEqual('api.opentok.com')
 
+# ***
+# *** Different ways of creating sessions
+# ***
   it "should create session", ->
+    sessionId = null
+    queryFinished = false
+
+    waitsFor ->
+      return queryFinished
+    runs ->
+      expect(sessionId).not.toBeNull()
+      expect(sessionId.length).toBeGreaterThan(5)
+
+    opentok.createSession (result) ->
+      sessionId = result
+      queryFinished = true
+
+  it "should create session with IP specified only", ->
     sessionId = null
     queryFinished = false
 
@@ -25,8 +42,21 @@ describe "Production Environment", ->
       sessionId = result
       queryFinished = true
 
+  it "should create session with p2p enabled only", ->
+    sessionId = null
+    queryFinished = false
 
-  it "should create session with p2p enabled", ->
+    waitsFor ->
+      return queryFinished
+    runs ->
+      expect(sessionId).not.toBeNull()
+      expect(sessionId.length).toBeGreaterThan(5)
+
+    opentok.createSession {'p2p.preference':'enabled'}, (result) ->
+      sessionId = result
+      queryFinished = true
+
+  it "should create session with ip and p2p enabled", ->
     sessionId = null
     queryFinished = false
 
@@ -41,6 +71,9 @@ describe "Production Environment", ->
       queryFinished = true
 
 
+# ***
+# *** Different ways of generating Tokens
+# ***
   describe "Generating Tokens", ->
     sessionId = '1_MX4xNDk3MTI5Mn5-MjAxMi0wNS0xNiAyMzoyMjozNC44NzQ0ODcrMDA6MDB-MC41MDI4NTI2OTA1MzR-'
 
