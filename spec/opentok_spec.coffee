@@ -1,4 +1,14 @@
 OpenTok = require('../lib/opentok')
+describe "error checking", ->
+  apiKey = '14971292'
+  apiSecret = 'ecbe2b25afec7887bd72fe4763b87add8ce02658'
+  opentok = new OpenTok.OpenTokSDK(apiKey, apiSecret)
+
+  it "should throw error without valid sessionId", ->
+    expect( -> opentok.generateToken({sessionId:"1234"}) ).toThrow( new Error("Please pass in a valid session id") )
+
+  it "should throw error without valid sessionId", ->
+    expect( -> opentok.generateToken({}) ).toThrow( new Error("Please pass in a valid session id") )
 
 describe "Production Environment", ->
   apiKey = '14971292'
