@@ -133,6 +133,9 @@ otArchive.downloadArchiveURL(vidID, function(resp){
 
   Check out the basic working example in examples/app.js
 
+### When done, update package.json version number and publish npm
+
+    npm publish
 
 ## Want to contribute?
 ### To run test suite:
