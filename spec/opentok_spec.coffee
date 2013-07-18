@@ -5,13 +5,13 @@ describe "error checking", ->
   opentok = new OpenTok.OpenTokSDK(apiKey, apiSecret)
 
   it "should throw error without valid sessionId", ->
-    expect( -> opentok.generateToken({sessionId:"1234"}) ).toThrow( new Error("Please pass in a valid session id") )
+    expect( -> opentok.generateToken({sessionId:"1234"}) ).toThrow( new Error("An invalid session ID was passed") )
 
   it "should throw error without valid sessionId", ->
-    expect( -> opentok.generateToken({}) ).toThrow( new Error("Please pass in a valid session id") )
+    expect( -> opentok.generateToken({}) ).toThrow( new Error("Null or empty session ID are not valid") )
 
   it "should throw error without a valid api key", ->
-    expect( -> opentok.generateToken({sessionId: "1_MX4xNdkJustTestingToSee-IfFakeAPIKeyWillThrowError-"}) ).toThrow( new Error("Please pass in a valid API key") )
+    expect( -> opentok.generateToken({sessionId: "1_MX4xNdkJustTestingToSee-IfFakeAPIKeyWillThrowError-"}) ).toThrow( new Error("An invalid session ID was passed") )
 
 describe "Production Environment", ->
   apiKey = '14971292'
