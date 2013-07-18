@@ -10,6 +10,9 @@ describe "error checking", ->
   it "should throw error without valid sessionId", ->
     expect( -> opentok.generateToken({}) ).toThrow( new Error("Please pass in a valid session id") )
 
+  it "should throw error without a valid api key", ->
+    expect( -> opentok.generateToken({sessionId: "1_MX4xNdkJustTestingToSee-IfFakeAPIKeyWillThrowError-"}) ).toThrow( new Error("Please pass in a valid API key") )
+
 describe "Production Environment", ->
   apiKey = '14971292'
   apiSecret = 'ecbe2b25afec7887bd72fe4763b87add8ce02658'
