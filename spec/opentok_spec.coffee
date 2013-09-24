@@ -1,4 +1,4 @@
-OpenTok = require('../lib/opentok')
+OpenTok = require('../')
 describe "error checking", ->
   apiKey = '14971292'
   apiSecret = 'ecbe2b25afec7887bd72fe4763b87add8ce02658'
