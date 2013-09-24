@@ -1,13 +1,18 @@
+/*
+ * OpenTok server-side SDK
+ */
+
+// Dependencies
 var https = require('https'),
     querystring = require('querystring'),
-    crypto = require('crypto'),
+    crypto = require('crypto');
 
     // tokbox constants:
-    TOKEN_SENTINEL = "T1==",
+var TOKEN_SENTINEL = "T1==",
     API_HOST = "api.opentok.com",
-    SESSION_API_ENDPOINT = "/hl/session/create",
-    GET_MANIFEST = "/archive/getmanifest/",
-    GET_URL = "/hl/archive/url/";
+    SESSION_API_ENDPOINT = "/hl/session/create";
+    // ARCHIVING GET_MANIFEST = "/archive/getmanifest/",
+    // ARCHIVING GET_URL = "/hl/archive/url/";
 
 var RoleConstants = exports.RoleConstants = {
     SUBSCRIBER: "subscriber",
@@ -37,91 +42,92 @@ var OpenTokSDK = exports.OpenTokSDK = function(partnerId, partnerSecret) {
   }
 }
 
-OpenTokSDK.OpenTokArchive = function(sdkObject) {
-  var self = this;
-  this.resources = [];
-  this.addVideoResource = function(res) {
-    self.resources.push(res);
-  };
-  this.downloadArchiveURL = function(vid, callback) {
-    var options = {
-      host: sdkObject.api_url,
-      path: GET_URL+sdkObject.archiveId+"/"+vid,
-      method: 'GET',
-      headers: {
-        'x-tb-token-auth': sdkObject.token
-      }
-    };
-    var req = https.request(options, function(res) {
-      var chunks = '';
-      res.setEncoding('utf8');
-      res.on('data', function(chunk) {
-        chunks += chunk;
-      });
-      res.on('end', function() {
-        callback(chunks);
-      });
-    });
-    req.end();
-  };
-};
+// ARCHIVING OpenTokSDK.OpenTokArchive = function(sdkObject) {
+// ARCHIVING   var self = this;
+// ARCHIVING   this.resources = [];
+// ARCHIVING   this.addVideoResource = function(res) {
+// ARCHIVING     self.resources.push(res);
+// ARCHIVING   };
+// ARCHIVING   this.downloadArchiveURL = function(vid, callback) {
+// ARCHIVING     var options = {
+// ARCHIVING       host: sdkObject.api_url,
+// ARCHIVING       path: GET_URL+sdkObject.archiveId+"/"+vid,
+// ARCHIVING       method: 'GET',
+// ARCHIVING       headers: {
+// ARCHIVING         'x-tb-token-auth': sdkObject.token
+// ARCHIVING       }
+// ARCHIVING     };
+// ARCHIVING     var req = https.request(options, function(res) {
+// ARCHIVING       var chunks = '';
+// ARCHIVING       res.setEncoding('utf8');
+// ARCHIVING       res.on('data', function(chunk) {
+// ARCHIVING         chunks += chunk;
+// ARCHIVING       });
+// ARCHIVING       res.on('end', function() {
+// ARCHIVING         callback(chunks);
+// ARCHIVING       });
+// ARCHIVING     });
+// ARCHIVING     req.end();
+// ARCHIVING   };
+// ARCHIVING };
 
-OpenTokSDK.OpenTokArchiveVideoResource = function(vid,length,name) {
-  this.vid = vid;
-  this.length = length;
-  this.name = name;
-  this.getId = function() {
-    return vid;
-  };
-};
-OpenTokSDK.prototype.getArchiveManifest = function(archiveId, token, callback) {
-  this.get_archive_manifest(archiveId, token, callback);
-}
+// ARCHIVING OpenTokSDK.OpenTokArchiveVideoResource = function(vid,length,name) {
+// ARCHIVING   this.vid = vid;
+// ARCHIVING   this.length = length;
+// ARCHIVING   this.name = name;
+// ARCHIVING   this.getId = function() {
+// ARCHIVING     return vid;
+// ARCHIVING   };
+// ARCHIVING };
 
-OpenTokSDK.prototype.get_archive_manifest = function(archiveId, token, callback) {
-  this.token = token;
-  this.archiveId = archiveId;
-  var self = this;
-  var parseResponse = function(chunks) {
-    var response = new OpenTokSDK.OpenTokArchive(self);
-    var start = chunks.match('<resources>'),
-        end = chunks.match('</resources>'),
-        videoTags = null,
-        attr, vid, length, name;
-    if (start && end) {
-      videoTags = chunks.substr(start.index + 12, (end.index - start.index - 12));
-      attr = videoTags.split('"');
-      if (attr.length>5) {
-        vid = attr[1];
-        length = attr[3];
-        name = attr[5];
-        resource = new OpenTokSDK.OpenTokArchiveVideoResource(vid, length, name);
-        response.addVideoResource(resource);
-      }
-    }
-    callback(response);
-  };
+// ARCHIVING OpenTokSDK.prototype.getArchiveManifest = function(archiveId, token, callback) {
+// ARCHIVING   this.get_archive_manifest(archiveId, token, callback);
+// ARCHIVING };
 
-  var options = {
-    host: this.api_url,
-    path: GET_MANIFEST+archiveId,
-    method: 'GET',
-    headers: {
-      'x-tb-token-auth':token
-    }
-  };
-  var req = https.request(options, function(res) {
-    var chunks = '';
-    res.setEncoding('utf8');
-    res.on('data', function(chunk) {
-      chunks += chunk;
-    });
-    res.on('end', function() {
-      parseResponse(chunks);
-    });
-  });
-  req.end();
-}
+// ARCHIVING OpenTokSDK.prototype.get_archive_manifest = function(archiveId, token, callback) {
+// ARCHIVING   this.token = token;
+// ARCHIVING   this.archiveId = archiveId;
+// ARCHIVING   var self = this;
+// ARCHIVING   var parseResponse = function(chunks) {
+// ARCHIVING     var response = new OpenTokSDK.OpenTokArchive(self);
+// ARCHIVING     var start = chunks.match('<resources>'),
+// ARCHIVING         end = chunks.match('</resources>'),
+// ARCHIVING         videoTags = null,
+// ARCHIVING         attr, vid, length, name;
+// ARCHIVING     if (start && end) {
+// ARCHIVING       videoTags = chunks.substr(start.index + 12, (end.index - start.index - 12));
+// ARCHIVING       attr = videoTags.split('"');
+// ARCHIVING       if (attr.length>5) {
+// ARCHIVING         vid = attr[1];
+// ARCHIVING         length = attr[3];
+// ARCHIVING         name = attr[5];
+// ARCHIVING         resource = new OpenTokSDK.OpenTokArchiveVideoResource(vid, length, name);
+// ARCHIVING         response.addVideoResource(resource);
+// ARCHIVING       }
+// ARCHIVING     }
+// ARCHIVING     callback(response);
+// ARCHIVING   };
+// ARCHIVING 
+// ARCHIVING   var options = {
+// ARCHIVING     host: this.api_url,
+// ARCHIVING     path: GET_MANIFEST+archiveId,
+// ARCHIVING     method: 'GET',
+// ARCHIVING     headers: {
+// ARCHIVING       'x-tb-token-auth':token
+// ARCHIVING     }
+// ARCHIVING   };
+// ARCHIVING   var req = https.request(options, function(res) {
+// ARCHIVING     var chunks = '';
+// ARCHIVING     res.setEncoding('utf8');
+// ARCHIVING     res.on('data', function(chunk) {
+// ARCHIVING       chunks += chunk;
+// ARCHIVING     });
+// ARCHIVING     res.on('end', function() {
+// ARCHIVING       parseResponse(chunks);
+// ARCHIVING     });
+// ARCHIVING   });
+// ARCHIVING   req.end();
+// ARCHIVING };
 
 OpenTokSDK.prototype.generate_token = function(ops) {
   ops = ops || {};
