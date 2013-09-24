@@ -37,7 +37,7 @@ describe "Production Environment", ->
       expect(sessionId).not.toBeNull()
       expect(sessionId.length).toBeGreaterThan(5)
 
-    opentok.createSession (result) ->
+    opentok.createSession (err, result) ->
       sessionId = result
       queryFinished = true
 
@@ -51,7 +51,7 @@ describe "Production Environment", ->
       expect(sessionId).not.toBeNull()
       expect(sessionId.length).toBeGreaterThan(5)
 
-    opentok.createSession 'localhost', (result) ->
+    opentok.createSession 'localhost', (err, result) ->
       sessionId = result
       queryFinished = true
 
@@ -65,7 +65,7 @@ describe "Production Environment", ->
       expect(sessionId).not.toBeNull()
       expect(sessionId.length).toBeGreaterThan(5)
 
-    opentok.createSession {'p2p.preference':'enabled'}, (result) ->
+    opentok.createSession {'p2p.preference':'enabled'}, (err, result) ->
       sessionId = result
       queryFinished = true
 
@@ -79,7 +79,7 @@ describe "Production Environment", ->
       expect(sessionId).not.toBeNull()
       expect(sessionId.length).toBeGreaterThan(5)
 
-    opentok.createSession 'localhost', {'p2p.preference':'enabled'}, (result) ->
+    opentok.createSession 'localhost', {'p2p.preference':'enabled'}, (err, result) ->
       sessionId = result
       queryFinished = true
 
