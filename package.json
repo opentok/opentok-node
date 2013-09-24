@@ -1,16 +1,17 @@
 {
   "name": "opentok",
-  "description": "OpenTokSDK for node.js",
+  "description": "OpenTok server-side SDK",
   "version": "1.0.1",
-  "homepage": "https://github.com/bsstoner/opentok",
-  "repository": "https://github.com/bsstoner/opentok.git",
-  "author": "Brian Stoner <bsstoner@gmail.com> (http://brianstoner.com)",
-  "main": "./lib/opentok",
-  "directories": {
-    "lib": "lib"
-  },
+  "homepage": "https://github.com/opentok/opentok-node",
+  "repository": "https://github.com/opentok/opentok-node.git",
+  "contributors": [
+    "Brian Stoner <bsstoner@gmail.com> (http://brianstoner.com)",
+    "Song Zheng <coldangelfire@gmail.com> (http://songz.me)",
+    "Ankur Oberoi <aoberoi@gmail.com> (http://aoberoi.me)"
+  ],
+  "main": "index.js",
   "engines": {
-    "node": "*"
+    "node": ">=0.8.0"
   },
   "devDependencies": {
     "jasmine-node" : "1.0.x"
