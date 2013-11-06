@@ -8,6 +8,7 @@ var https = require('https'),
     crypto = require('crypto'),
     to_json = require('xmljson').to_json,
     _ = require('underscore'),
+    helpers = require('./lib/helpers'),
     getArchive = require('./lib/archiving');
 
 // Internal Constants
@@ -37,15 +38,15 @@ var AuthScheme = {
  * @param  {(number|string)}   apiKey
  * @param  {string}            apiSecret
  */
-var OpenTokSDK = function(apiKey, apiSecret) {
+var OpenTokSDK = function(apiKey, apiSecret, env) {
   // TODO: to allow for DI, we can add a third argument which can take non-default config/dependencies
 
   // we're loose about calling this constructor with `new`, we got your back
-  if (!(this instanceof OpenTokSDK)) return new OpenTokSDK(apiKey, apiSecret);
+  if (!(this instanceof OpenTokSDK)) return new OpenTokSDK(apiKey, apiSecret, env);
 
   // validate arguments: apiKey := Number|String, apiSecret := String
   if (!(_.isNumber(apiKey) || _.isString(apiKey)) || !_.isString(apiSecret)) {
-    return null;
+    return {};
   }
 
   // apiKey argument can be a Number, but we will internally store it as a String
@@ -58,19 +59,18 @@ var OpenTokSDK = function(apiKey, apiSecret) {
 /**
  * creates a new OpenTok Session (calls the API server) and returns the sessionId via callback
  * @param   {Object}                             [opts]
- * @param   {string}                             [opts.location="127.0.0.1"] a hint to help
+ * @param   {string}                             [opts.location=""] a hint to help
  *    the OpenTok media server chose a location for the server; formatted as an
  *    IP address or a host name
- * @param   {boolean}                            [opts.p2p_preference=false] when set
- *    to true, the created session will only allow two clients (1-to-1) that
- *    will stream medapeer-to-peer
+ * @param   {boolean}                            [opts.p2p=false] when set
+ *    to true, the created session will allow clients to stream peer-to-peer
  * @param   {OpenTokSDK~createSessionCallback}   callback
  */
 OpenTokSDK.prototype.createSession = function(opts, callback) {
   // NOTE: the callback's signature is now error-first
   // NOTE: removing first param and folding it into opts (it was already optional)
   // NOTE: removing older method aliases
-  // NOTE: p2p.preference -> p2p_preference
+  // NOTE: p2p.preference -> p2p
 
   // shift arguments if there opts is left out
   if (_.isFunction(opts)) {
@@ -79,20 +79,21 @@ OpenTokSDK.prototype.createSession = function(opts, callback) {
   }
 
   // use defaults for missing options
-  _.defaults(opts, { "location" : "127.0.0.1", "p2p_preference" : false });
+  _.defaults(opts, { "location" : "", "p2p" : false });
 
   // rename p2p_preference -> p2p.preference
-  opts["p2p.preference"] = opts["p2p_preference"];
-  delete opts["p2p_preference"];
+  opts["p2p.preference"] = opts["p2p"];
+  delete opts["p2p"];
 
   this._doRequest(ENDPOINTS.SESSION_CREATE, AuthScheme.PARTNER, opts, function(err, xml) {
-    if (err) return handleError({ action: 'createSession', props: opts, cause: err}, callback);
+    if (err) return helpers.handleError({ action: 'createSession', props: opts, cause: err}, callback);
     to_json(xml, function(err, json) {
-      if (err) return handleError({ action: 'createSession', props: opts, cause: err}, callback);
+      if (err) return helpers.handleError({ action: 'createSession', props: opts, cause: err}, callback);
       callback(null, json.sessions.Session.session_id);
     });
   });
 };
+
 
 /**
  * generates a token which is used to access an OpenTok Session
@@ -139,7 +140,6 @@ OpenTokSDK.prototype.getArchive = function(archiveId, callback) {
  * @param    {OpenTokSDK~doRequestCallback} callback
  */
 OpenTokSDK.prototype._doRequest = function(endpoint, auth, data, callback) {
-  // TODO: we may want another param to specify the type of auth (X-TB-TOKEN-AUTH)
   var options, req, authHeader;
 
   // take care of encoding a JSON object into a string
@@ -185,29 +185,6 @@ OpenTokSDK.prototype._doRequest = function(endpoint, auth, data, callback) {
   });
   if (data) req.write(data, 'utf8');
   req.end();
-};
-
-/**
- * sends errors to callback functions in pretty, readable messages
- * @param   {Object}                    details
- * @param   {string}                    details.action - the action whose error needs handling
- * @param   {Error}                     [details.cause] - an underlying error that caused the error
- * @param   {OpenTokSDK~errorCallback}  cb
- */
-function handleError(details, cb) {
-  var message;
-
-  // Construct message according the the action (or method) that is triggering the error
-  if (details.action === 'createSession') {
-    message = 'Failed to create new OpenTok Session using properties: ' + JSON.stringify(details.props) + '.\n';
-  }
-
-  // When there is an underlying error that caused this one, give some details about it
-  if (details.cause) {
-    message += 'This error was caused by another error: "' + details.cause.message + '".\n';
-  }
-
-  return cb(new Error(message));
 };
 
 /**
@@ -301,3 +278,4 @@ OpenTokSDK._AuthScheme = AuthScheme;
 
 // NOTE: required value is now the OpenTokSDK constructor function
 module.exports = OpenTokSDK;
+

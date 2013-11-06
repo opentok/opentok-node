@@ -1,7 +1,7 @@
 {
   "name": "opentok",
   "description": "OpenTok server-side SDK",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "homepage": "https://github.com/opentok/opentok-node",
   "repository": "https://github.com/opentok/opentok-node.git",
   "contributors": [
@@ -10,11 +10,14 @@
     "Ankur Oberoi <aoberoi@gmail.com> (http://aoberoi.me)"
   ],
   "main": "index.js",
+  "scripts" : {
+    "test" : "mocha -u bdd ./test"
+  },
   "engines": {
     "node": ">=0.8.0"
   },
   "devDependencies": {
-    "jasmine-node": "1.0.x"
+    "mocha": "~1.13.0"
   },
   "dependencies": {
     "xmljson": "~0.2.0",
