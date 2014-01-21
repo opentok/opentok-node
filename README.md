@@ -66,17 +66,24 @@ opentok.createSession(location, {'p2p.preference':'enabled'}, function(result){
 </pre>
 
 ### Generating Token
-With the generated session_id and an OpenTokSDK object, you can start generating tokens for each user. See <http://www.tokbox.com/opentok/api/tools/documentation/api/server_side_libraries.html#generate_token> for more details.
+With the generated session_id and an OpenTokSDK object, you can start generating tokens for each user. See OpenTok's documentation,  [create-token overview](http://tokbox.com/opentok/tutorials/create-token/ ), for more details.
 `generateToken` takes in an object with 1-4 properties, and RETURNS a token as a string:  
 > session_id [string] - REQUIRED. This token is tied to the session it is generated with  
+
 > role [string] - OPTIONAL. opentok.RoleConstants.{SUBSCRIBER|PUBLISHER|MODERATOR}. Publisher role used when omitted.
+
 > expire_time [int] - OPTIONAL. Time when token will expire in unix timestamp.
+
 > connection_data [string] - OPTIONAL. Stores static metadata to pass to other users connected to the session. (eg. names, user id, etc)  
 
 Example:
-<pre>
-var token = opentok.generateToken({session_id:session_id, role:OpenTok.RoleConstants.PUBLISHER, connection_data:"userId:42"});
-</pre>
+```javascript
+var token = opentok.generateToken({
+  session_id:session_id, 
+  role:OpenTok.RoleConstants.PUBLISHER, 
+  connection_data:"userId:42"
+  });
+```
 
 ### Downloading Archive Videos
 To Download archived video, you must have an Archive ID (from the client), and a moderator token. For more information see <http://www.tokbox.com/opentok/api/tools/documentation/api/server_side_libraries.html#download_archive>.
