@@ -142,7 +142,6 @@ describe('Archiving', function() {
     var session = '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
 
     it('should return an Archive', function(done) {
-      // nock.recorder.rec();
 
       nock('https://api.opentok.com:443')
         .post('/v2/partner/APIKEY/archive', {'action':'start','sessionId':'1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg','name':'Bob'})
@@ -157,6 +156,30 @@ describe('Archiving', function() {
         expect(archive).not.toBeNull();
         if(archive) {
           expect(archive.name).toBe('Bob');
+          expect(archive.status).toBe('started');
+          expect(archive.stop).not.toBeNull();
+          expect(archive.delete).not.toBeNull();
+        }
+        done();
+      });
+
+    });
+
+    it('should work without the options', function(done) {
+
+      nock('https://api.opentok.com:443')
+        .post('/v2/partner/APIKEY/archive', {'action':'start','sessionId':'1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg'})
+        .reply(200, '{\n  \"createdAt\" : 1391149936527,\n  \"duration\" : 0,\n  \"id\" : \"4072fe0f-d499-4f2f-8237-64f5a9d936f5\",\n  \"name\" : null,\n  \"partnerId\" : \"APIKEY\",\n  \"reason\" : \"\",\n  \"sessionId\" : \"1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg\",\n  \"size\" : 0,\n  \"status\" : \"started\",\n  \"url\" : null\n}', { server: 'nginx',
+        date: 'Fri, 31 Jan 2014 06:32:16 GMT',
+        'content-type': 'application/json',
+        'transfer-encoding': 'chunked',
+        connection: 'keep-alive' });
+
+      opentok.startArchive(session, function(err, archive) {
+        expect(err).toBeNull();
+        expect(archive).not.toBeNull();
+        if(archive) {
+          expect(archive.name).toBe(null);
           expect(archive.status).toBe('started');
           expect(archive.stop).not.toBeNull();
           expect(archive.delete).not.toBeNull();
@@ -220,11 +243,19 @@ describe('Archiving', function() {
         'transfer-encoding': 'chunked',
         connection: 'keep-alive' });
 
-      opentok.startArchive(session, {}, function(err) {
+      opentok.startArchive(session, function(err) {
         expect(err).not.toBeNull();
         expect(err.message).toBe('Unexpected response from OpenTok');
         done();
       });
+
+    });
+
+    it('should throw an error if no callback is provided', function() {
+
+      expect(function() {
+        opentok.startArchive(session);
+      }).toThrow(new OpenTok.ArgumentError('No callback given to startArchive'));
 
     });
 
@@ -303,6 +334,14 @@ describe('Archiving', function() {
 
     });
 
+    it('should throw an error if no callback is provided', function() {
+
+      expect(function() {
+        opentok.getArchive(archiveID);
+      }).toThrow(new OpenTok.ArgumentError('No callback given to getArchive'));
+
+    });
+
   });
 
   describe('listArchives', function() {
@@ -318,6 +357,34 @@ describe('Archiving', function() {
         connection: 'keep-alive' });
 
       opentok.listArchives({ count: 5 }, function(err, archives, total) {
+        expect(err).toBeNull();
+        expect(total).toBe(149);
+        expect(archives).toEqual(jasmine.any(Array));
+        expect(archives.length).toBe(5);
+        expect(archives[0].duration).toBe(3);
+        expect(archives[0].id).toBe('16231874-7ce7-4f5e-a30a-4513c4df480d');
+        expect(archives[0].name).toBe('');
+        expect(archives[0].reason).toBe('');
+        expect(archives[0].sessionId).toBe('SESSION_ID');
+        expect(archives[0].size).toBe(6590);
+        expect(archives[0].status).toBe('available');
+        expect(archives[0].url).toBe('http://some/video1.mp4');
+        done();
+      });
+
+    });
+
+    it('should allow options to be optional', function(done) {
+
+      nock('https://api.opentok.com:443')
+        .get('/v2/partner/APIKEY/archive?')
+        .reply(200, '{\n  "count" : 149,\n  "items" : [ {\n    "createdAt" : 1391457926000,\n    "duration" : 3,\n    "id" : "16231874-7ce7-4f5e-a30a-4513c4df480d",\n    "name" : "",\n    "partnerId" : "APIKEY",\n    "reason" : "",\n    "sessionId" : "SESSION_ID",\n    "size" : 6590,\n    "status" : "available",\n    "url" : "http://some/video1.mp4"\n  }, {\n    "createdAt" : 1391218315000,\n    "duration" : 0,\n    "id" : "0931d1d7-4198-4db2-bf8a-097924421eb2",\n    "name" : "Archive 3",\n    "partnerId" : "APIKEY",\n    "reason" : "",\n    "sessionId" : "SESSION_ID",\n    "size" : 3150,\n    "status" : "available",\n    "url" : "http://some/video2.mp4"\n  }, {\n    "createdAt" : 1391218274000,\n    "duration" : 9,\n    "id" : "e7198f93-d8fa-448d-b134-ac3355ce2eb7",\n    "name" : "Archive 4",\n    "partnerId" : "APIKEY",\n    "reason" : "",\n    "sessionId" : "SESSION_ID",\n    "size" : 12691,\n    "status" : "available",\n    "url" : "http://some/video3.mp4"\n  }, {\n    "createdAt" : 1391218252000,\n    "duration" : 17,\n    "id" : "ae531f74-218c-4abd-bbe4-1f6bd92e9449",\n    "name" : null,\n    "partnerId" : "APIKEY",\n    "reason" : "",\n    "sessionId" : "SESSION_ID",\n    "size" : 21566,\n    "status" : "available",\n    "url" : "http://some/video4.mp4"\n  }, {\n    "createdAt" : 1391218139000,\n    "duration" : 73,\n    "id" : "cf2fd890-7ea0-4f43-a6a7-432ea9dc4c51",\n    "name" : "Archive 5",\n    "partnerId" : "APIKEY",\n    "reason" : "",\n    "sessionId" : "SESSION_ID",\n    "size" : 83158,\n    "status" : "available",\n    "url" : "http://some/video5.mp4"\n  } ]\n}', { server: 'nginx',
+        date: 'Mon, 03 Feb 2014 23:38:53 GMT',
+        'content-type': 'application/json',
+        'transfer-encoding': 'chunked',
+        connection: 'keep-alive' });
+
+      opentok.listArchives(function(err, archives, total) {
         expect(err).toBeNull();
         expect(total).toBe(149);
         expect(archives).toEqual(jasmine.any(Array));
@@ -351,6 +418,14 @@ describe('Archiving', function() {
         expect(err.message).toBe('Unexpected response from OpenTok');
         done();
       });
+    });
+
+    it('should throw an error if no callback is provided', function() {
+
+      expect(function() {
+        opentok.listArchives();
+      }).toThrow(new OpenTok.ArgumentError('No callback given to listArchives'));
+
     });
 
   });
@@ -443,6 +518,14 @@ describe('Archiving', function() {
 
     });
 
+    it('should throw an error if no callback is provided', function() {
+
+      expect(function() {
+        opentok.stopArchive('ca138a6c-380f-4de9-b2b2-bc78b3a117e2');
+      }).toThrow(new OpenTok.ArgumentError('No callback given to stopArchive'));
+
+    });
+
   });
 
   describe('deleteArchive', function() {
@@ -505,6 +588,14 @@ describe('Archiving', function() {
         expect(err.message).toBe('Unexpected response from OpenTok');
         done();
       });
+
+    });
+
+    it('should throw an error if no callback is provided', function() {
+
+      expect(function() {
+        opentok.deleteArchive('ca138a6c-380f-4de9-b2b2-bc78b3a117e2');
+      }).toThrow(new OpenTok.ArgumentError('No callback given to deleteArchive'));
 
     });
 
