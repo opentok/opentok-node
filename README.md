@@ -187,6 +187,6 @@ deleteArchive = function(archiveId) {
   Check out the basic working example in examples/app.js
 
 ### To run test suite:
-    jasmine-node --coffee spec/
+    jasmine-node --captureExceptions spec/
 
 
