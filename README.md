@@ -96,6 +96,95 @@ The `generateToken()` method takes in an object with 1-4 properties, and returns
 var token = opentok.generateToken({session_id:session_id, role:OpenTok.RoleConstants.PUBLISHER, connection_data:"userId:42"});
 </pre>
 
+
+## Working with archives
+
+The following function starts recording an archive of an OpenTok 2.0 session (given a session ID)
+and returns the archive ID (on success).
+
+<pre>
+startArchive = function(sessionId) {
+  startArchiveOptions = {name: "archive-" + new Date()}
+  ot.startArchive(sessionId, startArchiveOptions, function(error, archive) {
+    if (error) {
+      console.log("error:", error);
+    } else {
+      console.log("new archive:" + archive.id);
+      return archive.id;
+    }
+  });
+}
+</pre>
+
+The following function stops the recording of an archive (given an archive ID), returning
+true on success, and false on failure.
+
+<pre>
+stopArchive = function(archiveId) {
+  ot.stopArchive(sessionId, function(error, archive) {
+    if (error) {
+      console.log("error:", error);
+    } else {
+      console.log("Stopped archive:" + archive.id);
+    }
+  });
+}
+</pre>
+
+The following function logs information on a given archive:
+
+<pre>
+getArchive = function(archiveId) {
+  ot.getArchive(archiveId, function(error, archive) {
+    if (error) {
+      console.log("error:", error);
+    } else {
+      console.log("Archive:", archive);
+    }
+  });
+}
+</pre>
+
+The following method logs information on multiple archives. If you do not pass in
+offset and count parameters, the method logs information on up to 50 archives:
+
+<pre>
+listArchives = function(offset, count) {
+  listArchiveOptions = {};
+  if (offset) {
+    listArchiveOptions.offset = offset;
+  }
+  if (count) {
+    listArchiveOptions.count = count;
+  }
+  ot.listArchives(listArchiveOptions, function(error, archives, totalCount) {
+    if (error) {
+      console.log("error:", error);
+    } else {
+      console.log(totalCount + " archives");
+      for (var i = 0; i &lt; archives.length; i++) {
+        console.log(archives[i].id);
+      }
+    }
+  });
+}
+</pre>
+
+The following function deletes an archive:
+
+<pre>
+deleteArchive = function(archiveId) {
+  ot.deleteArchive(archiveId, function(error) {
+    if (error) {
+      console.log("error:", error);
+    } else {
+      console.log("Deleted archive:", archiveId);
+    }
+  });
+}
+</pre>
+
+
 ## Examples
 
   Check out the basic working example in examples/app.js
