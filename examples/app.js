@@ -4,9 +4,9 @@ var http = require('http')
   , server
 
   // opentok:
-  , opentok = require('opentok')
-  , OPENTOK_API_KEY = 'XXXX' // add your API key here
-  , OPENTOK_API_SECRET = 'XXXX'; // and your secret here
+  , opentok = require('../lib/opentok')
+  , OPENTOK_API_KEY = 'XXXX' // Add your OpenTok API key here (see https://dashboard.tokbox.com/).
+  , OPENTOK_API_SECRET = 'XXXX'; // And your OpenTok secret here.
 
 
 // create a single instance of opentok sdk.
@@ -55,7 +55,7 @@ renderExampleHTML = function(apikey, sessionId, token){
     '<html>\n',
       '<head>\n',
         '<title>OpenTok Hello World</title>\n',
-        '<script src="http://static.opentok.com/v0.91/js/TB.min.js"></script>\n',
+        '<script src="http://static.opentok.com/webrtc/v2.0/js/TB.min.js"></script>\n',
         '<script>\n',
           'var apikey = "',apikey,'"\n',
           '  , sessionId = "',sessionId,'"\n',
