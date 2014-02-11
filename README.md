@@ -9,16 +9,13 @@ This version of the SDK also includes support for working with OpenTok 2.0 archi
 
 ## Installation
 
-To install using npm, add OpenTok to `package.json` and run `npm install`:
+For this beta version, the OpenTok Node.js SDK is included as a tgz file. Install it by calling: 
 
-<pre>
-"dependencies" : {  
-    "opentok" : "2.0.0-beta",
-    ...
-} 
-</pre>
+    npm install opentok-node.tgz
 
-To install as a regular npm package just type `npm install opentok`.
+Then install other required dependencies by calling:
+
+   npm install
 
 ## Requirements
 
@@ -190,6 +187,6 @@ deleteArchive = function(archiveId) {
   Check out the basic working example in examples/app.js
 
 ### To run test suite:
-    jasmine-node --captureExceptions spec/
+    jasmine-node --coffee spec/
 
 
