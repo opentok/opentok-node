@@ -98,7 +98,7 @@ With your **moderator token** and a OpenTokSDK object, you can generate a OpenTo
 
 +-----------------+--------------------------------------------------------------+---------------+----------+
 | Name            | Description                                                  | Type          | Optional |
-+ --------------- + -------------------------------------------------------------+:-------------:+:--------:+
++=================+==============================================================+===============+==========+
 | archive_id      | Get this from the client that created the archive.           | string        |    no    |
 +-----------------+--------------------------------------------------------------+---------------+----------+
 | token           | Get this from the client or the generate_token method.       | string        |    no    |
