@@ -72,7 +72,7 @@ With the generated session_id and an OpenTokSDK object, you can start generating
 | Name            | Description                                                                                                          | Type   | Optional |
 | --------------- | -------------------------------------------------------------------------------------------------------------------- |:------:|:--------:|
 | session_id      | This token is tied to the session it is generated with                                                               | string |  no      |
-| role            | opentok.RoleConstants.\{SUBSCRIBER\|PUBLISHER\|MODERATOR\}. Publisher role used when omitted.                            | string |  yes     |
+| role            | opentok.RoleConstants.{SUBSCRIBER&#124;PUBLISHER&#124;MODERATOR}. Publisher role used when omitted.                            | string |  yes     |
 | expire_time     | Time when token will expire in unix timestamp.                                                                       | int    |  yes     |
 | connection_data | Stores static metadata to pass to other users connected to the session. (eg. names, user id, etc)                    | string |  yes     |
  
