@@ -1,3 +1,5 @@
+[![Open Tok](https://swww.tokbox.com/img/img_www_platform_devices.jpg)](http://tokbox.com/)
+
 # OpenTokSDK for Node.js
 
 OpenTok is a free set of APIs from TokBox that enables websites to weave live group video communication into their online experience. With OpenTok you have the freedom and flexibility to create the most engaging web experience for your users. OpenTok is currently available as a JavaScript and ActionScript 3.0 library. Check out <http://www.tokbox.com/> and <http://www.tokbox.com/opentok/tools/js/gettingstarted> for more information.
