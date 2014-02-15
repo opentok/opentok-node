@@ -76,7 +76,9 @@ opentok.createSession(location, {'p2p.preference':'enabled'}, function(result){
 
 ### Generating Token
 With the generated session_id and an OpenTokSDK object, you can start generating tokens for each user. See <http://www.tokbox.com/opentok/api/tools/documentation/api/server_side_libraries.html#generate_token> for more details.
-`generateToken` takes in an object with 1-4 properties, and RETURNS a token as a string: 
+`generateToken` takes in an object with 1-4 properties, and RETURNS a token as a string:
+
+#### Parameters 
 
 | Name            | Description                                                                                                          | Type   | Optional |
 | --------------- | -------------------------------------------------------------------------------------------------------------------- |:------:|:--------:|
@@ -106,6 +108,8 @@ With your **moderator token** and a OpenTokSDK object, you can generate a OpenTo
 `OpenTokSDK.getArchiveManifest()` takes in 3 parameters: **archiveId** and **moderator token**, and a callback function
 
 
+#### Parameters
+ 
 | Name            | Description                                                  | Type          | Optional |
 | --------------- | ------------------------------------------------------------ | ------------- | -------- |
 | archive_id      | Get this from the client that created the archive.           | string        |    no    |
@@ -136,8 +140,14 @@ opentok.getArchiveManifest(archiveId, token, function(tbarchive){
 
 ### Get Download URL
 `OpenTokArchive` objects have a `downloadArchiveURL(video_id, handler)` method that will return a URL string for downloading the video in the archive. Video files are FLV format.
-> video_id [string] - REQUIRED. The Video ID returned from OpenTokArchiveVideoResource.getId()  
-> handler [fn(url)] - REQUIRED. This function is triggered after it receives the URL for video. The result is a URL string.  
+
+
+#### Parameters
+
+| Name            | Description                                                  | Type          | Optional |
+| --------------- |------------------------------------------------------------- | ------------- | -------- |
+| video_id        | The Video ID returned from OpenTokArchiveVideoResource.getId() | string      |    no    |
+| handler         | This function is triggered after it receives the URL for video. The result is a URL string. | [fn(url)] | no |
 
 Example:
 
