@@ -67,11 +67,15 @@ opentok.createSession(location, {'p2p.preference':'enabled'}, function(result){
 
 ### Generating Token
 With the generated session_id and an OpenTokSDK object, you can start generating tokens for each user. See <http://www.tokbox.com/opentok/api/tools/documentation/api/server_side_libraries.html#generate_token> for more details.
-`generateToken` takes in an object with 1-4 properties, and RETURNS a token as a string:  
-> session_id [string] - REQUIRED. This token is tied to the session it is generated with  
-> role [string] - OPTIONAL. opentok.RoleConstants.{SUBSCRIBER|PUBLISHER|MODERATOR}. Publisher role used when omitted.
-> expire_time [int] - OPTIONAL. Time when token will expire in unix timestamp.
-> connection_data [string] - OPTIONAL. Stores static metadata to pass to other users connected to the session. (eg. names, user id, etc)  
+`generateToken` takes in an object with 1-4 properties, and RETURNS a token as a string: 
+
+| Name            | Description                                                                                                          | Type   | Optional |
+| --------------- | -------------------------------------------------------------------------------------------------------------------- |:------:|:--------:|
+| session_id      | This token is tied to the session it is generated with                                                               | string |  no      |
+| role            | opentok.RoleConstants.{SUBSCRIBER|PUBLISHER|MODERATOR}. Publisher role used when omitted.                            | string |  yes     |
+| expire_time     | Time when token will expire in unix timestamp.                                                                       | int    |  yes     |
+| connection_data | Stores static metadata to pass to other users connected to the session. (eg. names, user id, etc)                    | string |  yes     |
+ 
 
 Example:
 <pre>
