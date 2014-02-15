@@ -10,6 +10,21 @@ OpenTok is a free set of APIs from TokBox that enables websites to weave live gr
 
 This is the OpenTok NodeJS Module.
 
+* [Installation](#installation)
+* [How to use](#how-to-use)
+ * [Require the opentok module](#require-the-opentok-module)
+ * [API key and API secret](#api-key-and-api-secret)
+ * [OpenTokSDK](#opentoksdk)
+ * [Creating Sessions](#creating-sessions)
+ * [Generating Token](#generating-token)
+ * [Downloading Archive Videos](#downloading-archive-videos)
+ * [Get Archive Manifest](#get-archive-manifest)
+ * [Get video ID](#get-video-id)
+ * [Get Download URL](#get-download-url)
+* [Example](#example)
+* [Want to contribute?](#want-to-contribute)
+
+
 ## Installation
 
 To install using npm, add OpenTok to `package.json` and run `npm install`:
