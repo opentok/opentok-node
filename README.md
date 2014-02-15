@@ -95,9 +95,12 @@ To Download archived video, you must have an Archive ID (from the client), and a
 ### Get Archive Manifest
 With your **moderator token** and a OpenTokSDK object, you can generate a OpenTokArchive object, which contains information for all videos in the Archive  
 `OpenTokSDK.getArchiveManifest()` takes in 3 parameters: **archiveId** and **moderator token**, and a callback function
-> archive_id [string] - REQUIRED. Get this from the client that created the archive.  
-> token [string] - REQUIRED. Get this from the client or the generate_token method.  
-> handler [fn(tbarchive)] - REQUIRED. This function is triggered after it receives the Archive Manifest. The parameter is an `OpenTokArchive` object. The *resources* property of this object is array of `OpenTokArchiveVideoResource` objects, and each `OpenTokArchiveVideoResource` object represents a video in the archive.  
+| Name            | Description                                                  | Type   | Optional |
+| --------------- | -------------------------------------------------------------|:------:|:--------:|
+| archive_id      | Get this from the client that created the archive.           | string |    no    |
+| token           | Get this from the client or the generate_token method.       | string |    no    |
+| handler      | This function is triggered after it receives the Archive Manifest. The parameter is an `OpenTokArchive` object. The *resources* property of this object is array of `OpenT    okArchiveVideoResource` objects, and each `OpenTokArchiveVideoResource` object represents a video in the archive.  | fn(tbarchive) |   yes    |
+
 
 Example: (opentok is an OpentokSDK object)
 <pre>
