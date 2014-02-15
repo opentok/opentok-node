@@ -1,4 +1,8 @@
-[![Open Tok](https://swww.tokbox.com/img/img_www_platform_devices.jpg)](http://tokbox.com/)
+<div style="text-align:center;">
+<a href="http://tokbox.com/">
+<img src="https://swww.tokbox.com/img/img_www_platform_devices.jpg" style="margin: 0 auto;" alt="Open Tok" />
+</a>
+</div>
 
 # OpenTokSDK for Node.js
 
