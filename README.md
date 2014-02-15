@@ -63,10 +63,16 @@ var opentok = new OpenTok.OpenTokSDK(key, secret);
 
 ### Creating Sessions
 Use your `OpenTokSDK` object to create a `session_id`. See <http://www.tokbox.com/opentok/api/tools/documentation/api/server_side_libraries.html#create_session> for more details.
-`createSession` takes 2-3 parameters:  
-> location [string] -  give Opentok a hint on where you are running your application by specifiying an IP (e.g. '127.0.0.1')  
-> properties [object] - OPTIONAL. Set peer to peer as `enabled` or `disabled`  
-> callback [fn(sessionId)] - This is a function that handles the server response after session has been created. The result sessionId is a string.
+`createSession` takes 2-3 parameters: 
+
+ 
+#### Parameters 
+| Name       | Description                                      | Type   | Optional |
+| ---------- | ------------------------------------------------ | ------ | -------- |
+| location   | give Opentok a hint on where you are running your application by specifiying an IP (e.g. '127.0.0.1') | string | no |
+| properties | Set peer to peer as `enabled` or `disabled`      | object |   yes    |
+| callback   | This is a function that handles the server response after session has been created. The result sessionId is a string. |  fn(sessionId) |  yes  |
+
 
 Example: P2P disabled (default)
 
