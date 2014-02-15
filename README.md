@@ -7,12 +7,13 @@ This is the OpenTok NodeJS Module.
 ## Installation
 
 To install using npm, add OpenTok to `package.json` and run `npm install`:
-<pre>
+
+```javascript
 "dependencies" : {  
     "opentok" : "0.3.x",  
     ...
 } 
-</pre>
+```
 
 To install as a regular npm package just type `npm install opentok`
 
