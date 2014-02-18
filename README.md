@@ -1,18 +1,40 @@
+<div align="center">
+<a href="http://tokbox.com/">
+<img src="https://swww.tokbox.com/img/img_www_platform_devices.jpg" style="margin: 0 auto;" alt="Open Tok" />
+</a>
+</div>
+
 # OpenTokSDK for Node.js
 
 OpenTok is a free set of APIs from TokBox that enables websites to weave live group video communication into their online experience. With OpenTok you have the freedom and flexibility to create the most engaging web experience for your users. OpenTok is currently available as a JavaScript and ActionScript 3.0 library. Check out <http://www.tokbox.com/> and <http://www.tokbox.com/opentok/tools/js/gettingstarted> for more information.
 
 This is the OpenTok NodeJS Module.
 
+* [Installation](#installation)
+* [How to use](#how-to-use)
+ * [Require the opentok module](#require-the-opentok-module)
+ * [API key and API secret](#api-key-and-api-secret)
+ * [OpenTokSDK](#opentoksdk)
+ * [Creating Sessions](#creating-sessions)
+ * [Generating Token](#generating-token)
+ * [Downloading Archive Videos](#downloading-archive-videos)
+ * [Get Archive Manifest](#get-archive-manifest)
+ * [Get video ID](#get-video-id)
+ * [Get Download URL](#get-download-url)
+* [Example](#example)
+* [Want to contribute?](#want-to-contribute)
+
+
 ## Installation
 
 To install using npm, add OpenTok to `package.json` and run `npm install`:
-<pre>
+
+```javascript
 "dependencies" : {  
     "opentok" : "0.3.x",  
     ...
 } 
-</pre>
+```
 
 To install as a regular npm package just type `npm install opentok`
 
@@ -33,45 +55,59 @@ Request your API key and API secret at <http://www.tokbox.com/opentok/api/tools/
 In order to use any of the server side functions, you must first create an `OpenTokSDK` object with your developer credentials.  
 You must pass in your *API key* and *API secret*.
 
-<pre>
+```javascript
 var key = '';    // Replace with your API key  
 var secret = '';  // Replace with your API secret  
 var opentok = new OpenTok.OpenTokSDK(key, secret);
-</pre>
+```
 
 ### Creating Sessions
 Use your `OpenTokSDK` object to create a `session_id`. See <http://www.tokbox.com/opentok/api/tools/documentation/api/server_side_libraries.html#create_session> for more details.
-`createSession` takes 2-3 parameters:  
-> location [string] -  give Opentok a hint on where you are running your application by specifiying an IP (e.g. '127.0.0.1')  
-> properties [object] - OPTIONAL. Set peer to peer as `enabled` or `disabled`  
-> callback [fn(sessionId)] - This is a function that handles the server response after session has been created. The result sessionId is a string.
+`createSession` takes 2-3 parameters: 
+
+ 
+#### Parameters 
+| Name       | Description                                      | Type   | Optional |
+| ---------- | ------------------------------------------------ | ------ | -------- |
+| location   | give Opentok a hint on where you are running your application by specifiying an IP (e.g. '127.0.0.1') | string | no |
+| properties | Set peer to peer as `enabled` or `disabled`      | object |   yes    |
+| callback   | This is a function that handles the server response after session has been created. The result sessionId is a string. |  fn(sessionId) |  yes  |
+
 
 Example: P2P disabled (default)
-<pre>
+
+```javascript
 var location = '127.0.0.1'; // use an IP or 'localhost'
 var sessionId = '';
 opentok.createSession(location, function(result){
   sessionId = result;
   // Do things with sessionId
 });
-</pre>
+```
 
 Example: P2P enabled
-<pre>
+
+```javascript
 var location = '127.0.0.1'; // use an IP of 'localhost'
 var sessionId = '';
 opentok.createSession(location, {'p2p.preference':'enabled'}, function(result){
   sessionId = result;
 });
-</pre>
+```
 
 ### Generating Token
 With the generated session_id and an OpenTokSDK object, you can start generating tokens for each user. See <http://www.tokbox.com/opentok/api/tools/documentation/api/server_side_libraries.html#generate_token> for more details.
-`generateToken` takes in an object with 1-4 properties, and RETURNS a token as a string:  
-> session_id [string] - REQUIRED. This token is tied to the session it is generated with  
-> role [string] - OPTIONAL. opentok.RoleConstants.{SUBSCRIBER|PUBLISHER|MODERATOR}. Publisher role used when omitted.
-> expire_time [int] - OPTIONAL. Time when token will expire in unix timestamp.
-> connection_data [string] - OPTIONAL. Stores static metadata to pass to other users connected to the session. (eg. names, user id, etc)  
+`generateToken` takes in an object with 1-4 properties, and RETURNS a token as a string:
+
+#### Parameters 
+
+| Name            | Description                                                                                                          | Type   | Optional |
+| --------------- | -------------------------------------------------------------------------------------------------------------------- |:------:|:--------:|
+| session_id      | This token is tied to the session it is generated with                                                               | string |  no      |
+| role            | opentok.RoleConstants.{SUBSCRIBER&#124;PUBLISHER&#124;MODERATOR}. Publisher role used when omitted.                            | string |  yes     |
+| expire_time     | Time when token will expire in unix timestamp.                                                                       | int    |  yes     |
+| connection_data | Stores static metadata to pass to other users connected to the session. (eg. names, user id, etc)                    | string |  yes     |
+ 
 
 Example:
 <pre>
@@ -91,42 +127,57 @@ To Download archived video, you must have an Archive ID (from the client), and a
 ### Get Archive Manifest
 With your **moderator token** and a OpenTokSDK object, you can generate a OpenTokArchive object, which contains information for all videos in the Archive  
 `OpenTokSDK.getArchiveManifest()` takes in 3 parameters: **archiveId** and **moderator token**, and a callback function
-> archive_id [string] - REQUIRED. Get this from the client that created the archive.  
-> token [string] - REQUIRED. Get this from the client or the generate_token method.  
-> handler [fn(tbarchive)] - REQUIRED. This function is triggered after it receives the Archive Manifest. The parameter is an `OpenTokArchive` object. The *resources* property of this object is array of `OpenTokArchiveVideoResource` objects, and each `OpenTokArchiveVideoResource` object represents a video in the archive.  
+
+
+#### Parameters
+ 
+| Name            | Description                                                  | Type          | Optional |
+| --------------- | ------------------------------------------------------------ | ------------- | -------- |
+| archive_id      | Get this from the client that created the archive.           | string        |    no    |
+| token           | Get this from the client or the generate_token method.       | string        |    no    |
+| handler         | This function is triggered after it receives the Archive Manifest. The parameter  is an `OpenTokArchive` object. The *resources* property of this object is array of `OpenTokArchiveVideoResource` objects, and each `OpenTokArchiveVideoResource` object represents a video in the archive. | fn(tbarchive) |    no    | 
+
 
 Example: (opentok is an OpentokSDK object)
-<pre>
+
+```javascript
 var token = 'moderator_token';
 var archiveId = '5f74aee5-ab3f-421b-b124-ed2a698ee939'; // Obtained from Javascript Library
 
 opentok.getArchiveManifest(archiveId, token, function(tbarchive){
   var otArchive = tbarchive;
 });
-</pre>
+```
 
 ### Get video ID
 `OpenTokArchive.resources` is an array of `OpenTokArchiveVideoResource` objects. OpenTokArchiveVideoResource has a `getId()` method that returns the videoId as a string.
 
 Example:
-<pre>
+```javascript
 opentok.getArchiveManifest(archiveId, token, function(tbarchive){
   var vidID = tbarchive.resources[0].getId();
 });
-</pre>
+```
 
 ### Get Download URL
 `OpenTokArchive` objects have a `downloadArchiveURL(video_id, handler)` method that will return a URL string for downloading the video in the archive. Video files are FLV format.
-> video_id [string] - REQUIRED. The Video ID returned from OpenTokArchiveVideoResource.getId()  
-> handler [fn(url)] - REQUIRED. This function is triggered after it receives the URL for video. The result is a URL string.  
+
+
+#### Parameters
+
+| Name            | Description                                                  | Type          | Optional |
+| --------------- |------------------------------------------------------------- | ------------- | -------- |
+| video_id        | The Video ID returned from OpenTokArchiveVideoResource.getId() | string      |    no    |
+| handler         | This function is triggered after it receives the URL for video. The result is a URL string. | [fn(url)] | no |
 
 Example:
-<pre>
+
+```javascript
 var url = '';
 otArchive.downloadArchiveURL(vidID, function(resp){
   url = resp;
 });
-</pre>
+```
 
 
 ## Example
