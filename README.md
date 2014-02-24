@@ -71,7 +71,7 @@ Use your `OpenTokSDK` object to create a `session_id`. See <http://www.tokbox.co
 | ---------- | ------------------------------------------------ | ------ | -------- |
 | location   | give Opentok a hint on where you are running your application by specifiying an IP (e.g. '127.0.0.1') | string | no |
 | properties | Set peer to peer as `enabled` or `disabled`      | object |   yes    |
-| callback   | This is a function that handles the server response after session has been created. The result sessionId is a string. |  fn(sessionId) |  yes  |
+| callback   | This is a function that handles the server response after session has been created. The result sessionId is a string. |  fn(sessionId) |  no  |
 
 
 Example: P2P disabled (default)
