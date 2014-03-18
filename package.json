@@ -1,10 +1,24 @@
 {
   "name": "opentok",
   "description": "OpenTokSDK for node.js",
-  "version": "1.0.1",
-  "homepage": "https://github.com/bsstoner/opentok",
-  "repository": "https://github.com/bsstoner/opentok.git",
-  "author": "Brian Stoner <bsstoner@gmail.com> (http://brianstoner.com)",
+  "version": "1.0.2",
+  "homepage": "https://github.com/opentok/opentok",
+  "repository": "https://github.com/opentok/opentok.git",
+  "contributors": [
+    {
+      "name": "Brian Stoner",
+      "email": "bsstoner@gmail.com",
+      "url": "http://brianstoner.com"
+    },
+    {
+      "name": "Song Zheng",
+      "email": "song@tokbox.com"
+    },
+    {
+      "name": "Ankur Oberoi",
+      "email": "aoberoi@gmail.com"
+    }
+  ],
   "main": "./lib/opentok",
   "directories": {
     "lib": "lib"

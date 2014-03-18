@@ -31,7 +31,7 @@ To install using npm, add OpenTok to `package.json` and run `npm install`:
 
 ```javascript
 "dependencies" : {  
-    "opentok" : "0.3.x",  
+    "opentok" : "1.0.x",  
     ...
 } 
 ```
@@ -48,7 +48,7 @@ Add the following code to the top of any file using the `opentok` module:
 
 ### API key and API secret
 
-Request your API key and API secret at <http://www.tokbox.com/opentok/api/tools/js/apikey>.
+Create an account at [TokBox](http://tokbox.com), and sign into your [Dashboard](https://dashboard.tokbox.com) for an API Key and Secret.
 
 ### OpenTokSDK
 
@@ -62,16 +62,17 @@ var opentok = new OpenTok.OpenTokSDK(key, secret);
 ```
 
 ### Creating Sessions
-Use your `OpenTokSDK` object to create a `session_id`. See <http://www.tokbox.com/opentok/api/tools/documentation/api/server_side_libraries.html#create_session> for more details.
+Use your `OpenTokSDK` object to create a `session_id`.
 `createSession` takes 2-3 parameters: 
 
  
 #### Parameters 
 | Name       | Description                                      | Type   | Optional |
 | ---------- | ------------------------------------------------ | ------ | -------- |
-| location   | give Opentok a hint on where you are running your application by specifiying an IP (e.g. '127.0.0.1') | string | no |
-| properties | Set peer to peer as `enabled` or `disabled`      | object |   yes    |
-| callback   | This is a function that handles the server response after session has been created. The result sessionId is a string. |  fn(sessionId) |  no  |
+| location   | Give OpenTok a hint of where the clients connecting will be located by specifiying an IP (e.g. '127.0.0.1') | string | yes |
+| properties | Additional session options                       | object |   yes    |
+| properties['p2p.preference'] | set to 'enabled' or 'disabled' | string |   yes    |
+| callback   | This is a function that handles the server response after session has been created. The result sessionId is a string. |  fn(err, sessionId) |  no  |
 
 
 Example: P2P disabled (default)
@@ -79,8 +80,8 @@ Example: P2P disabled (default)
 ```javascript
 var location = '127.0.0.1'; // use an IP or 'localhost'
 var sessionId = '';
-opentok.createSession(location, function(result){
-  sessionId = result;
+opentok.createSession(location, function(err, sessionId){
+  if (err) return throw new Error("session creation failed");
   // Do things with sessionId
 });
 ```
@@ -90,13 +91,14 @@ Example: P2P enabled
 ```javascript
 var location = '127.0.0.1'; // use an IP of 'localhost'
 var sessionId = '';
-opentok.createSession(location, {'p2p.preference':'enabled'}, function(result){
-  sessionId = result;
+opentok.createSession(location, {'p2p.preference':'enabled'}, function(err, sessionId){
+  if (err) return throw new Error("session creation failed");
+  // Do things with sessionId
 });
 ```
 
 ### Generating Token
-With the generated session_id and an OpenTokSDK object, you can start generating tokens for each user. See <http://www.tokbox.com/opentok/api/tools/documentation/api/server_side_libraries.html#generate_token> for more details.
+With the generated session_id and an OpenTokSDK object, you can start generating tokens for each user.
 `generateToken` takes in an object with 1-4 properties, and RETURNS a token as a string:
 
 #### Parameters 
@@ -104,7 +106,7 @@ With the generated session_id and an OpenTokSDK object, you can start generating
 | Name            | Description                                                                                                          | Type   | Optional |
 | --------------- | -------------------------------------------------------------------------------------------------------------------- |:------:|:--------:|
 | session_id      | This token is tied to the session it is generated with                                                               | string |  no      |
-| role            | opentok.RoleConstants.{SUBSCRIBER&#124;PUBLISHER&#124;MODERATOR}. Publisher role used when omitted.                            | string |  yes     |
+| role            | opentok.RoleConstants.{SUBSCRIBER&#124;PUBLISHER&#124;MODERATOR}. Publisher role used when omitted.                  | string |  yes     |
 | expire_time     | Time when token will expire in unix timestamp.                                                                       | int    |  yes     |
 | connection_data | Stores static metadata to pass to other users connected to the session. (eg. names, user id, etc)                    | string |  yes     |
  
