@@ -32,7 +32,8 @@
     "grunt": "^0.4.4",
     "grunt-mocha-test": "^0.10.0",
     "chai": "^1.9.1",
-    "nock": "^0.27.2"
+    "nock": "^0.27.2",
+    "async": "^0.2.10"
   },
   "dependencies": {
     "xmljson": "~0.2.0",
