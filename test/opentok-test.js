@@ -1,4 +1,6 @@
-var assert = require('assert');
+var expect = require('chai').expect;
+
+// Subject
 var OpenTok = require('../lib/opentok.js');
 
 // Fixtures
@@ -8,20 +10,26 @@ var apiKey = '123456',
 
 describe('OpenTok', function() {
   it('should initialize with a valid apiKey and apiSecret', function() {
-    assert.ok(new OpenTok(apiKey,apiSecret) instanceof OpenTok);
+    var opentok = new OpenTok(apiKey, apiSecret);
+    expect(opentok).to.be.an.instanceof(OpenTok);
   });
   it('should initialize without `new`', function() {
-    assert.ok(OpenTok(apiKey, apiSecret) instanceof OpenTok);
+    var opentok = OpenTok(apiKey, apiSecret);
+    expect(opentok).to.be.an.instanceof(OpenTok);
   });
   it('should not initialize with just an apiKey but no apiSecret', function() {
-    assert.ok(!(new OpenTok(apiKey) instanceof OpenTok));
+    var opentok = new OpenTok(apiKey);
+    expect(opentok).to.not.be.an.instanceof(OpenTok);
   });
   it('should not initialize with incorrect type parameters', function() {
-    assert.ok(!(new OpenTok(new Date(), 'asdasdasdasdasd') instanceof OpenTok));
-    assert.ok(!(new OpenTok(4, {}) instanceof OpenTok));
+    var opentok = new OpenTok(new Date(), 'asdasdasdasdasd');
+    expect(opentok).to.not.be.an.instanceof(OpenTok);
+    opentok = new OpenTok(4, {});
+    expect(opentok).to.not.be.an.instanceof(OpenTok);
   });
-  it('should cooerce n number for the apiKey', function() {
-    assert.ok(new OpenTok(parseInt(apiKey), apiSecret) instanceof OpenTok);
+  it('should cooerce a number for the apiKey', function() {
+    var opentok = new OpenTok(parseInt(apiKey), apiSecret);
+    expect(opentok).to.be.an.instanceof(OpenTok);
   });
 
 

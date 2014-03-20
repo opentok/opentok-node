@@ -30,7 +30,8 @@
   },
   "devDependencies": {
     "grunt": "^0.4.4",
-    "grunt-mocha-test": "^0.10.0"
+    "grunt-mocha-test": "^0.10.0",
+    "chai": "^1.9.1"
   },
   "dependencies": {
     "xmljson": "~0.2.0",
