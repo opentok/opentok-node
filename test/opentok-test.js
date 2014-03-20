@@ -1,23 +1,27 @@
 var assert = require('assert');
 var OpenTok = require('../lib/opentok.js');
 
+// Fixtures
+var apiKey = '123456',
+    apiSecret = '1234567890abcdef1234567890abcdef1234567890';
+
+
 describe('OpenTok', function() {
   it('should initialize with a valid apiKey and apiSecret', function() {
-    assert.ok(new OpenTok('123123123', 'abcdefghijklmnop') instanceof OpenTok);
+    assert.ok(new OpenTok(apiKey,apiSecret) instanceof OpenTok);
   });
   it('should initialize without `new`', function() {
-    assert.ok(OpenTok('123123123', 'abcdefghijklmnop') instanceof OpenTok);
+    assert.ok(OpenTok(apiKey, apiSecret) instanceof OpenTok);
   });
   it('should not initialize with just an apiKey but no apiSecret', function() {
-    assert.ok(!(new OpenTok('123123123') instanceof OpenTok));
+    assert.ok(!(new OpenTok(apiKey) instanceof OpenTok));
   });
   it('should not initialize with incorrect type parameters', function() {
     assert.ok(!(new OpenTok(new Date(), 'asdasdasdasdasd') instanceof OpenTok));
     assert.ok(!(new OpenTok(4, {}) instanceof OpenTok));
   });
-  it('should be able to take an number or a string for the apiKey', function() {
-    assert.ok(new OpenTok('123123123', 'abcdefghijklmnop') instanceof OpenTok);
-    assert.ok(new OpenTok(123123123, 'abcdefghijklmnop') instanceof OpenTok);
+  it('should cooerce n number for the apiKey', function() {
+    assert.ok(new OpenTok(parseInt(apiKey), apiSecret) instanceof OpenTok);
   });
 
 
