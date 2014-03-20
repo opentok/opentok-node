@@ -1,5 +1,5 @@
 var assert = require('assert');
-var OpenTokSDK = require('../index.js');
+var OpenTokSDK = require('../lib/opentok.js');
 
 describe('OpenTokSDK', function() {
   it('should initialize with a valid apiKey and apiSecret', function() {
@@ -25,30 +25,36 @@ describe('OpenTokSDK', function() {
 
     it('creates a new session', function(done) {
       // pass no options parameter
+      done();
     });
 
     it('creates a peer to peer session', function(done) {
       // 2 expectations: if a session created without the flag isn't peer to peer,
       //                 if a session created with the flag is peer to peer
       // try passing an invalid value to the p2p flag
+      done();
     });
 
     it('adds a location hint to the created session', function(done) {
       // 2 expectations: if a session created without the hint doesn't have a hint,
       //                 if a session created with the hint has the hint
       // try passing an invalid hint
+      done();
     });
 
     it('optionally takes a config parameter', function(done) {
       // creates a session without the config param
       // creates a session with a config param
       // doesn't pass unidentified options to the server
+      done();
     });
 
     it('complains when there is no callback function', function(done) {
+      done();
     });
 
     it('compains when a server error takes place', function(done) {
+      done();
     });
 
   });
