@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "xmljson": "~0.2.0",
-    "underscore": "~1.5.2"
+    "underscore": "~1.5.2",
+    "request": "^2.34.0"
   }
 }
