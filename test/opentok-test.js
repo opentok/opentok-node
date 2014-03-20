@@ -1,23 +1,23 @@
 var assert = require('assert');
-var OpenTokSDK = require('../lib/opentok.js');
+var OpenTok = require('../lib/opentok.js');
 
-describe('OpenTokSDK', function() {
+describe('OpenTok', function() {
   it('should initialize with a valid apiKey and apiSecret', function() {
-    assert.ok(new OpenTokSDK('123123123', 'abcdefghijklmnop') instanceof OpenTokSDK);
+    assert.ok(new OpenTok('123123123', 'abcdefghijklmnop') instanceof OpenTok);
   });
   it('should initialize without `new`', function() {
-    assert.ok(OpenTokSDK('123123123', 'abcdefghijklmnop') instanceof OpenTokSDK);
+    assert.ok(OpenTok('123123123', 'abcdefghijklmnop') instanceof OpenTok);
   });
   it('should not initialize with just an apiKey but no apiSecret', function() {
-    assert.ok(!(new OpenTokSDK('123123123') instanceof OpenTokSDK));
+    assert.ok(!(new OpenTok('123123123') instanceof OpenTok));
   });
   it('should not initialize with incorrect type parameters', function() {
-    assert.ok(!(new OpenTokSDK(new Date(), 'asdasdasdasdasd') instanceof OpenTokSDK));
-    assert.ok(!(new OpenTokSDK(4, {}) instanceof OpenTokSDK));
+    assert.ok(!(new OpenTok(new Date(), 'asdasdasdasdasd') instanceof OpenTok));
+    assert.ok(!(new OpenTok(4, {}) instanceof OpenTok));
   });
   it('should be able to take an number or a string for the apiKey', function() {
-    assert.ok(new OpenTokSDK('123123123', 'abcdefghijklmnop') instanceof OpenTokSDK);
-    assert.ok(new OpenTokSDK(123123123, 'abcdefghijklmnop') instanceof OpenTokSDK);
+    assert.ok(new OpenTok('123123123', 'abcdefghijklmnop') instanceof OpenTok);
+    assert.ok(new OpenTok(123123123, 'abcdefghijklmnop') instanceof OpenTok);
   });
 
 
@@ -63,7 +63,7 @@ describe('OpenTokSDK', function() {
   describe('#generateToken', function() {
 
     var sessionId;
-    var opentok = new OpenTokSDK('123456', 'APISECRET');
+    var opentok = new OpenTok('123456', 'APISECRET');
 
     beforeEach(function(done) {
       // TODO: use a stub here instead of making a real request
