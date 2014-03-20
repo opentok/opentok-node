@@ -15,8 +15,9 @@ nock.disableNetConnect();
 var recording = false;
 if (recording) {
   // set these values before changing the above to true
-  apiKey = '',
-  apiSecret = '';
+  apiKey = '854511',
+  apiSecret = '93936990b97ffede04378028766bdc1755562cce';
+  nock.enableNetConnect();
   nock.recorder.rec();
 }
 
