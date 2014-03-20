@@ -1,12 +1,21 @@
-var expect = require('chai').expect;
+var expect = require('chai').expect,
+    nock = require('nock');
 
 // Subject
-var OpenTok = require('../lib/opentok.js');
+var OpenTok = require('../lib/opentok.js'),
+    package = require('../package.json');
 
 // Fixtures
 var apiKey = '123456',
     apiSecret = '1234567890abcdef1234567890abcdef1234567890';
 
+var recording = false;
+if (recording) {
+  // set these values before changing the above to true
+  apiKey = '',
+  apiSecret = '';
+  nock.recorder.rec();
+}
 
 describe('OpenTok', function() {
   it('should initialize with a valid apiKey and apiSecret', function() {
@@ -32,19 +41,60 @@ describe('OpenTok', function() {
     expect(opentok).to.be.an.instanceof(OpenTok);
   });
 
+  describe('when initialized with an apiUrl', function() {
+    it('sends its requests to the set apiUrl', function(done) {
+      done();
+    });
+  });
 
   describe('#createSession', function() {
 
+    beforeEach(function() {
+      this.opentok = new OpenTok(apiKey, apiSecret);
+    });
+
     it('creates a new session', function(done) {
+      var scope = nock('https://api.opentok.com:443')
+        .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
+        .post('/hl/session/create', "p2p.preference=false")
+        .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>SESSIONID</session_id><partner_id>123456</partner_id><create_dt>Wed Mar 19 23:35:24 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
+        date: 'Thu, 20 Mar 2014 06:35:24 GMT',
+        'content-type': 'text/xml',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'x-tb-host': 'mantis503-nyc.tokbox.com',
+        'content-length': '211' });
       // pass no options parameter
-      done();
+      this.opentok.createSession(function(err, session){
+        expect(session).to.be.a('string');
+        expect(session).to.equal('SESSIONID');
+        scope.done();
+        done(err);
+      });
     });
 
     it('creates a peer to peer session', function(done) {
       // 2 expectations: if a session created without the flag isn't peer to peer,
       //                 if a session created with the flag is peer to peer
       // try passing an invalid value to the p2p flag
-      done();
+      var scope = nock('https://api.opentok.com:443')
+        .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
+        .post('/hl/session/create', "p2p.preference=true")
+        .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>SESSIONID</session_id><partner_id>123456</partner_id><create_dt>Thu Mar 20 07:02:45 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
+        date: 'Thu, 20 Mar 2014 14:02:45 GMT',
+        'content-type': 'text/xml',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'x-tb-host': 'oms506-nyc.tokbox.com',
+        'content-length': '211' });
+      this.opentok.createSession({ 'p2p' : true }, function(err, session) {
+        expect(session).to.be.a('string');
+        expect(session).to.equal('SESSIONID');
+        scope.done();
+        done(err);
+      });
     });
 
     it('adds a location hint to the created session', function(done) {
@@ -54,10 +104,7 @@ describe('OpenTok', function() {
       done();
     });
 
-    it('optionally takes a config parameter', function(done) {
-      // creates a session without the config param
-      // creates a session with a config param
-      // doesn't pass unidentified options to the server
+    it('complains when the p2p or location values are not valid', function(done) {
       done();
     });
 
