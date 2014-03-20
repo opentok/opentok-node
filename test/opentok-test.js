@@ -9,7 +9,9 @@ var OpenTok = require('../lib/opentok.js'),
 // Fixtures
 var apiKey = '123456',
     apiSecret = '1234567890abcdef1234567890abcdef1234567890'
-    apiUrl = 'http://mymock.example.com';
+    apiUrl = 'http://mymock.example.com',
+    // This is specifically concocted for these tests (uses fake apiKey/apiSecret above)
+    sessionId = '1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX4';
 nock.disableNetConnect();
 
 var recording = false;
@@ -20,6 +22,9 @@ if (recording) {
   nock.enableNetConnect();
   nock.recorder.rec();
 }
+
+// Helpers
+var helpers = require('./helpers.js');
 
 describe('OpenTok', function() {
   it('should initialize with a valid apiKey and apiSecret', function() {
@@ -188,59 +193,81 @@ describe('OpenTok', function() {
 
   describe('#generateToken', function() {
 
-    var sessionId;
-    var opentok = new OpenTok('123456', 'APISECRET');
-
-    beforeEach(function(done) {
-      // TODO: use a stub here instead of making a real request
-      //opentok.createSession(function(err, freshSessionId) {
-      //  sessionId = freshSessionId;
-        done();
-      //});
+    beforeEach(function() {
+      this.opentok = new OpenTok(apiKey, apiSecret);
+      this.sessionId = sessionId;
     });
 
     it('generates a token', function() {
       // call generateToken with no options
-      //var token = opentok.generateToken(sessionId);
-      //assert.ok(typeof token == 'string');
+      var token = this.opentok.generateToken(this.sessionId);
+      expect(token).to.be.a('string');
       // TODO: decode token and verify signature
     });
 
     it('assigns a role in the token', function() {
       // expects one with no role defined to assign "publisher"
-      //var defaultRoleToken = opentok.generateToken(sessionId);
+      var defaultRoleToken = this.opentok.generateToken(this.sessionId);
+      expect(defaultRoleToken).to.be.a('string');
       // TODO: decode token, verify signature, make sure "role" matches 'publisher'
+
       // expects one with a valid role defined to set it
-      //var subscriberToken = opentok.generateToken(sessionId, { role : 'subscriber' });
+      var subscriberToken = this.opentok.generateToken(this.sessionId, { role : 'subscriber' });
+      expect(subscriberToken).to.be.a('string');
       // TODO: decode token, verify signature, make sure "role" matches 'subscriber'
+
       // expects one with an invalid role to complain
-      //var invalidToken = opentok.generateToken(sessionId, { role : 5 });
-      //assert.ok(invalidToken === false);
+      var invalidToken = this.opentok.generateToken(this.sessionId, { role : 5 });
+      expect(invalidToken).to.not.be.ok;
     });
 
     it('sets an expiration time for the token', function() {
       // expects a token with no expiration time to assign 1 day
+      var defaultExpireToken = this.opentok.generateToken(this.sessionId);
+      expect(defaultExpireToken).to.be.a('string');
+      // TODO decode and check
+
       // expects a token with an expiration time to have it
+      var expireTime =  new Date().getTime() / 1000 + (60*60); // 1 hour
+      var oneHourToken = this.opentok.generateToken(this.sessionId, { expireTime: expireTime });
+      expect(oneHourToken).to.be.a('string');
+      // TODO decode and check
+
       // expects a token with an invalid expiration time to complain
+      var invalidToken = this.opentok.generateToken(this.sessionId, { expireTime: "not a time" });
+      expect(invalidToken).to.not.be.ok;
     });
 
     it('sets connection data in the token', function() {
-      // expects a token with no connection data to have none
       // expects a token with a connection data to have it
+      var dataBearingToken = this.opentok.generateToken(this.sessionId, { data: 'name=Johnny' });
+      expect(dataBearingToken).to.be.a('string');
+      // TODO decode and check
+
       // expects a token with invalid connection to complain
+      var invalidToken = this.opentok.generateToken(this.sessionId, { data: { 'dont': 'work' } });
+      expect(invalidToken).to.not.be.ok;
+
+      var tooLongDataToken = this.opentok.generateToken(this.sessionId, {
+        data: Array(2000).join("a") // 1999 char string of all 'a's
+      });
+      expect(tooLongDataToken).to.not.be.ok;
     });
 
     it('complains if the sessionId is not valid', function() {
-      // complains if there is no sessionId
-      // complains if the sessionId doesn't belong to the apiKey
+      var badToken = this.opentok.generateToken();
+      expect(badToken).to.not.be.ok;
+
+      badToken = this.opentok.generateToken('blahblahblah');
+      expect(badToken).to.not.be.ok;
     });
 
     it('contains a unique nonce', function() {
       // generate a few and show the nonce exists each time and that they are different
+      var firstToken = this.opentok.generateToken(this.sessionId);
+      var secondToken = this.opentok.generateToken(this.sessionId);
+      // TODO decode and check if the nonce's are different
     });
   });
-
-  // existence of constants on the constructor and the instance
-
 
 });
