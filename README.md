@@ -1,17 +1,11 @@
 # OpenTokSDK for Node.js
 
-# TODO
+The OpenTok server SDKs include code for your web server. Use these SDKs to generate
+[sessions](http://tokbox.com/opentok/tutorials/create-session/) and to obtain
+[tokens](http://tokbox.com/opentok/tutorials/create-token/) for [OpenTok](http://www.tokbox.com/)
+applications.
 
-*  redo readme
-*  markup and generate JSDoc
-*  unit testing
-*  site
-*  examples
-*  travis badge
-
-OpenTok is a free set of APIs from TokBox that enables websites to weave live group video communication into their online experience. With OpenTok you have the freedom and flexibility to create the most engaging web experience for your users. OpenTok is currently available as a JavaScript and ActionScript 3.0 library. Check out <http://www.tokbox.com/> and <http://www.tokbox.com/opentok/tools/js/gettingstarted> for more information.
-
-This is the OpenTok NodeJS Module.
+This version of the SDK also includes support for working with OpenTok 2.0 archives.
 
 ## Installation
 
@@ -53,7 +47,6 @@ If you want the clients to connect peer-to-peer, you should specify this option 
 ```javascript
     opentok.createSession({ p2p : true }, callback);
 ```
-
 You can optionally specify a location hint in the form of an IP address to help the OpenTok service pick a server
 closest to the IP given to run the particular session from.
 
@@ -74,21 +67,104 @@ can be used to assign a "role" to a particular client, which limits or raises th
     var subscriberToken = opentok.generateToken(sessionId, { role : opentok.RoleConstants.SUBSCRIBER });
 ```
 
-### TODO: Archiving
 
-### Reference Documenation
 
-See the full reference documentation in the `/doc` directory.
+## Working with archives
 
-## Example
+The following function starts recording an archive of an OpenTok 2.0 session (given a session ID)
+and returns the archive ID (on success).
 
-A simple example server and web client which uses it is included in the `/example` directory.
+<pre>
+startArchive = function(sessionId) {
+  startArchiveOptions = {name: "archive-" + new Date()}
+  ot.startArchive(sessionId, startArchiveOptions, function(error, archive) {
+    if (error) {
+      console.log("error:", error);
+    } else {
+      console.log("new archive:" + archive.id);
+      return archive.id;
+    }
+  });
+}
+</pre>
 
-## License
+The following function stops the recording of an archive (given an archive ID), returning
+true on success, and false on failure.
 
-This project is MIT licensed and a copy is included in the `LICENSE` file.
+<pre>
+stopArchive = function(archiveId) {
+  ot.stopArchive(sessionId, function(error, archive) {
+    if (error) {
+      console.log("error:", error);
+    } else {
+      console.log("Stopped archive:" + archive.id);
+    }
+  });
+}
+</pre>
 
-## Contributing
+The following function logs information on a given archive:
+
+<pre>
+getArchive = function(archiveId) {
+  ot.getArchive(archiveId, function(error, archive) {
+    if (error) {
+      console.log("error:", error);
+    } else {
+      console.log("Archive:", archive);
+    }
+  });
+}
+</pre>
+
+The following method logs information on multiple archives. If you do not pass in
+offset and count parameters, the method logs information on up to 50 archives:
+
+<pre>
+listArchives = function(offset, count) {
+  listArchiveOptions = {};
+  if (offset) {
+    listArchiveOptions.offset = offset;
+  }
+  if (count) {
+    listArchiveOptions.count = count;
+  }
+  ot.listArchives(listArchiveOptions, function(error, archives, totalCount) {
+    if (error) {
+      console.log("error:", error);
+    } else {
+      console.log(totalCount + " archives");
+      for (var i = 0; i &lt; archives.length; i++) {
+        console.log(archives[i].id);
+      }
+    }
+  });
+}
+</pre>
+
+The following function deletes an archive:
+
+<pre>
+deleteArchive = function(archiveId) {
+  ot.deleteArchive(archiveId, function(error) {
+    if (error) {
+      console.log("error:", error);
+    } else {
+      console.log("Deleted archive:", archiveId);
+    }
+  });
+}
+</pre>
+
+
+## Examples
+
+  Check out the basic working example in examples/app.js
+
+### To run test suite:
+    jasmine-node --captureExceptions spec/
+
+
 
 We <3 opensource and would be more than happy to take contributions.
 
