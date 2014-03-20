@@ -23,7 +23,7 @@
   ],
   "main": "lib/opentok.js",
   "scripts": {
-    "test": "grunt mochaTest:test"
+    "test": "grunt"
   },
   "engines": {
     "node": ">=0.8.0"
@@ -33,7 +33,8 @@
     "grunt-mocha-test": "^0.10.0",
     "chai": "^1.9.1",
     "nock": "^0.27.2",
-    "async": "^0.2.10"
+    "async": "^0.2.10",
+    "grunt-jasmine-node": "^0.2.1"
   },
   "dependencies": {
     "xmljson": "~0.2.0",

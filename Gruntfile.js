@@ -10,11 +10,19 @@ module.exports = function(grunt) {
         },
         src: ['test/**/*test.js']
       }
+    },
+    jasmine_node: {
+      options: {
+        extensions: 'js',
+        specNameMatcher: 'spec',
+      },
+      all: ['spec/']
     }
   });
 
   grunt.loadNpmTasks('grunt-mocha-test');
+  grunt.loadNpmTasks('grunt-jasmine-node');
 
-  grunt.registerTask('default', 'mochaTest');
+  grunt.registerTask('default', ['mochaTest', 'jasmine_node']);
 
 };
