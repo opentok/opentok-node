@@ -241,6 +241,10 @@ describe('OpenTok', function() {
       // expects a token with an invalid expiration time to complain
       var invalidToken = this.opentok.generateToken(this.sessionId, { expireTime: "not a time" });
       expect(invalidToken).to.not.be.ok;
+
+      // expects a token with a time to thats in the past to complain
+      var invalidToken = this.opentok.generateToken(this.sessionId, { expireTime: "not a time" });
+      expect(invalidToken).to.not.be.ok;
     });
 
     it('sets connection data in the token', function() {

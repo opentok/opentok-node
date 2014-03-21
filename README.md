@@ -41,44 +41,51 @@ var OpenTok = require('opentok'),
 
 To create an OpenTok Session, use the `opentok.createSession(properties, callback)` method. The 
 `properties` parameter is an optional object used to specify whether you are creating a p2p Session
-and specifying a location hint. The callback has the signature `function(error, sessionId)`. The 
-`sessionId` returned in the callback is useful to be saved to a persistent store (e.g. database).
+and specifying a location hint. The callback has the signature `function(error, session)`. The 
+`session` returned in the callback is an instance of Session. Session objects have a `sessionId`
+property that is useful to be saved to a persistent store (e.g. database).
 
 ```javascript
 // Just a plain Session
-opentok.createSession(function(err, sessionId) {
+opentok.createSession(function(err, session) {
   if (err) return console.log(err);
 
-  // use the sessionId
+  // save the sessionId
+  db.save('session', session.sessionId, done);
 });
 
 // A p2p Session
-opentok.createSession({p2p:true}, function(err, sessionId) {
+opentok.createSession({p2p:true}, function(err, session) {
   if (err) return console.log(err);
 
-  // use the sessionId
+  // save the sessionId
+  db.save('session', session.sessionId, done);
 });
 
 // A Session with a location hint
-opentok.createSession({location:'12.34.56.78'}, function(err, sessionId) {
+opentok.createSession({location:'12.34.56.78'}, function(err, session) {
   if (err) return console.log(err);
 
-  // use the sessionId
+  // save the sessionId
+  db.save('session', session.sessionId, done);
 });
 ```
 ## Generating Tokens
 
 Once a Session is created, you can start generating Tokens for clients to use when connecting to it.
-You can generate a token by calling the `opentok.generateToken(sessionId, options)` method. The
-`options` parameter is an optional object used to set the role, expire time, and connection data of
-the Token.
+You can generate a token by calling the `opentok.generateToken(sessionId, options)` method. Another
+way is to call the `session.generateToken(options)` method of a Session object. The `options`
+parameter is an optional object used to set the role, expire time, and connection data of the Token.
 
 ```javascript
 // Generate a Token from just a sessionId (fetched from a database)
 token = opentok.generateToken(sessionId);
 
+// Genrate a Token from a session object (returned from createSession)
+token = session.generateToken();
+
 // Set some options in a Token
-token = opentok.generateToken({
+token = session.generateToken({
   role :       'moderator',
   expireTime : (new Date().getTime() / 1000)+(7 * 24 * 60 * 60), // in one week
   data :       'name=Johnny'
