@@ -3,10 +3,6 @@
 var OpenTok = require('../lib/opentok'),
     nock    = require('nock');
 
-nock.enableNetConnect();
-nock.recorder.rec();
-
-
 describe('Archiving', function() {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
 
