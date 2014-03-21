@@ -16,7 +16,7 @@ describe('Archiving', function() {
     it('should return an Archive', function(done) {
 
       nock('https://api.opentok.com:443')
-        .post('/v2/partner/APIKEY/archive', {'action':'start','sessionId':'1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg','name':'Bob'})
+        .post('/v2/partner/APIKEY/archive', {'sessionId':'1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg','name':'Bob'})
         .reply(200, '{\n  \"createdAt\" : 1391149936527,\n  \"duration\" : 0,\n  \"id\" : \"4072fe0f-d499-4f2f-8237-64f5a9d936f5\",\n  \"name\" : \"Bob\",\n  \"partnerId\" : \"APIKEY\",\n  \"reason\" : \"\",\n  \"sessionId\" : \"1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg\",\n  \"size\" : 0,\n  \"status\" : \"started\",\n  \"url\" : null\n}', { server: 'nginx',
         date: 'Fri, 31 Jan 2014 06:32:16 GMT',
         'content-type': 'application/json',
@@ -40,7 +40,7 @@ describe('Archiving', function() {
     it('should work without the options', function(done) {
 
       nock('https://api.opentok.com:443')
-        .post('/v2/partner/APIKEY/archive', {'action':'start','sessionId':'1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg'})
+        .post('/v2/partner/APIKEY/archive', {'sessionId':'1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg'})
         .reply(200, '{\n  \"createdAt\" : 1391149936527,\n  \"duration\" : 0,\n  \"id\" : \"4072fe0f-d499-4f2f-8237-64f5a9d936f5\",\n  \"name\" : null,\n  \"partnerId\" : \"APIKEY\",\n  \"reason\" : \"\",\n  \"sessionId\" : \"1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg\",\n  \"size\" : 0,\n  \"status\" : \"started\",\n  \"url\" : null\n}', { server: 'nginx',
         date: 'Fri, 31 Jan 2014 06:32:16 GMT',
         'content-type': 'application/json',
@@ -72,7 +72,7 @@ describe('Archiving', function() {
     it('should return an error if session ID is invalid', function(done) {
 
       nock('https://api.opentok.com:443')
-        .post('/v2/partner/APIKEY/archive', {'action':'start','sessionId':'invalidSessionIDIam'})
+        .post('/v2/partner/APIKEY/archive', {'sessionId':'invalidSessionIDIam'})
         .reply(404, '{ \"message\" : \"responseString\" }', { server: 'nginx',
         date: 'Fri, 31 Jan 2014 06:37:25 GMT',
         'content-type': 'application/json',
@@ -90,7 +90,7 @@ describe('Archiving', function() {
     it('should return an error if session is p2p or has no connections', function(done) {
 
       nock('https://api.opentok.com:443')
-        .post('/v2/partner/APIKEY/archive', {'action':'start','sessionId':'1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg'})
+        .post('/v2/partner/APIKEY/archive', {'sessionId':'1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg'})
         .reply(404, '{ \"message\" : \"responseString\" }', { server: 'nginx',
         date: 'Fri, 31 Jan 2014 06:46:22 GMT',
         'content-type': 'application/json',
@@ -108,7 +108,7 @@ describe('Archiving', function() {
     it('should return an error if any other HTTP status is returned', function(done) {
 
       nock('https://api.opentok.com:443')
-        .post('/v2/partner/APIKEY/archive', {'action':'start','sessionId':'1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg'})
+        .post('/v2/partner/APIKEY/archive', {'sessionId':'1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg'})
         .reply(500, '{ \"message\" : \"responseString\" }', { server: 'nginx',
         date: 'Fri, 31 Jan 2014 06:46:22 GMT',
         'content-type': 'application/json',
@@ -308,7 +308,7 @@ describe('Archiving', function() {
       var archiveId = 'ca138a6c-380f-4de9-b2b2-bc78b3a117e2';
             
       nock('https://api.opentok.com:443')
-        .post('/v2/partner/APIKEY/archive/ca138a6c-380f-4de9-b2b2-bc78b3a117e2', {'action':'stop'})
+        .post('/v2/partner/APIKEY/archive/ca138a6c-380f-4de9-b2b2-bc78b3a117e2/stop', {})
         .reply(200, '{\n  \"createdAt\" : 1391471703000,\n  \"duration\" : 0,\n  \"id\" : \"ca138a6c-380f-4de9-b2b2-bc78b3a117e2\",\n  \"name\" : \"PHP Archiving Sample App\",\n  \"partnerId\" : \"APIKEY\",\n  \"reason\" : \"\",\n  \"sessionId\" : \"1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg\",\n  \"size\" : 0,\n  \"status\" : \"stopped\",\n  \"url\" : null\n}', { server: 'nginx',
         date: 'Mon, 03 Feb 2014 23:56:29 GMT',
         'content-type': 'application/json',
@@ -335,7 +335,7 @@ describe('Archiving', function() {
 
     it('should return an error if archive ID is invalid', function(done) {
       nock('https://api.opentok.com:443')
-        .post('/v2/partner/APIKEY/archive/AN-INVALID-ARCHIVE-ID', {'action':'stop'})
+        .post('/v2/partner/APIKEY/archive/AN-INVALID-ARCHIVE-ID/stop', {})
         .reply(404, '{ \"message\" : \"Not found. You passed in an invalid archive ID.\" }', { server: 'nginx',
         date: 'Tue, 04 Feb 2014 00:51:02 GMT',
         'content-type': 'application/json',
@@ -353,7 +353,7 @@ describe('Archiving', function() {
     it('should return an error if the archive is not currently started', function(done) {
       
       nock('https://api.opentok.com:443')
-        .post('/v2/partner/APIKEY/archive/ca138a6c-380f-4de9-b2b2-bc78b3a117e2', {'action':'stop'})
+        .post('/v2/partner/APIKEY/archive/ca138a6c-380f-4de9-b2b2-bc78b3a117e2/stop', {})
         .reply(409, '{ \"message\" : \"Conflict. You are trying to stop an archive that is not recording.\" }', { server: 'nginx',
         date: 'Tue, 04 Feb 2014 00:52:38 GMT',
         'content-type': 'application/json',
@@ -373,7 +373,7 @@ describe('Archiving', function() {
     it('should return an error if any other HTTP status is returned', function(done) {
 
       nock('https://api.opentok.com:443')
-        .post('/v2/partner/APIKEY/archive/ca138a6c-380f-4de9-b2b2-bc78b3a117e2', {'action':'stop'})
+        .post('/v2/partner/APIKEY/archive/ca138a6c-380f-4de9-b2b2-bc78b3a117e2/stop', {})
         .reply(500, '{ \"message\" : \"Some other error.\" }', { server: 'nginx',
         date: 'Tue, 04 Feb 2014 00:52:38 GMT',
         'content-type': 'application/json',
