@@ -4,6 +4,7 @@ var expect = require('chai').expect,
 
 // Subject
 var OpenTok = require('../lib/opentok.js'),
+    Session = require('../lib/session.js'),
     package = require('../package.json');
 
 // Fixtures
@@ -17,8 +18,8 @@ nock.disableNetConnect();
 var recording = false;
 if (recording) {
   // set these values before changing the above to true
-  apiKey = '854511',
-  apiSecret = '93936990b97ffede04378028766bdc1755562cce';
+  apiKey = '',
+  apiSecret = '';
   nock.enableNetConnect();
   nock.recorder.rec();
 }
@@ -67,8 +68,8 @@ describe('OpenTok', function() {
         'x-tb-host': 'mantis503-nyc.tokbox.com',
         'content-length': '211' });
       this.opentok.createSession(function(err, session){
-        expect(session).to.be.a('string');
-        expect(session).to.equal('SESSIONID');
+        expect(session).to.be.an.instanceof(Session);
+        expect(session.sessionId).to.equal('SESSIONID');
         scope.done();
         done(err);
       });
@@ -95,8 +96,9 @@ describe('OpenTok', function() {
         'content-length': '211' });
       // pass no options parameter
       this.opentok.createSession(function(err, session){
-        expect(session).to.be.a('string');
-        expect(session).to.equal('SESSIONID');
+        expect(session).to.be.an.instanceof(Session);
+        expect(session.sessionId).to.equal('SESSIONID');
+        expect(session.p2p).to.be.false
         scope.done();
         done(err);
       });
@@ -116,8 +118,9 @@ describe('OpenTok', function() {
         'content-length': '211' });
       // passes p2p: true
       this.opentok.createSession({ 'p2p' : true }, function(err, session) {
-        expect(session).to.be.a('string');
-        expect(session).to.equal('SESSIONID');
+        expect(session).to.be.an.instanceof(Session);
+        expect(session.sessionId).to.equal('SESSIONID');
+        expect(session.p2p).to.be.true
         scope.done();
         done(err);
       });
@@ -137,8 +140,10 @@ describe('OpenTok', function() {
         'content-length': '211' });
       // passes location: '12.34.56.78'
       this.opentok.createSession({ 'location': '12.34.56.78' }, function(err, session) {
-        expect(session).to.be.a('string');
-        expect(session).to.equal('SESSIONID');
+        expect(session).to.be.an.instanceof(Session);
+        expect(session.sessionId).to.equal('SESSIONID');
+        expect(session.p2p).to.be.false
+        expect(session.location).to.equal('12.34.56.78');
         scope.done()
         done(err);
       });
