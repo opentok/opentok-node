@@ -26,14 +26,14 @@ Finally, start the app using node
 $ node index.js
 ```
 
-Visit <http://localhost:8080> in your browser. Open it again in a second window. Smile! You've just
+Visit <http://localhost:3000> in your browser. Open it again in a second window. Smile! You've just
 set up a group chat.
 
 ## Walkthrough
 
 This demo application uses the [express web framework](http://expressjs.com/). It is a popular web
 framework and similar to others. Its concepts won't be explained but can be explored further at the
-websites linked above.
+website linked above.
 
 ### Server module (index.js)
 
@@ -46,15 +46,15 @@ var express = require('express'),
     OpenTok = require('../../lib/opentok');
 ```
 
-Next the app performs some basic checks on the environment, initializes the express application
+Next the app performs some basic checks on the environment and initializes the express application
 (`app`).
 
 The first thing that we do with OpenTok is to initialize an instance. The very next thing we do is
 create a Session. This application will be setting up a group chat, where anyone that loads the
 page will be be connected to the same Session. So before we get started we need one `sessionId`,
-and that will be used for every client that connects. In many applications, this is a value you
-will want to store in a database. Once the Session is created and there are no errors, we store that
-`sessionId` in our `app`. Then we call an `init` function to show that the app is ready to start.
+and that will be used for every client that connects. In many applications, you would store this
+value in a database. Once the Session is created and there are no errors, we store that `sessionId`
+in our `app`. Then we call an `init` function when we know that the app is ready to start.
 
 ```javascript
 // Initialize OpenTok and store it in the express app
@@ -70,7 +70,7 @@ opentok.createSession(function(err, session) {
 ```
 
 Now we are ready to configure some routes. We only need one GET route for the root path because this
-application only has one page. Inside the route handler, we just need to get the three values the
+application only has one page. Inside the route handler, we just need to get the three values a
 client will need to connect: `sessionId`, `apiKey`, and `token`. The `sessionId` is stored in the
 express app, so we get it from there. The `apiKey` is available from the outer scope. Last, we
 generate a fresh `token` for this client so that it has permission to connect.
@@ -99,7 +99,7 @@ three values.
 ```
 
 Finally, we have the `init` function that we called from inside the `createSession` callback. To
-start the express app, we just call the `listen` method, and log that the app is ready.
+start the express app, it calls the `listen` method, and log that the app is ready.
 
 ```javascript
 // Start the express app
