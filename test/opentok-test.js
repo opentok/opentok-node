@@ -1,5 +1,6 @@
 var expect = require('chai').expect,
     nock = require('nock'),
+    _ = require('lodash'),
     async = require('async');
 
 // Subject
@@ -207,19 +208,27 @@ describe('OpenTok', function() {
       // call generateToken with no options
       var token = this.opentok.generateToken(this.sessionId);
       expect(token).to.be.a('string');
-      // TODO: decode token and verify signature
+      expect(helpers.verifyTokenSignature(token, apiSecret)).to.be.true
+      var decoded = helpers.decodeToken(token);
+      expect(decoded.partner_id).to.equal(apiKey);
+      expect(decoded.create_time).to.exist
+      expect(decoded.nonce).to.exist
     });
 
     it('assigns a role in the token', function() {
       // expects one with no role defined to assign "publisher"
       var defaultRoleToken = this.opentok.generateToken(this.sessionId);
       expect(defaultRoleToken).to.be.a('string');
-      // TODO: decode token, verify signature, make sure "role" matches 'publisher'
+      expect(helpers.verifyTokenSignature(defaultRoleToken, apiSecret)).to.be.true
+      var decoded = helpers.decodeToken(defaultRoleToken);
+      expect(decoded.role).to.equal('publisher');
 
       // expects one with a valid role defined to set it
       var subscriberToken = this.opentok.generateToken(this.sessionId, { role : 'subscriber' });
       expect(subscriberToken).to.be.a('string');
-      // TODO: decode token, verify signature, make sure "role" matches 'subscriber'
+      expect(helpers.verifyTokenSignature(subscriberToken, apiSecret)).to.be.true
+      var decoded = helpers.decodeToken(subscriberToken);
+      expect(decoded.role).to.equal('subscriber');
 
       // expects one with an invalid role to complain
       var invalidToken = this.opentok.generateToken(this.sessionId, { role : 5 });
@@ -228,30 +237,39 @@ describe('OpenTok', function() {
 
     it('sets an expiration time for the token', function() {
       // expects a token with no expiration time to assign 1 day
+      var now = (new Date().getTime()) / 1000, delta = 10,
+          inOneDay = now + (60*60*24);
       var defaultExpireToken = this.opentok.generateToken(this.sessionId);
       expect(defaultExpireToken).to.be.a('string');
-      // TODO decode and check
+      expect(helpers.verifyTokenSignature(defaultExpireToken, apiSecret)).to.be.true
+      var decoded = helpers.decodeToken(defaultExpireToken);
+      expect(decoded.expire_time).to.be.within(inOneDay-delta, inOneDay+delta);
 
       // expects a token with an expiration time to have it
-      var expireTime =  new Date().getTime() / 1000 + (60*60); // 1 hour
+      var expireTime = (new Date().getTime() / 1000) + (60*60); // 1 hour
       var oneHourToken = this.opentok.generateToken(this.sessionId, { expireTime: expireTime });
       expect(oneHourToken).to.be.a('string');
-      // TODO decode and check
+      expect(helpers.verifyTokenSignature(oneHourToken, apiSecret)).to.be.true
+      var decoded = helpers.decodeToken(oneHourToken);
+      expect(decoded.expire_time).to.be.within(expireTime-delta, expireTime+delta);
 
       // expects a token with an invalid expiration time to complain
       var invalidToken = this.opentok.generateToken(this.sessionId, { expireTime: "not a time" });
       expect(invalidToken).to.not.be.ok;
 
-      // expects a token with a time to thats in the past to complain
-      var invalidToken = this.opentok.generateToken(this.sessionId, { expireTime: "not a time" });
-      expect(invalidToken).to.not.be.ok;
+      // TODO: expects a token with a time to thats in the past to complain
+      //invalidToken = this.opentok.generateToken(this.sessionId, { expireTime: "not a time" });
+      //expect(invalidToken).to.not.be.ok;
     });
 
     it('sets connection data in the token', function() {
       // expects a token with a connection data to have it
-      var dataBearingToken = this.opentok.generateToken(this.sessionId, { data: 'name=Johnny' });
+      var sampleData = 'name=Johnny';
+      var dataBearingToken = this.opentok.generateToken(this.sessionId, { data: sampleData });
       expect(dataBearingToken).to.be.a('string');
-      // TODO decode and check
+      expect(helpers.verifyTokenSignature(dataBearingToken, apiSecret)).to.be.true
+      var decoded = helpers.decodeToken(dataBearingToken);
+      expect(decoded.connection_data).to.equal(sampleData);
 
       // expects a token with invalid connection to complain
       var invalidToken = this.opentok.generateToken(this.sessionId, { data: { 'dont': 'work' } });
@@ -273,9 +291,12 @@ describe('OpenTok', function() {
 
     it('contains a unique nonce', function() {
       // generate a few and show the nonce exists each time and that they are different
-      var firstToken = this.opentok.generateToken(this.sessionId);
-      var secondToken = this.opentok.generateToken(this.sessionId);
-      // TODO decode and check if the nonce's are different
+      var tokens = [
+        this.opentok.generateToken(this.sessionId),
+        this.opentok.generateToken(this.sessionId)
+      ];
+      var nonces = _.map(tokens, function(token) { return helpers.decodeToken(token).nonce; });
+      expect(_.uniq(nonces)).to.have.length(nonces.length);
     });
   });
 
