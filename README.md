@@ -81,7 +81,7 @@ Example: P2P disabled (default)
 var location = '127.0.0.1'; // use an IP or 'localhost'
 var sessionId = '';
 opentok.createSession(location, function(err, sessionId){
-  if (err) return throw new Error("session creation failed");
+  if (err) throw new Error("session creation failed");
   // Do things with sessionId
 });
 ```
@@ -92,7 +92,7 @@ Example: P2P enabled
 var location = '127.0.0.1'; // use an IP of 'localhost'
 var sessionId = '';
 opentok.createSession(location, {'p2p.preference':'enabled'}, function(err, sessionId){
-  if (err) return throw new Error("session creation failed");
+  if (err) throw new Error("session creation failed");
   // Do things with sessionId
 });
 ```
