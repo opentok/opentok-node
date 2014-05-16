@@ -157,14 +157,20 @@ deleteArchive = function(archiveId) {
 </pre>
 
 
+## Documentation
+
+Reference documentation is available at <http://www.tokbox.com//opentok/libraries/server/node/reference/index.html> and in the
+docs directory of the SDK.
+
+
 ## Examples
 
   Check out the basic working example in examples/app.js
 
-### To run test suite:
+## To run test suite:
     jasmine-node --captureExceptions spec/
 
-
+## Contributing
 
 We <3 opensource and would be more than happy to take contributions.
 
