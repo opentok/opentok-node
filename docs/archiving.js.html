@@ -98,10 +98,48 @@ function Archive(config, properties) {
     this[key] = properties[key];
   }
 
+  /**
+  * Stops the recording of the archive.
+  * &lt;p>
+  * Archives automatically stop recording after 90 minutes or when all clients have disconnected
+  * from the session being archived.
+  *
+  * @param callback {Function} The function to call upon completing the operation. Two arguments
+  * are passed to the function:
+  * 
+  * &lt;ul>
+  *
+  *   &lt;li>
+  *      &lt;code>error&lt;/code> &amp;mdash; An error object (if the call to the method fails).
+  *   &lt;/li>
+  *
+  *   &lt;li>
+  *       &lt;code>archive&lt;/code> &amp;mdash; The Archive object.
+  *   &lt;/li>
+  *
+  * &lt;/ul>
+  *
+  * @method #stop
+  * @memberof Archive
+  */
   this.stop = function(callback) {
     exports.stopArchive(config, id, callback);
   };
 
+  /**
+  * Deletes the OpenTok archive.
+  * &lt;p>
+  * You can only delete an archive which has a status of "available" or "uploaded". Deleting an
+  * archive removes its record from the list of archives. For an "available" archive, it also
+  * removes the archive file, making it unavailable for download.
+  *
+  * @param callback {Function} The function to call upon completing the operation. On successfully
+  * deleting the archive, the function is called with no arguments passed in. On failure, an error
+  * object is passed into the function.
+  *
+  * @method #delete
+  * @memberof Archive
+  */
   this.delete = function(callback) {
     exports.deleteArchive(config, id, callback);
   };
@@ -120,48 +158,6 @@ var api = function(config, method, path, body, callback) {
   }, callback);
 };
 
-/**
-* Retrieves a List of {@link Archive} objects, representing archives that are both
-* both completed and in-progress, for your API key. 
-*
-* @param options {Object} An options parameter with two properties:
-*
-* &lt;ul>
-*
-*   &lt;li>
-*     &lt;code>count&lt;/code> &amp;mdash; The index offset of the first archive. 0 is offset of the most 
-*     recently started archive. 1 is the offset of the archive that started prior to the most recent 
-*     archive. This limit is 1000 archives.
-*   &lt;/li>
-*
-*   &lt;li>
-*     &lt;code>offset&lt;/code> &amp;mdash; The offset for the first archive to list (starting with the first
-*     archive recorded as offset 0).
-*   &lt;/li>
-*
-* &lt;/ul>
-*
-* &lt;p>If you don't pass in an &lt;code>options&lt;/code> argument, the method returns up to 1000 archives
-* starting with the first archive recorded.
-*
-* @param callback {Function} The function to call upon completing the operation. Two arguments
-* are passed to the function:
-* 
-* &lt;ul>
-*
-*   &lt;li>
-*      &lt;code>error&lt;/code> &amp;mdash; An error object (if the call to the method fails).
-*   &lt;/li>
-*
-*   &lt;li>
-*       &lt;code>archives&lt;/code> &amp;mdash; An array of Archive objects.
-*   &lt;/li>
-*
-* &lt;/ul>
-* 
-* @method #listArchives
-* @memberof OpenTok
-*/
 exports.listArchives = function(config, options, callback) {
   if(typeof options == 'function') {
     callback = options;
@@ -199,41 +195,6 @@ exports.listArchives = function(config, options, callback) {
   });
 };
 
-/**
-* Starts archiving an OpenTok 2.0 session.
-* &lt;p>
-* Clients must be actively connected to the OpenTok session for you to successfully start recording
-* an archive.
-* &lt;p>
-* You can only record one archive at a time for a given session. You can only record archives
-* of sessions that uses the OpenTok Media Router; you cannot archive peer-to-peer sessions.
-*
-* @param sessionId The session ID of the OpenTok session to archive.
-*
-* @param options {Object} An optional options object with one property &amp;mdash; &lt;code>name&lt;/code>
-* (a String). This is the name of the archive. You can use this name to identify the archive. It is
-* a property of the Archive object, and it is a property of archive-related events in the OpenTok
-* client libraries.
-*
-* @param callback {Function} The function to call upon completing the operation. Two arguments
-* are passed to the function:
-* 
-* &lt;ul>
-*
-*   &lt;li>
-*      &lt;code>error&lt;/code> &amp;mdash; An error object (if the call to the method fails).
-*   &lt;/li>
-*
-*   &lt;li>
-*       &lt;code>archives&lt;/code> &amp;mdash; The Archive object. This object includes properties defining
-*       the archive, including the archive ID.
-*   &lt;/li>
-*
-* &lt;/ul>
-*
-* @method #startArchive
-* @memberof OpenTok
-*/
 exports.startArchive = function(config, sessionId, options, callback) {
   if(typeof options == 'function') {
     callback = options;
@@ -268,33 +229,6 @@ exports.startArchive = function(config, sessionId, options, callback) {
   });
 };
 
-/**
-* Stops an OpenTok archive that is being recorded.
-* &lt;p>
-* Archives automatically stop recording after 90 minutes or when all clients have disconnected from
-* the session being archived.
-*
-* @param archiveId {String} The archive ID of the archive you want to stop recording.
-* @return The Archive object corresponding to the archive being STOPPED.
-*
-* @param callback {Function} The function to call upon completing the operation. Two arguments
-* are passed to the function:
-* 
-* &lt;ul>
-*
-*   &lt;li>
-*      &lt;code>error&lt;/code> &amp;mdash; An error object (if the call to the method fails).
-*   &lt;/li>
-*
-*   &lt;li>
-*       &lt;code>archives&lt;/code> &amp;mdash; The Archive object.
-*   &lt;/li>
-*
-* &lt;/ul>
-*
-* @method #stopArchive
-* @memberof OpenTok
-*/
 exports.stopArchive = function(config, archiveId, callback) {
   if(typeof callback != 'function') {
     throw(new errors.ArgumentError('No callback given to stopArchive'));
@@ -324,16 +258,6 @@ exports.stopArchive = function(config, archiveId, callback) {
   });
 };
 
-/**
-* Gets an {@link Archive} object for the given archive ID.
-*
-* @param archiveId The archive ID.
-*
-* @return The {@link Archive} object.
-*
-* @method #getArchive
-* @memberof OpenTok
-*/
 exports.getArchive = function(config, archiveId, callback) {
   if(typeof callback != 'function') {
     throw(new errors.ArgumentError('No callback given to getArchive'));
@@ -364,22 +288,6 @@ exports.getArchive = function(config, archiveId, callback) {
   });
 };
 
-/**
-* Deletes an OpenTok archive.
-* &lt;p>
-* You can only delete an archive which has a status of "available" or "uploaded". Deleting an
-* archive removes its record from the list of archives. For an "available" archive, it also
-* removes the archive file, making it unavailable for download.
-*
-* @param {String} archiveId The archive ID of the archive you want to delete.
-*
-* @param callback {Function} The function to call upon completing the operation. On successfully
-* deleting the archive, the function is called with no arguments passed in. On failure, an error
-* object is passed into the function.
-*
-* @method #deleteArchive
-* @memberof OpenTok
-*/
 exports.deleteArchive = function(config, archiveId, callback) {
   if(typeof callback != 'function') {
     throw(new errors.ArgumentError('No callback given to deleteArchive'));
@@ -419,7 +327,7 @@ exports.deleteArchive = function(config, archiveId, callback) {
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Thu May 15 2014 22:41:38 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Fri May 16 2014 14:05:03 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

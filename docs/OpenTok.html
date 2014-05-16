@@ -231,8 +231,9 @@ explicitly be destroyed.
 <p>
 A session ID string can be up to 255 characters long.
 
-You can also create a session using the <a href="http://www.tokbox.com/opentok/api/#session_id_production">OpenTok
-REST API</a> or the <a href="https://dashboard.tokbox.com/projects">OpenTok dashboard</a>.
+You can also create a session using the
+<a href="http://www.tokbox.com/opentok/api/#session_id_production">OpenTok REST API</a>
+or the <a href="https://dashboard.tokbox.com/projects">OpenTok dashboard</a>.
     </div>
     
 
@@ -375,7 +376,7 @@ pricing, see the <a href="http://www.tokbox.com/pricing">OpenTok pricing page</a
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line136">line 136</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line271">line 271</a>
     </li></ul></dd>
     
 
@@ -534,7 +535,7 @@ object is passed into the function.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="archiving.js.html">archiving.js</a>, <a href="archiving.js.html#line340">line 340</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line142">line 142</a>
     </li></ul></dd>
     
 
@@ -700,7 +701,7 @@ dashboard</a> page to generate test tokens.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line206">line 206</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line341">line 341</a>
     </li></ul></dd>
     
 
@@ -824,7 +825,7 @@ dashboard</a> page to generate test tokens.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="archiving.js.html">archiving.js</a>, <a href="archiving.js.html#line300">line 300</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line130">line 130</a>
     </li></ul></dd>
     
 
@@ -929,13 +930,13 @@ both completed and in-progress, for your API key.
 
   <li>
     <code>count</code> &mdash; The index offset of the first archive. 0 is offset of the most 
-    recently started archive. 1 is the offset of the archive that started prior to the most recent 
-    archive. This limit is 1000 archives.
+    recently started archive. 1 is the offset of the archive that started prior to the most
+    recent archive. This limit is 1000 archives.
   </li>
 
   <li>
-    <code>offset</code> &mdash; The offset for the first archive to list (starting with the first
-    archive recorded as offset 0).
+    <code>offset</code> &mdash; The offset for the first archive to list (starting with the
+    first archive recorded as offset 0).
   </li>
 
 </ul>
@@ -1008,7 +1009,7 @@ are passed to the function:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="archiving.js.html">archiving.js</a>, <a href="archiving.js.html#line96">line 96</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line160">line 160</a>
     </li></ul></dd>
     
 
@@ -1048,8 +1049,8 @@ are passed to the function:
     <div class="description">
         Starts archiving an OpenTok 2.0 session.
 <p>
-Clients must be actively connected to the OpenTok session for you to successfully start recording
-an archive.
+Clients must be actively connected to the OpenTok session for you to successfully start
+recording an archive.
 <p>
 You can only record one archive at a time for a given session. You can only record archives
 of sessions that uses the OpenTok Media Router; you cannot archive peer-to-peer sessions.
@@ -1121,9 +1122,9 @@ of sessions that uses the OpenTok Media Router; you cannot archive peer-to-peer 
             
 
             <td class="description last">An optional options object with one property &mdash; <code>name</code>
-(a String). This is the name of the archive. You can use this name to identify the archive. It is
-a property of the Archive object, and it is a property of archive-related events in the OpenTok
-client libraries.</td>
+(a String). This is the name of the archive. You can use this name to identify the archive.
+It is a property of the Archive object, and it is a property of archive-related events in the
+OpenTok client libraries.</td>
         </tr>
 
     
@@ -1156,7 +1157,7 @@ are passed to the function:
   </li>
 
   <li>
-      <code>archives</code> &mdash; The Archive object. This object includes properties defining
+      <code>archive</code> &mdash; The Archive object. This object includes properties defining
       the archive, including the archive ID.
   </li>
 
@@ -1191,7 +1192,7 @@ are passed to the function:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="archiving.js.html">archiving.js</a>, <a href="archiving.js.html#line175">line 175</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line63">line 63</a>
     </li></ul></dd>
     
 
@@ -1231,8 +1232,8 @@ are passed to the function:
     <div class="description">
         Stops an OpenTok archive that is being recorded.
 <p>
-Archives automatically stop recording after 90 minutes or when all clients have disconnected from
-the session being archived.
+Archives automatically stop recording after 90 minutes or when all clients have disconnected
+from the session being archived.
     </div>
     
 
@@ -1315,7 +1316,7 @@ are passed to the function:
   </li>
 
   <li>
-      <code>archives</code> &mdash; The Archive object.
+      <code>archive</code> &mdash; The Archive object.
   </li>
 
 </ul></td>
@@ -1349,7 +1350,7 @@ are passed to the function:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="archiving.js.html">archiving.js</a>, <a href="archiving.js.html#line244">line 244</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line101">line 101</a>
     </li></ul></dd>
     
 
@@ -1408,7 +1409,7 @@ are passed to the function:
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Thu May 15 2014 22:41:38 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Fri May 16 2014 14:05:03 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

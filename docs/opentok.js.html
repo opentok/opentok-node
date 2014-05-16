@@ -87,10 +87,145 @@ var OpenTok = function(apiKey, apiSecret, env) {
     archiveConfig.apiEndpoint = env;
   }
 
+  /**
+  * Starts archiving an OpenTok 2.0 session.
+  * &lt;p>
+  * Clients must be actively connected to the OpenTok session for you to successfully start
+  * recording an archive.
+  * &lt;p>
+  * You can only record one archive at a time for a given session. You can only record archives
+  * of sessions that uses the OpenTok Media Router; you cannot archive peer-to-peer sessions.
+  *
+  * @param sessionId The session ID of the OpenTok session to archive.
+  *
+  * @param options {Object} An optional options object with one property &amp;mdash; &lt;code>name&lt;/code>
+  * (a String). This is the name of the archive. You can use this name to identify the archive.
+  * It is a property of the Archive object, and it is a property of archive-related events in the
+  * OpenTok client libraries.
+  *
+  * @param callback {Function} The function to call upon completing the operation. Two arguments
+  * are passed to the function:
+  * 
+  * &lt;ul>
+  *
+  *   &lt;li>
+  *      &lt;code>error&lt;/code> &amp;mdash; An error object (if the call to the method fails).
+  *   &lt;/li>
+  *
+  *   &lt;li>
+  *       &lt;code>archive&lt;/code> &amp;mdash; The Archive object. This object includes properties defining
+  *       the archive, including the archive ID.
+  *   &lt;/li>
+  *
+  * &lt;/ul>
+  *
+  * @method #startArchive
+  * @memberof OpenTok
+  */
   this.startArchive = archiving.startArchive.bind(null, archiveConfig);
+
+
+  /**
+  * Stops an OpenTok archive that is being recorded.
+  * &lt;p>
+  * Archives automatically stop recording after 90 minutes or when all clients have disconnected
+  * from the session being archived.
+  *
+  * @param archiveId {String} The archive ID of the archive you want to stop recording.
+  * @return The Archive object corresponding to the archive being STOPPED.
+  *
+  * @param callback {Function} The function to call upon completing the operation. Two arguments
+  * are passed to the function:
+  * 
+  * &lt;ul>
+  *
+  *   &lt;li>
+  *      &lt;code>error&lt;/code> &amp;mdash; An error object (if the call to the method fails).
+  *   &lt;/li>
+  *
+  *   &lt;li>
+  *       &lt;code>archive&lt;/code> &amp;mdash; The Archive object.
+  *   &lt;/li>
+  *
+  * &lt;/ul>
+  *
+  * @method #stopArchive
+  * @memberof OpenTok
+  */
   this.stopArchive = archiving.stopArchive.bind(null, archiveConfig);
+
+  /**
+  * Gets an {@link Archive} object for the given archive ID.
+  *
+  * @param archiveId The archive ID.
+  *
+  * @return The {@link Archive} object.
+  *
+  * @method #getArchive
+  * @memberof OpenTok
+  */
   this.getArchive = archiving.getArchive.bind(null, archiveConfig);
+
+  /**
+  * Deletes an OpenTok archive.
+  * &lt;p>
+  * You can only delete an archive which has a status of "available" or "uploaded". Deleting an
+  * archive removes its record from the list of archives. For an "available" archive, it also
+  * removes the archive file, making it unavailable for download.
+  *
+  * @param {String} archiveId The archive ID of the archive you want to delete.
+  *
+  * @param callback {Function} The function to call upon completing the operation. On successfully
+  * deleting the archive, the function is called with no arguments passed in. On failure, an error
+  * object is passed into the function.
+  *
+  * @method #deleteArchive
+  * @memberof OpenTok
+  */
   this.deleteArchive = archiving.deleteArchive.bind(null, archiveConfig);
+
+  /**
+  * Retrieves a List of {@link Archive} objects, representing archives that are both
+  * both completed and in-progress, for your API key. 
+  *
+  * @param options {Object} An options parameter with two properties:
+  *
+  * &lt;ul>
+  *
+  *   &lt;li>
+  *     &lt;code>count&lt;/code> &amp;mdash; The index offset of the first archive. 0 is offset of the most 
+  *     recently started archive. 1 is the offset of the archive that started prior to the most
+  *     recent archive. This limit is 1000 archives.
+  *   &lt;/li>
+  *
+  *   &lt;li>
+  *     &lt;code>offset&lt;/code> &amp;mdash; The offset for the first archive to list (starting with the
+  *     first archive recorded as offset 0).
+  *   &lt;/li>
+  *
+  * &lt;/ul>
+  *
+  * &lt;p>If you don't pass in an &lt;code>options&lt;/code> argument, the method returns up to 1000 archives
+  * starting with the first archive recorded.
+  *
+  * @param callback {Function} The function to call upon completing the operation. Two arguments
+  * are passed to the function:
+  * 
+  * &lt;ul>
+  *
+  *   &lt;li>
+  *      &lt;code>error&lt;/code> &amp;mdash; An error object (if the call to the method fails).
+  *   &lt;/li>
+  *
+  *   &lt;li>
+  *       &lt;code>archives&lt;/code> &amp;mdash; An array of Archive objects.
+  *   &lt;/li>
+  *
+  * &lt;/ul>
+  * 
+  * @method #listArchives
+  * @memberof OpenTok
+  */
   this.listArchives = archiving.listArchives.bind(null, archiveConfig);
 }
 
@@ -108,9 +243,9 @@ var OpenTok = function(apiKey, apiSecret, env) {
  * &lt;p>
  * A session ID string can be up to 255 characters long.
  *
- * You can also create a session using the &lt;a href="http://www.tokbox.com/opentok/api/#session_id_production">OpenTok
- * REST API&lt;/a> or the &lt;a href="https://dashboard.tokbox.com/projects">OpenTok dashboard&lt;/a>.
- *
+ * You can also create a session using the
+ * &lt;a href="http://www.tokbox.com/opentok/api/#session_id_production">OpenTok REST API&lt;/a>
+ * or the &lt;a href="https://dashboard.tokbox.com/projects">OpenTok dashboard&lt;/a>.
  *
  * @return A session ID for the new session. For example, when using the OpenTok.js library, use
  * this session ID when calling the &lt;code>OT.initSession()&lt;/code> method.
@@ -362,7 +497,7 @@ module.exports = OpenTok;
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Thu May 15 2014 22:41:38 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Fri May 16 2014 14:05:03 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>
