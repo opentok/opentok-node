@@ -33,17 +33,17 @@ describe('Session', function() {
       expect(session.sessionId).to.equal(sessionId);
   });
 
-  describe('when initialized with just a p2p option', function() {
-    it('has a p2p property', function() {
-      var session = new Session(this.opentok, sessionId, { p2p: true });
+  describe('when initialized with a media mode', function() {
+    it('has a mediaMode property', function() {
+      var session = new Session(this.opentok, sessionId, { mediaMode: "relayed" });
       expect(session).to.be.an.instanceof(Session);
-      expect(session.p2p).to.be.true
-      session = new Session(this.opentok, sessionId, { p2p: false });
+      expect(session.mediaMode).to.equal("relayed");
+      session = new Session(this.opentok, sessionId, { mediaMode: "routed" });
       expect(session).to.be.an.instanceof(Session);
-      expect(session.p2p).to.be.false
+      expect(session.mediaMode).to.equal("routed");
     });
     it('does not have a location property', function() {
-      var session = new Session(this.opentok, sessionId, { p2p: true });
+      var session = new Session(this.opentok, sessionId, { mediaMode: "relayed" });
       expect(session).to.be.an.instanceof(Session);
       expect(session.location).to.not.exist
     });
@@ -55,10 +55,10 @@ describe('Session', function() {
       expect(session).to.be.an.instanceof(Session);
       expect(session.location).to.equal('12.34.56.78');
     });
-    it('does not have a p2p property', function() {
+    it('does not have a mediaMode property', function() {
       var session = new Session(this.opentok, sessionId, { location: '12.34.56.78' });
       expect(session).to.be.an.instanceof(Session);
-      expect(session.p2p).to.not.exist
+      expect(session.mediaMode).to.not.exist
     });
   });
 

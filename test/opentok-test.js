@@ -60,7 +60,7 @@ describe('OpenTok', function() {
        var scope = nock(apiUrl)
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
         .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
-        .post('/hl/session/create', "p2p.preference=false")
+        .post('/hl/session/create', "p2p.preference=disabled")
         .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>SESSIONID</session_id><partner_id>123456</partner_id><create_dt>Wed Mar 19 23:35:24 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
         date: 'Thu, 20 Mar 2014 06:35:24 GMT',
         'content-type': 'text/xml',
@@ -87,7 +87,7 @@ describe('OpenTok', function() {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
         .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
-        .post('/hl/session/create', "p2p.preference=false")
+        .post('/hl/session/create', "p2p.preference=disabled")
         .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>SESSIONID</session_id><partner_id>123456</partner_id><create_dt>Wed Mar 19 23:35:24 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
         date: 'Thu, 20 Mar 2014 06:35:24 GMT',
         'content-type': 'text/xml',
@@ -99,17 +99,17 @@ describe('OpenTok', function() {
       this.opentok.createSession(function(err, session){
         expect(session).to.be.an.instanceof(Session);
         expect(session.sessionId).to.equal('SESSIONID');
-        expect(session.p2p).to.be.false
+        expect(session.mediaMode).to.equal('routed');
         scope.done();
         done(err);
       });
     });
 
-    it('creates a peer to peer session', function(done) {
+    it('creates a media relayed session', function(done) {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
         .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
-        .post('/hl/session/create', "p2p.preference=true")
+        .post('/hl/session/create', "p2p.preference=enabled")
         .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>SESSIONID</session_id><partner_id>123456</partner_id><create_dt>Thu Mar 20 07:02:45 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
         date: 'Thu, 20 Mar 2014 14:02:45 GMT',
         'content-type': 'text/xml',
@@ -117,11 +117,31 @@ describe('OpenTok', function() {
         'access-control-allow-origin': '*',
         'x-tb-host': 'oms506-nyc.tokbox.com',
         'content-length': '211' });
-      // passes p2p: true
-      this.opentok.createSession({ 'p2p' : true }, function(err, session) {
+      this.opentok.createSession({ 'mediaMode' : 'relayed' }, function(err, session) {
         expect(session).to.be.an.instanceof(Session);
         expect(session.sessionId).to.equal('SESSIONID');
-        expect(session.p2p).to.be.true
+        expect(session.mediaMode).to.equal('relayed');
+        scope.done();
+        done(err);
+      });
+    });
+
+    it('creates a media routed session even if the media mode is invalid', function(done) {
+      var scope = nock('https://api.opentok.com:443')
+        .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
+        .post('/hl/session/create', "p2p.preference=disabled")
+        .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>SESSIONID</session_id><partner_id>123456</partner_id><create_dt>Thu Mar 20 07:02:45 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
+        date: 'Thu, 20 Mar 2014 14:02:45 GMT',
+        'content-type': 'text/xml',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'x-tb-host': 'oms506-nyc.tokbox.com',
+        'content-length': '211' });
+      this.opentok.createSession({ 'mediaMode' : 'blah' }, function(err, session) {
+        expect(session).to.be.an.instanceof(Session);
+        expect(session.sessionId).to.equal('SESSIONID');
+        expect(session.mediaMode).to.equal('routed');
         scope.done();
         done(err);
       });
@@ -131,7 +151,7 @@ describe('OpenTok', function() {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
         .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
-        .post('/hl/session/create', "location=12.34.56.78&p2p.preference=false")
+        .post('/hl/session/create', "location=12.34.56.78&p2p.preference=disabled")
         .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>SESSIONID</session_id><partner_id>123456</partner_id><create_dt>Thu Mar 20 07:17:22 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
         date: 'Thu, 20 Mar 2014 14:17:22 GMT',
         'content-type': 'text/xml',
@@ -143,30 +163,18 @@ describe('OpenTok', function() {
       this.opentok.createSession({ 'location': '12.34.56.78' }, function(err, session) {
         expect(session).to.be.an.instanceof(Session);
         expect(session.sessionId).to.equal('SESSIONID');
-        expect(session.p2p).to.be.false
+        expect(session.mediaMode).to.equal('routed');
         expect(session.location).to.equal('12.34.56.78');
         scope.done()
         done(err);
       });
     });
 
-    it('complains when the p2p or location values are not valid', function(done) {
-      var self = this;
-      // YAY higher order programming :)
-      var expectError = function(cb) {
-        return function(err, result) {
-          expect(err).to.be.an.instanceof(Error);
-          cb(null)
-        };
-      };
-      async.parallel([
-        function(cb) {
-          self.opentok.createSession({ p2p: 'lalalal' }, expectError(cb))
-        },
-        function(cb) {
-          self.opentok.createSession({ location: 'not an ip address' }, expectError(cb))
-        }
-      ], done);
+    it('complains when the location value is not valid', function(done) {
+      this.opentok.createSession({ location: 'not an ip address' }, function(err) {
+        expect(err).to.be.an.instanceof(Error);
+        done();
+      });
     });
 
     it('complains when there is no callback function', function() {
@@ -175,11 +183,11 @@ describe('OpenTok', function() {
       expect(result).to.be.an.instanceof(Error);
     });
 
-    it('compains when a server error takes place', function(done) {
+    it('complains when a server error takes place', function(done) {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
         .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
-        .post('/hl/session/create', "p2p.preference=false")
+        .post('/hl/session/create', "p2p.preference=disabled")
         .reply(500, "", { server: 'nginx',
         date: 'Thu, 20 Mar 2014 06:35:24 GMT',
         'content-type': 'text/xml',
