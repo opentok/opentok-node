@@ -1,4 +1,31 @@
-/*
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: opentok.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: opentok.js</h1>
+
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
  * OpenTok server-side SDK
  */
 
@@ -8,30 +35,28 @@ var net = require('net'),
     crypto = require('crypto'),
     _ = require('lodash'),
     Client = require('./client'),
-    Session = require('./session'),
     archiving = require('./archiving'),
-    package = require ('../package.json')
-    errors = require('./errors');
+    package = require ('../package.json');
 
 // Internal Constants
 var TOKEN_SENTINEL = "T1==";
 
 /**
 * Contains methods for creating OpenTok sessions, generating tokens, and working with archives.
-* <p>
+* &lt;p>
 * To create a new OpenTok object, call the OpenTok constructor with your OpenTok API key
-* and the API secret from <a href="https://dashboard.tokbox.com">the OpenTok dashboard</a>.
+* and the API secret from &lt;a href="https://dashboard.tokbox.com">the OpenTok dashboard&lt;/a>.
 * Do not publicly share your API secret. You will use it with the OpenTok constructor
 * (only on your web server) to create OpenTok sessions.
-* <p>
+* &lt;p>
 * Be sure to include the entire OpenTok Node.js SDK on your web server.
 *
 * @class OpenTok
 *
 * @param apiKey {String} Your OpenTok API key. (See the
-* <a href="https://dashboard.tokbox.com">OpenTok dashboard</a> page.)
+* &lt;a href="https://dashboard.tokbox.com">OpenTok dashboard&lt;/a> page.)
 * @param apiSecret {String} Your OpenTok API secret. (See the
-* <a href="https://dashboard.tokbox.com">OpenTok dashboard</a> page)
+* &lt;a href="https://dashboard.tokbox.com">OpenTok dashboard&lt;/a> page)
 */
 var OpenTok = function(apiKey, apiSecret, env) {
   // we're loose about calling this constructor with `new`, we got your back
@@ -64,16 +89,16 @@ var OpenTok = function(apiKey, apiSecret, env) {
 
   /**
   * Starts archiving an OpenTok 2.0 session.
-  * <p>
+  * &lt;p>
   * Clients must be actively connected to the OpenTok session for you to successfully start
   * recording an archive.
-  * <p>
+  * &lt;p>
   * You can only record one archive at a time for a given session. You can only record archives
   * of sessions that uses the OpenTok Media Router; you cannot archive peer-to-peer sessions.
   *
   * @param sessionId The session ID of the OpenTok session to archive.
   *
-  * @param options {Object} An optional options object with one property &mdash; <code>name</code>
+  * @param options {Object} An optional options object with one property &amp;mdash; &lt;code>name&lt;/code>
   * (a String). This is the name of the archive. You can use this name to identify the archive.
   * It is a property of the Archive object, and it is a property of archive-related events in the
   * OpenTok client libraries.
@@ -81,18 +106,18 @@ var OpenTok = function(apiKey, apiSecret, env) {
   * @param callback {Function} The function to call upon completing the operation. Two arguments
   * are passed to the function:
   * 
-  * <ul>
+  * &lt;ul>
   *
-  *   <li>
-  *      <code>error</code> &mdash; An error object (if the call to the method fails).
-  *   </li>
+  *   &lt;li>
+  *      &lt;code>error&lt;/code> &amp;mdash; An error object (if the call to the method fails).
+  *   &lt;/li>
   *
-  *   <li>
-  *       <code>archive</code> &mdash; The Archive object. This object includes properties defining
+  *   &lt;li>
+  *       &lt;code>archive&lt;/code> &amp;mdash; The Archive object. This object includes properties defining
   *       the archive, including the archive ID.
-  *   </li>
+  *   &lt;/li>
   *
-  * </ul>
+  * &lt;/ul>
   *
   * @method #startArchive
   * @memberof OpenTok
@@ -102,7 +127,7 @@ var OpenTok = function(apiKey, apiSecret, env) {
 
   /**
   * Stops an OpenTok archive that is being recorded.
-  * <p>
+  * &lt;p>
   * Archives automatically stop recording after 90 minutes or when all clients have disconnected
   * from the session being archived.
   *
@@ -112,17 +137,17 @@ var OpenTok = function(apiKey, apiSecret, env) {
   * @param callback {Function} The function to call upon completing the operation. Two arguments
   * are passed to the function:
   * 
-  * <ul>
+  * &lt;ul>
   *
-  *   <li>
-  *      <code>error</code> &mdash; An error object (if the call to the method fails).
-  *   </li>
+  *   &lt;li>
+  *      &lt;code>error&lt;/code> &amp;mdash; An error object (if the call to the method fails).
+  *   &lt;/li>
   *
-  *   <li>
-  *       <code>archive</code> &mdash; The Archive object.
-  *   </li>
+  *   &lt;li>
+  *       &lt;code>archive&lt;/code> &amp;mdash; The Archive object.
+  *   &lt;/li>
   *
-  * </ul>
+  * &lt;/ul>
   *
   * @method #stopArchive
   * @memberof OpenTok
@@ -143,7 +168,7 @@ var OpenTok = function(apiKey, apiSecret, env) {
 
   /**
   * Deletes an OpenTok archive.
-  * <p>
+  * &lt;p>
   * You can only delete an archive which has a status of "available" or "uploaded". Deleting an
   * archive removes its record from the list of archives. For an "available" archive, it also
   * removes the archive file, making it unavailable for download.
@@ -165,38 +190,38 @@ var OpenTok = function(apiKey, apiSecret, env) {
   *
   * @param options {Object} An options parameter with two properties:
   *
-  * <ul>
+  * &lt;ul>
   *
-  *   <li>
-  *     <code>count</code> &mdash; The index offset of the first archive. 0 is offset of the most 
+  *   &lt;li>
+  *     &lt;code>count&lt;/code> &amp;mdash; The index offset of the first archive. 0 is offset of the most 
   *     recently started archive. 1 is the offset of the archive that started prior to the most
   *     recent archive. This limit is 1000 archives.
-  *   </li>
+  *   &lt;/li>
   *
-  *   <li>
-  *     <code>offset</code> &mdash; The offset for the first archive to list (starting with the
+  *   &lt;li>
+  *     &lt;code>offset&lt;/code> &amp;mdash; The offset for the first archive to list (starting with the
   *     first archive recorded as offset 0).
-  *   </li>
+  *   &lt;/li>
   *
-  * </ul>
+  * &lt;/ul>
   *
-  * <p>If you don't pass in an <code>options</code> argument, the method returns up to 1000 archives
+  * &lt;p>If you don't pass in an &lt;code>options&lt;/code> argument, the method returns up to 1000 archives
   * starting with the first archive recorded.
   *
   * @param callback {Function} The function to call upon completing the operation. Two arguments
   * are passed to the function:
   * 
-  * <ul>
+  * &lt;ul>
   *
-  *   <li>
-  *      <code>error</code> &mdash; An error object (if the call to the method fails).
-  *   </li>
+  *   &lt;li>
+  *      &lt;code>error&lt;/code> &amp;mdash; An error object (if the call to the method fails).
+  *   &lt;/li>
   *
-  *   <li>
-  *       <code>archives</code> &mdash; An array of Archive objects.
-  *   </li>
+  *   &lt;li>
+  *       &lt;code>archives&lt;/code> &amp;mdash; An array of Archive objects.
+  *   &lt;/li>
   *
-  * </ul>
+  * &lt;/ul>
   * 
   * @method #listArchives
   * @memberof OpenTok
@@ -207,71 +232,70 @@ var OpenTok = function(apiKey, apiSecret, env) {
 /**
  * Creates a new OpenTok session and returns the session ID, which uniquely identifies
  * the session.
- * <p>
+ * &lt;p>
  * For example, when using the OpenTok.js library, use the session ID when calling the
- * <a href="http://tokbox.com/opentok/libraries/client/js/reference/OT.html#initSession">
- * OT.initSession()</a> method (to initialize an OpenTok session).
- * <p>
+ * &lt;a href="http://tokbox.com/opentok/libraries/client/js/reference/OT.html#initSession">
+ * OT.initSession()&lt;/a> method (to initialize an OpenTok session).
+ * &lt;p>
  * OpenTok sessions do not expire. However, authentication tokens do expire (see the
  * generateToken(String, TokenOptions) method). Also note that sessions cannot
  * explicitly be destroyed.
- * <p>
+ * &lt;p>
  * A session ID string can be up to 255 characters long.
  *
  * You can also create a session using the
- * <a href="http://www.tokbox.com/opentok/api/#session_id_production">OpenTok REST API</a>
- * or the <a href="https://dashboard.tokbox.com/projects">OpenTok dashboard</a>.
+ * &lt;a href="http://www.tokbox.com/opentok/api/#session_id_production">OpenTok REST API&lt;/a>
+ * or the &lt;a href="https://dashboard.tokbox.com/projects">OpenTok dashboard&lt;/a>.
  *
  * @return A session ID for the new session. For example, when using the OpenTok.js library, use
- * this session ID when calling the <code>OT.initSession()</code> method.
+ * this session ID when calling the &lt;code>OT.initSession()&lt;/code> method.
  *
  * @param   {Object} options
  * This object defines options for the session, including the following properties:
  *
- * <ul>
+ * &lt;ul>
  *
- *     <li><code>location</code> (String) &mdash;
+ *     &lt;li>&lt;code>location&lt;/code> (String) &amp;mdash;
  * An IP address that the OpenTok servers will use to situate the session in the global
  * OpenTok network. If you do not set a location hint, the OpenTok servers will be based on
  * the first client connecting to the session.
- * </li>
+ * &lt;/li>
  *
- *     <li><code>p2p</code> (Boolean) &mdash;
+ *     &lt;li>&lt;code>p2p&lt;/code> (Boolean) &amp;mdash;
  * Determines whether the session will transmit streams between peers
  * (true) or using the OpenTok Media Router (false). By default, sessions use the OpenTok
  * Media Router (false).
- * <p>
- * The <a href="http://www.tokbox.com/blog/mantis-next-generation-cloud-technology-for-webrtc/">
- * OpenTok Media Router</a> provides benefits not available in peer-to-peer sessions.
+ * &lt;p>
+ * The &lt;a href="http://www.tokbox.com/blog/mantis-next-generation-cloud-technology-for-webrtc/">
+ * OpenTok Media Router&lt;/a> provides benefits not available in peer-to-peer sessions.
  * For example, the OpenTok media server can decrease bandwidth usage in multiparty sessions.
  * Also, the OpenTok server can improve the quality of the user experience through
- * <a href="http://www.tokbox.com/blog/quality-of-experience-and-traffic-shaping-the-next-step-with-mantis/">dynamic
- * traffic shaping</a>.
- * <p>
+ * &lt;a href="http://www.tokbox.com/blog/quality-of-experience-and-traffic-shaping-the-next-step-with-mantis/">dynamic
+ * traffic shaping&lt;/a>.
+ * &lt;p>
  * For peer-to-peer sessions, the session will attempt to transmit streams directly
  * between clients. If clients cannot connect due to firewall restrictions, the session uses
  * the OpenTok TURN server to relay audio-video streams.
- * <p>
+ * &lt;p>
  * You will be billed for streamed minutes if you use the OpenTok Media Router or if the
  * peer-to-peer session uses the OpenTok TURN server to relay streams. For information on
- * pricing, see the <a href="http://www.tokbox.com/pricing">OpenTok pricing page</a>.
+ * pricing, see the &lt;a href="http://www.tokbox.com/pricing">OpenTok pricing page&lt;/a>.
  *
  * @param   {Function}   callback
  * The function that is called when the operation completes. This function is passed two arguments:
  *
- * <ul>
- *   <li>
- *      <code>sessionId</code> &mdash; On sucess, this paramter is set to the session ID of
+ * &lt;ul>
+ *   &lt;li>
+ *      &lt;code>sessionId&lt;/code> &amp;mdash; On sucess, this paramter is set to the session ID of
  *      the session.
- *   </li>
- *   <li>
- *      <code>error</code> &mdash; On failiure, this parameter is set to an error object.
+ *   &lt;/li>
+ *   &lt;li>
+ *      &lt;code>error&lt;/code> &amp;mdash; On failiure, this parameter is set to an error object.
  *      Check the error message for details.
- *   </li>
- * </ul>
+ *   &lt;/li>
+ * &lt;/ul>
  */
 OpenTok.prototype.createSession = function(opts, callback) {
-  var backupOpts;
 
   if (_.isFunction(opts)) {
     // shift arguments if the opts is left out
@@ -284,61 +308,60 @@ OpenTok.prototype.createSession = function(opts, callback) {
 
   // whitelist the keys allowed
   _.pick(_.defaults(opts, { "p2p" : false }), "p2p", "location");
-  if ( !_.isBoolean(opts.p2p) || ( "location" in opts && !net.isIPv4(opts.location)) ) {
+  if ( !_.isBoolean(opts.p2p) || ( "location" in opts &amp;&amp; !net.isIPv4(opts.location)) ) {
     return callback(new Error('Invalid arguments when calling createSession, p2p must be Boolean and location must be an IPv4 address'));
   }
 
   // rename p2p -> p2p.preference
-  backupOpts = _.clone(opts);
   opts["p2p.preference"] = opts["p2p"];
   delete opts["p2p"];
 
   this.client.createSession(opts, function(err, json) {
     if (err) return callback(new Error('Failed to createSession. '+err));
-    callback(null, new Session(this, json.sessions.Session.session_id, backupOpts));
+    callback(null, json.sessions.Session.session_id);
   });
 };
 
 /**
 * Creates a token for connecting to an OpenTok session. In order to authenticate a user
 * connecting to an OpenTok session, the client passes a token when connecting to the session.
-* <p>
-* For testing, you can also use the <a href="https://dashboard.tokbox.com/projects">OpenTok
-* dashboard</a> page to generate test tokens.
+* &lt;p>
+* For testing, you can also use the &lt;a href="https://dashboard.tokbox.com/projects">OpenTok
+* dashboard&lt;/a> page to generate test tokens.
 *
 * @param sessionId The session ID corresponding to the session to which the user will connect.
 *
 * @param options An object that defines options for the token (each of which is optional):
 *
-* <ul>
-*    <li><code>role</code> (String) &mdash; The role for the token. Each role defines a set of
+* &lt;ul>
+*    &lt;li>&lt;code>role&lt;/code> (String) &amp;mdash; The role for the token. Each role defines a set of
 *      permissions granted to the token:
 *
-*        <ul>
-*           <li> <code>'subscriber'</code> &mdash; A subscriber can only subscribe to streams.</li>
+*        &lt;ul>
+*           &lt;li> &lt;code>'subscriber'&lt;/code> &amp;mdash; A subscriber can only subscribe to streams.&lt;/li>
 *
-*           <li> <code>'publisher'</code> &mdash; A publisher can publish streams, subscribe to
-*              streams, and signal. (This is the default value if you do not specify a role.)</li>
+*           &lt;li> &lt;code>'publisher'&lt;/code> &amp;mdash; A publisher can publish streams, subscribe to
+*              streams, and signal. (This is the default value if you do not specify a role.)&lt;/li>
 *
-*           <li> <code>'moderator'</code> &mdash; In addition to the privileges granted to a
+*           &lt;li> &lt;code>'moderator'&lt;/code> &amp;mdash; In addition to the privileges granted to a
 *             publisher, in clients using the OpenTok.js 2.2 library, a moderator can call the
-*             <code>forceUnpublish()</code> and <code>forceDisconnect()</code> method of the
-*             Session object.</li>
-*        </ul>
+*             &lt;code>forceUnpublish()&lt;/code> and &lt;code>forceDisconnect()&lt;/code> method of the
+*             Session object.&lt;/li>
+*        &lt;/ul>
 *
-*    </li>
+*    &lt;/li>
 *
-*    <li><code>expireTime</code> (Number) &mdash; The expiration time for the token, in seconds
+*    &lt;li>&lt;code>expireTime&lt;/code> (Number) &amp;mdash; The expiration time for the token, in seconds
 *      since the UNIX epoch. The maximum expiration time is 30 days after the creation time.
 *      The default expiration time of 24 hours after the token creation time.
-*    </li>
+*    &lt;/li>
 *
-*    <li><code>data</code> (String) &mdash; A string containing connection metadata describing the
+*    &lt;li>&lt;code>data&lt;/code> (String) &amp;mdash; A string containing connection metadata describing the
 *      end-user.For example, you can pass the user ID, name, or other data describing the end-user.
 *      The length of the string is limited to 1000 characters. This data cannot be updated once it
 *      is set.
-*    </li>
-* </ul>
+*    &lt;/li>
+* &lt;/ul>
 *
 * @return The token string.
 */
@@ -355,7 +378,7 @@ OpenTok.prototype.generateToken = function(sessionId, opts) {
 
   // combine defaults, opts, and whitelisted property names to create tokenData
   if (_.isNumber(opts.expireTime) || _.isString(opts.expireTime)) opts.expire_time = opts.expireTime;
-  if (opts.data) opts.connection_data = opts.data;
+  opts.connection_data = opts.data;
   tokenData = _.pick(_.defaults(opts, {
     session_id: sessionId,
     create_time: Math.round(new Date().getTime() / 1000),
@@ -367,7 +390,7 @@ OpenTok.prototype.generateToken = function(sessionId, opts) {
   // validate tokenData
   if (!_.contains(['publisher', 'subscriber', 'moderator'], tokenData.role)) return null;
   if (!_.isNumber(tokenData.expire_time)) return null;
-  if (tokenData.connection_data &&
+  if (tokenData.connection_data &amp;&amp;
       (tokenData.connection_data.length > 1024 || !_.isString(tokenData.connection_data))) {
         return null;
   }
@@ -407,7 +430,7 @@ function decodeSessionId(sessionId) {
 function encodeToken(data, apiKey, apiSecret) {
   var dataString = querystring.stringify(data),
       sig = signString(dataString, apiSecret),
-      decoded = new Buffer("partner_id="+apiKey+"&sig="+sig+":"+dataString, 'utf8');
+      decoded = new Buffer("partner_id="+apiKey+"&amp;sig="+sig+":"+dataString, 'utf8');
   return TOKEN_SENTINEL + decoded.toString('base64');
 }
 
@@ -458,8 +481,26 @@ function signString(unsigned, key) {
 
 module.exports = OpenTok;
 
-for(var key in errors) {
-  if(errors.hasOwnProperty(key)) {
-    OpenTok[key] = errors[key];
-  }
-}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Archive.html">Archive</a></li><li><a href="OpenTok.html">OpenTok</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Fri May 16 2014 14:05:03 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

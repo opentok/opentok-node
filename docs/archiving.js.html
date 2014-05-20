@@ -1,4 +1,31 @@
-/*global require, exports*/
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: archiving.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: archiving.js</h1>
+
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*global require, exports*/
 /*jshint strict:false, eqnull:true */
 
 var request = require('request'),
@@ -37,14 +64,14 @@ var request = require('request'),
 *
 * @param {String} status
 *   The status of the archive, which can be one of the following:
-*   <ul>
-*     <li> "available" -- The archive is available for download from the OpenTok cloud.
-*     <li> "failed" -- The archive recording failed.
-*     <li> "started" -- The archive started and is in the process of being recorded.
-*     <li> "stopped" -- The archive stopped recording.
-*     <li> "uploaded" -- The archive is available for download from the the upload target
+*   &lt;ul>
+*     &lt;li> "available" -- The archive is available for download from the OpenTok cloud.
+*     &lt;li> "failed" -- The archive recording failed.
+*     &lt;li> "started" -- The archive started and is in the process of being recorded.
+*     &lt;li> "stopped" -- The archive stopped recording.
+*     &lt;li> "uploaded" -- The archive is available for download from the the upload target
 *          S3 bucket.
-*   </ul>
+*   &lt;/ul>
 *
 * @param {String} url
 *   The download URL of the available MP4 file. This is only set for an archive with the status set to
@@ -73,24 +100,24 @@ function Archive(config, properties) {
 
   /**
   * Stops the recording of the archive.
-  * <p>
+  * &lt;p>
   * Archives automatically stop recording after 90 minutes or when all clients have disconnected
   * from the session being archived.
   *
   * @param callback {Function} The function to call upon completing the operation. Two arguments
   * are passed to the function:
   * 
-  * <ul>
+  * &lt;ul>
   *
-  *   <li>
-  *      <code>error</code> &mdash; An error object (if the call to the method fails).
-  *   </li>
+  *   &lt;li>
+  *      &lt;code>error&lt;/code> &amp;mdash; An error object (if the call to the method fails).
+  *   &lt;/li>
   *
-  *   <li>
-  *       <code>archive</code> &mdash; The Archive object.
-  *   </li>
+  *   &lt;li>
+  *       &lt;code>archive&lt;/code> &amp;mdash; The Archive object.
+  *   &lt;/li>
   *
-  * </ul>
+  * &lt;/ul>
   *
   * @method #stop
   * @memberof Archive
@@ -101,7 +128,7 @@ function Archive(config, properties) {
 
   /**
   * Deletes the OpenTok archive.
-  * <p>
+  * &lt;p>
   * You can only delete an archive which has a status of "available" or "uploaded". Deleting an
   * archive removes its record from the list of archives. For an "available" archive, it also
   * removes the archive file, making it unavailable for download.
@@ -146,8 +173,8 @@ exports.listArchives = function(config, options, callback) {
   if(options.count) {
     qs.push('count=' + parseInt(options.count, 10));
   }
-  api(config, 'GET', '/archive?' + qs.join('&'), null, function(err, response, body) {
-    if(!err && body ) {
+  api(config, 'GET', '/archive?' + qs.join('&amp;'), null, function(err, response, body) {
+    if(!err &amp;&amp; body ) {
       try {
         body = JSON.parse(body);
       } catch (_err) {
@@ -155,7 +182,7 @@ exports.listArchives = function(config, options, callback) {
       }
     }
     if(err || response.statusCode != 200) {
-      if(response && response.statusCode == 403) {
+      if(response &amp;&amp; response.statusCode == 403) {
         callback(new errors.AuthError('Invalid API key or secret'));
       } else {
         callback(new errors.RequestError('Unexpected response from OpenTok'));
@@ -187,9 +214,9 @@ exports.startArchive = function(config, sessionId, options, callback) {
     if(err) {
       callback(err);
     } else if(response.statusCode != 200) {
-      if(response && response.statusCode == 404) {
+      if(response &amp;&amp; response.statusCode == 404) {
         callback(new errors.ArchiveError('Session not found'));
-      } else if(response && response.statusCode == 403) {
+      } else if(response &amp;&amp; response.statusCode == 403) {
         callback(new errors.AuthError('Invalid API key or secret'));
       } else {
         callback(new errors.RequestError('Unexpected response from OpenTok'));
@@ -215,11 +242,11 @@ exports.stopArchive = function(config, archiveId, callback) {
     if(err) {
       callback(err);
     } else if(response.statusCode != 200) {
-      if(response && response.statusCode == 404) {
+      if(response &amp;&amp; response.statusCode == 404) {
         callback(new errors.ArchiveError('Archive not found'));
-      } else if(response && response.statusCode == 409) {
+      } else if(response &amp;&amp; response.statusCode == 409) {
         callback(new errors.ArchiveError(body.message));
-      } else if(response && response.statusCode == 403) {
+      } else if(response &amp;&amp; response.statusCode == 403) {
         callback(new errors.AuthError('Invalid API key or secret'));
       } else {
 
@@ -240,7 +267,7 @@ exports.getArchive = function(config, archiveId, callback) {
     return;
   }
   api(config, 'GET', '/archive/' + archiveId, null, function(err, response, body) {
-    if(!err && body ) {
+    if(!err &amp;&amp; body ) {
       try {
         body = JSON.parse(body);
       } catch (_err) {
@@ -248,9 +275,9 @@ exports.getArchive = function(config, archiveId, callback) {
       }
     }
     if(err || response.statusCode != 200) {
-      if(response && response.statusCode == 404) {
+      if(response &amp;&amp; response.statusCode == 404) {
         callback(new errors.ArchiveError('Archive not found'));
-      } else if(response && response.statusCode == 403) {
+      } else if(response &amp;&amp; response.statusCode == 403) {
         callback(new errors.AuthError('Invalid API key or secret'));
       } else {
         callback(new errors.RequestError('Unexpected response from OpenTok'));
@@ -272,9 +299,9 @@ exports.deleteArchive = function(config, archiveId, callback) {
   api(config, 'DELETE', '/archive/' + encodeURIComponent(archiveId), null,
     function(err, response) {
     if(err || response.statusCode != 204) {
-      if(response && response.statusCode == 404) {
+      if(response &amp;&amp; response.statusCode == 404) {
         callback(new errors.ArchiveError('Archive not found'));
-      } else if(response && response.statusCode == 403) {
+      } else if(response &amp;&amp; response.statusCode == 403) {
         callback(new errors.AuthError('Invalid API key or secret'));
       } else {
         callback(new errors.RequestError('Unexpected response from OpenTok'));
@@ -284,3 +311,26 @@ exports.deleteArchive = function(config, archiveId, callback) {
     }
   });
 };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Archive.html">Archive</a></li><li><a href="OpenTok.html">OpenTok</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Fri May 16 2014 14:05:03 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
