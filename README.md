@@ -2,9 +2,9 @@
 
 **TODO**: got to change this to master branch instead of cleaning-up
 
-[![Build Status](https://travis-ci.org/opentok/opentok-node.png?branch=cleaning-up)](https://travis-ci.org/opentok/opentok-node)
+[![Build Status](https://travis-ci.org/aoberoi/opentok-node.png?branch=modernization)](https://travis-ci.org/aoberoi/opentok-node)
 
-The OpenTok Ruby SDK lets you generate
+The OpenTok Node SDK lets you generate
 [sessions](http://tokbox.com/opentok/tutorials/create-session/) and
 [tokens](http://tokbox.com/opentok/tutorials/create-token/) for [OpenTok](http://www.tokbox.com/)
 applications. This version of the SDK also includes support for working with OpenTok 2.0 archives.
@@ -39,9 +39,9 @@ var OpenTok = require('opentok'),
 
 ## Creating Sessions
 
-To create an OpenTok Session, use the `opentok.createSession(properties, callback)` method. The 
+To create an OpenTok Session, use the `opentok.createSession(properties, callback)` method. The
 `properties` parameter is an optional object used to specify whether you are creating a p2p Session
-and specifying a location hint. The callback has the signature `function(error, session)`. The 
+and specifying a location hint. The callback has the signature `function(error, session)`. The
 `session` returned in the callback is an instance of Session. Session objects have a `sessionId`
 property that is useful to be saved to a persistent store (e.g. database).
 
@@ -126,8 +126,8 @@ archive.stop(function(err, archive) {
 });
 ```
 
-To get an `Archive` instance (and all the information about it) from an `archiveId`, use the 
-`opentok.getArchive(archiveId, callback)` method. The callback has a function signature 
+To get an `Archive` instance (and all the information about it) from an `archiveId`, use the
+`opentok.getArchive(archiveId, callback)` method. The callback has a function signature
 `function(err, archive)`. You can inspect the properties of the archive for more details.
 
 ```javascript
@@ -138,7 +138,7 @@ opentok.getArchive(archiveId, function(err, archive) {
 });
 ```
 
-To delete an Archive, you can call the `opentok.deleteArchive(archiveId, callback)` method or the 
+To delete an Archive, you can call the `opentok.deleteArchive(archiveId, callback)` method or the
 `delete(callback)` method of an `Archive` instance. The callback has a signature `function(err)`.
 
 ```javascript
@@ -183,10 +183,10 @@ The OpenTok Node SDK requires node 0.10 or higher.
 
 # Release Notes
 
-**TODO**: See the [Releases](https://github.com/opentok/opentok-php-sdk/releases) page for details 
+**TODO**: See the [Releases](https://github.com/opentok/opentok-node/releases) page for details
 about each release.
 
-## Important changes in v2.0
+## Important changes in v2.2
 
 This version of the SDK includes support for working with OpenTok 2.0 archives. (This API does not
 work with OpenTok 1.0 archives.)
@@ -206,4 +206,3 @@ See <http://tokbox.com/opentok/support/> for all our support options.
 
 Find a bug? File it on the [Issues](https://github.com/opentok/opentok-node/issues) page. Hint:
 test cases are really helpful!
-
