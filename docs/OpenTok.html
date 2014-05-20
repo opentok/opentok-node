@@ -129,7 +129,7 @@ Be sure to include the entire OpenTok Node.js SDK on your web server.
             
 
             <td class="description last">Your OpenTok API secret. (See the
-<a href="https://dashboard.tokbox.com">OpenTok dashboard</a> page)</td>
+<a href="https://dashboard.tokbox.com">OpenTok dashboard</a> page.)</td>
         </tr>
 
     
@@ -160,7 +160,7 @@ Be sure to include the entire OpenTok Node.js SDK on your web server.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line17">line 17</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line19">line 19</a>
     </li></ul></dd>
     
 
@@ -283,7 +283,8 @@ or the <a href="https://dashboard.tokbox.com/projects">OpenTok dashboard</a>.
 
             
 
-            <td class="description last">This object defines options for the session, including the following properties:
+            <td class="description last">This object defines options for the session, including the following properties (both of which
+are optional):
 
 <ul>
 
@@ -293,25 +294,39 @@ OpenTok network. If you do not set a location hint, the OpenTok servers will be 
 the first client connecting to the session.
 </li>
 
-    <li><code>p2p</code> (Boolean) &mdash;
-Determines whether the session will transmit streams between peers
-(true) or using the OpenTok Media Router (false). By default, sessions use the OpenTok
-Media Router (false).
+    <li><code>mediaMode</code> (String) &mdash;
+Determines whether the session will transmit streams using the OpenTok Media Router
+(<code>"routed"</code>) or not (<code>"relayed"</code>). By default, sessions use
+the OpenTok Media Router.
 <p>
-The <a href="http://www.tokbox.com/blog/mantis-next-generation-cloud-technology-for-webrtc/">
-OpenTok Media Router</a> provides benefits not available in peer-to-peer sessions.
-For example, the OpenTok media server can decrease bandwidth usage in multiparty sessions.
-Also, the OpenTok server can improve the quality of the user experience through
-<a href="http://www.tokbox.com/blog/quality-of-experience-and-traffic-shaping-the-next-step-with-mantis/">dynamic
-traffic shaping</a>.
+The <a href="http://tokbox.com/#multiparty" target="_top"> OpenTok Media Router</a>
+provides the following benefits:
+
+<ul>
+  <li>The OpenTok Media Router can decrease bandwidth usage in multiparty sessions.
+      (When the <code>mediaMode</code> parameter is set to <code><code>"routed"</code></code>,
+      each client must send a separate audio-video stream to each client subscribing to
+      it.)</li>
+  <li>The OpenTok Media Router can improve the quality of the user experience through
+    <a href="http://tokbox.com/#iqc" target="_top">Intellegent Quality Control</a>. With
+    Intellegent Quality Control, if a client's connectivity degrades to a degree that
+    it does not support video for a stream it's subscribing to, the video is dropped on
+    that client (without affecting other clients), and the client receives audio only.
+    If the client's connectivity improves, the video returns.</li>
+  <li>The OpenTok Media Router supports the
+    <a href="http://tokbox.com/#archiving" target="_top">archiving and playback</a>
+    feature, which lets you record, save, and retrieve OpenTok sessions.</li>
+</ul>
+
 <p>
-For peer-to-peer sessions, the session will attempt to transmit streams directly
-between clients. If clients cannot connect due to firewall restrictions, the session uses
-the OpenTok TURN server to relay audio-video streams.
+With the <code>mediaMode</code> parameter set to <code>"relayed"</code>, the session
+will attempt to transmit streams directly between clients. If clients cannot connect due to
+firewall restrictions, the session uses the OpenTok TURN server to relay audio-video
+streams.
 <p>
 You will be billed for streamed minutes if you use the OpenTok Media Router or if the
-peer-to-peer session uses the OpenTok TURN server to relay streams. For information on
-pricing, see the <a href="http://www.tokbox.com/pricing">OpenTok pricing page</a>.</td>
+session uses the OpenTok TURN server to relay streams. For information on pricing, see the
+<a href="http://www.tokbox.com/pricing" target="_top">OpenTok pricing page</a>.</td>
         </tr>
 
     
@@ -338,8 +353,8 @@ pricing, see the <a href="http://www.tokbox.com/pricing">OpenTok pricing page</a
 
 <ul>
   <li>
-     <code>sessionId</code> &mdash; On sucess, this paramter is set to the session ID of
-     the session.
+     <code>sessionId</code> &mdash; On sucess, this parameter is set to the session ID of
+     the session. Otherwise it is set to null.
   </li>
   <li>
      <code>error</code> &mdash; On failiure, this parameter is set to an error object.
@@ -376,7 +391,7 @@ pricing, see the <a href="http://www.tokbox.com/pricing">OpenTok pricing page</a
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line271">line 271</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line288">line 288</a>
     </li></ul></dd>
     
 
@@ -535,7 +550,7 @@ object is passed into the function.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line142">line 142</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line144">line 144</a>
     </li></ul></dd>
     
 
@@ -701,7 +716,7 @@ dashboard</a> page to generate test tokens.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line341">line 341</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line368">line 368</a>
     </li></ul></dd>
     
 
@@ -825,7 +840,7 @@ dashboard</a> page to generate test tokens.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line130">line 130</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line132">line 132</a>
     </li></ul></dd>
     
 
@@ -929,7 +944,7 @@ both completed and in-progress, for your API key.
 <ul>
 
   <li>
-    <code>count</code> &mdash; The index offset of the first archive. 0 is offset of the most 
+    <code>count</code> &mdash; The index offset of the first archive. 0 is offset of the most
     recently started archive. 1 is the offset of the archive that started prior to the most
     recent archive. This limit is 1000 archives.
   </li>
@@ -1009,7 +1024,7 @@ are passed to the function:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line160">line 160</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line162">line 162</a>
     </li></ul></dd>
     
 
@@ -1192,7 +1207,7 @@ are passed to the function:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line63">line 63</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line65">line 65</a>
     </li></ul></dd>
     
 
@@ -1350,7 +1365,7 @@ are passed to the function:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line101">line 101</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line103">line 103</a>
     </li></ul></dd>
     
 
@@ -1409,7 +1424,7 @@ are passed to the function:
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Fri May 16 2014 14:05:03 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Tue May 20 2014 11:59:44 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>
