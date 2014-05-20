@@ -3,7 +3,14 @@
   "description": "OpenTok server-side SDK",
   "version": "2.2.0-alpha",
   "homepage": "http://opentok.github.io/opentok-node",
-  "repository": "https://github.com/opentok/opentok-node.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/opentok/opentok-node.git"
+  },
+  "bugs": {
+    "url": "https://github.com/opentok/opentok-node/issues",
+    "email": "support@tokbox.com"
+  },
   "license" : "MIT",
   "contributors": [
     {
@@ -27,7 +34,7 @@
     "test": "grunt"
   },
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=0.10.0"
   },
   "devDependencies": {
     "grunt": "^0.4.4",
