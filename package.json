@@ -4,6 +4,7 @@
   "version": "2.2.0-alpha",
   "homepage": "http://opentok.github.io/opentok-node",
   "repository": "https://github.com/opentok/opentok-node.git",
+  "license" : "MIT",
   "contributors": [
     {
       "name": "Brian Stoner",
