@@ -1,7 +1,7 @@
 {
-  "name": "HelloWorld",
+  "name": "opentok-helloworld-sample",
   "version": "0.0.0",
-  "description": "Demo of OpenTok API",
+  "description": "Group video chat app to demonstrate the basic functionality of OpenTok",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
