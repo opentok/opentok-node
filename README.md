@@ -5,9 +5,10 @@
 [![Build Status](https://travis-ci.org/aoberoi/opentok-node.png?branch=modernization)](https://travis-ci.org/aoberoi/opentok-node)
 
 The OpenTok Node SDK lets you generate
-[sessions](http://tokbox.com/opentok/tutorials/create-session/) and
-[tokens](http://tokbox.com/opentok/tutorials/create-token/) for [OpenTok](http://www.tokbox.com/)
-applications. This version of the SDK also includes support for working with OpenTok 2.0 archives.
+[sessions](http://www.tokbox.com/opentok/tutorials/create-session/) and
+[tokens](http://www.tokbox.com/opentok/tutorials/create-token/) for 
+OpenTok](http://www.tokbox.com/) applications, and
+[archive](http://www.tokbox.com/platform/archiving) OpenTok 2.0 sessions.
 
 # Installation using npm (recommended):
 
