@@ -6,7 +6,7 @@ connect and conduct a group chat.
 
 ## Running the App
 
-First, download the dependencies using [npm](https://www.npmjs.org).
+First, download the dependencies using [npm](https://www.npmjs.org) in this directory.
 
 ```
 $ npm install
@@ -37,7 +37,7 @@ website linked above.
 
 ### Server module (index.js)
 
-The first thing done in this file is to require the the dependencies. We now have the express 
+The first thing done in this file is to require the the dependencies. We now have the express
 framework, and most importantly the OpenTok SDK available.
 
 ```javascript
