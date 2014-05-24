@@ -6,7 +6,7 @@
 
 The OpenTok Node SDK lets you generate
 [sessions](http://www.tokbox.com/opentok/tutorials/create-session/) and
-[tokens](http://www.tokbox.com/opentok/tutorials/create-token/) for 
+[tokens](http://www.tokbox.com/opentok/tutorials/create-token/) for
 [OpenTok](http://www.tokbox.com/) applications, and
 [archive](http://www.tokbox.com/platform/archiving) OpenTok 2.0 sessions.
 
@@ -182,7 +182,12 @@ You need an OpenTok API key and API secret, which you can obtain at <https://das
 
 The OpenTok Node SDK requires node 0.10 or higher.
 
-# Important changes in v2.2
+# Release Notes
+
+See the [Releases](https://github.com/opentok/opentok-node/releases) page for details
+about each release.
+
+## Important changes in v2.2
 
 This version of the SDK includes support for working with OpenTok 2.0 archives. (This API does not
 work with OpenTok 1.0 archives.)
