@@ -1,8 +1,6 @@
 # OpenTok Node SDK
 
-**TODO**: got to change this to master branch instead of cleaning-up
-
-[![Build Status](https://travis-ci.org/aoberoi/opentok-node.png?branch=modernization)](https://travis-ci.org/aoberoi/opentok-node)
+[![Build Status](https://travis-ci.org/opentok/opentok-node.png?branch=modernization)](https://travis-ci.org/opentok/opentok-node)
 
 The OpenTok Node SDK lets you generate
 [sessions](http://www.tokbox.com/opentok/tutorials/create-session/) and
@@ -171,9 +169,17 @@ opentok.listArchives({offset:100, count:50}, function(error, archives, totalCoun
 });
 ```
 
+# Samples
+
+There are two sample applications included in this repository. To get going as fast as possible, clone the whole
+repository and follow the Walkthroughs:
+
+*  [HelloWorld](sample/HelloWorld/README.md)
+*  [Archiving](sample/Archiving/README.md)
+
 # Documentation
 
-Reference documentation is available at <http://www.tokbox.com//opentok/libraries/server/node/reference/index.html> and in the
+Reference documentation is available at <http://www.tokbox.com/opentok/libraries/server/node/reference/index.html> and in the
 docs directory of the SDK.
 
 # Requirements
