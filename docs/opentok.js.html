@@ -35,8 +35,10 @@ var net = require('net'),
     crypto = require('crypto'),
     _ = require('lodash'),
     Client = require('./client'),
+    Session = require('./session'),
     archiving = require('./archiving'),
-    package = require ('../package.json');
+    package = require ('../package.json')
+    errors = require('./errors');
 
 // Internal Constants
 var TOKEN_SENTINEL = "T1==";
@@ -56,7 +58,7 @@ var TOKEN_SENTINEL = "T1==";
 * @param apiKey {String} Your OpenTok API key. (See the
 * &lt;a href="https://dashboard.tokbox.com">OpenTok dashboard&lt;/a> page.)
 * @param apiSecret {String} Your OpenTok API secret. (See the
-* &lt;a href="https://dashboard.tokbox.com">OpenTok dashboard&lt;/a> page)
+* &lt;a href="https://dashboard.tokbox.com">OpenTok dashboard&lt;/a> page.)
 */
 var OpenTok = function(apiKey, apiSecret, env) {
   // we're loose about calling this constructor with `new`, we got your back
@@ -105,7 +107,7 @@ var OpenTok = function(apiKey, apiSecret, env) {
   *
   * @param callback {Function} The function to call upon completing the operation. Two arguments
   * are passed to the function:
-  * 
+  *
   * &lt;ul>
   *
   *   &lt;li>
@@ -136,7 +138,7 @@ var OpenTok = function(apiKey, apiSecret, env) {
   *
   * @param callback {Function} The function to call upon completing the operation. Two arguments
   * are passed to the function:
-  * 
+  *
   * &lt;ul>
   *
   *   &lt;li>
@@ -186,14 +188,14 @@ var OpenTok = function(apiKey, apiSecret, env) {
 
   /**
   * Retrieves a List of {@link Archive} objects, representing archives that are both
-  * both completed and in-progress, for your API key. 
+  * both completed and in-progress, for your API key.
   *
   * @param options {Object} An options parameter with two properties:
   *
   * &lt;ul>
   *
   *   &lt;li>
-  *     &lt;code>count&lt;/code> &amp;mdash; The index offset of the first archive. 0 is offset of the most 
+  *     &lt;code>count&lt;/code> &amp;mdash; The index offset of the first archive. 0 is offset of the most
   *     recently started archive. 1 is the offset of the archive that started prior to the most
   *     recent archive. This limit is 1000 archives.
   *   &lt;/li>
@@ -210,7 +212,7 @@ var OpenTok = function(apiKey, apiSecret, env) {
   *
   * @param callback {Function} The function to call upon completing the operation. Two arguments
   * are passed to the function:
-  * 
+  *
   * &lt;ul>
   *
   *   &lt;li>
@@ -222,7 +224,7 @@ var OpenTok = function(apiKey, apiSecret, env) {
   *   &lt;/li>
   *
   * &lt;/ul>
-  * 
+  *
   * @method #listArchives
   * @memberof OpenTok
   */
@@ -251,7 +253,8 @@ var OpenTok = function(apiKey, apiSecret, env) {
  * this session ID when calling the &lt;code>OT.initSession()&lt;/code> method.
  *
  * @param   {Object} options
- * This object defines options for the session, including the following properties:
+ * This object defines options for the session, including the following properties (both of which
+ * are optional):
  *
  * &lt;ul>
  *
@@ -261,33 +264,47 @@ var OpenTok = function(apiKey, apiSecret, env) {
  * the first client connecting to the session.
  * &lt;/li>
  *
- *     &lt;li>&lt;code>p2p&lt;/code> (Boolean) &amp;mdash;
- * Determines whether the session will transmit streams between peers
- * (true) or using the OpenTok Media Router (false). By default, sessions use the OpenTok
- * Media Router (false).
+ *     &lt;li>&lt;code>mediaMode&lt;/code> (String) &amp;mdash;
+ * Determines whether the session will transmit streams using the OpenTok Media Router
+ * (&lt;code>"routed"&lt;/code>) or not (&lt;code>"relayed"&lt;/code>). By default, sessions use
+ * the OpenTok Media Router.
  * &lt;p>
- * The &lt;a href="http://www.tokbox.com/blog/mantis-next-generation-cloud-technology-for-webrtc/">
- * OpenTok Media Router&lt;/a> provides benefits not available in peer-to-peer sessions.
- * For example, the OpenTok media server can decrease bandwidth usage in multiparty sessions.
- * Also, the OpenTok server can improve the quality of the user experience through
- * &lt;a href="http://www.tokbox.com/blog/quality-of-experience-and-traffic-shaping-the-next-step-with-mantis/">dynamic
- * traffic shaping&lt;/a>.
+ * The &lt;a href="http://tokbox.com/#multiparty" target="_top"> OpenTok Media Router&lt;/a>
+ * provides the following benefits:
+ *
+ * &lt;ul>
+ *   &lt;li>The OpenTok Media Router can decrease bandwidth usage in multiparty sessions.
+ *       (When the &lt;code>mediaMode&lt;/code> parameter is set to &lt;code>"relayed"&lt;/code>,
+ *       each client must send a separate audio-video stream to each client subscribing to
+ *       it.)&lt;/li>
+ *   &lt;li>The OpenTok Media Router can improve the quality of the user experience through
+ *     &lt;a href="http://tokbox.com/#iqc" target="_top">Intelligent Quality Control&lt;/a>. With
+ *     Intelligent Quality Control, if a client's connectivity degrades to a degree that
+ *     it does not support video for a stream it's subscribing to, the video is dropped on
+ *     that client (without affecting other clients), and the client receives audio only.
+ *     If the client's connectivity improves, the video returns.&lt;/li>
+ *   &lt;li>The OpenTok Media Router supports the
+ *     &lt;a href="http://tokbox.com/platform/archiving" target="_top">archiving&lt;/a>
+ *     feature, which lets you record, save, and retrieve OpenTok sessions.&lt;/li>
+ * &lt;/ul>
+ *
  * &lt;p>
- * For peer-to-peer sessions, the session will attempt to transmit streams directly
- * between clients. If clients cannot connect due to firewall restrictions, the session uses
- * the OpenTok TURN server to relay audio-video streams.
+ * With the &lt;code>mediaMode&lt;/code> parameter set to &lt;code>"relayed"&lt;/code>, the session
+ * will attempt to transmit streams directly between clients. If clients cannot connect due to
+ * firewall restrictions, the session uses the OpenTok TURN server to relay audio-video
+ * streams.
  * &lt;p>
  * You will be billed for streamed minutes if you use the OpenTok Media Router or if the
- * peer-to-peer session uses the OpenTok TURN server to relay streams. For information on
- * pricing, see the &lt;a href="http://www.tokbox.com/pricing">OpenTok pricing page&lt;/a>.
+ * session uses the OpenTok TURN server to relay streams. For information on pricing, see the
+ * &lt;a href="http://www.tokbox.com/pricing" target="_top">OpenTok pricing page&lt;/a>.
  *
  * @param   {Function}   callback
  * The function that is called when the operation completes. This function is passed two arguments:
  *
  * &lt;ul>
  *   &lt;li>
- *      &lt;code>sessionId&lt;/code> &amp;mdash; On sucess, this paramter is set to the session ID of
- *      the session.
+ *      &lt;code>sessionId&lt;/code> &amp;mdash; On sucess, this parameter is set to the session ID of
+ *      the session. Otherwise it is set to null.
  *   &lt;/li>
  *   &lt;li>
  *      &lt;code>error&lt;/code> &amp;mdash; On failiure, this parameter is set to an error object.
@@ -296,6 +313,7 @@ var OpenTok = function(apiKey, apiSecret, env) {
  * &lt;/ul>
  */
 OpenTok.prototype.createSession = function(opts, callback) {
+  var backupOpts;
 
   if (_.isFunction(opts)) {
     // shift arguments if the opts is left out
@@ -307,18 +325,27 @@ OpenTok.prototype.createSession = function(opts, callback) {
   }
 
   // whitelist the keys allowed
-  _.pick(_.defaults(opts, { "p2p" : false }), "p2p", "location");
-  if ( !_.isBoolean(opts.p2p) || ( "location" in opts &amp;&amp; !net.isIPv4(opts.location)) ) {
-    return callback(new Error('Invalid arguments when calling createSession, p2p must be Boolean and location must be an IPv4 address'));
+  _.pick(_.defaults(opts, { "mediaMode" : "routed" }), "mediaMode", "location");
+  if ( opts.mediaMode !== "routed" &amp;&amp; opts.mediaMode !== "relayed" ) {
+    opts.mediaMode = "routed";
+  }
+  if ( "location" in opts &amp;&amp; !net.isIPv4(opts.location) ) {
+    return process.nextTick(function() { callback(new Error('Invalid arguments when calling createSession, ' +
+      'location must be an IPv4 address'))});
   }
 
-  // rename p2p -> p2p.preference
-  opts["p2p.preference"] = opts["p2p"];
-  delete opts["p2p"];
+  // rename mediaMode -> p2p.preference
+  backupOpts = _.clone(opts);
+  var mediaModeToParam = {
+    "routed" : "disabled",
+    "relayed" : "enabled"
+  };
+  opts["p2p.preference"] = mediaModeToParam[opts["mediaMode"]];
+  delete opts["mediaMode"];
 
   this.client.createSession(opts, function(err, json) {
     if (err) return callback(new Error('Failed to createSession. '+err));
-    callback(null, json.sessions.Session.session_id);
+    callback(null, new Session(this, json.sessions.Session.session_id, backupOpts));
   });
 };
 
@@ -378,7 +405,7 @@ OpenTok.prototype.generateToken = function(sessionId, opts) {
 
   // combine defaults, opts, and whitelisted property names to create tokenData
   if (_.isNumber(opts.expireTime) || _.isString(opts.expireTime)) opts.expire_time = opts.expireTime;
-  opts.connection_data = opts.data;
+  if (opts.data) opts.connection_data = opts.data;
   tokenData = _.pick(_.defaults(opts, {
     session_id: sessionId,
     create_time: Math.round(new Date().getTime() / 1000),
@@ -467,7 +494,7 @@ function signString(unsigned, key) {
  * @param {...*} arguments
  */
 
-/** 
+/**
  *  @typedef SessionInfo
  *  @type {Object}
  *  @property {string} apiKey       The API Key that created the session
@@ -481,6 +508,11 @@ function signString(unsigned, key) {
 
 module.exports = OpenTok;
 
+for(var key in errors) {
+  if(errors.hasOwnProperty(key)) {
+    OpenTok[key] = errors[key];
+  }
+}
 </code></pre>
         </article>
     </section>
@@ -497,7 +529,7 @@ module.exports = OpenTok;
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Fri May 16 2014 14:05:03 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Tue May 20 2014 12:28:07 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

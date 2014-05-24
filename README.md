@@ -5,13 +5,15 @@
 [![Build Status](https://travis-ci.org/aoberoi/opentok-node.png?branch=modernization)](https://travis-ci.org/aoberoi/opentok-node)
 
 The OpenTok Node SDK lets you generate
-[sessions](http://tokbox.com/opentok/tutorials/create-session/) and
-[tokens](http://tokbox.com/opentok/tutorials/create-token/) for [OpenTok](http://www.tokbox.com/)
-applications. This version of the SDK also includes support for working with OpenTok 2.0 archives.
+[sessions](http://www.tokbox.com/opentok/tutorials/create-session/) and
+[tokens](http://www.tokbox.com/opentok/tutorials/create-token/) for
+[OpenTok](http://www.tokbox.com/) applications, and
+[archive](http://www.tokbox.com/platform/archiving) OpenTok 2.0 sessions.
 
-# Installation
+If you are updating from a previous version of this SDK, see
+[Important changes in v2.2](#important-changes-in-v22).
 
-## npm (recommended):
+# Installation using npm (recommended):
 
 npm helps manage dependencies for node projects. Find more info here: <http://npmjs.org>
 
@@ -20,10 +22,6 @@ Run this command to install the package and adding it to your `package.json`:
 ```
 $ npm install opentok --save
 ```
-
-## Manually:
-
-**TODO**: instructions on getting the shrinkwrapped tarball from GitHub Releases
 
 # Usage
 
@@ -40,10 +38,11 @@ var OpenTok = require('opentok'),
 ## Creating Sessions
 
 To create an OpenTok Session, use the `opentok.createSession(properties, callback)` method. The
-`properties` parameter is an optional object used to specify whether you are creating a p2p Session
-and specifying a location hint. The callback has the signature `function(error, session)`. The
-`session` returned in the callback is an instance of Session. Session objects have a `sessionId`
-property that is useful to be saved to a persistent store (e.g. database).
+`properties` parameter is an optional object used to specify whether the session uses the OpenTok
+Media Router and to specify a location hint. The callback has the signature
+`function(error, session)`. The `session` returned in the callback is an instance of Session.
+Session objects have a `sessionId` property that is useful to be saved to a persistent store
+(such as a database).
 
 ```javascript
 // Just a plain Session
@@ -54,8 +53,9 @@ opentok.createSession(function(err, session) {
   db.save('session', session.sessionId, done);
 });
 
-// A p2p Session
-opentok.createSession({p2p:true}, function(err, session) {
+// A The session will attempt to transmit streams directly between clients.
+// If clients cannot connect, the session uses the OpenTok TURN server:
+opentok.createSession({mediaMode:"relayed"}, function(err, session) {
   if (err) return console.log(err);
 
   // save the sessionId
@@ -173,7 +173,8 @@ opentok.listArchives({offset:100, count:50}, function(error, archives, totalCoun
 
 # Documentation
 
-**TODO**: Reference documentation is available at <http://opentok.github.io/opentok-node/>
+Reference documentation is available at <http://www.tokbox.com//opentok/libraries/server/node/reference/index.html> and in the
+docs directory of the SDK.
 
 # Requirements
 
@@ -183,7 +184,7 @@ The OpenTok Node SDK requires node 0.10 or higher.
 
 # Release Notes
 
-**TODO**: See the [Releases](https://github.com/opentok/opentok-node/releases) page for details
+See the [Releases](https://github.com/opentok/opentok-node/releases) page for details
 about each release.
 
 ## Important changes in v2.2
@@ -191,6 +192,15 @@ about each release.
 This version of the SDK includes support for working with OpenTok 2.0 archives. (This API does not
 work with OpenTok 1.0 archives.)
 
+The `create_session()` has changed to take one parameter: an `options` object that has `location`
+and `mediaMode` properties. The `mediaMode` property replaces the `properties.p2p.preference`
+parameter in the previous version of the SDK.
+
+The `generateToken()` has changed to take two parameters: the session ID and an `options` object that has `role`, `expireTime` and `data` properties.
+
+See the reference documentation
+<http://www.tokbox.com/opentok/libraries/server/node/reference/index.html> and in the
+docs directory of the SDK.
 
 
 # Development and Contributing
