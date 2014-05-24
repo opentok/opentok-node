@@ -25,8 +25,8 @@ Finally, start the app using node
 $ node index.js
 ```
 
-Visit <http://localhost:3000> in your browser. Open it again in a second window. Smile! You've just
-set up a group chat.
+Visit <http://localhost:3000> in your browser. You can now create new archives (either as a host or
+as a participant) and also play archives that have already been created.
 
 ## Walkthrough
 
