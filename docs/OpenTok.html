@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>JSDoc: Class: OpenTok</title>
-
+    
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
     <!--[if lt IE 9]>
@@ -16,35 +16,35 @@
 <body>
 
 <div id="main">
-
+    
     <h1 class="page-title">Class: OpenTok</h1>
-
+    
     
 
 
 
 <section>
-
+    
 <header>
     <h2>
     OpenTok
     </h2>
     
-</header>
+</header>  
 
 <article>
     <div class="container-overview">
     
-
+    
     
         
 <dt>
     <h4 class="name" id="OpenTok"><span class="type-signature"></span>new OpenTok<span class="signature">(apiKey, apiSecret)</span><span class="type-signature"></span></h4>
-
+    
     
 </dt>
 <dd>
-
+    
     
     <div class="description">
         Contains methods for creating OpenTok sessions, generating tokens, and working with archives.
@@ -59,38 +59,38 @@ Be sure to include the entire OpenTok Node.js SDK on your web server.
     
 
     
-
     
-
+    
+    
     
         <h5>Parameters:</h5>
         
 
 <table class="params">
     <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
         <tr>
             
                 <td class="name"><code>apiKey</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -99,22 +99,22 @@ Be sure to include the entire OpenTok Node.js SDK on your web server.
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">Your OpenTok API key. (See the
 <a href="https://dashboard.tokbox.com">OpenTok dashboard</a> page.)</td>
         </tr>
-
-    
-
+	
+	
+	
         <tr>
             
                 <td class="name"><code>apiSecret</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -123,99 +123,95 @@ Be sure to include the entire OpenTok Node.js SDK on your web server.
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">Your OpenTok API secret. (See the
 <a href="https://dashboard.tokbox.com">OpenTok dashboard</a> page.)</td>
         </tr>
-
-    
-    </tbody>
+	
+	
+	</tbody>
 </table>
     
-
+    
     
 <dl class="details">
     
-
+        
+    
+    
     
 
     
-
     
-
     
-
     
-
     
-
     
-
     
-
+    
+    
+    
+    
+    
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line19">line 19</a>
     </li></ul></dd>
     
-
     
-
     
-
+    
+    
+    
     
 </dl>
 
-
+    
     
 
     
 
     
-
     
-
     
-
     
-
+    
+    
     
 </dd>
 
     
     </div>
-
     
-
     
-
     
-
     
-
-     
-
     
-
     
-
+    
+    
+    
+    
+    
+    
+    
     
         <h3 class="subsection-title">Methods</h3>
-
+        
         <dl>
             
 <dt>
     <h4 class="name" id="createSession"><span class="type-signature"></span>createSession<span class="signature">(options, callback)</span><span class="type-signature"></span></h4>
-
+    
     
 </dt>
 <dd>
-
+    
     
     <div class="description">
         Creates a new OpenTok session and returns the session ID, which uniquely identifies
@@ -238,38 +234,38 @@ or the <a href="https://dashboard.tokbox.com/projects">OpenTok dashboard</a>.
     
 
     
-
     
-
+    
+    
     
         <h5>Parameters:</h5>
         
 
 <table class="params">
     <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
         <tr>
             
                 <td class="name"><code>options</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -278,11 +274,11 @@ or the <a href="https://dashboard.tokbox.com/projects">OpenTok dashboard</a>.
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">This object defines options for the session, including the following properties (both of which
 are optional):
 
@@ -328,14 +324,14 @@ You will be billed for streamed minutes if you use the OpenTok Media Router or i
 session uses the OpenTok TURN server to relay streams. For information on pricing, see the
 <a href="http://www.tokbox.com/pricing" target="_top">OpenTok pricing page</a>.</td>
         </tr>
-
-    
-
+	
+	
+	
         <tr>
             
                 <td class="name"><code>callback</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -344,11 +340,11 @@ session uses the OpenTok TURN server to relay streams. For information on pricin
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The function that is called when the operation completes. This function is passed two arguments:
 
 <ul>
@@ -362,57 +358,55 @@ session uses the OpenTok TURN server to relay streams. For information on pricin
   </li>
 </ul></td>
         </tr>
-
-    
-    </tbody>
+	
+	
+	</tbody>
 </table>
     
-
+    
     
 <dl class="details">
     
-
+        
+    
+    
     
 
     
-
     
-
     
-
     
-
     
-
     
-
     
-
+    
+    
+    
+    
+    
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line288">line 288</a>
     </li></ul></dd>
     
-
     
-
     
-
+    
+    
+    
     
 </dl>
 
-
+    
     
 
     
 
     
-
     
-
     
-
+    
     
     <h5>Returns:</h5>
     
@@ -425,7 +419,7 @@ this session ID when calling the <code>OT.initSession()</code> method.
 
 
         
-
+    
     
 </dd>
 
@@ -433,11 +427,11 @@ this session ID when calling the <code>OT.initSession()</code> method.
             
 <dt>
     <h4 class="name" id="deleteArchive"><span class="type-signature"></span>deleteArchive<span class="signature">(archiveId, callback)</span><span class="type-signature"></span></h4>
-
+    
     
 </dt>
 <dd>
-
+    
     
     <div class="description">
         Deletes an OpenTok archive.
@@ -449,38 +443,38 @@ removes the archive file, making it unavailable for download.
     
 
     
-
     
-
+    
+    
     
         <h5>Parameters:</h5>
         
 
 <table class="params">
     <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
         <tr>
             
                 <td class="name"><code>archiveId</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -489,21 +483,21 @@ removes the archive file, making it unavailable for download.
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The archive ID of the archive you want to delete.</td>
         </tr>
-
-    
-
+	
+	
+	
         <tr>
             
                 <td class="name"><code>callback</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -512,68 +506,66 @@ removes the archive file, making it unavailable for download.
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The function to call upon completing the operation. On successfully
 deleting the archive, the function is called with no arguments passed in. On failure, an error
 object is passed into the function.</td>
         </tr>
-
-    
-    </tbody>
+	
+	
+	</tbody>
 </table>
     
-
+    
     
 <dl class="details">
     
-
+        
+    
+    
     
 
     
-
     
-
     
-
     
-
     
-
     
-
     
-
+    
+    
+    
+    
+    
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line144">line 144</a>
     </li></ul></dd>
     
-
     
-
     
-
+    
+    
+    
     
 </dl>
 
-
+    
     
 
     
 
     
-
     
-
     
-
     
-
+    
+    
     
 </dd>
 
@@ -581,11 +573,11 @@ object is passed into the function.</td>
             
 <dt>
     <h4 class="name" id="generateToken"><span class="type-signature"></span>generateToken<span class="signature">(sessionId, options)</span><span class="type-signature"></span></h4>
-
+    
     
 </dt>
 <dd>
-
+    
     
     <div class="description">
         Creates a token for connecting to an OpenTok session. In order to authenticate a user
@@ -597,64 +589,64 @@ dashboard</a> page to generate test tokens.
     
 
     
-
     
-
+    
+    
     
         <h5>Parameters:</h5>
         
 
 <table class="params">
     <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
         <tr>
             
                 <td class="name"><code>sessionId</code></td>
             
-
+            
             <td class="type">
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The session ID corresponding to the session to which the user will connect.</td>
         </tr>
-
-    
-
+	
+	
+	
         <tr>
             
                 <td class="name"><code>options</code></td>
             
-
+            
             <td class="type">
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">An object that defines options for the token (each of which is optional):
 
 <ul>
@@ -687,57 +679,55 @@ dashboard</a> page to generate test tokens.
    </li>
 </ul></td>
         </tr>
-
-    
-    </tbody>
+	
+	
+	</tbody>
 </table>
     
-
+    
     
 <dl class="details">
     
-
+        
+    
+    
     
 
     
-
     
-
     
-
     
-
     
-
     
-
     
-
+    
+    
+    
+    
+    
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line368">line 368</a>
     </li></ul></dd>
     
-
     
-
     
-
+    
+    
+    
     
 </dl>
 
-
+    
     
 
     
 
     
-
     
-
     
-
+    
     
     <h5>Returns:</h5>
     
@@ -749,7 +739,7 @@ dashboard</a> page to generate test tokens.
 
 
         
-
+    
     
 </dd>
 
@@ -757,11 +747,11 @@ dashboard</a> page to generate test tokens.
             
 <dt>
     <h4 class="name" id="getArchive"><span class="type-signature"></span>getArchive<span class="signature">(archiveId)</span><span class="type-signature"></span></h4>
-
+    
     
 </dt>
 <dd>
-
+    
     
     <div class="description">
         Gets an <a href="Archive.html">Archive</a> object for the given archive ID.
@@ -769,99 +759,97 @@ dashboard</a> page to generate test tokens.
     
 
     
-
     
-
+    
+    
     
         <h5>Parameters:</h5>
         
 
 <table class="params">
     <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
         <tr>
             
                 <td class="name"><code>archiveId</code></td>
             
-
+            
             <td class="type">
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The archive ID.</td>
         </tr>
-
-    
-    </tbody>
+	
+	
+	</tbody>
 </table>
     
-
+    
     
 <dl class="details">
     
-
+        
+    
+    
     
 
     
-
     
-
     
-
     
-
     
-
     
-
     
-
+    
+    
+    
+    
+    
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line132">line 132</a>
     </li></ul></dd>
     
-
     
-
     
-
+    
+    
+    
     
 </dl>
 
-
+    
     
 
     
 
     
-
     
-
     
-
+    
     
     <h5>Returns:</h5>
     
@@ -873,7 +861,7 @@ dashboard</a> page to generate test tokens.
 
 
         
-
+    
     
 </dd>
 
@@ -881,11 +869,11 @@ dashboard</a> page to generate test tokens.
             
 <dt>
     <h4 class="name" id="listArchives"><span class="type-signature"></span>listArchives<span class="signature">(options, callback)</span><span class="type-signature"></span></h4>
-
+    
     
 </dt>
 <dd>
-
+    
     
     <div class="description">
         Retrieves a List of <a href="Archive.html">Archive</a> objects, representing archives that are both
@@ -894,38 +882,38 @@ both completed and in-progress, for your API key.
     
 
     
-
     
-
+    
+    
     
         <h5>Parameters:</h5>
         
 
 <table class="params">
     <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
         <tr>
             
                 <td class="name"><code>options</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -934,11 +922,11 @@ both completed and in-progress, for your API key.
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">An options parameter with two properties:
 
 <ul>
@@ -959,14 +947,14 @@ both completed and in-progress, for your API key.
 <p>If you don't pass in an <code>options</code> argument, the method returns up to 1000 archives
 starting with the first archive recorded.</td>
         </tr>
-
-    
-
+	
+	
+	
         <tr>
             
                 <td class="name"><code>callback</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -975,11 +963,11 @@ starting with the first archive recorded.</td>
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The function to call upon completing the operation. Two arguments
 are passed to the function:
 
@@ -995,59 +983,57 @@ are passed to the function:
 
 </ul></td>
         </tr>
-
-    
-    </tbody>
+	
+	
+	</tbody>
 </table>
     
-
+    
     
 <dl class="details">
     
-
+        
+    
+    
     
 
     
-
     
-
     
-
     
-
     
-
     
-
     
-
+    
+    
+    
+    
+    
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line162">line 162</a>
     </li></ul></dd>
     
-
     
-
     
-
+    
+    
+    
     
 </dl>
 
-
+    
     
 
     
 
     
-
     
-
     
-
     
-
+    
+    
     
 </dd>
 
@@ -1055,11 +1041,11 @@ are passed to the function:
             
 <dt>
     <h4 class="name" id="startArchive"><span class="type-signature"></span>startArchive<span class="signature">(sessionId, options, callback)</span><span class="type-signature"></span></h4>
-
+    
     
 </dt>
 <dd>
-
+    
     
     <div class="description">
         Starts archiving an OpenTok 2.0 session.
@@ -1073,56 +1059,56 @@ of sessions that uses the OpenTok Media Router; you cannot archive peer-to-peer 
     
 
     
-
     
-
+    
+    
     
         <h5>Parameters:</h5>
         
 
 <table class="params">
     <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
         <tr>
             
                 <td class="name"><code>sessionId</code></td>
             
-
+            
             <td class="type">
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The session ID of the OpenTok session to archive.</td>
         </tr>
-
-    
-
+	
+	
+	
         <tr>
             
                 <td class="name"><code>options</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -1131,24 +1117,24 @@ of sessions that uses the OpenTok Media Router; you cannot archive peer-to-peer 
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">An optional options object with one property &mdash; <code>name</code>
 (a String). This is the name of the archive. You can use this name to identify the archive.
 It is a property of the Archive object, and it is a property of archive-related events in the
 OpenTok client libraries.</td>
         </tr>
-
-    
-
+	
+	
+	
         <tr>
             
                 <td class="name"><code>callback</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -1157,11 +1143,11 @@ OpenTok client libraries.</td>
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The function to call upon completing the operation. Two arguments
 are passed to the function:
 
@@ -1178,59 +1164,57 @@ are passed to the function:
 
 </ul></td>
         </tr>
-
-    
-    </tbody>
+	
+	
+	</tbody>
 </table>
     
-
+    
     
 <dl class="details">
     
-
+        
+    
+    
     
 
     
-
     
-
     
-
     
-
     
-
     
-
     
-
+    
+    
+    
+    
+    
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line65">line 65</a>
     </li></ul></dd>
     
-
     
-
     
-
+    
+    
+    
     
 </dl>
 
-
+    
     
 
     
 
     
-
     
-
     
-
     
-
+    
+    
     
 </dd>
 
@@ -1238,11 +1222,11 @@ are passed to the function:
             
 <dt>
     <h4 class="name" id="stopArchive"><span class="type-signature"></span>stopArchive<span class="signature">(archiveId, callback)</span><span class="type-signature"></span></h4>
-
+    
     
 </dt>
 <dd>
-
+    
     
     <div class="description">
         Stops an OpenTok archive that is being recorded.
@@ -1253,38 +1237,38 @@ from the session being archived.
     
 
     
-
     
-
+    
+    
     
         <h5>Parameters:</h5>
         
 
 <table class="params">
     <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
         <tr>
             
                 <td class="name"><code>archiveId</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -1293,21 +1277,21 @@ from the session being archived.
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The archive ID of the archive you want to stop recording.</td>
         </tr>
-
-    
-
+	
+	
+	
         <tr>
             
                 <td class="name"><code>callback</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -1316,11 +1300,11 @@ from the session being archived.
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The function to call upon completing the operation. Two arguments
 are passed to the function:
 
@@ -1336,57 +1320,55 @@ are passed to the function:
 
 </ul></td>
         </tr>
-
-    
-    </tbody>
+	
+	
+	</tbody>
 </table>
     
-
+    
     
 <dl class="details">
     
-
+        
+    
+    
     
 
     
-
     
-
     
-
     
-
     
-
     
-
     
-
+    
+    
+    
+    
+    
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line103">line 103</a>
     </li></ul></dd>
     
-
     
-
     
-
+    
+    
+    
     
 </dl>
 
-
+    
     
 
     
 
     
-
     
-
     
-
+    
     
     <h5>Returns:</h5>
     
@@ -1398,19 +1380,508 @@ are passed to the function:
 
 
         
-
+    
     
 </dd>
 
         </dl>
     
+    
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+        
+        <dl>
+                
+<dt>
+    <h4 class="name" id="createSessionCallback"><span class="type-signature"></span>createSessionCallback<span class="signature">(err, sessionId)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        /*
+handles the result of a session creation
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>err</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Error</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    &lt;nullable><br>
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>sessionId</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line449">line 449</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
 
     
 
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+            
+                
+<dt>
+    <h4 class="name" id="doRequestCallback"><span class="type-signature"></span>doRequestCallback<span class="signature">(err, responseXml)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        /*
+handles the result of a REST request
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>err</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Error</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    &lt;nullable><br>
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>responseXml</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line451">line 451</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+            
+                
+<dt>
+    <h4 class="name" id="doRequestCallback"><span class="type-signature"></span>doRequestCallback<span class="signature">(err, arguments)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        /*
+is interested in an error, can be a super-type of OpenTok~createSessionCallback
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>err</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Error</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    &lt;nullable><br>
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>arguments</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line453">line 453</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+            </dl>
+    
+    
     
 </article>
 
-</section>
+</section>  
 
 
 
@@ -1424,7 +1895,7 @@ are passed to the function:
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Tue May 20 2014 12:28:08 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Tue May 27 2014 11:47:29 GMT-0400 (EDT)
 </footer>
 
 <script> prettyPrint(); </script>

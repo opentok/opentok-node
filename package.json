@@ -11,7 +11,7 @@
     "url": "https://github.com/opentok/opentok-node/issues",
     "email": "support@tokbox.com"
   },
-  "license" : "MIT",
+  "license": "MIT",
   "contributors": [
     {
       "name": "Brian Stoner",
@@ -37,12 +37,13 @@
     "node": ">=0.10.0"
   },
   "devDependencies": {
-    "grunt": "^0.4.4",
-    "grunt-mocha-test": "^0.10.0",
-    "chai": "^1.9.1",
-    "nock": "^0.27.2",
     "async": "^0.2.10",
-    "grunt-jasmine-node": "^0.2.1"
+    "chai": "^1.9.1",
+    "grunt": "^0.4.4",
+    "grunt-jasmine-node": "^0.2.1",
+    "grunt-jsdoc": "^0.5.4",
+    "grunt-mocha-test": "^0.10.0",
+    "nock": "^0.27.2"
   },
   "dependencies": {
     "xmljson": "~0.2.0",

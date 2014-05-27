@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>JSDoc: Class: Archive</title>
-
+    
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
     <!--[if lt IE 9]>
@@ -16,35 +16,35 @@
 <body>
 
 <div id="main">
-
+    
     <h1 class="page-title">Class: Archive</h1>
-
+    
     
 
 
 
 <section>
-
+    
 <header>
     <h2>
     Archive
     </h2>
     
-</header>
+</header>  
 
 <article>
     <div class="container-overview">
     
-
+    
     
         
 <dt>
     <h4 class="name" id="Archive"><span class="type-signature"></span>new Archive<span class="signature">(createdAt, duration, id, name, partnerId, reason, sessionId, size, status, url)</span><span class="type-signature"></span></h4>
-
+    
     
 </dt>
 <dd>
-
+    
     
     <div class="description">
         An object representing an OpenTok 2.0 archive.
@@ -52,38 +52,38 @@
     
 
     
-
     
-
+    
+    
     
         <h5>Parameters:</h5>
         
 
 <table class="params">
     <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
         <tr>
             
                 <td class="name"><code>createdAt</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -92,21 +92,21 @@
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The time at which the archive was created, in milliseconds since the UNIX epoch.</td>
         </tr>
-
-    
-
+	
+	
+	
         <tr>
             
                 <td class="name"><code>duration</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -115,21 +115,21 @@
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The duration of the archive, in milliseconds.</td>
         </tr>
-
-    
-
+	
+	
+	
         <tr>
             
                 <td class="name"><code>id</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -138,21 +138,21 @@
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The archive ID.</td>
         </tr>
-
-    
-
+	
+	
+	
         <tr>
             
                 <td class="name"><code>name</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -161,22 +161,22 @@
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The name of the archive. If no name was provided when the archive was created, this is set
   to null.</td>
         </tr>
-
-    
-
+	
+	
+	
         <tr>
             
                 <td class="name"><code>partnerId</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -185,21 +185,21 @@
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The API key associated with the archive.</td>
         </tr>
-
-    
-
+	
+	
+	
         <tr>
             
                 <td class="name"><code>reason</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -208,23 +208,23 @@
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">For archives with the status "stopped", this can be set to "90 mins exceeded", "failure",
   "session ended", or "user initiated". For archives with the status "failed", this can be set
   to "system failure".</td>
         </tr>
-
-    
-
+	
+	
+	
         <tr>
             
                 <td class="name"><code>sessionId</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -233,21 +233,21 @@
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The session ID of the OpenTok session associated with this archive.</td>
         </tr>
-
-    
-
+	
+	
+	
         <tr>
             
                 <td class="name"><code>size</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -256,21 +256,21 @@
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The size of the MP4 file. For archives that have not been generated, this value is set to 0.</td>
         </tr>
-
-    
-
+	
+	
+	
         <tr>
             
                 <td class="name"><code>status</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -279,11 +279,11 @@
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The status of the archive, which can be one of the following:
   <ul>
     <li> "available" -- The archive is available for download from the OpenTok cloud.
@@ -294,14 +294,14 @@
          S3 bucket.
   </ul></td>
         </tr>
-
-    
-
+	
+	
+	
         <tr>
             
                 <td class="name"><code>url</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -310,52 +310,52 @@
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The download URL of the available MP4 file. This is only set for an archive with the status set to
   "available"; for other archives, (including archives with the status "uploaded") this property is
   set to null. The download URL is obfuscated, and the file is only available from the URL for
   10 minutes. To generate a new URL, call the Archive.listArchives() or OpenTok.getArchive()
   method.</td>
         </tr>
-
-    
-    </tbody>
+	
+	
+	</tbody>
 </table>
     
-
+    
     
 <dl class="details">
     
-
+        
+    
+    
     
 
     
-
     
-
     
-
     
-
     
-
     
-
     
-
+    
+    
+    
+    
+    
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="archiving.js.html">archiving.js</a>, <a href="archiving.js.html#line8">line 8</a>
     </li></ul></dd>
     
-
     
-
+    
+    
     
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
@@ -372,55 +372,51 @@
         </ul>
     </dd>
     
-
+    
     
 </dl>
 
-
+    
     
 
     
 
     
-
     
-
     
-
     
-
+    
+    
     
 </dd>
 
     
     </div>
-
     
-
     
-
     
-
     
-
-     
-
     
-
     
-
+    
+    
+    
+    
+    
+    
+    
     
         <h3 class="subsection-title">Methods</h3>
-
+        
         <dl>
             
 <dt>
     <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(callback)</span><span class="type-signature"></span></h4>
-
+    
     
 </dt>
 <dd>
-
+    
     
     <div class="description">
         Deletes the OpenTok archive.
@@ -432,38 +428,38 @@ removes the archive file, making it unavailable for download.
     
 
     
-
     
-
+    
+    
     
         <h5>Parameters:</h5>
         
 
 <table class="params">
     <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
         <tr>
             
                 <td class="name"><code>callback</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -472,68 +468,66 @@ removes the archive file, making it unavailable for download.
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The function to call upon completing the operation. On successfully
 deleting the archive, the function is called with no arguments passed in. On failure, an error
 object is passed into the function.</td>
         </tr>
-
-    
-    </tbody>
+	
+	
+	</tbody>
 </table>
     
-
+    
     
 <dl class="details">
     
-
+        
+    
+    
     
 
     
-
     
-
     
-
     
-
     
-
     
-
     
-
+    
+    
+    
+    
+    
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="archiving.js.html">archiving.js</a>, <a href="archiving.js.html#line102">line 102</a>
     </li></ul></dd>
     
-
     
-
     
-
+    
+    
+    
     
 </dl>
 
-
+    
     
 
     
 
     
-
     
-
     
-
     
-
+    
+    
     
 </dd>
 
@@ -541,11 +535,11 @@ object is passed into the function.</td>
             
 <dt>
     <h4 class="name" id="stop"><span class="type-signature"></span>stop<span class="signature">(callback)</span><span class="type-signature"></span></h4>
-
+    
     
 </dt>
 <dd>
-
+    
     
     <div class="description">
         Stops the recording of the archive.
@@ -556,38 +550,38 @@ from the session being archived.
     
 
     
-
     
-
+    
+    
     
         <h5>Parameters:</h5>
         
 
 <table class="params">
     <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
         <tr>
             
                 <td class="name"><code>callback</code></td>
             
-
+            
             <td class="type">
             
                 
@@ -596,11 +590,11 @@ from the session being archived.
 
             
             </td>
-
             
-
             
-
+            
+            
+            
             <td class="description last">The function to call upon completing the operation. Two arguments
 are passed to the function:
 
@@ -616,71 +610,69 @@ are passed to the function:
 
 </ul></td>
         </tr>
-
-    
-    </tbody>
+	
+	
+	</tbody>
 </table>
     
-
+    
     
 <dl class="details">
     
-
+        
+    
+    
     
 
     
-
     
-
     
-
     
-
     
-
     
-
     
-
+    
+    
+    
+    
+    
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="archiving.js.html">archiving.js</a>, <a href="archiving.js.html#line74">line 74</a>
     </li></ul></dd>
     
-
     
-
     
-
+    
+    
+    
     
 </dl>
 
-
+    
     
 
     
 
     
-
     
-
     
-
     
-
+    
+    
     
 </dd>
 
         </dl>
     
-
     
-
+    
+    
     
 </article>
 
-</section>
+</section>  
 
 
 
@@ -694,7 +686,7 @@ are passed to the function:
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Tue May 20 2014 12:28:08 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Tue May 27 2014 11:47:29 GMT-0400 (EDT)
 </footer>
 
 <script> prettyPrint(); </script>
