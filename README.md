@@ -211,10 +211,8 @@ docs directory of the SDK.
 
 # Development and Contributing
 
-Interested in contributing? We <3 pull requests! File a new
-[Issue](https://github.com/opentok/opentok-node/issues) or take a look at the existing ones. If
-you are going to send us a pull request, please try to run the test suite first and also include
-tests for your changes.
+Interested in contributing? We :heart: pull requests! See the [Development](DEVELOPING.md) and
+[Contribution](CONTRIBUTING.md) guidelines.
 
 # Support
 
