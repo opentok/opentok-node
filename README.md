@@ -1,6 +1,6 @@
 # OpenTok Node SDK
 
-[![Build Status](https://travis-ci.org/opentok/opentok-node.png?branch=modernization)](https://travis-ci.org/opentok/opentok-node)
+[![Build Status](https://travis-ci.org/opentok/opentok-node.png)](https://travis-ci.org/opentok/opentok-node)
 
 The OpenTok Node SDK lets you generate
 [sessions](http://www.tokbox.com/opentok/tutorials/create-session/) and
