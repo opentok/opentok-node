@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>JSDoc: Source: opentok.js</title>
-
+    
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
     <!--[if lt IE 9]>
@@ -16,16 +16,16 @@
 <body>
 
 <div id="main">
-
+    
     <h1 class="page-title">Source: opentok.js</h1>
-
+    
     
 
 
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/*
+            <pre class="prettyprint source"><code>/*
  * OpenTok server-side SDK
  */
 
@@ -100,7 +100,7 @@ var OpenTok = function(apiKey, apiSecret, env) {
   *
   * @param sessionId The session ID of the OpenTok session to archive.
   *
-  * @param options {Object} An optional options object with one property &amp;mdash; &lt;code>name&lt;/code>
+  * @param options {Object} An optional options object with one property &mdash; &lt;code>name&lt;/code>
   * (a String). This is the name of the archive. You can use this name to identify the archive.
   * It is a property of the Archive object, and it is a property of archive-related events in the
   * OpenTok client libraries.
@@ -111,11 +111,11 @@ var OpenTok = function(apiKey, apiSecret, env) {
   * &lt;ul>
   *
   *   &lt;li>
-  *      &lt;code>error&lt;/code> &amp;mdash; An error object (if the call to the method fails).
+  *      &lt;code>error&lt;/code> &mdash; An error object (if the call to the method fails).
   *   &lt;/li>
   *
   *   &lt;li>
-  *       &lt;code>archive&lt;/code> &amp;mdash; The Archive object. This object includes properties defining
+  *       &lt;code>archive&lt;/code> &mdash; The Archive object. This object includes properties defining
   *       the archive, including the archive ID.
   *   &lt;/li>
   *
@@ -142,11 +142,11 @@ var OpenTok = function(apiKey, apiSecret, env) {
   * &lt;ul>
   *
   *   &lt;li>
-  *      &lt;code>error&lt;/code> &amp;mdash; An error object (if the call to the method fails).
+  *      &lt;code>error&lt;/code> &mdash; An error object (if the call to the method fails).
   *   &lt;/li>
   *
   *   &lt;li>
-  *       &lt;code>archive&lt;/code> &amp;mdash; The Archive object.
+  *       &lt;code>archive&lt;/code> &mdash; The Archive object.
   *   &lt;/li>
   *
   * &lt;/ul>
@@ -195,13 +195,13 @@ var OpenTok = function(apiKey, apiSecret, env) {
   * &lt;ul>
   *
   *   &lt;li>
-  *     &lt;code>count&lt;/code> &amp;mdash; The index offset of the first archive. 0 is offset of the most
+  *     &lt;code>count&lt;/code> &mdash; The index offset of the first archive. 0 is offset of the most
   *     recently started archive. 1 is the offset of the archive that started prior to the most
   *     recent archive. This limit is 1000 archives.
   *   &lt;/li>
   *
   *   &lt;li>
-  *     &lt;code>offset&lt;/code> &amp;mdash; The offset for the first archive to list (starting with the
+  *     &lt;code>offset&lt;/code> &mdash; The offset for the first archive to list (starting with the
   *     first archive recorded as offset 0).
   *   &lt;/li>
   *
@@ -216,11 +216,11 @@ var OpenTok = function(apiKey, apiSecret, env) {
   * &lt;ul>
   *
   *   &lt;li>
-  *      &lt;code>error&lt;/code> &amp;mdash; An error object (if the call to the method fails).
+  *      &lt;code>error&lt;/code> &mdash; An error object (if the call to the method fails).
   *   &lt;/li>
   *
   *   &lt;li>
-  *       &lt;code>archives&lt;/code> &amp;mdash; An array of Archive objects.
+  *       &lt;code>archives&lt;/code> &mdash; An array of Archive objects.
   *   &lt;/li>
   *
   * &lt;/ul>
@@ -258,13 +258,13 @@ var OpenTok = function(apiKey, apiSecret, env) {
  *
  * &lt;ul>
  *
- *     &lt;li>&lt;code>location&lt;/code> (String) &amp;mdash;
+ *     &lt;li>&lt;code>location&lt;/code> (String) &mdash;
  * An IP address that the OpenTok servers will use to situate the session in the global
  * OpenTok network. If you do not set a location hint, the OpenTok servers will be based on
  * the first client connecting to the session.
  * &lt;/li>
  *
- *     &lt;li>&lt;code>mediaMode&lt;/code> (String) &amp;mdash;
+ *     &lt;li>&lt;code>mediaMode&lt;/code> (String) &mdash;
  * Determines whether the session will transmit streams using the OpenTok Media Router
  * (&lt;code>"routed"&lt;/code>) or not (&lt;code>"relayed"&lt;/code>). By default, sessions use
  * the OpenTok Media Router.
@@ -303,11 +303,11 @@ var OpenTok = function(apiKey, apiSecret, env) {
  *
  * &lt;ul>
  *   &lt;li>
- *      &lt;code>sessionId&lt;/code> &amp;mdash; On sucess, this parameter is set to the session ID of
+ *      &lt;code>sessionId&lt;/code> &mdash; On sucess, this parameter is set to the session ID of
  *      the session. Otherwise it is set to null.
  *   &lt;/li>
  *   &lt;li>
- *      &lt;code>error&lt;/code> &amp;mdash; On failiure, this parameter is set to an error object.
+ *      &lt;code>error&lt;/code> &mdash; On failiure, this parameter is set to an error object.
  *      Check the error message for details.
  *   &lt;/li>
  * &lt;/ul>
@@ -326,10 +326,10 @@ OpenTok.prototype.createSession = function(opts, callback) {
 
   // whitelist the keys allowed
   _.pick(_.defaults(opts, { "mediaMode" : "routed" }), "mediaMode", "location");
-  if ( opts.mediaMode !== "routed" &amp;&amp; opts.mediaMode !== "relayed" ) {
+  if ( opts.mediaMode !== "routed" && opts.mediaMode !== "relayed" ) {
     opts.mediaMode = "routed";
   }
-  if ( "location" in opts &amp;&amp; !net.isIPv4(opts.location) ) {
+  if ( "location" in opts && !net.isIPv4(opts.location) ) {
     return process.nextTick(function() { callback(new Error('Invalid arguments when calling createSession, ' +
       'location must be an IPv4 address'))});
   }
@@ -361,16 +361,16 @@ OpenTok.prototype.createSession = function(opts, callback) {
 * @param options An object that defines options for the token (each of which is optional):
 *
 * &lt;ul>
-*    &lt;li>&lt;code>role&lt;/code> (String) &amp;mdash; The role for the token. Each role defines a set of
+*    &lt;li>&lt;code>role&lt;/code> (String) &mdash; The role for the token. Each role defines a set of
 *      permissions granted to the token:
 *
 *        &lt;ul>
-*           &lt;li> &lt;code>'subscriber'&lt;/code> &amp;mdash; A subscriber can only subscribe to streams.&lt;/li>
+*           &lt;li> &lt;code>'subscriber'&lt;/code> &mdash; A subscriber can only subscribe to streams.&lt;/li>
 *
-*           &lt;li> &lt;code>'publisher'&lt;/code> &amp;mdash; A publisher can publish streams, subscribe to
+*           &lt;li> &lt;code>'publisher'&lt;/code> &mdash; A publisher can publish streams, subscribe to
 *              streams, and signal. (This is the default value if you do not specify a role.)&lt;/li>
 *
-*           &lt;li> &lt;code>'moderator'&lt;/code> &amp;mdash; In addition to the privileges granted to a
+*           &lt;li> &lt;code>'moderator'&lt;/code> &mdash; In addition to the privileges granted to a
 *             publisher, in clients using the OpenTok.js 2.2 library, a moderator can call the
 *             &lt;code>forceUnpublish()&lt;/code> and &lt;code>forceDisconnect()&lt;/code> method of the
 *             Session object.&lt;/li>
@@ -378,12 +378,12 @@ OpenTok.prototype.createSession = function(opts, callback) {
 *
 *    &lt;/li>
 *
-*    &lt;li>&lt;code>expireTime&lt;/code> (Number) &amp;mdash; The expiration time for the token, in seconds
+*    &lt;li>&lt;code>expireTime&lt;/code> (Number) &mdash; The expiration time for the token, in seconds
 *      since the UNIX epoch. The maximum expiration time is 30 days after the creation time.
 *      The default expiration time of 24 hours after the token creation time.
 *    &lt;/li>
 *
-*    &lt;li>&lt;code>data&lt;/code> (String) &amp;mdash; A string containing connection metadata describing the
+*    &lt;li>&lt;code>data&lt;/code> (String) &mdash; A string containing connection metadata describing the
 *      end-user.For example, you can pass the user ID, name, or other data describing the end-user.
 *      The length of the string is limited to 1000 characters. This data cannot be updated once it
 *      is set.
@@ -417,7 +417,7 @@ OpenTok.prototype.generateToken = function(sessionId, opts) {
   // validate tokenData
   if (!_.contains(['publisher', 'subscriber', 'moderator'], tokenData.role)) return null;
   if (!_.isNumber(tokenData.expire_time)) return null;
-  if (tokenData.connection_data &amp;&amp;
+  if (tokenData.connection_data &&
       (tokenData.connection_data.length > 1024 || !_.isString(tokenData.connection_data))) {
         return null;
   }
@@ -457,7 +457,7 @@ function decodeSessionId(sessionId) {
 function encodeToken(data, apiKey, apiSecret) {
   var dataString = querystring.stringify(data),
       sig = signString(dataString, apiSecret),
-      decoded = new Buffer("partner_id="+apiKey+"&amp;sig="+sig+":"+dataString, 'utf8');
+      decoded = new Buffer("partner_id="+apiKey+"&sig="+sig+":"+dataString, 'utf8');
   return TOKEN_SENTINEL + decoded.toString('base64');
 }
 
@@ -529,7 +529,7 @@ for(var key in errors) {
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Tue May 20 2014 12:28:07 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Tue May 27 2014 11:47:29 GMT-0400 (EDT)
 </footer>
 
 <script> prettyPrint(); </script>
