@@ -1,9 +1,17 @@
 {
   "name": "opentok",
-  "description": "OpenTokSDK for node.js",
-  "version": "1.0.2",
-  "homepage": "https://github.com/opentok/opentok",
-  "repository": "https://github.com/opentok/opentok.git",
+  "description": "OpenTok server-side SDK",
+  "version": "2.2.0-alpha",
+  "homepage": "http://opentok.github.io/opentok-node",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/opentok/opentok-node.git"
+  },
+  "bugs": {
+    "url": "https://github.com/opentok/opentok-node/issues",
+    "email": "support@tokbox.com"
+  },
+  "license": "MIT",
   "contributors": [
     {
       "name": "Brian Stoner",
@@ -12,21 +20,35 @@
     },
     {
       "name": "Song Zheng",
-      "email": "song@tokbox.com"
+      "email": "song@tokbox.com",
+      "url": "http://songz.me"
     },
     {
       "name": "Ankur Oberoi",
-      "email": "aoberoi@gmail.com"
+      "email": "aoberoi@gmail.com",
+      "url": "http://aoberoi.me"
     }
   ],
-  "main": "./lib/opentok",
-  "directories": {
-    "lib": "lib"
+  "main": "lib/opentok.js",
+  "scripts": {
+    "test": "grunt"
   },
   "engines": {
-    "node": "*"
+    "node": ">=0.10.0"
   },
   "devDependencies": {
-    "jasmine-node" : "1.0.x"
+    "async": "^0.2.10",
+    "chai": "^1.9.1",
+    "grunt": "^0.4.4",
+    "grunt-jasmine-node": "^0.2.1",
+    "grunt-jsdoc": "^0.5.4",
+    "grunt-mocha-test": "^0.10.0",
+    "nock": "^0.27.2"
+  },
+  "dependencies": {
+    "xmljson": "~0.2.0",
+    "underscore": "~1.5.2",
+    "request": "^2.34.0",
+    "lodash": "^2.4.1"
   }
 }
