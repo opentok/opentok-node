@@ -13,7 +13,9 @@ var apiKey = '123456',
     apiSecret = '1234567890abcdef1234567890abcdef1234567890'
     apiUrl = 'http://mymock.example.com',
     // This is specifically concocted for these tests (uses fake apiKey/apiSecret above)
-    sessionId = '1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX4';
+    sessionId = '1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX4'
+    badApiKey = 'badkey',
+    badApiSecret = 'badsecret';
 nock.disableNetConnect();
 
 var recording = false;
@@ -73,6 +75,28 @@ describe('OpenTok', function() {
         expect(session.sessionId).to.equal('SESSIONID');
         scope.done();
         done(err);
+      });
+    });
+  });
+
+  describe('when initialized with bad credentials', function() {
+    beforeEach(function() {
+      this.opentok = new OpenTok(badApiKey, badApiSecret);
+    });
+    describe('#createSession', function() {
+      it('throws a client error', function(done) {
+        var scope = nock('https://api.opentok.com:443')
+          .post('/hl/session/create', "p2p.preference=disabled")
+          .reply(403, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><errorPayload><code>-1</code><message>Invalid partner credentials</message></errorPayload>", { server: 'nginx',
+          date: 'Fri, 30 May 2014 19:37:12 GMT',
+          'content-type': 'application/xml',
+          connection: 'keep-alive',
+          'content-length': '145' });
+        this.opentok.createSession(function(err, session) {
+          expect(err).to.be.an.instanceof(Error);
+          scope.done();
+          done();
+        });
       });
     });
   });
