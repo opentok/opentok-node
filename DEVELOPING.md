@@ -31,17 +31,22 @@ Common tasks:
 In order to create a release, the following should be completed in order.
 
 1. Ensure all the tests are passing (`grunt`) and that there is enough test coverage.
-1. Make sure you are on the `master` branch of the repository, with all changes merged/commited already.
-1. Update the version number in the source code and the README. See [Versioning](#versioning) for information
-   about selecting an appropriate version number. Files to change:
+1. Make sure you are on the `master` branch of the repository, with all changes merged/commited
+   already.
+1. Update the version number anywhere it appears in the source code and documentation. See
+   [Versioning](#versioning) for information about selecting an appropriate version number. Files to
+   check:
    - package.json
    - README.md
-1. Commit the version number change with the message "Update to version x.x.x", substituting the new version number.
-1. Create a git tag: `git tag -a vx.x.x -m "Release vx.x.x"`
-1. Ensure that you have permission to update the [opentok npm module](https://www.npmjs.org/package/opentok)
+1. Commit the version number change with the message "Update to version x.y.z", substituting the new
+   version number.
+1. Create a git tag: `git tag -a vx.y.z -m "Release vx.y.z"`
+1. Ensure that you have permission to update the
+   [opentok npm module](https://www.npmjs.org/package/opentok)
 1. Run `npm publish` to release to npm.
-1. Change the version number for future development by adding "-alpha.1" in each file, then make another commit with the
-   message "Begin development on next version".
+1. Change the version number for future development by incrementing the patch number (z) adding
+   "-alpha.1" in the source code (not the documentation). For possible files, see above. Then make
+   another commit with the message "Begin development on next version".
 1. Push the changes to the source repository: `git push origin master`
 
 ## Workflow
