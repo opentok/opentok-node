@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>OpenTok Hello World</title>
+    <script src="//static.opentok.com/webrtc/v2.2/js/TB.min.js"></script>
+    <script type="text/javascript">
+        var apiKey = '<%= apiKey %>';
+        var sessionId = '<%= sessionId %>';
+        var token = '<%= token %>';
+    </script>
+    <script src="/js/helloworld.js"></script>
+    <script src="/js/files.js"></script>
+    <script src="/js/fileShareUI.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/SocketClient.js"></script>
+    <script src="//api.peer5.com/peer5.js?id=z142i5n5qypq4cxr"></script>
+</head>
+<body>
+    <h2>Hello, World!</h2>
+    <div class = "row">
+        <div class = "col" style="width:50%">
+            <div id="publisher"></div>
+            <div id="subscribers"></div>
+        </div>
+        <div class = "col" style="width:50%">
+            <input onchange="addFiles(this.files)" type="file" id="files" name="files[]" multiple>
+            <div class="file_list"></div>
+        </div>
+    </div>
+</body>
+</html>

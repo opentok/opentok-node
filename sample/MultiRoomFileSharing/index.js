@@ -1,6 +1,6 @@
 // Dependencies
 var express = require('express'),
-    OpenTok = require('../../lib/opentok');
+    OpenTok = require('../../lib/opentok')
 
 // Verify that the API Key and API Secret are defined
 var apiKey = process.env.API_KEY,
@@ -13,6 +13,7 @@ if (!apiKey || !apiSecret) {
 
 // Initialize the express app
 var app = express();
+var server = require('http').Server(app);
 app.use(express.static(__dirname + '/public'));
 
 // Initialize OpenTok
@@ -28,30 +29,32 @@ app.get('/:id', function (req, res) {
         sessionId = roomsSession[req.params.id];
         // generate a fresh token for this client
         var token = opentok.generateToken(sessionId);
-        res.render('index.ejs', {
+        res.render('room.ejs', {
             apiKey: apiKey,
             sessionId: sessionId,
             token: token
         });
-    }
-    else
+    }else{
         opentok.createSession(function(err, session) {
             if (err) throw err;
             sessionId = session.sessionId;
             roomsSession[req.params.id] = sessionId;
-            console.log("sessionId = " + sessionId);
+            console.log("index.js: sessionId = " + sessionId);
             // generate a fresh token for this client
             var token = opentok.generateToken(sessionId);
 
-            res.render('index.ejs', {
+            res.render('room.ejs', {
                 apiKey: apiKey,
                 sessionId: sessionId,
                 token: token
             });
         });
+    }
 });
 
 // Start the express app
-app.listen(3000, function() {
+server.listen(3000, function() {
     console.log('Your app is now ready at http://localhost:3000/');
 });
+
+require('./SocketServer')(server);
