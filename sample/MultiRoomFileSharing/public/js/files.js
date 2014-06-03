@@ -1,12 +1,17 @@
 function addFiles(files){
-    var file = files[0];
+    for(var i=0;i<files.length;++i){
+        addFile(files[i]);
+    }
+}
+
+function addFile(file){
     var peer5Request = new peer5.Request({downloadeMode:"p2p"});
     peer5Request.onprogress = function(e){
 //        updateShareProgressUI(e.loaded, e.total);
     }
     peer5Request.onload = function(e){
         userState = {isSeeder:true,origin:true};
-        var fileInfo = {swarmId:this.getFileInfo().swarmId,filename:file.name};
+        var fileInfo = {swarmId:this.getFileInfo().swarmId,filename:file.name,size:file.size};
         socket.emit('new file', fileInfo);
     }
 
@@ -22,6 +27,7 @@ function addFiles(files){
 }
 
 function getFile(fileInfo){
+    showDownloadProgressUI(fileInfo);
     var peer5Request = new peer5.Request({downloadMode:"p2p"});
     peer5Request.onload = function(e){
         console.log("Finished downloading the file");
@@ -31,7 +37,7 @@ function getFile(fileInfo){
 
     }
     peer5Request.onprogress = function(e){
-        console.log(e);
+        updateProgressUI(fileInfo.swarmId,e.loaded, e.total);
     }
 
     peer5Request.onswarmstatechange = function(e){

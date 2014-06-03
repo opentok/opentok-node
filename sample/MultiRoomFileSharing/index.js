@@ -5,7 +5,7 @@ var express = require('express'),
 // Verify that the API Key and API Secret are defined
 var apiKey = process.env.API_KEY,
     apiSecret = process.env.API_SECRET;
-var roomsSession = {};
+rooms = {};
 if (!apiKey || !apiSecret) {
   console.log('You must specify API_KEY and API_SECRET environment variables');
   process.exit(1);
@@ -25,8 +25,8 @@ app.get('/',function(req,res){
 
 app.get('/:id', function (req, res) {
     var sessionId;
-    if(roomsSession[req.params.id]){
-        sessionId = roomsSession[req.params.id];
+    if(rooms[req.params.id]){
+        sessionId = rooms[req.params.id].sessionId;
         // generate a fresh token for this client
         var token = opentok.generateToken(sessionId);
         res.render('room.ejs', {
@@ -38,7 +38,7 @@ app.get('/:id', function (req, res) {
         opentok.createSession(function(err, session) {
             if (err) throw err;
             sessionId = session.sessionId;
-            roomsSession[req.params.id] = sessionId;
+            rooms[req.params.id] = {sessionId:sessionId};
             console.log("index.js: sessionId = " + sessionId);
             // generate a fresh token for this client
             var token = opentok.generateToken(sessionId);
