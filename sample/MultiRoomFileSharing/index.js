@@ -53,8 +53,8 @@ app.get('/:id', function (req, res) {
 });
 
 // Start the express app
-server.listen(3000, function() {
-    console.log('Your app is now ready at http://localhost:3000/');
+server.listen(80, function() {
+    console.log('Your app is now ready at port 80');
 });
 
 require('./SocketServer')(server);

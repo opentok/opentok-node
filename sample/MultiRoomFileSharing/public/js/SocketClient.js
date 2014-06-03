@@ -1,4 +1,4 @@
-var socket = io.connect('http://localhost:3000');
+var socket = io.connect(window.location.host);
 socket.on('hello', function (data) {
     socket.emit('room', {id:window.location.pathname.split("/")[1]});
 });
