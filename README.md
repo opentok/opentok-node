@@ -43,7 +43,8 @@ Session objects have a `sessionId` property that is useful to be saved to a pers
 (such as a database).
 
 ```javascript
-// Just a plain Session
+// Create a session that will attempt to transmit streams directly between
+// clients. If clients cannot connect, the session uses the OpenTok TURN server:
 opentok.createSession(function(err, session) {
   if (err) return console.log(err);
 
@@ -51,9 +52,8 @@ opentok.createSession(function(err, session) {
   db.save('session', session.sessionId, done);
 });
 
-// A The session will attempt to transmit streams directly between clients.
-// If clients cannot connect, the session uses the OpenTok TURN server:
-opentok.createSession({mediaMode:"relayed"}, function(err, session) {
+// The session will the OpenTok Media Router:
+opentok.createSession({mediaMode:"routed"}, function(err, session) {
   if (err) return console.log(err);
 
   // save the sessionId
