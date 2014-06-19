@@ -9,7 +9,7 @@ The OpenTok Node SDK lets you generate
 [archive](http://www.tokbox.com/platform/archiving) OpenTok 2.0 sessions.
 
 If you are updating from a previous version of this SDK, see
-[Important changes in v2.2](#important-changes-in-v22).
+[Important changes since v2.2](#important-changes-since-v220).
 
 # Installation using npm (recommended):
 
@@ -193,7 +193,17 @@ The OpenTok Node SDK requires node 0.10 or higher.
 See the [Releases](https://github.com/opentok/opentok-node/releases) page for details
 about each release.
 
-## Important changes in v2.2.1
+## Important changes since v2.2.0
+
+**Changes in v2.2.3:**
+
+The default setting for the `createSession()` method is to create a session with the media mode set
+to relayed. In previous versions of the SDK, the default setting was to use the OpenTok Media Router
+(media mode set to routed). In a relayed session, clients will attempt to send streams directly
+between each other (peer-to-peer); if clients cannot connect due to firewall restrictions, the
+session uses the OpenTok TURN server to relay audio-video streams.
+
+**Changes in v2.2.0:**
 
 This version of the SDK includes support for working with OpenTok 2.0 archives. (This API does not
 work with OpenTok 1.0 archives.)
@@ -201,12 +211,6 @@ work with OpenTok 1.0 archives.)
 The `createSession()` method has changed to take one parameter: an `options` object that has `location`
 and `mediaMode` properties. The `mediaMode` property replaces the `properties.p2p.preference`
 parameter in the previous version of the SDK.
-
-The default setting for the `createSession()` method is to create a session with the media mode set
-to relayed. In previous versions of the SDK, the default setting was to use the OpenTok Media Router
-(media mode set to routed). In a relayed session, clients will attempt to send streams directly
-between each other (peer-to-peer); if clients cannot connect due to firewall restrictions, the
-session uses the OpenTok TURN server to relay audio-video streams.
 
 The `generateToken()` has changed to take two parameters: the session ID and an `options` object that has `role`, `expireTime` and `data` properties.
 
