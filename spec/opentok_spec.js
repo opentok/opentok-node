@@ -155,6 +155,43 @@ describe('Archiving', function() {
 
     });
 
+    it('should return an expired archive', function(done) {
+      nock('https://api.opentok.com:443')
+        .get('/v2/partner/APIKEY/archive/d4c27726-d965-4456-8b07-0cca1a4f4802')
+        .reply(200, '{\n  \"createdAt\" : 1389986091000,\n  \"duration\" : 300,\n  \"id\" : \"d4c27726-d965-4456-8b07-0cca1a4f4802\",\n  \"name\" : \"Bob\",\n  \"partnerId\" : \"APIKEY\",\n  \"reason\" : \"\",\n  \"sessionId\" : \"1_MX4xMDB-fkZyaSBKYW4gMTcgMTE6MTQ6NTAgUFNUIDIwMTR-MC4xNTM4NDExNH4\",\n  \"size\" : 331266,\n  \"status\" : \"expired\",\n  \"url\" : null\n}', { server: 'nginx',
+        date: 'Fri, 31 Jan 2014 06:49:12 GMT',
+        'content-type': 'application/json',
+        'transfer-encoding': 'chunked',
+        connection: 'keep-alive' });
+
+      opentok.getArchive(archiveID, function(err, archive) {
+        expect(err).toBeNull();
+        expect(archive).not.toBeNull();
+        if(archive) {
+          expect(archive.status).toBe('expired');
+        }
+        done();
+      });
+
+    });
+
+    it('should return archives with unknown properties', function(done) {
+      nock('https://api.opentok.com:443')
+        .get('/v2/partner/APIKEY/archive/d4c27726-d965-4456-8b07-0cca1a4f4802')
+        .reply(200, '{\n  \"createdAt\" : 1389986091000,\n  \"duration\" : 300,\n  \"id\" : \"d4c27726-d965-4456-8b07-0cca1a4f4802\",\n  \"name\" : \"Bob\",\n  \"partnerId\" : \"APIKEY\",\n  \"reason\" : \"\",\n  \"sessionId\" : \"1_MX4xMDB-fkZyaSBKYW4gMTcgMTE6MTQ6NTAgUFNUIDIwMTR-MC4xNTM4NDExNH4\",\n  \"size\" : 331266,\n  \"status\" : \"expired\",\n  \"url\" : null,\n \"notarealproperty\" : \"not a real value\"\n}', { server: 'nginx',
+        date: 'Fri, 31 Jan 2014 06:49:12 GMT',
+        'content-type': 'application/json',
+        'transfer-encoding': 'chunked',
+        connection: 'keep-alive' });
+
+      opentok.getArchive(archiveID, function(err, archive) {
+        expect(err).toBeNull();
+        expect(archive).not.toBeNull();
+        done();
+      });
+
+    });
+
     it('should return an error if archive ID is null', function(done) {
 
       opentok.getArchive(null, function(err) {
@@ -302,7 +339,7 @@ describe('Archiving', function() {
 
     it('should return an archive', function(done) {
       var archiveId = 'ca138a6c-380f-4de9-b2b2-bc78b3a117e2';
-            
+
       nock('https://api.opentok.com:443')
         .post('/v2/partner/APIKEY/archive/ca138a6c-380f-4de9-b2b2-bc78b3a117e2/stop', {})
         .reply(200, '{\n  \"createdAt\" : 1391471703000,\n  \"duration\" : 0,\n  \"id\" : \"ca138a6c-380f-4de9-b2b2-bc78b3a117e2\",\n  \"name\" : \"PHP Archiving Sample App\",\n  \"partnerId\" : \"APIKEY\",\n  \"reason\" : \"\",\n  \"sessionId\" : \"1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg\",\n  \"size\" : 0,\n  \"status\" : \"stopped\",\n  \"url\" : null\n}', { server: 'nginx',
@@ -347,7 +384,7 @@ describe('Archiving', function() {
     });
 
     it('should return an error if the archive is not currently started', function(done) {
-      
+
       nock('https://api.opentok.com:443')
         .post('/v2/partner/APIKEY/archive/ca138a6c-380f-4de9-b2b2-bc78b3a117e2/stop', {})
         .reply(409, '{ \"message\" : \"Conflict. You are trying to stop an archive that is not recording.\" }', { server: 'nginx',
@@ -470,4 +507,3 @@ describe('Archiving', function() {
   });
 
 });
-  
