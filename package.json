@@ -43,7 +43,8 @@
     "grunt-jasmine-node": "^0.2.1",
     "grunt-jsdoc": "^0.5.4",
     "grunt-mocha-test": "^0.10.0",
-    "nock": "^0.32.3"
+    "nock": "^0.32.3",
+    "sinon": "1.10.2"
   },
   "dependencies": {
     "xmljson": "~0.2.0",
