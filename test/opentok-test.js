@@ -10,10 +10,10 @@ var OpenTok = require('../lib/opentok.js'),
 
 // Fixtures
 var apiKey = '123456',
-    apiSecret = '1234567890abcdef1234567890abcdef1234567890'
+    apiSecret = '1234567890abcdef1234567890abcdef1234567890',
     apiUrl = 'http://mymock.example.com',
     // This is specifically concocted for these tests (uses fake apiKey/apiSecret above)
-    sessionId = '1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX4'
+    sessionId = '1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX4',
     badApiKey = 'badkey',
     badApiSecret = 'badsecret';
 nock.disableNetConnect();
@@ -21,7 +21,7 @@ nock.disableNetConnect();
 var recording = false;
 if (recording) {
   // set these values before changing the above to true
-  apiKey = '',
+  apiKey = '';
   apiSecret = '';
   nock.enableNetConnect();
   nock.recorder.rec();
@@ -192,7 +192,7 @@ describe('OpenTok', function() {
         expect(session.sessionId).to.equal('SESSIONID');
         expect(session.mediaMode).to.equal('relayed');
         expect(session.location).to.equal('12.34.56.78');
-        scope.done()
+        scope.done();
         done(err);
       });
     });
@@ -262,12 +262,12 @@ describe('OpenTok', function() {
       var subscriberToken = this.opentok.generateToken(this.sessionId, { role : 'subscriber' });
       expect(subscriberToken).to.be.a('string');
       expect(helpers.verifyTokenSignature(subscriberToken, apiSecret)).to.be.true
-      var decoded = helpers.decodeToken(subscriberToken);
+      decoded = helpers.decodeToken(subscriberToken);
       expect(decoded.role).to.equal('subscriber');
 
       // expects one with an invalid role to complain
       var invalidToken = this.opentok.generateToken(this.sessionId, { role : 5 });
-      expect(invalidToken).to.not.be.ok;
+      expect(invalidToken).to.not.be.ok
     });
 
     it('sets an expiration time for the token', function() {
@@ -285,7 +285,7 @@ describe('OpenTok', function() {
       var oneHourToken = this.opentok.generateToken(this.sessionId, { expireTime: expireTime });
       expect(oneHourToken).to.be.a('string');
       expect(helpers.verifyTokenSignature(oneHourToken, apiSecret)).to.be.true
-      var decoded = helpers.decodeToken(oneHourToken);
+      decoded = helpers.decodeToken(oneHourToken);
       expect(decoded.expire_time).to.be.within(expireTime-delta, expireTime+delta);
 
       // expects a token with an invalid expiration time to complain
