@@ -10,10 +10,10 @@ var OpenTok = require('../lib/opentok.js'),
 
 // Fixtures
 var apiKey = '123456',
-    apiSecret = '1234567890abcdef1234567890abcdef1234567890'
+    apiSecret = '1234567890abcdef1234567890abcdef1234567890',
     apiUrl = 'http://mymock.example.com',
     // This is specifically concocted for these tests (uses fake apiKey/apiSecret above)
-    sessionId = '1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX4'
+    sessionId = '1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX4',
     badApiKey = 'badkey',
     badApiSecret = 'badsecret';
 nock.disableNetConnect();
@@ -21,9 +21,9 @@ nock.disableNetConnect();
 var recording = false;
 if (recording) {
   // set these values before changing the above to true
-  apiKey = '',
+  apiKey = '';
   apiSecret = '';
-  nock.enableNetConnect();
+  //nock.enableNetConnect();
   nock.recorder.rec();
 }
 
@@ -71,8 +71,33 @@ describe('OpenTok', function() {
         'x-tb-host': 'mantis503-nyc.tokbox.com',
         'content-length': '211' });
       this.opentok.createSession(function(err, session){
+        if (err) return done(err);
         expect(session).to.be.an.instanceof(Session);
         expect(session.sessionId).to.equal('SESSIONID');
+        scope.done();
+        done(err);
+      });
+    });
+  });
+
+  describe('when initialized with a proxy', function() {
+    beforeEach(function() {
+      // TODO: remove temporary proxy value
+      this.proxyUrl = 'http://localhost:8080';
+      this.opentok = new OpenTok(apiKey, apiSecret, { proxy: this.proxyUrl });
+    });
+    it('sends its requests through an http proxy', function(done) {
+      this.timeout(10000);
+      var scope = nock('https://api.opentok.com:443')
+        .post('/session/create', "p2p.preference=enabled")
+        .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>1_MX44NTQ1MTF-flN1biBKdWwgMTMgMjE6MjY6MzUgUERUIDIwMTR-MC40OTU0NzA0Nn5Qfg</session_id><partner_id>854511</partner_id><create_dt>Sun Jul 13 21:26:35 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
+        date: 'Mon, 14 Jul 2014 04:26:35 GMT',
+        'content-type': 'application/xml',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'x-tb-host': 'mantis402-oak.tokbox.com',
+        'content-length': '274' });
+      this.opentok.createSession(function(err, session) {
         scope.done();
         done(err);
       });
@@ -121,6 +146,7 @@ describe('OpenTok', function() {
         'content-length': '211' });
       // pass no options parameter
       this.opentok.createSession(function(err, session){
+        if (err) return done(err);
         expect(session).to.be.an.instanceof(Session);
         expect(session.sessionId).to.equal('SESSIONID');
         expect(session.mediaMode).to.equal('relayed');
@@ -142,6 +168,7 @@ describe('OpenTok', function() {
         'x-tb-host': 'oms506-nyc.tokbox.com',
         'content-length': '211' });
       this.opentok.createSession({ 'mediaMode' : 'routed' }, function(err, session) {
+        if (err) return done(err);
         expect(session).to.be.an.instanceof(Session);
         expect(session.sessionId).to.equal('SESSIONID');
         expect(session.mediaMode).to.equal('routed');
@@ -163,6 +190,7 @@ describe('OpenTok', function() {
         'x-tb-host': 'oms506-nyc.tokbox.com',
         'content-length': '211' });
       this.opentok.createSession({ 'mediaMode' : 'blah' }, function(err, session) {
+        if (err) return done(err);
         expect(session).to.be.an.instanceof(Session);
         expect(session.sessionId).to.equal('SESSIONID');
         expect(session.mediaMode).to.equal('relayed');
@@ -185,11 +213,12 @@ describe('OpenTok', function() {
         'content-length': '211' });
       // passes location: '12.34.56.78'
       this.opentok.createSession({ 'location': '12.34.56.78' }, function(err, session) {
+        if (err) return done(err);
         expect(session).to.be.an.instanceof(Session);
         expect(session.sessionId).to.equal('SESSIONID');
         expect(session.mediaMode).to.equal('relayed');
         expect(session.location).to.equal('12.34.56.78');
-        scope.done()
+        scope.done();
         done(err);
       });
     });
