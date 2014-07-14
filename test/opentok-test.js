@@ -107,6 +107,33 @@ describe('OpenTok', function() {
     });
   });
 
+  describe('when initialized with a timeout', function() {
+    beforeEach(function() {
+      this.timeoutLength = 1000;
+      this.opentok = new OpenTok(apiKey, apiSecret, { timeout: this.timeoutLength });
+    });
+    it('times out when the request takes longer than the specified timeout', function(done) {
+      // make sure the mocha test runner doesn't time out for at least as long as we are willing to
+      // wait plus some reasonable amount of overhead time (100ms)
+      this.timeout(this.timeoutLength + 100);
+      var scope = nock('https://api.opentok.com:443')
+        .post('/session/create', "p2p.preference=enabled")
+        .delayConnection(this.timeoutLength + 10)
+        .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>1_MX44NTQ1MTF-flN1biBKdWwgMTMgMjE6MjY6MzUgUERUIDIwMTR-MC40OTU0NzA0Nn5Qfg</session_id><partner_id>854511</partner_id><create_dt>Sun Jul 13 21:26:35 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
+        date: 'Mon, 14 Jul 2014 04:26:35 GMT',
+        'content-type': 'application/xml',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'x-tb-host': 'mantis402-oak.tokbox.com',
+        'content-length': '274' });
+      this.opentok.createSession(function(err, session) {
+        expect(err).to.be.an.instanceof(Error);
+        scope.done();
+        done();
+      });
+    });
+  });
+
   describe('when initialized with bad credentials', function() {
     beforeEach(function() {
       this.opentok = new OpenTok(badApiKey, badApiSecret);
