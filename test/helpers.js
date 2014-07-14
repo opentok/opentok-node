@@ -12,7 +12,7 @@ exports.decodeToken = function(token) {
     _.merge(parsed, qs.parse(part));
   });
   return parsed;
-}
+};
 
 exports.verifyTokenSignature = function(token, apiSecret) {
   var encoded = token.substring(4);   // remove 'T1=='
@@ -20,7 +20,7 @@ exports.verifyTokenSignature = function(token, apiSecret) {
   var tokenParts = decoded.split(':');
   var sig = qs.parse(tokenParts[0]).sig;
   return signString(tokenParts[1], apiSecret) === sig;
-}
+};
 
 function signString(unsigned, key) {
   var hmac = crypto.createHmac('sha1', key);

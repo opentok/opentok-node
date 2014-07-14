@@ -15,7 +15,8 @@ var apiKey = '123456',
     // This is specifically concocted for these tests (uses fake apiKey/apiSecret above)
     sessionId = '1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX4',
     badApiKey = 'badkey',
-    badApiSecret = 'badsecret';
+    badApiSecret = 'badsecret',
+    defaultApiUrl = 'https://api.opentok.com';
 nock.disableNetConnect();
 
 var recording = false;
@@ -23,7 +24,7 @@ if (recording) {
   // set these values before changing the above to true
   apiKey = '';
   apiSecret = '';
-  nock.enableNetConnect();
+  //nock.enableNetConnect();
   nock.recorder.rec();
 }
 
@@ -34,6 +35,9 @@ describe('OpenTok', function() {
   it('should initialize with a valid apiKey and apiSecret', function() {
     var opentok = new OpenTok(apiKey, apiSecret);
     expect(opentok).to.be.an.instanceof(OpenTok);
+    expect(opentok.apiKey).to.be.equal(apiKey);
+    expect(opentok.apiSecret).to.be.equal(apiSecret);
+    expect(opentok.apiUrl).to.be.equal(defaultApiUrl);
   });
   it('should initialize without `new`', function() {
     var opentok = OpenTok(apiKey, apiSecret);
@@ -61,6 +65,9 @@ describe('OpenTok', function() {
     beforeEach(function() {
       this.opentok = new OpenTok(apiKey, apiSecret, apiUrl);
     });
+    it('exposes the custom apiUrl', function() {
+      expect(this.opentok.apiUrl).to.be.equal(apiUrl);
+    });
     it('sends its requests to the set apiUrl', function(done) {
        var scope = nock(apiUrl)
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
@@ -74,10 +81,62 @@ describe('OpenTok', function() {
         'x-tb-host': 'mantis503-nyc.tokbox.com',
         'content-length': '211' });
       this.opentok.createSession(function(err, session){
+        if (err) return done(err);
         expect(session).to.be.an.instanceof(Session);
         expect(session.sessionId).to.equal('SESSIONID');
         scope.done();
         done(err);
+      });
+    });
+  });
+
+  describe('when initialized with a proxy', function() {
+    beforeEach(function() {
+      // TODO: remove temporary proxy value
+      this.proxyUrl = 'http://localhost:8080';
+      this.opentok = new OpenTok(apiKey, apiSecret, { proxy: this.proxyUrl });
+    });
+    it('sends its requests through an http proxy', function(done) {
+      this.timeout(10000);
+      var scope = nock('https://api.opentok.com:443')
+        .post('/session/create', "p2p.preference=enabled")
+        .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>1_MX44NTQ1MTF-flN1biBKdWwgMTMgMjE6MjY6MzUgUERUIDIwMTR-MC40OTU0NzA0Nn5Qfg</session_id><partner_id>854511</partner_id><create_dt>Sun Jul 13 21:26:35 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
+        date: 'Mon, 14 Jul 2014 04:26:35 GMT',
+        'content-type': 'application/xml',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'x-tb-host': 'mantis402-oak.tokbox.com',
+        'content-length': '274' });
+      this.opentok.createSession(function(err, session) {
+        scope.done();
+        done(err);
+      });
+    });
+  });
+
+  describe('when initialized with a timeout', function() {
+    beforeEach(function() {
+      this.timeoutLength = 500;
+      this.opentok = new OpenTok(apiKey, apiSecret, { timeout: this.timeoutLength });
+    });
+    it('times out when the request takes longer than the specified timeout', function(done) {
+      // make sure the mocha test runner doesn't time out for at least as long as we are willing to
+      // wait plus some reasonable amount of overhead time (100ms)
+      this.timeout(this.timeoutLength + 100);
+      var scope = nock('https://api.opentok.com:443')
+        .post('/session/create', "p2p.preference=enabled")
+        .delayConnection(this.timeoutLength + 10)
+        .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>1_MX44NTQ1MTF-flN1biBKdWwgMTMgMjE6MjY6MzUgUERUIDIwMTR-MC40OTU0NzA0Nn5Qfg</session_id><partner_id>854511</partner_id><create_dt>Sun Jul 13 21:26:35 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
+        date: 'Mon, 14 Jul 2014 04:26:35 GMT',
+        'content-type': 'application/xml',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'x-tb-host': 'mantis402-oak.tokbox.com',
+        'content-length': '274' });
+      this.opentok.createSession(function(err, session) {
+        expect(err).to.be.an.instanceof(Error);
+        scope.done();
+        done();
       });
     });
   });
@@ -124,6 +183,7 @@ describe('OpenTok', function() {
         'content-length': '211' });
       // pass no options parameter
       this.opentok.createSession(function(err, session){
+        if (err) return done(err);
         expect(session).to.be.an.instanceof(Session);
         expect(session.sessionId).to.equal('SESSIONID');
         expect(session.mediaMode).to.equal('relayed');
@@ -145,6 +205,7 @@ describe('OpenTok', function() {
         'x-tb-host': 'oms506-nyc.tokbox.com',
         'content-length': '211' });
       this.opentok.createSession({ 'mediaMode' : 'routed' }, function(err, session) {
+        if (err) return done(err);
         expect(session).to.be.an.instanceof(Session);
         expect(session.sessionId).to.equal('SESSIONID');
         expect(session.mediaMode).to.equal('routed');
@@ -166,6 +227,7 @@ describe('OpenTok', function() {
         'x-tb-host': 'oms506-nyc.tokbox.com',
         'content-length': '211' });
       this.opentok.createSession({ 'mediaMode' : 'blah' }, function(err, session) {
+        if (err) return done(err);
         expect(session).to.be.an.instanceof(Session);
         expect(session.sessionId).to.equal('SESSIONID');
         expect(session.mediaMode).to.equal('relayed');
@@ -188,6 +250,7 @@ describe('OpenTok', function() {
         'content-length': '211' });
       // passes location: '12.34.56.78'
       this.opentok.createSession({ 'location': '12.34.56.78' }, function(err, session) {
+        if (err) return done(err);
         expect(session).to.be.an.instanceof(Session);
         expect(session.sessionId).to.equal('SESSIONID');
         expect(session.mediaMode).to.equal('relayed');
