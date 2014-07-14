@@ -15,7 +15,8 @@ var apiKey = '123456',
     // This is specifically concocted for these tests (uses fake apiKey/apiSecret above)
     sessionId = '1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX4',
     badApiKey = 'badkey',
-    badApiSecret = 'badsecret';
+    badApiSecret = 'badsecret',
+    defaultApiUrl = 'https://api.opentok.com';
 nock.disableNetConnect();
 
 var recording = false;
@@ -34,6 +35,9 @@ describe('OpenTok', function() {
   it('should initialize with a valid apiKey and apiSecret', function() {
     var opentok = new OpenTok(apiKey, apiSecret);
     expect(opentok).to.be.an.instanceof(OpenTok);
+    expect(opentok.apiKey).to.be.equal(apiKey);
+    expect(opentok.apiSecret).to.be.equal(apiSecret);
+    expect(opentok.apiUrl).to.be.equal(defaultApiUrl);
   });
   it('should initialize without `new`', function() {
     var opentok = OpenTok(apiKey, apiSecret);
@@ -60,6 +64,9 @@ describe('OpenTok', function() {
   describe('when initialized with an apiUrl', function() {
     beforeEach(function() {
       this.opentok = new OpenTok(apiKey, apiSecret, apiUrl);
+    });
+    it('exposes the custom apiUrl', function() {
+      expect(this.opentok.apiUrl).to.be.equal(apiUrl);
     });
     it('sends its requests to the set apiUrl', function(done) {
        var scope = nock(apiUrl)
@@ -109,7 +116,7 @@ describe('OpenTok', function() {
 
   describe('when initialized with a timeout', function() {
     beforeEach(function() {
-      this.timeoutLength = 1000;
+      this.timeoutLength = 500;
       this.opentok = new OpenTok(apiKey, apiSecret, { timeout: this.timeoutLength });
     });
     it('times out when the request takes longer than the specified timeout', function(done) {
