@@ -40,14 +40,17 @@ describe('OpenTok', function() {
     expect(opentok).to.be.an.instanceof(OpenTok);
   });
   it('should not initialize with just an apiKey but no apiSecret', function() {
-    var opentok = new OpenTok(apiKey);
-    expect(opentok).to.not.be.an.instanceof(OpenTok);
+    expect(function() {
+      var opentok = new OpenTok(apiKey);
+    }).to.throw(Error);
   });
   it('should not initialize with incorrect type parameters', function() {
-    var opentok = new OpenTok(new Date(), 'asdasdasdasdasd');
-    expect(opentok).to.not.be.an.instanceof(OpenTok);
-    opentok = new OpenTok(4, {});
-    expect(opentok).to.not.be.an.instanceof(OpenTok);
+    expect(function() {
+      var opentok = new OpenTok(new Date(), 'asdasdasdasdasd');
+    }).to.throw(Error);
+    expect(function() {
+      opentok = new OpenTok(4, {});
+    }).to.throw(Error);
   });
   it('should cooerce a number for the apiKey', function() {
     var opentok = new OpenTok(parseInt(apiKey), apiSecret);
@@ -231,9 +234,9 @@ describe('OpenTok', function() {
     });
 
     it('complains when there is no callback function', function() {
-      // this is the only synchronous error, because there is no mechanism for an asyc one
-      var result = this.opentok.createSession();
-      expect(result).to.be.an.instanceof(Error);
+      expect(function() {
+        var result = this.opentok.createSession();
+      }).to.throw(Error);
     });
 
     it('complains when a server error takes place', function(done) {
@@ -288,12 +291,12 @@ describe('OpenTok', function() {
       var subscriberToken = this.opentok.generateToken(this.sessionId, { role : 'subscriber' });
       expect(subscriberToken).to.be.a('string');
       expect(helpers.verifyTokenSignature(subscriberToken, apiSecret)).to.be.true
-      var decoded = helpers.decodeToken(subscriberToken);
+      decoded = helpers.decodeToken(subscriberToken);
       expect(decoded.role).to.equal('subscriber');
 
       // expects one with an invalid role to complain
       var invalidToken = this.opentok.generateToken(this.sessionId, { role : 5 });
-      expect(invalidToken).to.not.be.ok;
+      expect(invalidToken).to.not.be.ok
     });
 
     it('sets an expiration time for the token', function() {
@@ -311,7 +314,7 @@ describe('OpenTok', function() {
       var oneHourToken = this.opentok.generateToken(this.sessionId, { expireTime: expireTime });
       expect(oneHourToken).to.be.a('string');
       expect(helpers.verifyTokenSignature(oneHourToken, apiSecret)).to.be.true
-      var decoded = helpers.decodeToken(oneHourToken);
+      decoded = helpers.decodeToken(oneHourToken);
       expect(decoded.expire_time).to.be.within(expireTime-delta, expireTime+delta);
 
       // expects a token with an invalid expiration time to complain
