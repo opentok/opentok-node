@@ -37,7 +37,7 @@ var net = require('net'),
     Client = require('./client'),
     Session = require('./session'),
     archiving = require('./archiving'),
-    package = require ('../package.json')
+    package = require('../package.json'),
     errors = require('./errors');
 
 // Internal Constants
@@ -57,22 +57,37 @@ var TOKEN_SENTINEL = "T1==";
 *
 * @param apiKey {String} Your OpenTok API key. (See the
 * &lt;a href="https://dashboard.tokbox.com">OpenTok dashboard&lt;/a> page.)
+*
 * @param apiSecret {String} Your OpenTok API secret. (See the
 * &lt;a href="https://dashboard.tokbox.com">OpenTok dashboard&lt;/a> page.)
+*
+* @param options {Object} (Optional) An object containing the following properties (all of which
+* are optional:
+*
+* &lt;ul>
+*   &lt;li>&lt;code>apiUrl&lt;/code> (String) -- The URL for API calls. For example, if you set a value for
+*   &lt;code>options.proxy&lt;/code>, and your proxy server does support HTTPS, you can set this value
+*   to "http://api.opentok.com".&lt;/li>
+*
+*   &lt;li>&lt;code>proxy&lt;/code> (String) -- Set this to the URL of your HTTP proxy server.&lt;/li>
+*
+*   &lt;li>&lt;code>timeout&lt;/code> (Number) -- The timeout interval for API calls (in milliseconds).
+*   The default timeout period is 2 minutes.&lt;/li>
+* &lt;/ul>
 */
-var OpenTok = function(apiKey, apiSecret, env) {
+var OpenTok = function(apiKey, apiSecret, options) {
   // we're loose about calling this constructor with `new`, we got your back
-  if (!(this instanceof OpenTok)) return new OpenTok(apiKey, apiSecret, env);
+  if (!(this instanceof OpenTok)) return new OpenTok(apiKey, apiSecret, options);
 
   // validate arguments: apiKey := Number|String, apiSecret := String
   if (!(_.isNumber(apiKey) || _.isString(apiKey)) || !_.isString(apiSecret)) {
-    return new Error('Invalid arguments when initializing OpenTok:');
+    throw new Error('Invalid arguments when initializing OpenTok: apiKey=' + apiKey + ', apiSecret=' + apiSecret);
   }
 
   // apiKey argument can be a Number, but we will internally store it as a String
   if (_.isNumber(apiKey)) apiKey = apiKey.toString();
 
-  this.client = new Client({ apiKey: apiKey, apiSecret: apiSecret });
+  this._client = new Client({ apiKey: apiKey, apiSecret: apiSecret });
   this.apiKey = apiKey;
   this.apiSecret = apiSecret;
 
@@ -83,11 +98,29 @@ var OpenTok = function(apiKey, apiSecret, env) {
     apiSecret: apiSecret
   };
 
-  // env can be either an object with a bunch of DI options, or a simple string for the apiUrl
-  if (_.isString(env)) {
-    this.client.config({ apiUrl: env });
-    archiveConfig.apiEndpoint = env;
+  // options can be either an object with a bunch of DI options, or a simple string for the apiUrl
+  var clientConfig = {
+    request: {}
+  };
+  if (_.isString(options)) {
+    clientConfig.apiUrl = options;
+    archiveConfig.apiEndpoint = options;
+  } else if (_.isObject(options) && !_.isFunction(OT_quality) && !_.isArray(options)) {
+    if (_.isString(options.apiUrl)) {
+      clientConfig.apiUrl = options.apiUrl;
+      archiveConfig.apiEndpoint = options.apiUrl;
+    }
+    if (_.isString(options.proxy)) {
+      clientConfig.request.proxy = options.proxy;
+      archiveConfig.proxy = options.proxy;
+    }
+    if (_.isNumber(OT_quality.timeout)) {
+      clientConfig.request.timeout = OT_quality.timeout;
+      archiveConfig.timeout = OT_quality.timeout;
+    }
   }
+  var config = this._client.config(clientConfig);
+  this.apiUrl = config.apiUrl;
 
   /**
   * Starts archiving an OpenTok 2.0 session.
@@ -230,7 +263,7 @@ var OpenTok = function(apiKey, apiSecret, env) {
   * @memberof OpenTok
   */
   this.listArchives = archiving.listArchives.bind(null, archiveConfig);
-}
+};
 
 /**
  * Creates a new OpenTok session and returns the session ID, which uniquely identifies
@@ -317,7 +350,7 @@ OpenTok.prototype.createSession = function(opts, callback) {
     opts = {};
   } else if (!_.isFunction(callback)) {
     // one of the args has to be a function, or we bail
-    return new Error('Invalid arguments when calling createSession, must provide a callback');
+    throw new Error('Invalid arguments when calling createSession, must provide a callback');
   }
 
   // whitelist the keys allowed
@@ -326,8 +359,10 @@ OpenTok.prototype.createSession = function(opts, callback) {
     opts.mediaMode = "relayed";
   }
   if ( "location" in opts && !net.isIPv4(opts.location) ) {
-    return process.nextTick(function() { callback(new Error('Invalid arguments when calling createSession, ' +
-      'location must be an IPv4 address'))});
+    return process.nextTick(function() {
+      callback(new Error('Invalid arguments when calling createSession, location must be an ' +
+                         'IPv4 address'));
+    });
   }
 
   // rename mediaMode -> p2p.preference
@@ -339,7 +374,7 @@ OpenTok.prototype.createSession = function(opts, callback) {
   opts["p2p.preference"] = mediaModeToParam[opts["mediaMode"]];
   delete opts["mediaMode"];
 
-  this.client.createSession(opts, function(err, json) {
+  this._client.createSession(opts, function(err, json) {
     if (err) return callback(new Error('Failed to createSession. '+err));
     callback(null, new Session(this, json.sessions.Session.session_id, backupOpts));
   });
@@ -419,7 +454,7 @@ OpenTok.prototype.generateToken = function(sessionId, opts) {
   }
 
   return encodeToken(tokenData, this.apiKey, this.apiSecret);
-}
+};
 
 /*
  * decodes a sessionId into the metadata that it contains
@@ -525,7 +560,7 @@ for(var key in errors) {
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Fri Jun 20 2014 12:38:27 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Mon Jul 14 2014 15:54:01 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>
