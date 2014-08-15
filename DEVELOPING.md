@@ -37,7 +37,6 @@ In order to create a release, the following should be completed in order.
    [Versioning](#versioning) for information about selecting an appropriate version number. Files to
    check:
    - package.json
-   - README.md
 1. Commit the version number change with the message "Update to version x.y.z", substituting the new
    version number.
 1. Create a git tag: `git tag -a vx.y.z -m "Release vx.y.z"`
@@ -47,7 +46,9 @@ In order to create a release, the following should be completed in order.
 1. Change the version number for future development by incrementing the patch number (z) adding
    "-alpha.1" in the source code (not the documentation). For possible files, see above. Then make
    another commit with the message "Begin development on next version".
-1. Push the changes to the source repository: `git push origin master`
+1. Push the changes to the source repository: `git push origin master && git push --tags origin`
+1. Add a description to the [GitHub Releases](https://github.com/opentok/opentok-node/releases) page
+   with any notable changes.
 
 ## Workflow
 
