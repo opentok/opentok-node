@@ -1,7 +1,7 @@
 {
   "name": "opentok",
   "description": "OpenTok server-side SDK",
-  "version": "2.2.4",
+  "version": "2.2.5-alpha.1",
   "homepage": "http://opentok.github.io/opentok-node",
   "repository": {
     "type": "git",
