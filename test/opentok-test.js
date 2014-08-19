@@ -1,7 +1,6 @@
 var expect = require('chai').expect,
     nock = require('nock'),
-    _ = require('lodash'),
-    async = require('async');
+    _ = require('lodash');
 
 // Subject
 var OpenTok = require('../lib/opentok.js'),

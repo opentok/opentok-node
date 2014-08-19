@@ -1,6 +1,4 @@
-var expect = require('chai').expect,
-    nock = require('nock'),
-    async = require('async');
+var expect = require('chai').expect;
 
 // Subject
 var Session = require('../lib/session.js'),
@@ -8,19 +6,9 @@ var Session = require('../lib/session.js'),
 
 // Fixtures
 var apiKey = '123456',
-    apiSecret = '1234567890abcdef1234567890abcdef1234567890'
+    apiSecret = '1234567890abcdef1234567890abcdef1234567890',
     // This is specifically concocted for these tests (uses fake apiKey/apiSecret above)
     sessionId = '1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX4';
-nock.disableNetConnect();
-
-var recording = false;
-if (recording) {
-  // set these values before changing the above to true
-  apiKey = '',
-  apiSecret = '';
-  nock.enableNetConnect();
-  nock.recorder.rec();
-}
 
 describe('Session', function() {
   beforeEach(function() {
