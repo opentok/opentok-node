@@ -22,6 +22,56 @@ exports.verifyTokenSignature = function(token, apiSecret) {
   return signString(tokenParts[1], apiSecret) === sig;
 };
 
+exports.getAttachableNock = function(nock, networkAttached) {
+  if (networkAttached) {
+    var dummy = function() { return dummy; },
+        methodNames = ['get',
+                       'post',
+                       'delete',
+                       'put',
+                       'merge',
+                       'patch',
+                       'head',
+                       'intercept',
+                       'reply',
+                       'replyWithFile',
+                       'discard',
+                       'delay',
+                       'delayConnection',
+                       'match',
+                       'matchIndependentOfBody',
+                       'matchHeader',
+                       'times',
+                       'once',
+                       'twice',
+                       'thrice',
+                       'done',
+                       'isDone',
+                       'cleanAll',
+                       'activate',
+                       'isActive',
+                       'removeInterceptor',
+                       'disableNetConnect',
+                       'enableNetConnect',
+                       'load',
+                       'loadDefs',
+                       'define',
+                       'filteringPath',
+                       'filteringRequestBody',
+                       'defaultReplyHeaders',
+                       'log',
+                       'persist',
+                       'shouldPersist',
+                       'pendingMocks'];
+    methodNames.forEach(function(methodName) {
+      dummy[methodName] = dummy;
+    });
+    return dummy;
+  } else {
+    return nock;
+  }
+};
+
 function signString(unsigned, key) {
   var hmac = crypto.createHmac('sha1', key);
   hmac.update(unsigned);

@@ -9,6 +9,12 @@ module.exports = function(grunt) {
           reporter: 'spec'
         },
         src: ['test/**/*test.js']
+      },
+      integration: {
+        options: {
+          grep: 'integrates'
+        },
+        src: ['test/**/*test.js']
       }
     },
     jasmine_node: {
@@ -32,6 +38,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-jasmine-node');
   grunt.loadNpmTasks('grunt-jsdoc');
 
-  grunt.registerTask('default', ['mochaTest', 'jasmine_node']);
+  grunt.registerTask('default', ['mochaTest:test', 'jasmine_node']);
 
 };
