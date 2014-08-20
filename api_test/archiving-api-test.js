@@ -26,7 +26,7 @@ function createOpenTok() {
 describe('#archiving', function() {
 
   var opentok,
-    sessionId = 'SESSIONID',
+    sessionId = '1_MX4xMDB-fldlZCBBdWcgMjAgMTU6MDI6NTMgUERUIDIwMTR-MC40Mjc0OTM1N35-',
     archiveId = 'ARCHIVEID';
 
   beforeEach(function(done) {
