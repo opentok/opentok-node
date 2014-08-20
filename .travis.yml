@@ -1,6 +1,9 @@
 language: node_js
 node_js:
-  - "0.11"
-  - "0.10"
+- '0.11'
+- '0.10'
 before_script:
-  - npm install -g grunt-cli
+- npm install -g grunt-cli
+notifications:
+  slack:
+    secure: CEhTJBzvdIEOWdjylkoDl+ioI5dHIBCgoHsRHAQFY0H7hhcuPHlJSr5MKNo65TRZfvDYUcVvbw62jBMmAIr878NQBnEPnhF/DusMB0JiZoIT2fKB2jMMzlql1NyzlEpIT1fnONBWewOeRSzp4fIu6xct4pvBja044o6PUw+TVRg=
