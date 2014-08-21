@@ -7,10 +7,19 @@ var Session = require('../lib/session.js'),
     OpenTok = require('../lib/opentok.js');
 
 // Fixtures
-var apiKey = '123456',
-    apiSecret = '1234567890abcdef1234567890abcdef1234567890'
-    // This is specifically concocted for these tests (uses fake apiKey/apiSecret above)
-    sessionId = '1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX4';
+var _fakeApiKey = '123456',
+  _fakeApiSecret = '1234567890abcdef1234567890abcdef1234567890',
+  _fakeSessionId = '1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX4',
+  _fakeProxyUrl = 'http://localhost:8080',
+  _badApiKey = 'badkey',
+  _badApiSecret = 'badsecret',
+  _fakeApiUrl = 'http://mymock.example.com',
+  _defaultApiUrl = 'https://api.opentok.com',
+  _defaultTimeoutLength = 20000,
+  _defaultApiKey = process.env.API_KEY || _fakeApiKey,
+  _defaultApiSecret = process.env.API_SECRET || _fakeApiSecret,
+  _integrationApiUrl = process.env.API_URL || _defaultApiUrl;
+
 nock.disableNetConnect();
 
 var recording = false;
@@ -23,27 +32,32 @@ if (recording) {
 }
 
 describe('Session', function() {
+  var apiKey = _fakeApiKey,
+    apiSecret = _fakeApiSecret,
+    sessionId = _fakeSessionId,
+    opentok;
+
   beforeEach(function() {
-    this.opentok = new OpenTok(apiKey, apiSecret);
+    opentok = new OpenTok(apiKey, apiSecret);
   });
 
   it('initializes with no options', function() {
-    var session = new Session(this.opentok, sessionId);
+    var session = new Session(opentok, sessionId);
       expect(session).to.be.an.instanceof(Session);
       expect(session.sessionId).to.equal(sessionId);
   });
 
   describe('when initialized with a media mode', function() {
     it('has a mediaMode property', function() {
-      var session = new Session(this.opentok, sessionId, { mediaMode: "relayed" });
+      var session = new Session(opentok, sessionId, { mediaMode: "relayed" });
       expect(session).to.be.an.instanceof(Session);
       expect(session.mediaMode).to.equal("relayed");
-      session = new Session(this.opentok, sessionId, { mediaMode: "routed" });
+      session = new Session(opentok, sessionId, { mediaMode: "routed" });
       expect(session).to.be.an.instanceof(Session);
       expect(session.mediaMode).to.equal("routed");
     });
     it('does not have a location property', function() {
-      var session = new Session(this.opentok, sessionId, { mediaMode: "relayed" });
+      var session = new Session(opentok, sessionId, { mediaMode: "relayed" });
       expect(session).to.be.an.instanceof(Session);
       expect(session.location).to.not.exist
     });
@@ -51,12 +65,12 @@ describe('Session', function() {
 
   describe('when initialized with just a location option', function() {
     it('has a location property', function() {
-      var session = new Session(this.opentok, sessionId, { location: '12.34.56.78' });
+      var session = new Session(opentok, sessionId, { location: '12.34.56.78' });
       expect(session).to.be.an.instanceof(Session);
       expect(session.location).to.equal('12.34.56.78');
     });
     it('does not have a mediaMode property', function() {
-      var session = new Session(this.opentok, sessionId, { location: '12.34.56.78' });
+      var session = new Session(opentok, sessionId, { location: '12.34.56.78' });
       expect(session).to.be.an.instanceof(Session);
       expect(session.mediaMode).to.not.exist
     });
@@ -64,7 +78,7 @@ describe('Session', function() {
 
   describe('#generateToken', function() {
     beforeEach(function() {
-      this.session = new Session(this.opentok, sessionId);
+      this.session = new Session(opentok, sessionId);
     });
     // TODO: check all the invalid stuff
     it('generates tokens', function() {
