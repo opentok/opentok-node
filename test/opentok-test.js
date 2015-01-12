@@ -618,7 +618,6 @@ describe('OpenTok', function() {
 
       opentok.startArchive(sessionId, function(err, archive) {
         expect(err).not.to.be.null;
-        expect(err.message).to.equal('Session not found');
         done();
       });
     });
@@ -638,7 +637,6 @@ describe('OpenTok', function() {
 
       opentok.startArchive(sessionId, {name: 'Blah'}, function(err, archive) {
         expect(err).not.to.be.null;
-        expect(err.message).to.equal('Session not found');
         done();
       });
     });
