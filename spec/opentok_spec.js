@@ -126,7 +126,24 @@ describe('Archiving', function() {
       }).toThrow(new OpenTok.ArgumentError('No callback given to startArchive'));
 
     });
+    
+    it('should be able to archive with hasVideo to false', function(done) {
 
+      nock('https://api.opentok.com:443')
+        .post('/v2/partner/APIKEY/archive', {'sessionId':'1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg', 'hasAudio': true, hasVideo: false})
+        .reply(200, '{\n  \"createdAt\" : 1391149936527,\n  \"duration\" : 0,\n  \"id\" : \"4072fe0f-d499-4f2f-8237-64f5a9d936f5\",\n  \"name\" : null,\n  \"partnerId\" : \"APIKEY\",\n  \"reason\" : \"\",\n  \"sessionId\" : \"1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg\",\n  \"size\" : 0,\n  \"status\" : \"started\",\n \"hasAudio\" : true,\n \"hasVideo\" : false,\n \"url\" : null\n}', { server: 'nginx',
+        date: 'Fri, 31 Jan 2014 06:32:16 GMT',
+        'content-type': 'application/json',
+        'transfer-encoding': 'chunked',
+        connection: 'keep-alive' });
+
+      opentok.startArchive(session, {hasAudio: true, hasVideo: false}, function(err, archive) {
+	expect(err).toBeNull();
+	expect(archive.hasAudio).toEqual(true);
+	expect(archive.hasVideo).toEqual(false);
+	done();
+      });
+    });
   });
 
   describe('getArchive', function() {
