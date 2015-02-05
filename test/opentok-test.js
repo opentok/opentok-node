@@ -292,6 +292,26 @@ describe('OpenTok', function() {
       });
     });
 
+    it('complains when a server error takes place', function(done) {
+      var scope = nock('https://api.opentok.com:443')
+        .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
+        .post('/session/create', "p2p.preference=enabled")
+        .reply(503, "", { server: 'nginx',
+        date: 'Thu, 20 Mar 2014 06:35:24 GMT',
+        'content-type': 'text/xml',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'x-tb-host': 'mantis503-nyc.tokbox.com',
+        'content-length': '0' });
+      this.opentok.createSession(function(err, session) {
+        expect(err).to.be.an.instanceof(Error);
+        expect(err.message).to.contain("A server error occurred");
+        scope.done();
+        done();
+      });
+    });
+
   });
 
 
