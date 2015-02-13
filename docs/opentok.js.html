@@ -37,7 +37,7 @@ var net = require('net'),
     Client = require('./client'),
     Session = require('./session'),
     archiving = require('./archiving'),
-    package = require ('../package.json')
+    package = require('../package.json'),
     errors = require('./errors');
 
 // Internal Constants
@@ -66,13 +66,13 @@ var OpenTok = function(apiKey, apiSecret, env) {
 
   // validate arguments: apiKey := Number|String, apiSecret := String
   if (!(_.isNumber(apiKey) || _.isString(apiKey)) || !_.isString(apiSecret)) {
-    return new Error('Invalid arguments when initializing OpenTok:');
+    throw new Error('Invalid arguments when initializing OpenTok: apiKey=' + apiKey + ', apiSecret=' + apiSecret);
   }
 
   // apiKey argument can be a Number, but we will internally store it as a String
   if (_.isNumber(apiKey)) apiKey = apiKey.toString();
 
-  this.client = new Client({ apiKey: apiKey, apiSecret: apiSecret });
+  this._client = new Client({ apiKey: apiKey, apiSecret: apiSecret });
   this.apiKey = apiKey;
   this.apiSecret = apiSecret;
 
@@ -84,10 +84,24 @@ var OpenTok = function(apiKey, apiSecret, env) {
   };
 
   // env can be either an object with a bunch of DI options, or a simple string for the apiUrl
+  var clientConfig = {
+    request: {}
+  };
   if (_.isString(env)) {
-    this.client.config({ apiUrl: env });
+    clientConfig.apiUrl = env;
     archiveConfig.apiEndpoint = env;
+  } else if (_.isObject(env) && !_.isFunction(env) && !_.isArray(env)) {
+    if (_.isString(env.apiUrl)) {
+      clientConfig.apiUrl = env.apiUrl;
+      archiveConfig.apiEndpoint = env.apiUrl;
+    }
+    if (_.isString(env.proxy)) {
+      clientConfig.request.proxy = env.proxy;
+      archiveConfig.proxy = env.proxy;
+    }
   }
+  var config = this._client.config(clientConfig);
+  this.apiUrl = config.apiUrl;
 
   /**
   * Starts archiving an OpenTok 2.0 session.
@@ -101,10 +115,30 @@ var OpenTok = function(apiKey, apiSecret, env) {
   *
   * @param sessionId The session ID of the OpenTok session to archive.
   *
-  * @param options {Object} An optional options object with one property &mdash; &lt;code>name&lt;/code>
-  * (a String). This is the name of the archive. You can use this name to identify the archive.
-  * It is a property of the Archive object, and it is a property of archive-related events in the
-  * OpenTok client libraries.
+  * @param options {Object} An optional options object with the following properties (each
+  * of which is optional):
+  * &lt;p>
+  * &lt;ul>
+  *   &lt;li>
+  *     &lt;code>name&lt;/code> (String) &mdash; the name of the archive, which you can use to identify
+  *     the archive. The name is set as a property of the Archive object, and it is a property of
+  *     archive-related events in the OpenTok client libraries.
+  *   &lt;/li>
+  *   &lt;li>
+  *     &lt;code>hasAudio&lt;/code> (Boolean) &mdash; Whether the archive will record audio
+  *     (&lt;code>true&lt;/code>) or not &lt;code>false&lt;/code>). The default value is &lt;code>true&lt;/code>
+  *     (audio is recorded). If you set both  &lt;code>hasAudio&lt;/code> and  &lt;code>hasAudio&lt;/code>
+  *     to &lt;code>false&lt;/code>, the call to the &lt;code>startArchive()&lt;/code> method results in an
+  *     error.
+  *   &lt;/li>
+  *   &lt;li>
+  *     &lt;code>hasVideo&lt;/code> (Boolean) &mdash; Whether the archive will record video
+  *     (&lt;code>true&lt;/code>) or not &lt;code>false&lt;/code>). The default value is &lt;code>true&lt;/code>
+  *     (video is recorded). If you set both  &lt;code>hasAudio&lt;/code> and  &lt;code>hasAudio&lt;/code>
+  *     to &lt;code>false&lt;/code>, the call to the &lt;code>startArchive()&lt;/code> method results in an
+  *     error.
+  *   &lt;/li>
+  * &lt;/ul>
   *
   * @param callback {Function} The function to call upon completing the operation. Two arguments
   * are passed to the function:
@@ -116,8 +150,8 @@ var OpenTok = function(apiKey, apiSecret, env) {
   *   &lt;/li>
   *
   *   &lt;li>
-  *       &lt;code>archive&lt;/code> &mdash; The Archive object. This object includes properties defining
-  *       the archive, including the archive ID.
+  *       &lt;code>archive&lt;/code> &mdash; The {@link Archive} object. This object includes properties
+  *       defining the archive, including the archive ID.
   *   &lt;/li>
   *
   * &lt;/ul>
@@ -135,7 +169,7 @@ var OpenTok = function(apiKey, apiSecret, env) {
   * from the session being archived.
   *
   * @param archiveId {String} The archive ID of the archive you want to stop recording.
-  * @return The Archive object corresponding to the archive being STOPPED.
+  * @return The {@link Archive} object corresponding to the archive being STOPPED.
   *
   * @param callback {Function} The function to call upon completing the operation. Two arguments
   * are passed to the function:
@@ -147,7 +181,7 @@ var OpenTok = function(apiKey, apiSecret, env) {
   *   &lt;/li>
   *
   *   &lt;li>
-  *       &lt;code>archive&lt;/code> &mdash; The Archive object.
+  *       &lt;code>archive&lt;/code> &mdash; The {@link Archive} object.
   *   &lt;/li>
   *
   * &lt;/ul>
@@ -221,7 +255,7 @@ var OpenTok = function(apiKey, apiSecret, env) {
   *   &lt;/li>
   *
   *   &lt;li>
-  *       &lt;code>archives&lt;/code> &mdash; An array of Archive objects.
+  *       &lt;code>archives&lt;/code> &mdash; An array of {@link Archive} objects.
   *   &lt;/li>
   *
   * &lt;/ul>
@@ -230,7 +264,7 @@ var OpenTok = function(apiKey, apiSecret, env) {
   * @memberof OpenTok
   */
   this.listArchives = archiving.listArchives.bind(null, archiveConfig);
-}
+};
 
 /**
  * Creates a new OpenTok session and returns the session ID, which uniquely identifies
@@ -317,7 +351,7 @@ OpenTok.prototype.createSession = function(opts, callback) {
     opts = {};
   } else if (!_.isFunction(callback)) {
     // one of the args has to be a function, or we bail
-    return new Error('Invalid arguments when calling createSession, must provide a callback');
+    throw new Error('Invalid arguments when calling createSession, must provide a callback');
   }
 
   // whitelist the keys allowed
@@ -326,8 +360,10 @@ OpenTok.prototype.createSession = function(opts, callback) {
     opts.mediaMode = "relayed";
   }
   if ( "location" in opts && !net.isIPv4(opts.location) ) {
-    return process.nextTick(function() { callback(new Error('Invalid arguments when calling createSession, ' +
-      'location must be an IPv4 address'))});
+    return process.nextTick(function() {
+      callback(new Error('Invalid arguments when calling createSession, location must be an ' +
+                         'IPv4 address'));
+    });
   }
 
   // rename mediaMode -> p2p.preference
@@ -339,7 +375,7 @@ OpenTok.prototype.createSession = function(opts, callback) {
   opts["p2p.preference"] = mediaModeToParam[opts["mediaMode"]];
   delete opts["mediaMode"];
 
-  this.client.createSession(opts, function(err, json) {
+  this._client.createSession(opts, function(err, json) {
     if (err) return callback(new Error('Failed to createSession. '+err));
     callback(null, new Session(this, json.sessions.Session.session_id, backupOpts));
   });
@@ -419,7 +455,7 @@ OpenTok.prototype.generateToken = function(sessionId, opts) {
   }
 
   return encodeToken(tokenData, this.apiKey, this.apiSecret);
-}
+};
 
 /*
  * decodes a sessionId into the metadata that it contains
@@ -525,7 +561,7 @@ for(var key in errors) {
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Fri Jun 20 2014 12:38:27 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Fri Feb 13 2015 13:08:01 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>
