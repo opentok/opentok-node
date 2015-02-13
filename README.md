@@ -100,10 +100,30 @@ connected clients.
 
 ```javascript
 opentok.startArchive(sessionId, { name: 'Important Presentation' }, function(err, archive) {
-  if (err) return console.log(err);
+  if (err) {
+    return console.log(err);
+  } else {
+    // The id property is useful to save off into a database
+    console.log("new archive:" + archive.id);
+  }
+});
+```
 
-  // The id property is useful to save off into a database
-  console.log("new archive:" + archive.id);
+You can also disable audio or video recording by setting the `hasAudio` or `hasVideo` property of
+the `options` parameter to `false`:
+
+```javascript
+var archiveOptions = {
+  name: 'Important Presentation',
+  hasVideo: false  // Record audio only
+};
+opentok.startArchive(sessionId, archiveOptions, function(err, archive) {
+  if (err) {
+    return console.log(err);
+  } else {
+    // The id property is useful to save off into a database
+    console.log("new archive:" + archive.id);
+  }
 });
 ```
 
