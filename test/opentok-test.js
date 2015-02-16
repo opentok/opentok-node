@@ -314,6 +314,29 @@ describe('OpenTok', function() {
       });
     });
 
+    it('should not modify the options object parameter', function(done) {
+      var scope = nock('https://api.opentok.com:443')
+        .filteringRequestBody(function(path) {
+          return '*';
+        })
+        .post('/session/create', '*')
+        .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>SESSIONID</session_id><partner_id>123456</partner_id><create_dt>Thu Mar 20 07:02:45 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
+        date: 'Thu, 20 Mar 2014 14:02:45 GMT',
+        'content-type': 'text/xml',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'x-tb-host': 'oms506-nyc.tokbox.com',
+        'content-length': '211' });
+      var options = { mediaMode: 'routed' };
+      var optionsUntouched = _.clone(options);
+      this.opentok.createSession(options, function(err, session) {
+        if (err) return done(err);
+        scope.done();
+        expect(options).to.deep.equal(optionsUntouched);
+        done();
+      });
+    });
+
   });
 
 
@@ -357,32 +380,42 @@ describe('OpenTok', function() {
     });
 
     it('sets an expiration time for the token', function() {
+      var now = Math.round((new Date().getTime()) / 1000);
+      var delta = 10;
+      var decoded;
+
       // expects a token with no expiration time to assign 1 day
-      var now = (new Date().getTime()) / 1000, delta = 10,
-          inOneDay = now + (60*60*24);
+      var inOneDay = now + (60*60*24);
       var defaultExpireToken = this.opentok.generateToken(this.sessionId);
       expect(defaultExpireToken).to.be.a('string');
       expect(helpers.verifyTokenSignature(defaultExpireToken, apiSecret)).to.be.true
-      var decoded = helpers.decodeToken(defaultExpireToken);
+      decoded = helpers.decodeToken(defaultExpireToken);
       expect(decoded.expire_time).to.be.within(inOneDay-delta, inOneDay+delta);
 
       // expects a token with an expiration time to have it
-      var expireTime = (new Date().getTime() / 1000) + (60*60); // 1 hour
-      var oneHourToken = this.opentok.generateToken(this.sessionId, { expireTime: expireTime });
+      var inOneHour = now + (60*60);
+      var oneHourToken = this.opentok.generateToken(this.sessionId, { expireTime: inOneHour });
       expect(oneHourToken).to.be.a('string');
       expect(helpers.verifyTokenSignature(oneHourToken, apiSecret)).to.be.true
       decoded = helpers.decodeToken(oneHourToken);
-      expect(decoded.expire_time).to.be.within(expireTime-delta, expireTime+delta);
+      expect(decoded.expire_time).to.be.within(inOneHour-delta, inOneHour+delta);
 
       // expects a token with an invalid expiration time to complain
       expect(function() {
         this.opentok.generateToken(this.sessionId, { expireTime: "not a time" });
       }).to.throw(Error);
 
-      var inThePast = (new Date().getTime() / 1000) - (60*60); // 1 hour ago
+      var oneHourAgo = now - (60*60);
       expect(function() {
-        this.opentok.generateToken(this.sessionId, { expireTime: inThePast });
+        this.opentok.generateToken(this.sessionId, { expireTime: oneHourAgo });
       }).to.throw(Error);
+
+      // rounds down fractional expiration time
+      var fractionalExpireTime = now + (60.5);
+      var roundedToken = this.opentok.generateToken(this.sessionId, { expireTime: fractionalExpireTime });
+      expect(helpers.verifyTokenSignature(roundedToken, apiSecret)).to.be.true
+      decoded = helpers.decodeToken(roundedToken);
+      expect(decoded.expire_time).to.equal(Math.round(fractionalExpireTime).toString());
     });
 
     it('sets connection data in the token', function() {
@@ -424,6 +457,13 @@ describe('OpenTok', function() {
       ];
       var nonces = _.map(tokens, function(token) { return helpers.decodeToken(token).nonce; });
       expect(_.uniq(nonces)).to.have.length(nonces.length);
+    });
+
+    it('does not modify passed in options', function() {
+      var options = { data: 'test' };
+      var optionsUntouched = _.clone(options);
+      this.opentok.generateToken(this.sessionId, options);
+      expect(options).to.deep.equal(optionsUntouched);
     });
   });
 
