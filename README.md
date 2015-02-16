@@ -226,7 +226,7 @@ Interested in contributing? We :heart: pull requests! See the [Development](DEVE
 
 # Support
 
-See <http://tokbox.com/opentok/support/> for all our support options.
+See <https://support.tokbox.com> for all our support options.
 
 Find a bug? File it on the [Issues](https://github.com/opentok/opentok-node/issues) page. Hint:
 test cases are really helpful!
