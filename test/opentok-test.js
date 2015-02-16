@@ -1,7 +1,6 @@
 var expect = require('chai').expect,
     nock = require('nock'),
-    _ = require('lodash'),
-    async = require('async');
+    _ = require('lodash');
 
 // Subject
 var OpenTok = require('../lib/opentok.js'),
@@ -278,7 +277,7 @@ describe('OpenTok', function() {
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
         .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
         .post('/session/create', "p2p.preference=enabled")
-        .reply(500, "", { server: 'nginx',
+        .reply(503, "", { server: 'nginx',
         date: 'Thu, 20 Mar 2014 06:35:24 GMT',
         'content-type': 'text/xml',
         connection: 'keep-alive',
@@ -287,8 +286,31 @@ describe('OpenTok', function() {
         'content-length': '0' });
       this.opentok.createSession(function(err, session) {
         expect(err).to.be.an.instanceof(Error);
+        expect(err.message).to.contain("A server error occurred");
         scope.done();
         done();
+      });
+    });
+
+    it('returns a Session that can generate a token', function(done) {
+      var scope = nock('https://api.opentok.com:443')
+        .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
+        .post('/session/create', "p2p.preference=enabled")
+        .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>"+sessionId+"</session_id><partner_id>123456</partner_id><create_dt>Wed Mar 19 23:35:24 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
+        date: 'Thu, 20 Mar 2014 06:35:24 GMT',
+        'content-type': 'text/xml',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'x-tb-host': 'mantis503-nyc.tokbox.com',
+        'content-length': '211' });
+      // pass no options parameter
+      this.opentok.createSession(function(err, session){
+        if (err) return done(err);
+        scope.done();
+        var token = session.generateToken();
+        expect(token).to.be.a('string');
+        done(err);
       });
     });
 
@@ -329,8 +351,9 @@ describe('OpenTok', function() {
       expect(decoded.role).to.equal('subscriber');
 
       // expects one with an invalid role to complain
-      var invalidToken = this.opentok.generateToken(this.sessionId, { role : 5 });
-      expect(invalidToken).to.not.be.ok
+      expect(function() {
+        this.opentok.generateToken(this.sessionId, { role : 5 });
+      }).to.throw(Error);
     });
 
     it('sets an expiration time for the token', function() {
@@ -352,12 +375,14 @@ describe('OpenTok', function() {
       expect(decoded.expire_time).to.be.within(expireTime-delta, expireTime+delta);
 
       // expects a token with an invalid expiration time to complain
-      var invalidToken = this.opentok.generateToken(this.sessionId, { expireTime: "not a time" });
-      expect(invalidToken).to.not.be.ok;
+      expect(function() {
+        this.opentok.generateToken(this.sessionId, { expireTime: "not a time" });
+      }).to.throw(Error);
 
-      // TODO: expects a token with a time to thats in the past to complain
-      //invalidToken = this.opentok.generateToken(this.sessionId, { expireTime: "not a time" });
-      //expect(invalidToken).to.not.be.ok;
+      var inThePast = (new Date().getTime() / 1000) - (60*60); // 1 hour ago
+      expect(function() {
+        this.opentok.generateToken(this.sessionId, { expireTime: inThePast });
+      }).to.throw(Error);
     });
 
     it('sets connection data in the token', function() {
@@ -369,22 +394,26 @@ describe('OpenTok', function() {
       var decoded = helpers.decodeToken(dataBearingToken);
       expect(decoded.connection_data).to.equal(sampleData);
 
-      // expects a token with invalid connection to complain
-      var invalidToken = this.opentok.generateToken(this.sessionId, { data: { 'dont': 'work' } });
-      expect(invalidToken).to.not.be.ok;
+      // expects a token with invalid connection data to complain
+      expect(function() {
+        this.opentok.generateToken(this.sessionId, { data: { 'dont': 'work' } });
+      }).to.throw(Error);
 
-      var tooLongDataToken = this.opentok.generateToken(this.sessionId, {
-        data: Array(2000).join("a") // 1999 char string of all 'a's
-      });
-      expect(tooLongDataToken).to.not.be.ok;
+      expect(function() {
+        this.opentok.generateToken(this.sessionId, {
+          data: Array(2000).join("a") // 1999 char string of all 'a's
+        });
+      }).to.throw(Error);
     });
 
     it('complains if the sessionId is not valid', function() {
-      var badToken = this.opentok.generateToken();
-      expect(badToken).to.not.be.ok;
+      expect(function() {
+        this.opentok.generateToken();
+      }).to.throw(Error);
 
-      badToken = this.opentok.generateToken('blahblahblah');
-      expect(badToken).to.not.be.ok;
+      expect(function() {
+        this.opentok.generateToken('blahblahblah');
+      }).to.throw(Error);
     });
 
     it('contains a unique nonce', function() {
