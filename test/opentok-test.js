@@ -314,6 +314,29 @@ describe('OpenTok', function() {
       });
     });
 
+    it('should not modify the options object parameter', function(done) {
+      var scope = nock('https://api.opentok.com:443')
+        .filteringRequestBody(function(path) {
+          return '*';
+        })
+        .post('/session/create', '*')
+        .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>SESSIONID</session_id><partner_id>123456</partner_id><create_dt>Thu Mar 20 07:02:45 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
+        date: 'Thu, 20 Mar 2014 14:02:45 GMT',
+        'content-type': 'text/xml',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'x-tb-host': 'oms506-nyc.tokbox.com',
+        'content-length': '211' });
+      var options = { mediaMode: 'routed' };
+      var optionsUntouched = _.clone(options);
+      this.opentok.createSession(options, function(err, session) {
+        if (err) return done(err);
+        scope.done();
+        expect(options).to.deep.equal(optionsUntouched);
+        done();
+      });
+    });
+
   });
 
 
