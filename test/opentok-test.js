@@ -292,6 +292,28 @@ describe('OpenTok', function() {
       });
     });
 
+    it('returns a Session that can generate a token', function(done) {
+      var scope = nock('https://api.opentok.com:443')
+        .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
+        .post('/session/create', "p2p.preference=enabled")
+        .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>"+sessionId+"</session_id><partner_id>123456</partner_id><create_dt>Wed Mar 19 23:35:24 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
+        date: 'Thu, 20 Mar 2014 06:35:24 GMT',
+        'content-type': 'text/xml',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'x-tb-host': 'mantis503-nyc.tokbox.com',
+        'content-length': '211' });
+      // pass no options parameter
+      this.opentok.createSession(function(err, session){
+        if (err) return done(err);
+        scope.done();
+        var token = session.generateToken();
+        expect(token).to.be.a('string');
+        done(err);
+      });
+    });
+
   });
 
 
