@@ -458,6 +458,13 @@ describe('OpenTok', function() {
       var nonces = _.map(tokens, function(token) { return helpers.decodeToken(token).nonce; });
       expect(_.uniq(nonces)).to.have.length(nonces.length);
     });
+
+    it('does not modify passed in options', function() {
+      var options = { data: 'test' };
+      var optionsUntouched = _.clone(options);
+      this.opentok.generateToken(this.sessionId, options);
+      expect(options).to.deep.equal(optionsUntouched);
+    });
   });
 
 });
