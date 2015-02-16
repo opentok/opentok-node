@@ -329,8 +329,9 @@ describe('OpenTok', function() {
       expect(decoded.role).to.equal('subscriber');
 
       // expects one with an invalid role to complain
-      var invalidToken = this.opentok.generateToken(this.sessionId, { role : 5 });
-      expect(invalidToken).to.not.be.ok
+      expect(function() {
+        this.opentok.generateToken(this.sessionId, { role : 5 });
+      }).to.throw(Error);
     });
 
     it('sets an expiration time for the token', function() {
@@ -352,12 +353,14 @@ describe('OpenTok', function() {
       expect(decoded.expire_time).to.be.within(expireTime-delta, expireTime+delta);
 
       // expects a token with an invalid expiration time to complain
-      var invalidToken = this.opentok.generateToken(this.sessionId, { expireTime: "not a time" });
-      expect(invalidToken).to.not.be.ok;
+      expect(function() {
+        this.opentok.generateToken(this.sessionId, { expireTime: "not a time" });
+      }).to.throw(Error);
 
-      // TODO: expects a token with a time to thats in the past to complain
-      //invalidToken = this.opentok.generateToken(this.sessionId, { expireTime: "not a time" });
-      //expect(invalidToken).to.not.be.ok;
+      var inThePast = (new Date().getTime() / 1000) - (60*60); // 1 hour ago
+      expect(function() {
+        this.opentok.generateToken(this.sessionId, { expireTime: inThePast });
+      }).to.throw(Error);
     });
 
     it('sets connection data in the token', function() {
@@ -369,22 +372,26 @@ describe('OpenTok', function() {
       var decoded = helpers.decodeToken(dataBearingToken);
       expect(decoded.connection_data).to.equal(sampleData);
 
-      // expects a token with invalid connection to complain
-      var invalidToken = this.opentok.generateToken(this.sessionId, { data: { 'dont': 'work' } });
-      expect(invalidToken).to.not.be.ok;
+      // expects a token with invalid connection data to complain
+      expect(function() {
+        this.opentok.generateToken(this.sessionId, { data: { 'dont': 'work' } });
+      }).to.throw(Error);
 
-      var tooLongDataToken = this.opentok.generateToken(this.sessionId, {
-        data: Array(2000).join("a") // 1999 char string of all 'a's
-      });
-      expect(tooLongDataToken).to.not.be.ok;
+      expect(function() {
+        this.opentok.generateToken(this.sessionId, {
+          data: Array(2000).join("a") // 1999 char string of all 'a's
+        });
+      }).to.throw(Error);
     });
 
     it('complains if the sessionId is not valid', function() {
-      var badToken = this.opentok.generateToken();
-      expect(badToken).to.not.be.ok;
+      expect(function() {
+        this.opentok.generateToken();
+      }).to.throw(Error);
 
-      badToken = this.opentok.generateToken('blahblahblah');
-      expect(badToken).to.not.be.ok;
+      expect(function() {
+        this.opentok.generateToken('blahblahblah');
+      }).to.throw(Error);
     });
 
     it('contains a unique nonce', function() {
