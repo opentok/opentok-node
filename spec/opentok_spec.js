@@ -138,10 +138,44 @@ describe('Archiving', function() {
         connection: 'keep-alive' });
 
       opentok.startArchive(session, {hasAudio: true, hasVideo: false}, function(err, archive) {
-	expect(err).toBeNull();
-	expect(archive.hasAudio).toEqual(true);
-	expect(archive.hasVideo).toEqual(false);
-	done();
+        expect(err).toBeNull();
+        expect(archive.hasAudio).toEqual(true);
+        expect(archive.hasVideo).toEqual(false);
+        done();
+      });
+    });
+
+    it('should be able to archive if outputMode is individual', function(done) {
+
+      nock('https://api.opentok.com:443')
+        .post('/v2/partner/APIKEY/archive', {'sessionId':'1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg', 'outputMode': 'individual' })
+        .reply(200, '{\n  \"createdAt\" : 1391149936527,\n  \"duration\" : 0,\n  \"id\" : \"4072fe0f-d499-4f2f-8237-64f5a9d936f5\",\n  \"name\" : null,\n  \"partnerId\" : \"APIKEY\",\n  \"reason\" : \"\",\n  \"sessionId\" : \"1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg\",\n  \"size\" : 0,\n  \"status\" : \"started\",\n \"hasAudio\" : true,\n \"hasVideo\" : true,\n \"outputMode\" : \"individual\",\n \"url\" : null\n}', { server: 'nginx',
+        date: 'Fri, 31 Jan 2014 06:32:16 GMT',
+        'content-type': 'application/json',
+        'transfer-encoding': 'chunked',
+        connection: 'keep-alive' });
+
+      opentok.startArchive(session, {outputMode: 'individual'}, function(err, archive) {
+        expect(err).toBeNull();
+        expect(archive.outputMode).toEqual('individual');
+        done();
+      });
+    });
+
+    it('should be able to archive if outputMode is composed', function(done) {
+
+      nock('https://api.opentok.com:443')
+        .post('/v2/partner/APIKEY/archive', {'sessionId':'1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg', 'outputMode': 'composed' })
+        .reply(200, '{\n  \"createdAt\" : 1391149936527,\n  \"duration\" : 0,\n  \"id\" : \"4072fe0f-d499-4f2f-8237-64f5a9d936f5\",\n  \"name\" : null,\n  \"partnerId\" : \"APIKEY\",\n  \"reason\" : \"\",\n  \"sessionId\" : \"1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg\",\n  \"size\" : 0,\n  \"status\" : \"started\",\n \"hasAudio\" : true,\n \"hasVideo\" : true,\n \"outputMode\" : \"composed\",\n \"url\" : null\n}', { server: 'nginx',
+        date: 'Fri, 31 Jan 2014 06:32:16 GMT',
+        'content-type': 'application/json',
+        'transfer-encoding': 'chunked',
+        connection: 'keep-alive' });
+
+      opentok.startArchive(session, {outputMode: 'composed'}, function(err, archive) {
+        expect(err).toBeNull();
+        expect(archive.outputMode).toEqual('composed');
+        done();
       });
     });
   });
