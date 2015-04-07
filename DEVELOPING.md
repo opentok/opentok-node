@@ -16,8 +16,29 @@ this project. If you use this package within your own software as is but don't p
 This project's tests are written with Mocha and with Jasmine. Common tasks:
 
 *  `grunt` - run the complete test suite.
-*  `grunt mochaTest` - run just the mocha tests
+*  `grunt mochaTest:test` - run the mocha tests (canned network responses)
 *  `grunt jasmine_node` - run just the jasmine tests
+
+#### Integration Testing
+
+Integration tests are those which use the actual network. These tests are limited to cases where
+the API functionality is independent of the state on the OpenTok Platform (for simplicity). Tasks:
+
+*  `grunt mochaTest:integration` - run mocha tests (real network, state-independent)
+
+Environment variables can be used to configure these tests:
+
+*  `NETWORK` - (**required**) If this is set, its an indicator that the network should be used
+*  `API_KEY` - (**required**) An OpenTok API Key
+*  `API_SECRET` - (**required**) An OpenTok API Secret
+*  `API_URL` - (**optional**) A alternative URL for an environment
+
+Example CLI usage:
+
+```
+$ NETWORK=true API_KEY=000000 API_SECRET=abcdef1234567890abcdef \
+API_URL=http://anvil-dev.tokbox.com grunt mochaTest:integration
+```
 
 ### Generating Documentation
 

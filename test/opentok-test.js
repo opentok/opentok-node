@@ -19,17 +19,31 @@ var apiKey = '123456',
     defaultTimeoutLength = 20000; // 20 seconds
 nock.disableNetConnect();
 
-var recording = false;
+// Modes
+var recording = process.env.RECORDING || false;
+var networkAttached = process.env.NETWORK || recording || false;
+
+// Network-attached mode (implied by recording mode)
+if (networkAttached) {
+  nock.enableNetConnect();
+  apiKey = process.env.API_KEY;
+  apiSecret = process.env.API_SECRET;
+  if (!apiKey || !apiSecret) {
+    throw Error('When running tests in this mode, you must define an API_KEY and an API_SECRET'+
+                'environment variable');
+  }
+  var integrationApiUrl = process.env.API_URL || defaultApiUrl;
+}
+
+// Recording mode
 if (recording) {
-  // set these values before changing the above to true
-  apiKey = '';
-  apiSecret = '';
-  //nock.enableNetConnect();
   nock.recorder.rec();
 }
 
+
 // Helpers
-var helpers = require('./helpers.js');
+var helpers = require('./helpers.js'),
+    attachableNock = helpers.getAttachableNock(nock, networkAttached);
 
 describe('OpenTok', function() {
   it('should initialize with a valid apiKey and apiSecret', function() {
@@ -165,11 +179,12 @@ describe('OpenTok', function() {
   describe('#createSession', function() {
 
     beforeEach(function() {
-      this.opentok = new OpenTok(apiKey, apiSecret);
+      this.opentok = networkAttached ? new OpenTok(apiKey, apiSecret, integrationApiUrl) :
+                                       new OpenTok(apiKey, apiSecret);
     });
 
-    it('creates a new session', function(done) {
-      var scope = nock('https://api.opentok.com:443')
+    it('creates a new session, integrates', function(done) {
+      var scope = attachableNock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
         .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
         .post('/session/create', "p2p.preference=enabled")
@@ -184,15 +199,17 @@ describe('OpenTok', function() {
       this.opentok.createSession(function(err, session){
         if (err) return done(err);
         expect(session).to.be.an.instanceof(Session);
-        expect(session.sessionId).to.equal('SESSIONID');
+        if (!networkAttached) {
+          expect(session.sessionId).to.equal('SESSIONID');
+        }
         expect(session.mediaMode).to.equal('relayed');
         scope.done();
         done(err);
       });
     });
 
-    it('creates a media routed session', function(done) {
-      var scope = nock('https://api.opentok.com:443')
+    it('creates a media routed session, integrates', function(done) {
+      var scope = attachableNock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
         .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
         .post('/session/create', "p2p.preference=disabled")
@@ -206,15 +223,17 @@ describe('OpenTok', function() {
       this.opentok.createSession({ 'mediaMode' : 'routed' }, function(err, session) {
         if (err) return done(err);
         expect(session).to.be.an.instanceof(Session);
-        expect(session.sessionId).to.equal('SESSIONID');
+        if (!networkAttached) {
+          expect(session.sessionId).to.equal('SESSIONID');
+        }
         expect(session.mediaMode).to.equal('routed');
         scope.done();
         done(err);
       });
     });
 
-    it('creates a media relayed session even if the media mode is invalid', function(done) {
-      var scope = nock('https://api.opentok.com:443')
+    it('creates a media relayed session even if the media mode is invalid, integrates', function(done) {
+      var scope = attachableNock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
         .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
         .post('/session/create', "p2p.preference=enabled")
@@ -228,15 +247,17 @@ describe('OpenTok', function() {
       this.opentok.createSession({ 'mediaMode' : 'blah' }, function(err, session) {
         if (err) return done(err);
         expect(session).to.be.an.instanceof(Session);
-        expect(session.sessionId).to.equal('SESSIONID');
+        if (!networkAttached) {
+          expect(session.sessionId).to.equal('SESSIONID');
+        }
         expect(session.mediaMode).to.equal('relayed');
         scope.done();
         done(err);
       });
     });
 
-    it('adds a location hint to the created session', function(done) {
-      var scope = nock('https://api.opentok.com:443')
+    it('adds a location hint to the created session, integrates', function(done) {
+      var scope = attachableNock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
         .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
         .post('/session/create', "location=12.34.56.78&p2p.preference=enabled")
@@ -251,7 +272,9 @@ describe('OpenTok', function() {
       this.opentok.createSession({ 'location': '12.34.56.78' }, function(err, session) {
         if (err) return done(err);
         expect(session).to.be.an.instanceof(Session);
-        expect(session.sessionId).to.equal('SESSIONID');
+        if (!networkAttached) {
+          expect(session.sessionId).to.equal('SESSIONID');
+        }
         expect(session.mediaMode).to.equal('relayed');
         expect(session.location).to.equal('12.34.56.78');
         scope.done();
