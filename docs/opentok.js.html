@@ -309,8 +309,8 @@ var OpenTok = function(apiKey, apiSecret, env) {
  * firewall restrictions, the session uses the OpenTok TURN server to relay audio-video
  * streams.
  * &lt;p>
- * The &lt;a href="http://tokbox.com/#multiparty" target="_top"> OpenTok Media Router&lt;/a>
- * provides the following benefits:
+ * The &lt;a href="https://tokbox.com/opentok/tutorials/create-session/#media-mode" target="_top">
+ * OpenTok Media Router&lt;/a> provides the following benefits:
  *
  * &lt;ul>
  *   &lt;li>The OpenTok Media Router can decrease bandwidth usage in multiparty sessions.
@@ -318,13 +318,13 @@ var OpenTok = function(apiKey, apiSecret, env) {
  *       each client must send a separate audio-video stream to each client subscribing to
  *       it.)&lt;/li>
  *   &lt;li>The OpenTok Media Router can improve the quality of the user experience through
- *     &lt;a href="http://tokbox.com/#iqc" target="_top">Intelligent Quality Control&lt;/a>. With
- *     Intelligent Quality Control, if a client's connectivity degrades to a degree that
+ *     &lt;a href="https://tokbox.com/platform/fallback" target="_top">audio fallback and video
+ *     recovery&lt;/a>. With these features, if a client's connectivity degrades to a degree that
  *     it does not support video for a stream it's subscribing to, the video is dropped on
  *     that client (without affecting other clients), and the client receives audio only.
  *     If the client's connectivity improves, the video returns.&lt;/li>
  *   &lt;li>The OpenTok Media Router supports the
- *     &lt;a href="http://tokbox.com/platform/archiving" target="_top">archiving&lt;/a>
+ *     &lt;a href="https://tokbox.com/opentok/tutorials/archiving" target="_top">archiving&lt;/a>
  *     feature, which lets you record, save, and retrieve OpenTok sessions.&lt;/li>
  * &lt;/ul>
  *
