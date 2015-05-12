@@ -18,6 +18,7 @@ session.on('archiveStarted', function(event) {
   console.log("ARCHIVE STARTED");
   $(".start").hide();
   $(".stop").show();
+  disableForm();
 });
 
 session.on('archiveStopped', function(event) {
@@ -25,13 +26,25 @@ session.on('archiveStopped', function(event) {
   console.log("ARCHIVE STOPPED");
   $(".start").show();
   $(".stop").hide();
+  enableForm();
 });
 
 $(document).ready(function() {
-  $(".start").click(function(event){
-    $.get("start");
+  $(".start").click(function (event) {
+    var options = $(".archive-options").serialize();
+    disableForm();
+    $.post("/start", options).fail(enableForm);
   }).show();
   $(".stop").click(function(event){
     $.get("stop/" + archiveID);
   }).hide();
 });
+
+
+function disableForm() {
+  $(".archive-options-fields").attr('disabled', 'disabled');
+}
+
+function enableForm() {
+  $(".archive-options-fields").removeAttr('disabled');
+}
