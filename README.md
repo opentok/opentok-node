@@ -8,9 +8,6 @@ The OpenTok Node SDK lets you generate
 [OpenTok](http://www.tokbox.com/) applications, and
 [archive](https://tokbox.com/opentok/tutorials/archiving) OpenTok sessions.
 
-If you are updating from a previous version of this SDK, see
-[Important changes since v2.2](#important-changes-since-v220).
-
 # Installation using npm (recommended):
 
 npm helps manage dependencies for node projects. Find more info here: <http://npmjs.org>
@@ -225,8 +222,7 @@ session uses the OpenTok TURN server to relay audio-video streams.
 
 **Changes in v2.2.0:**
 
-This version of the SDK includes support for working with OpenTok 2.0 archives. (This API does not
-work with OpenTok 1.0 archives.)
+This version of the SDK includes support for working with OpenTok archives.
 
 The `createSession()` method has changed to take one parameter: an `options` object that has `location`
 and `mediaMode` properties. The `mediaMode` property replaces the `properties.p2p.preference`
