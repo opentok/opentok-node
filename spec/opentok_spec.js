@@ -126,7 +126,7 @@ describe('Archiving', function() {
       }).toThrow(new OpenTok.ArgumentError('No callback given to startArchive'));
 
     });
-    
+
     it('should be able to archive with hasVideo to false', function(done) {
 
       nock('https://api.opentok.com:443')
@@ -200,6 +200,26 @@ describe('Archiving', function() {
           expect(archive.status).toBe('available');
           expect(archive.stop).not.toBeNull();
           expect(archive.delete).not.toBeNull();
+        }
+        done();
+      });
+
+    });
+
+    it('should allow archives with paused status', function(done) {
+      nock('https://api.opentok.com:443')
+        .get('/v2/partner/APIKEY/archive/d4c27726-d965-4456-8b07-0cca1a4f4802')
+        .reply(200, '{\n  \"createdAt\" : 1389986091000,\n  \"duration\" : 300,\n  \"id\" : \"d4c27726-d965-4456-8b07-0cca1a4f4802\",\n  \"name\" : \"Bob\",\n  \"partnerId\" : \"APIKEY\",\n  \"reason\" : \"\",\n  \"sessionId\" : \"1_MX4xMDB-fkZyaSBKYW4gMTcgMTE6MTQ6NTAgUFNUIDIwMTR-MC4xNTM4NDExNH4\",\n  \"size\" : 331266,\n  \"status\" : \"paused\",\n  \"url\" : \"http://tokbox.com.archive2.s3.amazonaws.com/APIKEY%2Fd4c27726-d965-4456-8b07-0cca1a4f4802%2Farchive.mp4?Expires=1391151552&AWSAccessKeyId=AKIAI6LQCPIXYVWCQV6Q&Signature=IiFhiMDUyvP6Q6EChXioePxvp6g%3D\"\n}', { server: 'nginx',
+        date: 'Fri, 31 Jan 2014 06:49:12 GMT',
+        'content-type': 'application/json',
+        'transfer-encoding': 'chunked',
+        connection: 'keep-alive' });
+
+      opentok.getArchive(archiveID, function(err, archive) {
+        expect(err).toBeNull();
+        expect(archive).not.toBeNull();
+        if(archive) {
+          expect(archive.status).toBe('paused');
         }
         done();
       });
