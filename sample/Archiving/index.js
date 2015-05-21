@@ -1,5 +1,7 @@
 // Dependencies
 var express = require('express'),
+    bodyParser = require('body-parser'),
+    request = require('request'),
     OpenTok = require('../../lib/opentok');
 
 // Verify that the API Key and API Secret are defined
@@ -13,6 +15,9 @@ if (!apiKey || !apiSecret) {
 // Initialize the express app
 var app = express();
 app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 // Initialize OpenTok
 var opentok = new OpenTok(apiKey, apiSecret);
@@ -74,9 +79,15 @@ app.get('/download/:archiveId', function(req, res) {
   });
 });
 
-app.get('/start', function(req, res) {
+app.post('/start', function(req, res) {
+  var hasAudio = (req.param('hasAudio') !== undefined);
+  var hasVideo = (req.param('hasVideo') !== undefined);
+  var outputMode = req.param('outputMode');
   opentok.startArchive(app.get('sessionId'), {
-    name: 'Node Archiving Sample App'
+    name: 'Node Archiving Sample App',
+    hasAudio: hasAudio,
+    hasVideo: hasVideo,
+    outputMode: outputMode
   }, function(err, archive) {
     if (err) return res.send(500,
       'Could not start archive for session '+sessionId+'. error='+err.message
