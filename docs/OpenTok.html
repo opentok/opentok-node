@@ -160,7 +160,7 @@ Be sure to include the entire OpenTok Node.js SDK on your web server.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line19">line 19</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line20">line 20</a>
     </li></ul></dd>
     
     
@@ -303,6 +303,13 @@ streams.
 The <a href="https://tokbox.com/opentok/tutorials/create-session/#media-mode" target="_top">
 OpenTok Media Router</a> provides the following benefits:
 
+     <li><code>archiveMode</code> (String) &mdash;
+Whether the session is automatically archived (<code>"always"</code>) or not 
+(<code>"manual"</code>). By default, the setting is <code>"manual"</code>, and you must call the
+<code>StartArchive()</code> method of the OpenTok object to start archiving. To archive the
+session (either automatically or not), you must set the <code>mediaMode</code> parameter to
+<code>"routed"</code>.
+
 <ul>
   <li>The OpenTok Media Router can decrease bandwidth usage in multiparty sessions.
       (When the <code>mediaMode</code> parameter is set to <code>"relayed"</code>,
@@ -382,7 +389,7 @@ OpenTok Media Router</a> provides the following benefits:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line318">line 318</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line331">line 331</a>
     </li></ul></dd>
     
     
@@ -403,17 +410,6 @@ OpenTok Media Router</a> provides the following benefits:
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    A session ID for the new session. For example, when using the OpenTok.js library, use
-this session ID when calling the <code>OT.initSession()</code> method.
-</div>
-
-
-
-        
     
     
 </dd>
@@ -539,7 +535,7 @@ object is passed into the function.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line179">line 179</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line188">line 188</a>
     </li></ul></dd>
     
     
@@ -663,7 +659,8 @@ dashboard</a> page to generate test tokens.
    </li>
 
    <li><code>expireTime</code> (Number) &mdash; The expiration time for the token, in seconds
-     since the UNIX epoch. The maximum expiration time is 30 days after the creation time.
+     since the UNIX epoch. The maximum expiration time is 30 days after the creation time. If
+     a fractional number is specified, then it is rounded down to the nearest whole number.
      The default expiration time of 24 hours after the token creation time.
    </li>
 
@@ -703,7 +700,7 @@ dashboard</a> page to generate test tokens.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line400">line 400</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line427">line 427</a>
     </li></ul></dd>
     
     
@@ -825,7 +822,7 @@ dashboard</a> page to generate test tokens.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line167">line 167</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line176">line 176</a>
     </li></ul></dd>
     
     
@@ -1007,7 +1004,7 @@ are passed to the function:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line197">line 197</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line206">line 206</a>
     </li></ul></dd>
     
     
@@ -1043,7 +1040,7 @@ are passed to the function:
     
     
     <div class="description">
-        Starts archiving an OpenTok 2.0 session.
+        Starts archiving an OpenTok session.
 <p>
 Clients must be actively connected to the OpenTok session for you to successfully start
 recording an archive.
@@ -1141,7 +1138,15 @@ of which is optional):
     <code>hasVideo</code> to <code>false</code>, the call to the <code>startArchive()</code>
     method results in an error.
   </li>
-</ul></td>
+  <li>
+    <code>outputMode</code> (String) &mdash; Whether all streams in the archive are recorded
+    to a single file ("composed", the default) or to individual files ("individual").
+  </li>
+</ul>
+
+For more information on archiving and the archive file formats, see the
+<a href="https://tokbox.com/opentok/tutorials/archiving/">OpenTok archiving</a>
+programming guide.</td>
         </tr>
 	
 	
@@ -1209,7 +1214,7 @@ are passed to the function:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line79">line 79</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line80">line 80</a>
     </li></ul></dd>
     
     
@@ -1365,7 +1370,7 @@ are passed to the function:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line138">line 138</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line147">line 147</a>
     </li></ul></dd>
     
     
@@ -1542,7 +1547,7 @@ handles the result of a session creation
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line481">line 481</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line501">line 501</a>
     </li></ul></dd>
     
     
@@ -1703,7 +1708,7 @@ handles the result of a REST request
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line483">line 483</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line503">line 503</a>
     </li></ul></dd>
     
     
@@ -1866,7 +1871,7 @@ is interested in an error, can be a super-type of OpenTok~createSessionCallback
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line485">line 485</a>
+        <a href="opentok.js.html">opentok.js</a>, <a href="opentok.js.html#line505">line 505</a>
     </li></ul></dd>
     
     
@@ -1911,7 +1916,7 @@ is interested in an error, can be a super-type of OpenTok~createSessionCallback
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Thu Mar 05 2015 09:17:18 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Mon May 25 2015 14:53:59 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>
