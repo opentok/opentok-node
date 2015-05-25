@@ -34,10 +34,10 @@ var OpenTok = require('opentok'),
 
 To create an OpenTok Session, use the `opentok.createSession(properties, callback)` method. The
 `properties` parameter is an optional object used to specify whether the session uses the OpenTok
-Media Router and to specify a location hint. The callback has the signature
-`function(error, session)`. The `session` returned in the callback is an instance of Session.
-Session objects have a `sessionId` property that is useful to be saved to a persistent store
-(such as a database).
+Media Router, to specify a location hint, and to specify whether the session will be automatically
+archived or not. The callback has the signature `function(error, session)`. The `session` returned
+in the callback is an instance of Session. Session objects have a `sessionId` property that is
+useful to be saved to a persistent store (such as a database).
 
 ```javascript
 // Create a session that will attempt to transmit streams directly between
@@ -59,6 +59,14 @@ opentok.createSession({mediaMode:"routed"}, function(err, session) {
 
 // A Session with a location hint
 opentok.createSession({location:'12.34.56.78'}, function(err, session) {
+  if (err) return console.log(err);
+
+  // save the sessionId
+  db.save('session', session.sessionId, done);
+});
+
+// A Session with an automatic archiving
+opentok.createSession({mediaMode:'routed', archiveMode:'always'}, function(err, session) {
   if (err) return console.log(err);
 
   // save the sessionId
@@ -113,6 +121,25 @@ the `options` parameter to `false`:
 var archiveOptions = {
   name: 'Important Presentation',
   hasVideo: false  // Record audio only
+};
+opentok.startArchive(sessionId, archiveOptions, function(err, archive) {
+  if (err) {
+    return console.log(err);
+  } else {
+    // The id property is useful to save off into a database
+    console.log("new archive:" + archive.id);
+  }
+});
+```
+
+By default, all streams are recorded to a single (composed) file. You can record the different
+streams in the session to individual files (instead of a single composed file) by setting the
+`outputMode` parameter of the `opentok.startArchive()` method `individual`.
+
+```javascript
+var archiveOptions = {
+  name: 'Important Presentation',
+  outputMode: 'individual'
 };
 opentok.startArchive(sessionId, archiveOptions, function(err, archive) {
   if (err) {
@@ -185,6 +212,10 @@ opentok.listArchives({offset:100, count:50}, function(error, archives, totalCoun
   }
 });
 ```
+
+Note that you can also create an automatically archived session, by passing in `always`
+as the `archiveMode` parameter when you call the `opentok.createSession()` method (see "Creating
+Sessions," above).
 
 # Samples
 
