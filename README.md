@@ -134,7 +134,7 @@ opentok.startArchive(sessionId, archiveOptions, function(err, archive) {
 
 By default, all streams are recorded to a single (composed) file. You can record the different
 streams in the session to individual files (instead of a single composed file) by setting the
-`outputMode` parameter of the `opentok.startArchive()` method to `individual`:
+`outputMode` option to `'individual'` when you call the `opentok.startArchive()`:
 
 ```javascript
 var archiveOptions = {
@@ -213,8 +213,8 @@ opentok.listArchives({offset:100, count:50}, function(error, archives, totalCoun
 });
 ```
 
-Note that you can also create an automatically archived session, by passing in `always`
-as the `archiveMode` parameter when you call the `opentok.createSession()` method (see "Creating
+Note that you can also create an automatically archived session, by passing in `'always'`
+as the `archiveMode` option when you call the `opentok.createSession()` method (see "Creating
 Sessions," above).
 
 For more information on archiving, see the
