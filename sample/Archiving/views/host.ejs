@@ -14,6 +14,29 @@
           <div id="subscribers"><div id="publisher"></div></div>
         </div>
         <div class="panel-footer">
+          <form class="archive-options">
+              <fieldset class="archive-options-fields">
+                  <div class="form-group">
+                      <p class="help-block">Archive Options:</p>
+                      <label class="checkbox-inline">
+                          <input type="checkbox" name="hasAudio" checked> Audio
+                      </label>
+                      <label class="checkbox-inline">
+                          <input type="checkbox" name="hasVideo" checked> Video
+                      </label>
+                  </div>
+
+                  <div class="form-group">
+                      <p class="help-block">Output Mode:</p>
+                      <label class="radio-inline">
+                          <input type="radio" name="outputMode" value="composed" checked> Composed
+                      </label>
+                      <label class="radio-inline">
+                          <input type="radio" name="outputMode" value="individual"> Individual
+                      </label>
+                  </div>
+              </fieldset>
+          </form>
           <button class="btn btn-danger start">Start archiving</button>
           <button class="btn btn-success stop">Stop archiving</button>
         </div>

@@ -39,7 +39,7 @@
     
         
 <dt>
-    <h4 class="name" id="Archive"><span class="type-signature"></span>new Archive<span class="signature">(createdAt, duration, id, name, partnerId, reason, sessionId, size, status, url)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Archive"><span class="type-signature"></span>new Archive<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -47,7 +47,10 @@
     
     
     <div class="description">
-        An object representing an OpenTok 2.0 archive.
+        An object representing an OpenTok archive.
+<p>
+Do not call the <code>new()</code> constructor. To start recording an archive, call the
+<a href="OpenTok.html#startArchive">OpenTok.startArchive()</a> method.
     </div>
     
 
@@ -56,10 +59,16 @@
     
     
     
-        <h5>Parameters:</h5>
+    
+    
+<dl class="details">
+    
         
+        <h5 class="subsection-title">Properties:</h5>
+        
+        <dl>
 
-<table class="params">
+<table class="props">
     <thead>
 	<tr>
 		
@@ -289,12 +298,99 @@
     <li> "available" -- The archive is available for download from the OpenTok cloud.
     <li> "expired" -- The archive is no longer available for download from the OpenTok cloud.
     <li> "failed" -- The archive recording failed.
+    <li> "paused" -- The archive is in progress and no clients are publishing streams to
+       the session. When an archive is in progress and any client publishes a stream,
+       the status is "started". When an archive is "paused", nothing is recorded. When
+       a client starts publishing a stream, the recording starts (or resumes). If all clients
+       disconnect from a session that is being archived, the status changes to "paused", and
+       after 60 seconds the archive recording stops (and the status changes to "stopped").</li>
     <li> "started" -- The archive started and is in the process of being recorded.
     <li> "stopped" -- The archive stopped recording.
     <li> "uploaded" -- The archive is available for download from the the upload target
          Amazon S3 bucket or Windows Azure container you set up at the
          <a href="https://dashboard.tokbox.com">OpenTok dashboard</a>.
   </ul></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>hasAudio</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Whether the archive has an audio track (<code>true</code>) or not (<code>false</code>).
+  You can prevent audio from being recorded by setting <code>hasAudio</code> to <code>false</code>
+  in the <code>options</code> parameter you pass into the
+  <a href="OpenTok.html#startArchive">OpenTok.startArchive()</a> method.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>hasAudio</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Whether the archive has an video track (<code>true</code>) or not (<code>false</code>).
+  You can prevent video from being recorded by setting <code>hasVideo</code> to <code>false</code>
+  in the <code>options</code> parameter you pass into the
+  <a href="OpenTok.html#startArchive">OpenTok.startArchive()</a> method.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>outputMode</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">The output mode to be generated for this archive, which can be one of the following:
+  <ul>
+    <li> "composed" -- All streams in the archive are recorded to a single (composed) file.
+    <li> "individual" -- Each stream in the archive is recorded to its own individual file.
+  </ul>
+
+  See the <a href="OpenTok.html#startArchive">OpenTok.startArchive()</a> method.</td>
         </tr>
 	
 	
@@ -320,17 +416,14 @@
             <td class="description last">The download URL of the available MP4 file. This is only set for an archive with the status set to
   "available"; for other archives, (including archives with the status "uploaded") this property is
   set to null. The download URL is obfuscated, and the file is only available from the URL for
-  10 minutes. To generate a new URL, call the Archive.listArchives() or OpenTok.getArchive()
-  method.</td>
+  10 minutes. To generate a new URL, call the <a href="OpenTok.html#getArchive">OpenTok.getArchive()</a> or
+  <a href="OpenTok.html#listArchives">OpenTok.listArchives()</a> method.</td>
         </tr>
 	
 	
 	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
+</table></dl>
+        
     
         
     
@@ -352,7 +445,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="archiving.js.html">archiving.js</a>, <a href="archiving.js.html#line8">line 8</a>
+        <a href="archiving.js.html">archiving.js</a>, <a href="archiving.js.html#line9">line 9</a>
     </li></ul></dd>
     
     
@@ -362,15 +455,15 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="OpenTok.html#deleteArchive">OpenTok.deleteArchive</a></li>
+            <li><a href="OpenTok.html#deleteArchive">OpenTok.deleteArchive()</a></li>
         
-            <li><a href="OpenTok.html#getArchive">OpenTok.getArchive</a></li>
+            <li><a href="OpenTok.html#getArchive">OpenTok.getArchive()</a></li>
         
-            <li><a href="OpenTok.html#startArchive">OpenTok.startArchive</a></li>
+            <li><a href="OpenTok.html#startArchive">OpenTok.startArchive()</a></li>
         
-            <li><a href="OpenTok.html#stopArchive">OpenTok.stopArchive</a></li>
+            <li><a href="OpenTok.html#stopArchive">OpenTok.stopArchive()</a></li>
         
-            <li><a href="OpenTok.html#listArchives">OpenTok.listArchives</a></li>
+            <li><a href="OpenTok.html#listArchives">OpenTok.listArchives()</a></li>
         </ul>
     </dd>
     
@@ -508,7 +601,7 @@ object is passed into the function.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="archiving.js.html">archiving.js</a>, <a href="archiving.js.html#line104">line 104</a>
+        <a href="archiving.js.html">archiving.js</a>, <a href="archiving.js.html#line135">line 135</a>
     </li></ul></dd>
     
     
@@ -641,7 +734,7 @@ are passed to the function:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="archiving.js.html">archiving.js</a>, <a href="archiving.js.html#line76">line 76</a>
+        <a href="archiving.js.html">archiving.js</a>, <a href="archiving.js.html#line107">line 107</a>
     </li></ul></dd>
     
     
@@ -688,7 +781,7 @@ are passed to the function:
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Fri Jun 20 2014 12:38:28 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Mon May 25 2015 14:53:59 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

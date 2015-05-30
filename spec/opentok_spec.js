@@ -127,6 +127,57 @@ describe('Archiving', function() {
 
     });
 
+    it('should be able to archive with hasVideo to false', function(done) {
+
+      nock('https://api.opentok.com:443')
+        .post('/v2/partner/APIKEY/archive', {'sessionId':'1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg', 'hasAudio': true, hasVideo: false})
+        .reply(200, '{\n  \"createdAt\" : 1391149936527,\n  \"duration\" : 0,\n  \"id\" : \"4072fe0f-d499-4f2f-8237-64f5a9d936f5\",\n  \"name\" : null,\n  \"partnerId\" : \"APIKEY\",\n  \"reason\" : \"\",\n  \"sessionId\" : \"1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg\",\n  \"size\" : 0,\n  \"status\" : \"started\",\n \"hasAudio\" : true,\n \"hasVideo\" : false,\n \"url\" : null\n}', { server: 'nginx',
+        date: 'Fri, 31 Jan 2014 06:32:16 GMT',
+        'content-type': 'application/json',
+        'transfer-encoding': 'chunked',
+        connection: 'keep-alive' });
+
+      opentok.startArchive(session, {hasAudio: true, hasVideo: false}, function(err, archive) {
+        expect(err).toBeNull();
+        expect(archive.hasAudio).toEqual(true);
+        expect(archive.hasVideo).toEqual(false);
+        done();
+      });
+    });
+
+    it('should be able to archive if outputMode is individual', function(done) {
+
+      nock('https://api.opentok.com:443')
+        .post('/v2/partner/APIKEY/archive', {'sessionId':'1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg', 'outputMode': 'individual' })
+        .reply(200, '{\n  \"createdAt\" : 1391149936527,\n  \"duration\" : 0,\n  \"id\" : \"4072fe0f-d499-4f2f-8237-64f5a9d936f5\",\n  \"name\" : null,\n  \"partnerId\" : \"APIKEY\",\n  \"reason\" : \"\",\n  \"sessionId\" : \"1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg\",\n  \"size\" : 0,\n  \"status\" : \"started\",\n \"hasAudio\" : true,\n \"hasVideo\" : true,\n \"outputMode\" : \"individual\",\n \"url\" : null\n}', { server: 'nginx',
+        date: 'Fri, 31 Jan 2014 06:32:16 GMT',
+        'content-type': 'application/json',
+        'transfer-encoding': 'chunked',
+        connection: 'keep-alive' });
+
+      opentok.startArchive(session, {outputMode: 'individual'}, function(err, archive) {
+        expect(err).toBeNull();
+        expect(archive.outputMode).toEqual('individual');
+        done();
+      });
+    });
+
+    it('should be able to archive if outputMode is composed', function(done) {
+
+      nock('https://api.opentok.com:443')
+        .post('/v2/partner/APIKEY/archive', {'sessionId':'1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg', 'outputMode': 'composed' })
+        .reply(200, '{\n  \"createdAt\" : 1391149936527,\n  \"duration\" : 0,\n  \"id\" : \"4072fe0f-d499-4f2f-8237-64f5a9d936f5\",\n  \"name\" : null,\n  \"partnerId\" : \"APIKEY\",\n  \"reason\" : \"\",\n  \"sessionId\" : \"1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg\",\n  \"size\" : 0,\n  \"status\" : \"started\",\n \"hasAudio\" : true,\n \"hasVideo\" : true,\n \"outputMode\" : \"composed\",\n \"url\" : null\n}', { server: 'nginx',
+        date: 'Fri, 31 Jan 2014 06:32:16 GMT',
+        'content-type': 'application/json',
+        'transfer-encoding': 'chunked',
+        connection: 'keep-alive' });
+
+      opentok.startArchive(session, {outputMode: 'composed'}, function(err, archive) {
+        expect(err).toBeNull();
+        expect(archive.outputMode).toEqual('composed');
+        done();
+      });
+    });
   });
 
   describe('getArchive', function() {
@@ -149,6 +200,26 @@ describe('Archiving', function() {
           expect(archive.status).toBe('available');
           expect(archive.stop).not.toBeNull();
           expect(archive.delete).not.toBeNull();
+        }
+        done();
+      });
+
+    });
+
+    it('should allow archives with paused status', function(done) {
+      nock('https://api.opentok.com:443')
+        .get('/v2/partner/APIKEY/archive/d4c27726-d965-4456-8b07-0cca1a4f4802')
+        .reply(200, '{\n  \"createdAt\" : 1389986091000,\n  \"duration\" : 300,\n  \"id\" : \"d4c27726-d965-4456-8b07-0cca1a4f4802\",\n  \"name\" : \"Bob\",\n  \"partnerId\" : \"APIKEY\",\n  \"reason\" : \"\",\n  \"sessionId\" : \"1_MX4xMDB-fkZyaSBKYW4gMTcgMTE6MTQ6NTAgUFNUIDIwMTR-MC4xNTM4NDExNH4\",\n  \"size\" : 331266,\n  \"status\" : \"paused\",\n  \"url\" : \"http://tokbox.com.archive2.s3.amazonaws.com/APIKEY%2Fd4c27726-d965-4456-8b07-0cca1a4f4802%2Farchive.mp4?Expires=1391151552&AWSAccessKeyId=AKIAI6LQCPIXYVWCQV6Q&Signature=IiFhiMDUyvP6Q6EChXioePxvp6g%3D\"\n}', { server: 'nginx',
+        date: 'Fri, 31 Jan 2014 06:49:12 GMT',
+        'content-type': 'application/json',
+        'transfer-encoding': 'chunked',
+        connection: 'keep-alive' });
+
+      opentok.getArchive(archiveID, function(err, archive) {
+        expect(err).toBeNull();
+        expect(archive).not.toBeNull();
+        if(archive) {
+          expect(archive.status).toBe('paused');
         }
         done();
       });

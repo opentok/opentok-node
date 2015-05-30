@@ -69,9 +69,15 @@ generates the three strings that the client (JavaScript) needs to connect to the
 URL. The route handler for this URL is shown below:
 
 ```javascript
-app.get('/start', function(req, res) {
+app.post('/start', function(req, res) {
+  var hasAudio = (req.param('hasAudio') !== undefined);
+  var hasVideo = (req.param('hasVideo') !== undefined);
+  var outputMode = req.param('outputMode');
   opentok.startArchive(app.get('sessionId'), {
-    name: 'Node Archiving Sample App'
+    name: 'Node Archiving Sample App',
+    hasAudio: hasAudio,
+    hasVideo: hasVideo,
+    outputMode: outputMode
   }, function(err, archive) {
     if (err) return res.send(500,
       'Could not start archive for session '+sessionId+'. error='+err.message
@@ -81,11 +87,14 @@ app.get('/start', function(req, res) {
 });
 ```
 
-In this handler, the `startArchive()` method of the `opentok` instance is called with the `sessionId`
-for the session that needs to be archived. In this case, as in the HelloWorld sample app, there is
-only one session created and it is used here and for the participant view. This will trigger the
-recording to begin. The optional second argument is for options like `name`, which is stored with
-the archive and can be read later. The last argument is the callback for the result of this
+In this handler, the `startArchive()` method of the `opentok` instance is called with the
+`sessionId` for the session that needs to be archived. In this case, as in the HelloWorld
+sample app, there is only one session created and it is used here and for the participant view.
+This will trigger the recording to begin. The optional second argument is for options.
+The `name` is stored with the archive and can be read later. The `hasAudio`, `hasVideo`,
+and `outputMode` values are read from the request body; these define whether the archive
+will record audio and video, and whether it will record streams individually or to a
+single file composed of all streams. The last argument is the callback for the result of this
 asynchronous function. The callback signature follows the common node pattern of using the first
 argument for an error if one occurred, otherwise the second parameter is an Archive object. As long
 as there is no error, a response is sent back to the client's XHR request with the JSON

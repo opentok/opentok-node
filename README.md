@@ -6,10 +6,7 @@ The OpenTok Node SDK lets you generate
 [sessions](http://www.tokbox.com/opentok/tutorials/create-session/) and
 [tokens](http://www.tokbox.com/opentok/tutorials/create-token/) for
 [OpenTok](http://www.tokbox.com/) applications, and
-[archive](http://www.tokbox.com/platform/archiving) OpenTok 2.0 sessions.
-
-If you are updating from a previous version of this SDK, see
-[Important changes since v2.2](#important-changes-since-v220).
+[archive](https://tokbox.com/opentok/tutorials/archiving) OpenTok sessions.
 
 # Installation using npm (recommended):
 
@@ -37,10 +34,10 @@ var OpenTok = require('opentok'),
 
 To create an OpenTok Session, use the `opentok.createSession(properties, callback)` method. The
 `properties` parameter is an optional object used to specify whether the session uses the OpenTok
-Media Router and to specify a location hint. The callback has the signature
-`function(error, session)`. The `session` returned in the callback is an instance of Session.
-Session objects have a `sessionId` property that is useful to be saved to a persistent store
-(such as a database).
+Media Router, to specify a location hint, and to specify whether the session will be automatically
+archived or not. The callback has the signature `function(error, session)`. The `session` returned
+in the callback is an instance of Session. Session objects have a `sessionId` property that is
+useful to be saved to a persistent store (such as a database).
 
 ```javascript
 // Create a session that will attempt to transmit streams directly between
@@ -62,6 +59,14 @@ opentok.createSession({mediaMode:"routed"}, function(err, session) {
 
 // A Session with a location hint
 opentok.createSession({location:'12.34.56.78'}, function(err, session) {
+  if (err) return console.log(err);
+
+  // save the sessionId
+  db.save('session', session.sessionId, done);
+});
+
+// A Session with an automatic archiving
+opentok.createSession({mediaMode:'routed', archiveMode:'always'}, function(err, session) {
   if (err) return console.log(err);
 
   // save the sessionId
@@ -100,10 +105,49 @@ connected clients.
 
 ```javascript
 opentok.startArchive(sessionId, { name: 'Important Presentation' }, function(err, archive) {
-  if (err) return console.log(err);
+  if (err) {
+    return console.log(err);
+  } else {
+    // The id property is useful to save off into a database
+    console.log("new archive:" + archive.id);
+  }
+});
+```
 
-  // The id property is useful to save off into a database
-  console.log("new archive:" + archive.id);
+You can also disable audio or video recording by setting the `hasAudio` or `hasVideo` property of
+the `options` parameter to `false`:
+
+```javascript
+var archiveOptions = {
+  name: 'Important Presentation',
+  hasVideo: false  // Record audio only
+};
+opentok.startArchive(sessionId, archiveOptions, function(err, archive) {
+  if (err) {
+    return console.log(err);
+  } else {
+    // The id property is useful to save off into a database
+    console.log("new archive:" + archive.id);
+  }
+});
+```
+
+By default, all streams are recorded to a single (composed) file. You can record the different
+streams in the session to individual files (instead of a single composed file) by setting the
+`outputMode` option to `'individual'` when you call the `opentok.startArchive()`:
+
+```javascript
+var archiveOptions = {
+  name: 'Important Presentation',
+  outputMode: 'individual'
+};
+opentok.startArchive(sessionId, archiveOptions, function(err, archive) {
+  if (err) {
+    return console.log(err);
+  } else {
+    // The id property is useful to save off into a database
+    console.log("new archive:" + archive.id);
+  }
 });
 ```
 
@@ -169,6 +213,13 @@ opentok.listArchives({offset:100, count:50}, function(error, archives, totalCoun
 });
 ```
 
+Note that you can also create an automatically archived session, by passing in `'always'`
+as the `archiveMode` option when you call the `opentok.createSession()` method (see "Creating
+Sessions," above).
+
+For more information on archiving, see the
+[OpenTok archiving](https://tokbox.com/opentok/tutorials/archiving/) programming guide.
+
 # Samples
 
 There are two sample applications included in this repository. To get going as fast as possible, clone the whole
@@ -205,8 +256,7 @@ session uses the OpenTok TURN server to relay audio-video streams.
 
 **Changes in v2.2.0:**
 
-This version of the SDK includes support for working with OpenTok 2.0 archives. (This API does not
-work with OpenTok 1.0 archives.)
+This version of the SDK includes support for working with OpenTok archives.
 
 The `createSession()` method has changed to take one parameter: an `options` object that has `location`
 and `mediaMode` properties. The `mediaMode` property replaces the `properties.p2p.preference`

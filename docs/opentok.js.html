@@ -34,10 +34,11 @@ var net = require('net'),
     querystring = require('querystring'),
     crypto = require('crypto'),
     _ = require('lodash'),
+    encodeToken = require('opentok-token'),
     Client = require('./client'),
     Session = require('./session'),
     archiving = require('./archiving'),
-    package = require ('../package.json')
+    package = require('../package.json'),
     errors = require('./errors');
 
 // Internal Constants
@@ -66,13 +67,13 @@ var OpenTok = function(apiKey, apiSecret, env) {
 
   // validate arguments: apiKey := Number|String, apiSecret := String
   if (!(_.isNumber(apiKey) || _.isString(apiKey)) || !_.isString(apiSecret)) {
-    return new Error('Invalid arguments when initializing OpenTok:');
+    throw new Error('Invalid arguments when initializing OpenTok: apiKey=' + apiKey + ', apiSecret=' + apiSecret);
   }
 
   // apiKey argument can be a Number, but we will internally store it as a String
   if (_.isNumber(apiKey)) apiKey = apiKey.toString();
 
-  this.client = new Client({ apiKey: apiKey, apiSecret: apiSecret });
+  this._client = new Client({ apiKey: apiKey, apiSecret: apiSecret });
   this.apiKey = apiKey;
   this.apiSecret = apiSecret;
 
@@ -84,13 +85,27 @@ var OpenTok = function(apiKey, apiSecret, env) {
   };
 
   // env can be either an object with a bunch of DI options, or a simple string for the apiUrl
+  var clientConfig = {
+    request: {}
+  };
   if (_.isString(env)) {
-    this.client.config({ apiUrl: env });
+    clientConfig.apiUrl = env;
     archiveConfig.apiEndpoint = env;
+  } else if (_.isObject(env) && !_.isFunction(env) && !_.isArray(env)) {
+    if (_.isString(env.apiUrl)) {
+      clientConfig.apiUrl = env.apiUrl;
+      archiveConfig.apiEndpoint = env.apiUrl;
+    }
+    if (_.isString(env.proxy)) {
+      clientConfig.request.proxy = env.proxy;
+      archiveConfig.proxy = env.proxy;
+    }
   }
+  var config = this._client.config(clientConfig);
+  this.apiUrl = config.apiUrl;
 
   /**
-  * Starts archiving an OpenTok 2.0 session.
+  * Starts archiving an OpenTok session.
   * &lt;p>
   * Clients must be actively connected to the OpenTok session for you to successfully start
   * recording an archive.
@@ -101,10 +116,38 @@ var OpenTok = function(apiKey, apiSecret, env) {
   *
   * @param sessionId The session ID of the OpenTok session to archive.
   *
-  * @param options {Object} An optional options object with one property &mdash; &lt;code>name&lt;/code>
-  * (a String). This is the name of the archive. You can use this name to identify the archive.
-  * It is a property of the Archive object, and it is a property of archive-related events in the
-  * OpenTok client libraries.
+  * @param options {Object} An optional options object with the following properties (each
+  * of which is optional):
+  * &lt;p>
+  * &lt;ul>
+  *   &lt;li>
+  *     &lt;code>name&lt;/code> (String) &mdash; the name of the archive, which you can use to identify
+  *     the archive. The name is set as a property of the Archive object, and it is a property of
+  *     archive-related events in the OpenTok client libraries.
+  *   &lt;/li>
+  *   &lt;li>
+  *     &lt;code>hasAudio&lt;/code> (Boolean) &mdash; Whether the archive will include an audio track
+  *     (&lt;code>true&lt;/code>) or not (&lt;code>false&lt;/code>). The default value is &lt;code>true&lt;/code>
+  *     (an audio track is included). If you set both  &lt;code>hasAudio&lt;/code> and
+  *     &lt;code>hasVideo&lt;/code> to &lt;code>false&lt;/code>, the call to the &lt;code>startArchive()&lt;/code>
+  *     method results in an error.
+  *   &lt;/li>
+  *   &lt;li>
+  *     &lt;code>hasVideo&lt;/code> (Boolean) &mdash; Whether the archive will include a video track
+  *     (&lt;code>true&lt;/code>) or (not &lt;code>false&lt;/code>). The default value is &lt;code>true&lt;/code>
+  *     (a video track is included). If you set both  &lt;code>hasAudio&lt;/code> and
+  *     &lt;code>hasVideo&lt;/code> to &lt;code>false&lt;/code>, the call to the &lt;code>startArchive()&lt;/code>
+  *     method results in an error.
+  *   &lt;/li>
+  *   &lt;li>
+  *     &lt;code>outputMode&lt;/code> (String) &mdash; Whether all streams in the archive are recorded
+  *     to a single file ("composed", the default) or to individual files ("individual").
+  *   &lt;/li>
+  * &lt;/ul>
+  *
+  * For more information on archiving and the archive file formats, see the
+  * &lt;a href="https://tokbox.com/opentok/tutorials/archiving/">OpenTok archiving&lt;/a>
+  * programming guide.
   *
   * @param callback {Function} The function to call upon completing the operation. Two arguments
   * are passed to the function:
@@ -116,8 +159,8 @@ var OpenTok = function(apiKey, apiSecret, env) {
   *   &lt;/li>
   *
   *   &lt;li>
-  *       &lt;code>archive&lt;/code> &mdash; The Archive object. This object includes properties defining
-  *       the archive, including the archive ID.
+  *       &lt;code>archive&lt;/code> &mdash; The {@link Archive} object. This object includes properties
+  *       defining the archive, including the archive ID.
   *   &lt;/li>
   *
   * &lt;/ul>
@@ -135,7 +178,7 @@ var OpenTok = function(apiKey, apiSecret, env) {
   * from the session being archived.
   *
   * @param archiveId {String} The archive ID of the archive you want to stop recording.
-  * @return The Archive object corresponding to the archive being STOPPED.
+  * @return The {@link Archive} object corresponding to the archive being STOPPED.
   *
   * @param callback {Function} The function to call upon completing the operation. Two arguments
   * are passed to the function:
@@ -147,7 +190,7 @@ var OpenTok = function(apiKey, apiSecret, env) {
   *   &lt;/li>
   *
   *   &lt;li>
-  *       &lt;code>archive&lt;/code> &mdash; The Archive object.
+  *       &lt;code>archive&lt;/code> &mdash; The {@link Archive} object.
   *   &lt;/li>
   *
   * &lt;/ul>
@@ -221,7 +264,7 @@ var OpenTok = function(apiKey, apiSecret, env) {
   *   &lt;/li>
   *
   *   &lt;li>
-  *       &lt;code>archives&lt;/code> &mdash; An array of Archive objects.
+  *       &lt;code>archives&lt;/code> &mdash; An array of {@link Archive} objects.
   *   &lt;/li>
   *
   * &lt;/ul>
@@ -230,7 +273,7 @@ var OpenTok = function(apiKey, apiSecret, env) {
   * @memberof OpenTok
   */
   this.listArchives = archiving.listArchives.bind(null, archiveConfig);
-}
+};
 
 /**
  * Creates a new OpenTok session and returns the session ID, which uniquely identifies
@@ -249,9 +292,6 @@ var OpenTok = function(apiKey, apiSecret, env) {
  * You can also create a session using the
  * &lt;a href="http://www.tokbox.com/opentok/api/#session_id_production">OpenTok REST API&lt;/a>
  * or the &lt;a href="https://dashboard.tokbox.com/projects">OpenTok dashboard&lt;/a>.
- *
- * @return A session ID for the new session. For example, when using the OpenTok.js library, use
- * this session ID when calling the &lt;code>OT.initSession()&lt;/code> method.
  *
  * @param   {Object} options
  * This object defines options for the session, including the following properties (both of which
@@ -275,8 +315,15 @@ var OpenTok = function(apiKey, apiSecret, env) {
  * firewall restrictions, the session uses the OpenTok TURN server to relay audio-video
  * streams.
  * &lt;p>
- * The &lt;a href="http://tokbox.com/#multiparty" target="_top"> OpenTok Media Router&lt;/a>
- * provides the following benefits:
+ * The &lt;a href="https://tokbox.com/opentok/tutorials/create-session/#media-mode" target="_top">
+ * OpenTok Media Router&lt;/a> provides the following benefits:
+ *
+ *      &lt;li>&lt;code>archiveMode&lt;/code> (String) &mdash;
+ * Whether the session is automatically archived (&lt;code>"always"&lt;/code>) or not 
+ * (&lt;code>"manual"&lt;/code>). By default, the setting is &lt;code>"manual"&lt;/code>, and you must call the
+ * &lt;code>StartArchive()&lt;/code> method of the OpenTok object to start archiving. To archive the
+ * session (either automatically or not), you must set the &lt;code>mediaMode&lt;/code> parameter to
+ * &lt;code>"routed"&lt;/code>.
  *
  * &lt;ul>
  *   &lt;li>The OpenTok Media Router can decrease bandwidth usage in multiparty sessions.
@@ -284,13 +331,13 @@ var OpenTok = function(apiKey, apiSecret, env) {
  *       each client must send a separate audio-video stream to each client subscribing to
  *       it.)&lt;/li>
  *   &lt;li>The OpenTok Media Router can improve the quality of the user experience through
- *     &lt;a href="http://tokbox.com/#iqc" target="_top">Intelligent Quality Control&lt;/a>. With
- *     Intelligent Quality Control, if a client's connectivity degrades to a degree that
+ *     &lt;a href="https://tokbox.com/platform/fallback" target="_top">audio fallback and video
+ *     recovery&lt;/a>. With these features, if a client's connectivity degrades to a degree that
  *     it does not support video for a stream it's subscribing to, the video is dropped on
  *     that client (without affecting other clients), and the client receives audio only.
  *     If the client's connectivity improves, the video returns.&lt;/li>
  *   &lt;li>The OpenTok Media Router supports the
- *     &lt;a href="http://tokbox.com/platform/archiving" target="_top">archiving&lt;/a>
+ *     &lt;a href="https://tokbox.com/opentok/tutorials/archiving" target="_top">archiving&lt;/a>
  *     feature, which lets you record, save, and retrieve OpenTok sessions.&lt;/li>
  * &lt;/ul>
  *
@@ -309,7 +356,7 @@ var OpenTok = function(apiKey, apiSecret, env) {
  * &lt;/ul>
  */
 OpenTok.prototype.createSession = function(opts, callback) {
-  var backupOpts;
+  var backupOpts, self = this;
 
   if (_.isFunction(opts)) {
     // shift arguments if the opts is left out
@@ -317,31 +364,46 @@ OpenTok.prototype.createSession = function(opts, callback) {
     opts = {};
   } else if (!_.isFunction(callback)) {
     // one of the args has to be a function, or we bail
-    return new Error('Invalid arguments when calling createSession, must provide a callback');
+    throw new Error('Invalid arguments when calling createSession, must provide a callback');
   }
 
   // whitelist the keys allowed
-  _.pick(_.defaults(opts, { "mediaMode" : "relayed" }), "mediaMode", "location");
+  _.pick(_.defaults(opts, { "mediaMode" : "relayed", "archiveMode" : "manual" }),
+        "mediaMode", "archiveMode", "location");
   if ( opts.mediaMode !== "routed" && opts.mediaMode !== "relayed" ) {
     opts.mediaMode = "relayed";
   }
+  if ( opts.archiveMode !== "manual" && opts.archiveMode !== "always" ) {
+    opts.archiveMode = "manual";
+  }
+
+  if ( opts.archiveMode == "always" && opts.mediaMode != "routed" ) {
+    return process.nextTick(function() {
+      callback(new Error('A session with always archive mode must also have the routed media mode.'));
+    });
+  }
   if ( "location" in opts && !net.isIPv4(opts.location) ) {
-    return process.nextTick(function() { callback(new Error('Invalid arguments when calling createSession, ' +
-      'location must be an IPv4 address'))});
+    return process.nextTick(function() {
+      callback(new Error('Invalid arguments when calling createSession, location must be an ' +
+                         'IPv4 address'));
+    });
   }
 
   // rename mediaMode -> p2p.preference
+  // store backup for use in constucting Session
   backupOpts = _.clone(opts);
+  // avoid mutating passed in options
+  opts = _.clone(opts);
   var mediaModeToParam = {
-    "routed" : "disabled",
-    "relayed" : "enabled"
+    routed : 'disabled',
+    relayed : 'enabled'
   };
-  opts["p2p.preference"] = mediaModeToParam[opts["mediaMode"]];
-  delete opts["mediaMode"];
+  opts['p2p.preference'] = mediaModeToParam[opts.mediaMode];
+  delete opts.mediaMode;
 
-  this.client.createSession(opts, function(err, json) {
+  this._client.createSession(opts, function(err, json) {
     if (err) return callback(new Error('Failed to createSession. '+err));
-    callback(null, new Session(this, json.sessions.Session.session_id, backupOpts));
+    callback(null, new Session(self, json.sessions.Session.session_id, backupOpts));
   });
 };
 
@@ -375,7 +437,8 @@ OpenTok.prototype.createSession = function(opts, callback) {
 *    &lt;/li>
 *
 *    &lt;li>&lt;code>expireTime&lt;/code> (Number) &mdash; The expiration time for the token, in seconds
-*      since the UNIX epoch. The maximum expiration time is 30 days after the creation time.
+*      since the UNIX epoch. The maximum expiration time is 30 days after the creation time. If
+*      a fractional number is specified, then it is rounded down to the nearest whole number.
 *      The default expiration time of 24 hours after the token creation time.
 *    &lt;/li>
 *
@@ -389,37 +452,56 @@ OpenTok.prototype.createSession = function(opts, callback) {
 * @return The token string.
 */
 OpenTok.prototype.generateToken = function(sessionId, opts) {
-  var decoded, tokenData;
+  var decoded, tokenData, now = Math.round(new Date().getTime() / 1000);
 
   if (!opts) opts = {};
+  // avoid mutating passed in options
+  opts = _.clone(opts);
 
-  if ( !_.isString(sessionId) ) return null;
+  if ( !_.isString(sessionId) ) {
+    throw new Error('Token cannot be generated without a sessionId parameter');
+  }
 
   // validate the sessionId belongs to the apiKey of this OpenTok instance
   decoded = decodeSessionId(sessionId);
-  if ( !decoded || decoded.apiKey !== this.apiKey) return null;
+  if ( !decoded || decoded.apiKey !== this.apiKey) {
+    throw new Error('Token cannot be generated unless the session belongs to the API Key');
+  }
 
   // combine defaults, opts, and whitelisted property names to create tokenData
-  if (_.isNumber(opts.expireTime) || _.isString(opts.expireTime)) opts.expire_time = opts.expireTime;
-  if (opts.data) opts.connection_data = opts.data;
+  if (_.isNumber(opts.expireTime) || _.isString(opts.expireTime)) {
+    // Automatic rounding to help out people who pass in a fractional expireTime
+    opts.expire_time = Math.round(opts.expireTime);
+  }
+  if (opts.data) {
+    opts.connection_data = opts.data;
+  }
   tokenData = _.pick(_.defaults(opts, {
     session_id: sessionId,
-    create_time: Math.round(new Date().getTime() / 1000),
-    expire_time: Math.round(new Date().getTime() / 1000) + (60*60*24), // 1 day
+    create_time: now,
+    expire_time: now + (60*60*24), // 1 day
     nonce: Math.random(),
     role: 'publisher'
   }), 'session_id', 'create_time', 'nonce', 'role', 'expire_time', 'connection_data');
 
   // validate tokenData
-  if (!_.contains(['publisher', 'subscriber', 'moderator'], tokenData.role)) return null;
-  if (!_.isNumber(tokenData.expire_time)) return null;
+  if (!_.contains(['publisher', 'subscriber', 'moderator'], tokenData.role)) {
+    throw new Error('Invalid role for token generation: ' + tokenData.role);
+  }
+  if (!_.isNumber(tokenData.expire_time)) {
+    throw new Error('Invalid expireTime for token generation: ' + tokenData.expire_time);
+  }
+  if (tokenData.expire_time &lt; now) {
+    throw new Error('Invalid expireTime for token generation, time cannot be in the past: ' +
+                    tokenData.expire_time + ' &lt; ' + now);
+  }
   if (tokenData.connection_data &&
       (tokenData.connection_data.length > 1024 || !_.isString(tokenData.connection_data))) {
-        return null;
+    throw new Error('Invalid data for token generation, must be a string with maximum length 1024');
   }
 
   return encodeToken(tokenData, this.apiKey, this.apiSecret);
-}
+};
 
 /*
  * decodes a sessionId into the metadata that it contains
@@ -441,32 +523,6 @@ function decodeSessionId(sessionId) {
     location: fields[2],
     create_time: new Date(fields[3])
   };
-}
-
-/*
- * encodes token data into a valid token
- * @param   {Object}   data
- * @param   {string}   apiKey
- * @param   {string}   apiSecret
- * @returns {string}   token
- */
-function encodeToken(data, apiKey, apiSecret) {
-  var dataString = querystring.stringify(data),
-      sig = signString(dataString, apiSecret),
-      decoded = new Buffer("partner_id="+apiKey+"&sig="+sig+":"+dataString, 'utf8');
-  return TOKEN_SENTINEL + decoded.toString('base64');
-}
-
-/*
- * sign a string
- * @param   {string}   unsigned
- * @param   {string}   key
- * @returns {string}   signed
- */
-function signString(unsigned, key) {
-  var hmac = crypto.createHmac('sha1', key);
-  hmac.update(unsigned);
-  return hmac.digest('hex');
 }
 
 /*
@@ -525,7 +581,7 @@ for(var key in errors) {
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Fri Jun 20 2014 12:38:27 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Mon May 25 2015 14:53:58 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

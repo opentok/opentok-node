@@ -46,9 +46,10 @@
     "nock": "^0.42.1"
   },
   "dependencies": {
-    "xmljson": "~0.2.0",
-    "underscore": "~1.5.2",
+    "lodash": "^2.4.1",
+    "opentok-token": "^1.1.0",
     "request": "^2.34.0",
-    "lodash": "^2.4.1"
+    "underscore": "~1.5.2",
+    "xmljson": "~0.2.0"
   }
 }
