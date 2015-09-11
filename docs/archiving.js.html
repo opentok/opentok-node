@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>JSDoc: Source: archiving.js</title>
-    
+
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
     <!--[if lt IE 9]>
@@ -16,16 +16,17 @@
 <body>
 
 <div id="main">
-    
+
     <h1 class="page-title">Source: archiving.js</h1>
+
     
-    
+
 
 
     
     <section>
         <article>
-            <pre class="prettyprint source"><code>/*global require, exports*/
+            <pre class="prettyprint source linenums"><code>/*global require, exports*/
 /*jshint strict:false, eqnull:true */
 
 var request = require('request'),
@@ -143,11 +144,11 @@ function Archive(config, properties) {
   * &lt;ul>
   *
   *   &lt;li>
-  *      &lt;code>error&lt;/code> &mdash; An error object (if the call to the method fails).
+  *      &lt;code>error&lt;/code> &amp;mdash; An error object (if the call to the method fails).
   *   &lt;/li>
   *
   *   &lt;li>
-  *       &lt;code>archive&lt;/code> &mdash; The Archive object.
+  *       &lt;code>archive&lt;/code> &amp;mdash; The Archive object.
   *   &lt;/li>
   *
   * &lt;/ul>
@@ -209,8 +210,8 @@ exports.listArchives = function(config, options, callback) {
   if(options.count) {
     qs.push('count=' + parseInt(options.count, 10));
   }
-  api(config, 'GET', '/archive?' + qs.join('&'), null, function(err, response, body) {
-    if(!err && body ) {
+  api(config, 'GET', '/archive?' + qs.join('&amp;'), null, function(err, response, body) {
+    if(!err &amp;&amp; body ) {
       try {
         body = JSON.parse(body);
       } catch (_err) {
@@ -218,7 +219,7 @@ exports.listArchives = function(config, options, callback) {
       }
     }
     if(err || response.statusCode != 200) {
-      if(response && response.statusCode == 403) {
+      if(response &amp;&amp; response.statusCode == 403) {
         callback(new errors.AuthError('Invalid API key or secret'));
       } else {
         callback(new errors.RequestError('Unexpected response from OpenTok'));
@@ -253,9 +254,9 @@ exports.startArchive = function(config, sessionId, options, callback) {
     if(err) {
       callback(err);
     } else if(response.statusCode != 200) {
-      if(response && response.statusCode == 404) {
+      if(response &amp;&amp; response.statusCode == 404) {
         callback(new errors.ArchiveError('Session not found'));
-      } else if(response && response.statusCode == 403) {
+      } else if(response &amp;&amp; response.statusCode == 403) {
         callback(new errors.AuthError('Invalid API key or secret'));
       } else {
         callback(new errors.RequestError('Unexpected response from OpenTok'));
@@ -281,11 +282,11 @@ exports.stopArchive = function(config, archiveId, callback) {
     if(err) {
       callback(err);
     } else if(response.statusCode != 200) {
-      if(response && response.statusCode == 404) {
+      if(response &amp;&amp; response.statusCode == 404) {
         callback(new errors.ArchiveError('Archive not found'));
-      } else if(response && response.statusCode == 409) {
+      } else if(response &amp;&amp; response.statusCode == 409) {
         callback(new errors.ArchiveError(body.message));
-      } else if(response && response.statusCode == 403) {
+      } else if(response &amp;&amp; response.statusCode == 403) {
         callback(new errors.AuthError('Invalid API key or secret'));
       } else {
 
@@ -306,7 +307,7 @@ exports.getArchive = function(config, archiveId, callback) {
     return;
   }
   api(config, 'GET', '/archive/' + archiveId, null, function(err, response, body) {
-    if(!err && body ) {
+    if(!err &amp;&amp; body ) {
       try {
         body = JSON.parse(body);
       } catch (_err) {
@@ -314,9 +315,9 @@ exports.getArchive = function(config, archiveId, callback) {
       }
     }
     if(err || response.statusCode != 200) {
-      if(response && response.statusCode == 404) {
+      if(response &amp;&amp; response.statusCode == 404) {
         callback(new errors.ArchiveError('Archive not found'));
-      } else if(response && response.statusCode == 403) {
+      } else if(response &amp;&amp; response.statusCode == 403) {
         callback(new errors.AuthError('Invalid API key or secret'));
       } else {
         callback(new errors.RequestError('Unexpected response from OpenTok'));
@@ -338,9 +339,9 @@ exports.deleteArchive = function(config, archiveId, callback) {
   api(config, 'DELETE', '/archive/' + encodeURIComponent(archiveId), null,
     function(err, response) {
     if(err || response.statusCode != 204) {
-      if(response && response.statusCode == 404) {
+      if(response &amp;&amp; response.statusCode == 404) {
         callback(new errors.ArchiveError('Archive not found'));
-      } else if(response && response.statusCode == 403) {
+      } else if(response &amp;&amp; response.statusCode == 403) {
         callback(new errors.AuthError('Invalid API key or secret'));
       } else {
         callback(new errors.RequestError('Unexpected response from OpenTok'));
@@ -360,13 +361,13 @@ exports.deleteArchive = function(config, archiveId, callback) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Archive.html">Archive</a></li><li><a href="OpenTok.html">OpenTok</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Archive.html">Archive</a></li><li><a href="OpenTok.html">OpenTok</a></li><li><a href="Session.html">Session</a></li></ul>
 </nav>
 
-<br clear="both">
+<br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Mon May 25 2015 14:53:58 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Fri Sep 11 2015 13:24:18 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>

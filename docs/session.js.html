@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: session.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,41 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: session.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+* Represents an OpenTok session. Use the {@link OpenTok#createSession OpenTok.createSession()}
+* method to create an OpenTok session. The &lt;code>sessionId&lt;/code> property of the Session object
+* is the session ID.
+*
+* @property {String} sessionId The session ID.
+*
+* @class Session
+*/
 
+var Session = function(ot, sessionId, properties) {
+  this.ot = ot;
+  this.sessionId = sessionId;
+  for (prop in properties) {
+    this[prop] = properties[prop];
+  }
+}
 
-    <h3> </h3>
+Session.prototype.generateToken = function(opts) {
+  return this.ot.generateToken(this.sessionId, opts);
+}
 
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+module.exports = Session;
+</code></pre>
+        </article>
+    </section>
 
 
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>JSDoc: Class: Archive</title>
-    
+
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
     <!--[if lt IE 9]>
@@ -16,83 +16,86 @@
 <body>
 
 <div id="main">
-    
+
     <h1 class="page-title">Class: Archive</h1>
+
     
-    
+
 
 
 
 <section>
-    
+
 <header>
-    <h2>
-    Archive
-    </h2>
     
-</header>  
+        <h2>
+        Archive
+        </h2>
+        
+    
+</header>
 
 <article>
     <div class="container-overview">
     
-    
-    
         
-<dt>
+
+    
+
     <h4 class="name" id="Archive"><span class="type-signature"></span>new Archive<span class="signature">()</span><span class="type-signature"></span></h4>
+
     
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        An object representing an OpenTok archive.
+
+
+
+<div class="description">
+    An object representing an OpenTok archive.
 <p>
 Do not call the <code>new()</code> constructor. To start recording an archive, call the
 <a href="OpenTok.html#startArchive">OpenTok.startArchive()</a> method.
-    </div>
-    
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
 
     
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-        <h5 class="subsection-title">Properties:</h5>
-        
-        <dl>
 
 <table class="props">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>createdAt</code></td>
             
-            
+
             <td class="type">
             
                 
@@ -101,21 +104,21 @@ Do not call the <code>new()</code> constructor. To start recording an archive, c
 
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">The time at which the archive was created, in milliseconds since the UNIX epoch.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>duration</code></td>
             
-            
+
             <td class="type">
             
                 
@@ -124,21 +127,21 @@ Do not call the <code>new()</code> constructor. To start recording an archive, c
 
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">The duration of the archive, in milliseconds.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>id</code></td>
             
-            
+
             <td class="type">
             
                 
@@ -147,21 +150,21 @@ Do not call the <code>new()</code> constructor. To start recording an archive, c
 
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">The archive ID.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>name</code></td>
             
-            
+
             <td class="type">
             
                 
@@ -170,22 +173,22 @@ Do not call the <code>new()</code> constructor. To start recording an archive, c
 
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">The name of the archive. If no name was provided when the archive was created, this is set
   to null.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>partnerId</code></td>
             
-            
+
             <td class="type">
             
                 
@@ -194,21 +197,21 @@ Do not call the <code>new()</code> constructor. To start recording an archive, c
 
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">The API key associated with the archive.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>reason</code></td>
             
-            
+
             <td class="type">
             
                 
@@ -217,23 +220,23 @@ Do not call the <code>new()</code> constructor. To start recording an archive, c
 
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">For archives with the status "stopped", this can be set to "90 mins exceeded", "failure",
   "session ended", or "user initiated". For archives with the status "failed", this can be set
   to "system failure".</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>sessionId</code></td>
             
-            
+
             <td class="type">
             
                 
@@ -242,21 +245,21 @@ Do not call the <code>new()</code> constructor. To start recording an archive, c
 
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">The session ID of the OpenTok session associated with this archive.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>size</code></td>
             
-            
+
             <td class="type">
             
                 
@@ -265,21 +268,21 @@ Do not call the <code>new()</code> constructor. To start recording an archive, c
 
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">The size of the MP4 file. For archives that have not been generated, this value is set to 0.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>status</code></td>
             
-            
+
             <td class="type">
             
                 
@@ -288,11 +291,11 @@ Do not call the <code>new()</code> constructor. To start recording an archive, c
 
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">The status of the archive, which can be one of the following:
   <ul>
     <li> "available" -- The archive is available for download from the OpenTok cloud.
@@ -311,14 +314,14 @@ Do not call the <code>new()</code> constructor. To start recording an archive, c
          <a href="https://dashboard.tokbox.com">OpenTok dashboard</a>.
   </ul></td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>hasAudio</code></td>
             
-            
+
             <td class="type">
             
                 
@@ -327,24 +330,24 @@ Do not call the <code>new()</code> constructor. To start recording an archive, c
 
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">Whether the archive has an audio track (<code>true</code>) or not (<code>false</code>).
   You can prevent audio from being recorded by setting <code>hasAudio</code> to <code>false</code>
   in the <code>options</code> parameter you pass into the
   <a href="OpenTok.html#startArchive">OpenTok.startArchive()</a> method.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>hasAudio</code></td>
             
-            
+
             <td class="type">
             
                 
@@ -353,24 +356,24 @@ Do not call the <code>new()</code> constructor. To start recording an archive, c
 
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">Whether the archive has an video track (<code>true</code>) or not (<code>false</code>).
   You can prevent video from being recorded by setting <code>hasVideo</code> to <code>false</code>
   in the <code>options</code> parameter you pass into the
   <a href="OpenTok.html#startArchive">OpenTok.startArchive()</a> method.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>outputMode</code></td>
             
-            
+
             <td class="type">
             
                 
@@ -379,11 +382,11 @@ Do not call the <code>new()</code> constructor. To start recording an archive, c
 
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">The output mode to be generated for this archive, which can be one of the following:
   <ul>
     <li> "composed" -- All streams in the archive are recorded to a single (composed) file.
@@ -392,14 +395,14 @@ Do not call the <code>new()</code> constructor. To start recording an archive, c
 
   See the <a href="OpenTok.html#startArchive">OpenTok.startArchive()</a> method.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>url</code></td>
             
-            
+
             <td class="type">
             
                 
@@ -408,49 +411,60 @@ Do not call the <code>new()</code> constructor. To start recording an archive, c
 
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">The download URL of the available MP4 file. This is only set for an archive with the status set to
   "available"; for other archives, (including archives with the status "uploaded") this property is
   set to null. The download URL is obfuscated, and the file is only available from the URL for
   10 minutes. To generate a new URL, call the <a href="OpenTok.html#getArchive">OpenTok.getArchive()</a> or
   <a href="OpenTok.html#listArchives">OpenTok.listArchives()</a> method.</td>
         </tr>
-	
-	
-	</tbody>
-</table></dl>
-        
+
     
-        
-    
-    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
     
 
     
+
     
+
     
+
     
+
     
+
     
+
     
+
     
+
     
+
     
+
     
-    
+
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="archiving.js.html">archiving.js</a>, <a href="archiving.js.html#line9">line 9</a>
     </li></ul></dd>
     
+
     
-    
-    
+
     
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
@@ -467,94 +481,98 @@ Do not call the <code>new()</code> constructor. To start recording an archive, c
         </ul>
     </dd>
     
-    
+
     
 </dl>
 
-    
-    
 
-    
 
-    
-    
-    
-    
-    
-    
-    
-</dd>
+
+
+
+
+
+
+
+
+
+
+
+
 
     
     </div>
+
     
+
     
+
     
+
+     
+
     
+
     
-    
-    
-    
-    
-    
-    
-    
-    
+
     
         <h3 class="subsection-title">Methods</h3>
+
         
-        <dl>
             
-<dt>
+
+    
+
     <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+
     
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Deletes the OpenTok archive.
+
+
+
+<div class="description">
+    Deletes the OpenTok archive.
 <p>
 You can only delete an archive which has a status of "available" or "uploaded". Deleting an
 archive removes its record from the list of archives. For an "available" archive, it also
 removes the archive file, making it unavailable for download.
-    </div>
-    
+</div>
 
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
     
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>callback</code></td>
             
-            
+
             <td class="type">
             
                 
@@ -563,120 +581,134 @@ removes the archive file, making it unavailable for download.
 
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">The function to call upon completing the operation. On successfully
 deleting the archive, the function is called with no arguments passed in. On failure, an error
 object is passed into the function.</td>
         </tr>
-	
-	
-	</tbody>
+
+    
+    </tbody>
 </table>
-    
-    
-    
+
+
+
+
+
+
 <dl class="details">
-    
-        
-    
-    
+
     
 
     
+
     
+
     
+
     
+
     
+
     
+
     
+
     
+
     
+
     
+
     
-    
+
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="archiving.js.html">archiving.js</a>, <a href="archiving.js.html#line135">line 135</a>
     </li></ul></dd>
     
+
     
+
     
-    
-    
-    
+
     
 </dl>
 
-    
-    
 
-    
 
-    
-    
-    
-    
-    
-    
-    
-</dd>
+
+
+
+
+
+
+
+
+
+
+
+
 
         
             
-<dt>
+
+    
+
     <h4 class="name" id="stop"><span class="type-signature"></span>stop<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+
     
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Stops the recording of the archive.
+
+
+
+<div class="description">
+    Stops the recording of the archive.
 <p>
 Archives automatically stop recording after 90 minutes or when all clients have disconnected
 from the session being archived.
-    </div>
-    
+</div>
 
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
     
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>callback</code></td>
             
-            
+
             <td class="type">
             
                 
@@ -685,11 +717,11 @@ from the session being archived.
 
             
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">The function to call upon completing the operation. Two arguments
 are passed to the function:
 
@@ -705,69 +737,80 @@ are passed to the function:
 
 </ul></td>
         </tr>
-	
-	
-	</tbody>
+
+    
+    </tbody>
 </table>
-    
-    
-    
+
+
+
+
+
+
 <dl class="details">
-    
-        
-    
-    
+
     
 
     
+
     
+
     
+
     
+
     
+
     
+
     
+
     
+
     
+
     
+
     
-    
+
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="archiving.js.html">archiving.js</a>, <a href="archiving.js.html#line107">line 107</a>
     </li></ul></dd>
     
+
     
+
     
-    
-    
-    
+
     
 </dl>
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     
 
     
 
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        </dl>
-    
-    
-    
-    
     
 </article>
 
-</section>  
+</section>
 
 
 
@@ -775,13 +818,13 @@ are passed to the function:
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Archive.html">Archive</a></li><li><a href="OpenTok.html">OpenTok</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Archive.html">Archive</a></li><li><a href="OpenTok.html">OpenTok</a></li><li><a href="Session.html">Session</a></li></ul>
 </nav>
 
-<br clear="both">
+<br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Mon May 25 2015 14:53:59 GMT-0700 (PDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Fri Sep 11 2015 13:24:18 GMT-0700 (PDT)
 </footer>
 
 <script> prettyPrint(); </script>
