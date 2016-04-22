@@ -5,7 +5,7 @@ var expect = require('chai').expect,
 // Subject
 var OpenTok = require('../lib/opentok.js'),
     Session = require('../lib/session.js'),
-    package = require('../package.json');
+    pkg = require('../package.json');
 
 // Fixtures
 var apiKey = '123456',
@@ -71,7 +71,7 @@ describe('OpenTok', function() {
     it('sends its requests to the set apiUrl', function(done) {
        var scope = nock(apiUrl)
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
-        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
         .post('/session/create', "archiveMode=manual&p2p.preference=enabled")
         .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>SESSIONID</session_id><partner_id>123456</partner_id><create_dt>Wed Mar 19 23:35:24 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
         date: 'Thu, 20 Mar 2014 06:35:24 GMT',
@@ -171,7 +171,7 @@ describe('OpenTok', function() {
     it('creates a new session', function(done) {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
-        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
         .post('/session/create', "archiveMode=manual&p2p.preference=enabled")
         .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>SESSIONID</session_id><partner_id>123456</partner_id><create_dt>Wed Mar 19 23:35:24 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
         date: 'Thu, 20 Mar 2014 06:35:24 GMT',
@@ -194,7 +194,7 @@ describe('OpenTok', function() {
     it('creates a media routed session', function(done) {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
-        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
         .post('/session/create', "archiveMode=manual&p2p.preference=disabled")
         .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>SESSIONID</session_id><partner_id>123456</partner_id><create_dt>Thu Mar 20 07:02:45 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
         date: 'Thu, 20 Mar 2014 14:02:45 GMT',
@@ -216,7 +216,7 @@ describe('OpenTok', function() {
     it('creates a media relayed session even if the media mode is invalid', function(done) {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
-        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
         .post('/session/create', "archiveMode=manual&p2p.preference=enabled")
         .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>SESSIONID</session_id><partner_id>123456</partner_id><create_dt>Thu Mar 20 07:02:45 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
         date: 'Thu, 20 Mar 2014 14:02:45 GMT',
@@ -238,7 +238,7 @@ describe('OpenTok', function() {
     it('creates a session with manual archive mode', function(done) {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
-        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
         .post('/session/create', "archiveMode=manual&p2p.preference=disabled")
         .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>SESSIONID</session_id><partner_id>123456</partner_id><create_dt>Thu Mar 20 07:02:45 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
         date: 'Thu, 20 Mar 2014 14:02:45 GMT',
@@ -260,7 +260,7 @@ describe('OpenTok', function() {
     it('creates a session with always archive mode', function(done) {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
-        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
         .post('/session/create', "archiveMode=always&p2p.preference=disabled")
         .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>SESSIONID</session_id><partner_id>123456</partner_id><create_dt>Thu Mar 20 07:02:45 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
         date: 'Thu, 20 Mar 2014 14:02:45 GMT',
@@ -282,7 +282,7 @@ describe('OpenTok', function() {
     it('creates a session with manual archive mode even if the archive mode is invalid', function(done) {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
-        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
         .post('/session/create', "archiveMode=manual&p2p.preference=disabled")
         .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>SESSIONID</session_id><partner_id>123456</partner_id><create_dt>Thu Mar 20 07:02:45 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
         date: 'Thu, 20 Mar 2014 14:02:45 GMT',
@@ -304,7 +304,7 @@ describe('OpenTok', function() {
     it('adds a location hint to the created session', function(done) {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
-        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
         .post('/session/create', "location=12.34.56.78&archiveMode=manual&p2p.preference=enabled")
         .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>SESSIONID</session_id><partner_id>123456</partner_id><create_dt>Thu Mar 20 07:17:22 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
         date: 'Thu, 20 Mar 2014 14:17:22 GMT',
@@ -348,7 +348,7 @@ describe('OpenTok', function() {
     it('complains when a server error takes place', function(done) {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
-        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
         .post('/session/create', "archiveMode=manual&p2p.preference=enabled")
         .reply(503, "", { server: 'nginx',
         date: 'Thu, 20 Mar 2014 06:35:24 GMT',
@@ -368,7 +368,7 @@ describe('OpenTok', function() {
     it('returns a Session that can generate a token', function(done) {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
-        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+package.version))
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
         .post('/session/create', "archiveMode=manual&p2p.preference=enabled")
         .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>"+sessionId+"</session_id><partner_id>123456</partner_id><create_dt>Wed Mar 19 23:35:24 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
         date: 'Thu, 20 Mar 2014 06:35:24 GMT',
