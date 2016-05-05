@@ -23,7 +23,7 @@ $ npm install opentok --save
 ## Initializing
 
 Import the module to get a constructor function for an OpenTok object, then call it with `new` to
-initantiate it with your own API Key and API Secret.
+instantiate an OpenTok object with your own API Key and API Secret.
 
 ```javascript
 var OpenTok = require('opentok'),
@@ -234,7 +234,8 @@ Reference documentation is available at <https://tokbox.com/developer/sdks/node/
 
 # Requirements
 
-You need an OpenTok API key and API secret, which you can obtain at <https://dashboard.tokbox.com>.
+You need an OpenTok API key and API secret, which you can obtain by logging into your
+[TokBox account](https://tokbox.com/account).
 
 The OpenTok Node SDK requires node 0.10 or higher.
 
