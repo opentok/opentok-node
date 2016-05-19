@@ -114,6 +114,34 @@ describe('OpenTok', function() {
     });
   });
 
+  describe('when a user agent addendum is needed', function() {
+    beforeEach(function() {
+      this.addendum = 'my-special-app';
+      this.opentok = new OpenTok(apiKey, apiSecret, { uaAddendum: this.addendum });
+    });
+    it('appends the addendum in a create session request', function(done) {
+      var scope = nock('https://api.opentok.com:443')
+        .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version+" "+this.addendum))
+        .post('/session/create', "archiveMode=manual&p2p.preference=enabled")
+        .reply(200, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><sessions><Session><session_id>SESSIONID</session_id><partner_id>123456</partner_id><create_dt>Wed Mar 19 23:35:24 PDT 2014</create_dt></Session></sessions>", { server: 'nginx',
+        date: 'Thu, 20 Mar 2014 06:35:24 GMT',
+        'content-type': 'text/xml',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'x-tb-host': 'mantis503-nyc.tokbox.com',
+        'content-length': '211' });
+      this.opentok.createSession(function(err, session){
+        if (err) return done(err);
+        scope.done();
+        done(err);
+      });
+    });
+    it.skip('appends the addendum in an archiving request', function() {
+      // TODO:
+    });
+  });
+
   describe('when there is too much network latency', function() {
     beforeEach(function() {
       this.opentok = new OpenTok(apiKey, apiSecret);
