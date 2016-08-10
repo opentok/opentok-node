@@ -37,13 +37,13 @@
     "node": ">=0.10.0"
   },
   "devDependencies": {
-    "async": "^0.2.10",
-    "chai": "^1.9.1",
-    "grunt": "^0.4.4",
+    "async": "^2.0.1",
+    "chai": "^3.5.0",
+    "grunt": "^1.0.1",
     "grunt-jasmine-node": "^0.3.1",
-    "grunt-jsdoc": "^0.6.8",
-    "grunt-mocha-test": "^0.10.0",
-    "nock": "^0.42.1"
+    "grunt-jsdoc": "^2.1.0",
+    "grunt-mocha-test": "^0.12.7",
+    "nock": "^8.0.0"
   },
   "dependencies": {
     "lodash": "^4.14.2",
