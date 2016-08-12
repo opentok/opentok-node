@@ -84,7 +84,7 @@ parameter is an optional object used to set the role, expire time, and connectio
 // Generate a Token from just a sessionId (fetched from a database)
 token = opentok.generateToken(sessionId);
 
-// Genrate a Token from a session object (returned from createSession)
+// Generate a Token from a session object (returned from createSession)
 token = session.generateToken();
 
 // Set some options in a Token
@@ -219,6 +219,21 @@ Sessions," above).
 
 For more information on archiving, see the
 [OpenTok archiving](https://tokbox.com/opentok/tutorials/archiving/) programming guide.
+
+## Working with SIP Interconnect
+
+You can add an audio-only stream from an external third party SIP gateway using the SIP Interconnect
+feature. This requires a SIP URI, the session ID you wish to add the audio-only stream to, and a
+Token to connect to that session ID.
+
+```javascript
+opentok.dial(sessionId, token, sipUri, options, function (error, sipCall) {
+  if (error) return console.log("error: ", error);
+
+  console.log('SIP audio stream Id: ' + sipCall.streamId+ ' added to session ID: ' + sipCall.sessionId);
+});
+```
+
 
 # Samples
 
