@@ -224,7 +224,7 @@ For more information on archiving, see the
 
 You can add an audio-only stream from an external third party SIP gateway using the SIP Interconnect
 feature. This requires a SIP URI, the session ID you wish to add the audio-only stream to, and a
-Token to connect to that session ID.
+token to connect to that session ID.
 
 ```javascript
 opentok.dial(sessionId, token, sipUri, options, function (error, sipCall) {
