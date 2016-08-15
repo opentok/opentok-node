@@ -579,7 +579,6 @@ describe('#dial', function() {
       this.token = this.opentok.generateToken(this.sessionId);
     });
 
-
     it('dials a SIP gateway and adds a stream', function(done) {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
@@ -732,7 +731,6 @@ describe('#dial', function() {
         });
     });
 
-
     it('dials a SIP gateway and adds an encrypted media stream', function(done) {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
@@ -769,7 +767,6 @@ describe('#dial', function() {
           done(err);
         });
     });
-
 
     it('complains if sessionId, token, or SIP URI are missing or invalid', function() {
       // Missing all params
