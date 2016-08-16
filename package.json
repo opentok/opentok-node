@@ -37,7 +37,6 @@
     "node": ">=0.10.0"
   },
   "devDependencies": {
-    "async": "^2.0.1",
     "chai": "^3.5.0",
     "grunt": "^1.0.1",
     "grunt-jasmine-node": "^0.3.1",
