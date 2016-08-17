@@ -619,7 +619,7 @@ describe('#dial', function() {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
         .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
-        .post('/v2/partner/123456/call?transport=tls', {
+        .post('/v2/partner/123456/call;transport=tls', {
           sessionId: this.sessionId,
           token: this.token,
           sip: {
