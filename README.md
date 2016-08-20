@@ -220,6 +220,20 @@ Sessions," above).
 For more information on archiving, see the
 [OpenTok archiving](https://tokbox.com/opentok/tutorials/archiving/) programming guide.
 
+# Disconnecting participants
+
+You can disconnect participants from an OpenTok Session using the
+``opentok.forceDisconnect(sessionId, connectionId, callback)`` method.
+
+```javascript
+opentok.forceDisconnect(sessionId, connectionId, function(error) {
+  if (error) return console.log("error:", error);
+});
+```
+
+This is the server-side equivalent to the forceDisconnect() method in OpenTok.js:
+<https://www.tokbox.com/developer/guides/moderation/js/#force_disconnect>.
+
 # Samples
 
 There are two sample applications included in this repository. To get going as fast as possible, clone the whole
