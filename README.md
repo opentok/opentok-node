@@ -220,6 +220,42 @@ Sessions," above).
 For more information on archiving, see the
 [OpenTok archiving](https://tokbox.com/opentok/tutorials/archiving/) programming guide.
 
+# Working with Callbacks
+
+You can register callbacks to receive notifications for streams and connections created and destroyed
+in an OpenTok session and also to receive notifications when your archives start and stop.
+
+You register a callback you can use the ``opentok.registerCallback(group, event, url)`` method indicating
+the group and the event you are interested in and the url where you want to receive the notifications.
+
+.. code:: python
+
+  opentok.register_callback(CallbackGroup.STREAM, CallbackEvent.CREATED, "http://mydomain.com/opentok/callbacks")
+
+Note that you can only register a callback for a specific group&event. When registering a new callback for the
+same event you are replacing the previous registration.
+
+To unregister a callback you have can use the ``opentok.unregister_callback(callback_id)`` method.
+
+.. code:: python
+
+  opentok.unregister_callback(callback_id)
+
+You can also get a list of all the Callbacks you've registered for your API Key. This is
+done using the ``opentok.list_callbacks()`` method.
+
+.. code:: python
+
+  callback_list = opentok.getcallbacks()
+
+  # Get a specific Callback from the list
+  callback = callback_list.items[i]
+
+  # Iterate over items
+  for archive in callback_list.items:
+    pass
+
+
 # Samples
 
 There are two sample applications included in this repository. To get going as fast as possible, clone the whole
