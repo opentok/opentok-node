@@ -225,36 +225,41 @@ For more information on archiving, see the
 You can register callbacks to receive notifications for streams and connections created and destroyed
 in an OpenTok session and also to receive notifications when your archives start and stop.
 
-You register a callback you can use the ``opentok.registerCallback(group, event, url)`` method indicating
+You register a callback you can use the ``opentok.registerCallback(group, event, url, callback)`` method indicating
 the group and the event you are interested in and the url where you want to receive the notifications.
 
-.. code:: python
+```javascript
+var url = "http://mydomain.com/opentok/callbacks";
+opentok.registerCallback('connection', 'created', url, function(error, callback) {
+  if (error) return console.log("error:", error);
 
-  opentok.register_callback(CallbackGroup.STREAM, CallbackEvent.CREATED, "http://mydomain.com/opentok/callbacks")
+  console.log("Registered callback: ", callback.id);
+});
+```
 
 Note that you can only register a callback for a specific group&event. When registering a new callback for the
 same event you are replacing the previous registration.
 
-To unregister a callback you have can use the ``opentok.unregister_callback(callback_id)`` method.
+To unregister a callback you have can use the ``opentok.unregisterCallback(callbackId, callback)`` method.
 
-.. code:: python
-
-  opentok.unregister_callback(callback_id)
+```javascript
+opentok.unregisterCallback(callbackId, function(error) {
+  if (error) return console.log("error:", error);
+});
+```
 
 You can also get a list of all the Callbacks you've registered for your API Key. This is
-done using the ``opentok.list_callbacks()`` method.
+done using the ``opentok.listCallbacks(callback)`` method.
 
-.. code:: python
+```javascript
+opentok.listCallbacks(function(error, callbacks) {
+  if (error) return console.log("error:", error);
 
-  callback_list = opentok.getcallbacks()
-
-  # Get a specific Callback from the list
-  callback = callback_list.items[i]
-
-  # Iterate over items
-  for archive in callback_list.items:
-    pass
-
+  for (var i = 0; i < callbacks.length; i++) {
+    console.log(callbacks[i].id);
+  }
+});
+```
 
 # Samples
 
