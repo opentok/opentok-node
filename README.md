@@ -220,6 +220,21 @@ Sessions," above).
 For more information on archiving, see the
 [OpenTok archiving](https://tokbox.com/opentok/tutorials/archiving/) programming guide.
 
+# Sending signals
+
+You can send a signal to all the participants in an OpenTok Session using the
+``opentok.signal(sessionId, payload, callback)`` method or send it to a specific participant in the session using the
+``opentok.signal(sessionId, sessionId, payload, callback)`` method.
+
+```javascript
+opentok.signal(sessionId, sessionId, { 'type': 'chat', 'data': 'Hello!' }, function(error) {
+  if (error) return console.log("error:", error);
+});
+```
+
+This is the server-side equivalent to the signal() method in the OpenTok client SDKs. See
+<https://www.tokbox.com/developer/guides/signaling/js/>.
+
 # Samples
 
 There are two sample applications included in this repository. To get going as fast as possible, clone the whole
