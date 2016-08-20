@@ -220,6 +220,47 @@ Sessions," above).
 For more information on archiving, see the
 [OpenTok archiving](https://tokbox.com/opentok/tutorials/archiving/) programming guide.
 
+# Working with Callbacks
+
+You can register callbacks to receive notifications for streams and connections created and destroyed
+in an OpenTok session and also to receive notifications when your archives start and stop.
+
+You register a callback you can use the ``opentok.registerCallback(group, event, url, callback)`` method indicating
+the group and the event you are interested in and the url where you want to receive the notifications.
+
+```javascript
+var url = "http://mydomain.com/opentok/callbacks";
+opentok.registerCallback('connection', 'created', url, function(error, callback) {
+  if (error) return console.log("error:", error);
+
+  console.log("Registered callback: ", callback.id);
+});
+```
+
+Note that you can only register a callback for a specific group&event. When registering a new callback for the
+same event you are replacing the previous registration.
+
+To unregister a callback you have can use the ``opentok.unregisterCallback(callbackId, callback)`` method.
+
+```javascript
+opentok.unregisterCallback(callbackId, function(error) {
+  if (error) return console.log("error:", error);
+});
+```
+
+You can also get a list of all the Callbacks you've registered for your API Key. This is
+done using the ``opentok.listCallbacks(callback)`` method.
+
+```javascript
+opentok.listCallbacks(function(error, callbacks) {
+  if (error) return console.log("error:", error);
+
+  for (var i = 0; i < callbacks.length; i++) {
+    console.log(callbacks[i].id);
+  }
+});
+```
+
 # Samples
 
 There are two sample applications included in this repository. To get going as fast as possible, clone the whole
