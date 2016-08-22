@@ -583,43 +583,7 @@ describe('#dial', function() {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
         .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
-        .post('/v2/partner/123456/call', {
-          sessionId: this.sessionId,
-          token: this.token,
-          sip: {
-            uri: goodSipUri
-          }
-        })
-        .reply(200,  {
-           id: 'CONFERENCEID',
-           projectId: '123123',
-           sessionId: 'SESSIONID',
-           connectionId: 'CONNECTIONID',
-           streamId: 'STREAMID',
-           createdAt: 1471246754353,
-           updatedAt: 1471246754353
-        });
-      this.opentok.dial(this.sessionId, this.token, goodSipUri, function (err, sipCall) {
-        if (err) return done(err);
-        expect(sipCall).to.be.an.instanceof(SipInterconnect);
-        expect(sipCall.sessionId).to.equal('SESSIONID');
-        expect(sipCall.projectId).to.equal('123123');
-        expect(sipCall.id).to.equal('CONFERENCEID');
-        expect(sipCall.streamId).to.equal('STREAMID');
-        expect(sipCall.connectionId).to.equal('CONNECTIONID');
-        expect(sipCall.createdAt).to.equal(1471246754353);
-        expect(sipCall.updatedAt).to.equal(1471246754353);
-        scope.done();
-        done(err);
-      });
-    });
-
-    // Todo: not really sure how to check via nock if the negotiation is fully TLS
-    xit('dials a SIP gateway and adds a stream via secure negotiation', function(done) {
-      var scope = nock('https://api.opentok.com:443')
-        .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
-        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
-        .post('/v2/partner/123456/call;transport=tls', {
+        .post('/v2/partner/123456/dial', {
           sessionId: this.sessionId,
           token: this.token,
           sip: {
@@ -654,7 +618,7 @@ describe('#dial', function() {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
         .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
-        .post('/v2/partner/123456/call', {
+        .post('/v2/partner/123456/dial', {
           sessionId: this.sessionId,
           token: this.token,
           sip: {
@@ -693,7 +657,7 @@ describe('#dial', function() {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
         .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
-        .post('/v2/partner/123456/call', {
+        .post('/v2/partner/123456/dial', {
           sessionId: this.sessionId,
           token: this.token,
           sip: {
@@ -735,7 +699,7 @@ describe('#dial', function() {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
         .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
-        .post('/v2/partner/123456/call', {
+        .post('/v2/partner/123456/dial', {
           sessionId: this.sessionId,
           token: this.token,
           sip: {
