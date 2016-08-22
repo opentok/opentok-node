@@ -583,7 +583,7 @@ describe('#dial', function() {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
         .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
-        .post('/v2/partner/123456/dial', {
+        .post('/v2/project/123456/dial', {
           sessionId: this.sessionId,
           token: this.token,
           sip: {
@@ -618,7 +618,7 @@ describe('#dial', function() {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
         .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
-        .post('/v2/partner/123456/dial', {
+        .post('/v2/project/123456/dial', {
           sessionId: this.sessionId,
           token: this.token,
           sip: {
@@ -657,7 +657,7 @@ describe('#dial', function() {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
         .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
-        .post('/v2/partner/123456/dial', {
+        .post('/v2/project/123456/dial', {
           sessionId: this.sessionId,
           token: this.token,
           sip: {
@@ -699,7 +699,7 @@ describe('#dial', function() {
       var scope = nock('https://api.opentok.com:443')
         .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
         .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
-        .post('/v2/partner/123456/dial', {
+        .post('/v2/project/123456/dial', {
           sessionId: this.sessionId,
           token: this.token,
           sip: {
