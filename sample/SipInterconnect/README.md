@@ -5,12 +5,12 @@
 This document describes how to use the OpenTok SIP Interconnect Sample App for JavaScript. Through the exploration of this sample application, you will learn best practices for adding audio from a SIP call directly into your website and mobile applications. 
 
 The standard way to connect to the OpenTok platform is with the OpenTok client SDKs that use proprietary signaling interfaces provided by TokBox. However, it is sometimes useful to interconnect with other RTC platforms such as PSTN, IMS, PBX, and Call Centers. For such cases, TokBox exposes a SIP interface that enables access to existing 3rd party PSTN functionality. This interface enables users, who are connected via such 3rd party PSTN platforms, to participate in the audio portion of an OpenTok session.
-_OpenTok SIP Interconnect provides support to dial out from an OpenTok session to any SIP URI._ For example, your OpenTok SIP Interconnect application would make a SIP call to a customer contact center, which routes the call to an agent. The agent accepts the phone call and participates by voice in the session in order to speak with the customer. In addition, the agent could still optionally join with video via a laptop. To make such functionality available, the OpenTok cloud infrastructure includes signaling and media gateways, as well as REST APIs, to allow you to trigger the SIP calls from OpenTok sessions as needed for your business logic.
+_OpenTok SIP Interconnect provides support to dial out from an OpenTok session to any SIP URI._ For example, your OpenTok SIP Interconnect application would make a SIP call to a customer contact center, which routes the call to an agent. The agent accepts the phone call and participates by voice in the session in order to speak with the customer. In addition, the agent could still optionally join with video via a laptop. To make such functionality available, the OpenTok cloud infrastructure includes signaling and media gateways, as well as REST APIs, to allow you to trigger the SIP calls from OpenTok sessions as needed for your business logic.
 
 The OpenTok SIP Interconnect Sample App allows you to start and end SIP calls, and its UI displays the participants using both WebRTC streams and SIP streams. WebRTC participants include video, while SIP participants are displayed with audio only.
 
 You can configure and run this sample app within just a few minutes!
-_**NOTE**: OpenTok SIP Interconnect supports only audio through the SIP interface, and does not currently support video. All the existing functionality of OpenTok, such as multiparty sessions and archiving, are compatible with OpenTok SIP Interconnect. OpenTok SIP Interconnect does not include any built-in PSTN functionality._
+_**NOTE**: OpenTok SIP Interconnect supports only audio through the SIP interface, and does not currently support video. All the existing functionality of OpenTok, such as multiparty sessions and archiving, are compatible with OpenTok SIP Interconnect. OpenTok SIP Interconnect does not include any built-in PSTN functionality._
 
 
 This guide has the following sections:
@@ -29,8 +29,9 @@ The OpenTok SIP Interconnect Gateway exposes a SIP Interface and REST APIs that 
 
 This architecture enables a SIP participant to appear in an OpenTok session like any other client. All that is required to enable this behavior is to pass an OpenTok **Session ID** and **Token** when initiating the SIP call the makes use of the OpenTok Dial REST API.
 
-OpenTok identifies a SIP Gateway in the same region of the Media Server where the session is allocated. You can use the existing OpenTok capabilities if the default Media Server allocation is not ideal for your use (making use of the location hint when creating the session).The SIP Gateway terminates the SIP Dialogs and RTP flows. The protocols and capabilities supported in both interfaces are described in the next sections.
-The SIP Gateway is comprised of a session border controller (SBC), a Signaling Gateway, and a Media Mixer. The SBC component handles security as well as the protocol and codec adaptation. The Signaling Gateway converts the SIP primitives into the corresponding OpenTok primitives. The Media Mixer mixes the audio flows from multiple participants in OpenTok session in order to forward them as a single composite audio flow.
+OpenTok identifies a SIP Gateway in the same region of the Media Server where the session is allocated. You can use the existing OpenTok capabilities if the default Media Server allocation is not ideal for your use (making use of the location hint when creating the session).
+The SIP Gateway terminates the SIP Dialogs and RTP flows. The protocols and capabilities supported in both interfaces are described in the next sections.
+The SIP Gateway is comprised of a session border controller (SBC), a Signaling Gateway, and a Media Mixer. The SBC component handles security as well as the protocol and codec adaptation. The Signaling Gateway converts the SIP primitives into the corresponding OpenTok primitives. The Media Mixer mixes the audio flows from multiple participants in OpenTok session in order to forward them as a single composite audio flow.
 
 _**NOTE**: If media inactivity lasts for more than 5 minutes, the call will be automatically closed unless session timers are used at the SIP level. As a security measure, any SIP call longer than 6 hours will be automatically closed by OpenTok._
 
@@ -68,7 +69,7 @@ will need to change your configuration.
 **Signaling:** The OpenTok SIP gateway supports RFC3561 (SIP) over UDP, TCP, and TLS.
 Contact TokBox if you need information or support for any specific extension.
 
-The OpenTok SIP gateway will not accept any SIP message coming from the a third-party SIP
+The OpenTok SIP gateway will not accept any SIP message coming from a third-party SIP
 platform unless it is part of a SIP dialog initiated by the OpenTok SIP gateway.
 Calls initiated with the OpenTok SIP gateway can be put on ­hold using either a `re-­INVITE`
 with the `sendonly/inactive` direction in the SDP or a `re-­INVITE` with port 0 in the SDP.
@@ -94,7 +95,7 @@ To install the OpenTok SIP Interconnect Sample App, run the following commands:
 
 ```
 npm install
-node bin/www
+npm start
 ```
 
 
@@ -125,50 +126,43 @@ While TokBox hosts [OpenTok.js](https://tokbox.com/developer/sdks/js/), you must
 
 * **[index.ejs](./views/index.ejs)**: This defines the container defining the publisher and layout for the sample app, including the buttons to start and end the SIP call. This file contains the business logic that initiates the OpenTok session and handles the SIP call click events.
 
-* **[config.js](./config.js)**: Configures the participant’s **Session ID**, **Token**, and **API Key** used to create the OpenTok session in [index.js](./routes/index.js), and specifies the SIP headers and credentials required to start the SIP call.
+* **[config.js](./config.js)**: Configures the participant’s **Session ID**, **Token**, and **API Key** used to create the OpenTok session in [app.js](./app.js), and specifies the SIP headers and credentials required to start the SIP call.
 
-* **[index.js](./routes/index.js)**: Creates the OpenTok session and builds the POST request for starting the SIP call using the credentials specified in [config.js](./config.js).
-
-* **[CSS files](./public/stylesheets)**: Defines the client UI style. 
+* **[app.js](./app.js)**: Creates the OpenTok session, serves the app, and listens for the POST request for starting the SIP call using the credentials specified in [config.js](./config.js).
 
 
 ### SIP Call
 
-A SIP call is made by clicking the **Start SIP Call** button, which results in a REST POST request of this form:
+A SIP call is made by clicking the **Start SIP Call** button, which results in a call to the `opentok.dial()` method.
 
-```
-http://api.opentok.com/v2/project/API_KEY/call
-```
+The `opentok.dial()` method in [app.js](./app.js) creates a REST request to OpenTok to start the SIP call. `opentok.dial()` takes the following arguments:
 
-where `API_KEY` is the participant’s **API Key**, which is used to create the OpenTok session.
+  - Session ID and session token
+  - SIP URI
+  - SIP username and password (optional)
+  - A `secure` field indicating whether TLS encryption is applied (optional)
+  - SIP headers to be added to the SIP INVITE request (optional)
 
-
-The `router.post()` method in [index.js](./routes/index.js) creates such a POST request to start the SIP call. Its `json` field specifies:
-
-  - Participant OpenTok credentials
-  - SIP credentials
-  - A `secure` field indicating whether TLS encryption is applied
-  - SIP headers to be added to the SIP INVITE request
-
-In this sample application, a SIP token is defined as part of the metadata, which may be be useful for embedding UI metadata for the audio participant. The token is generated as part of the token metadata (`data: "sip=true"`, which is stored in `event.stream.connection.data`) as the OpenTok session is created:
+In this sample application, a SIP token is defined by part of its metadata, which may be be useful for embedding UI metadata for the SIP audio participant. The token is generated with the metadata `{data: "sip=true"}` as the OpenTok session is created:
 
 ```javascript
 opentok.createSession({ mediaMode:"routed" }, function(error, session) {
   if (error) {
-    console.log("Error creating session:", error);
-    res.status(500).send("Error creating session.");
+    throw new Error("Error creating session:"+error);
   } else {
     sessionId = session.sessionId;
 
-    //  Use the moderator role so you can force disconnect the SIP call
-    // Generate a token.
+    // For web tokens, moderator role is used to force disconnect SIP calls.
+    // For SIP tokens, an identifying SIP flag is embedded in the metadata.
     webrtcToken = opentok.generateToken(sessionId, {role: "moderator"});
     sipToken = opentok.generateToken(sessionId, {data: "sip=true"});
   }
 });
 ```
 
-**NOTE:** Such metadata is not actually necessary to start a SIP call, though it has advantages as shown in this sample app. It is also possible to simply call `opentok.dial(sessionID, token, sipUri)` to start the SIP call.<br/><br/> 
+This metadata can be viewed in the `event.stream.connection.data` property of [ConnectionEvents](https://www.tokbox.com/developer/sdks/js/reference/ConnectionEvent.html).
+
+**NOTE:** Such metadata is not actually necessary to start a SIP call, though it has advantages as shown in this sample app. It is also possible to simply call `opentok.dial(sessionID, token, sipUri, callback)` to start the SIP call.<br/><br/> 
 
 
 The `streamCreated` listener, as shown here in [index.ejs](./views/index.ejs), inspects this token metadata to determine if the new participant is joining via a SIP call:
@@ -189,49 +183,19 @@ session.on("streamCreated", function (event) {
 ```
 
 
-Once the session has been established and the SIP token (`sipToken`) has been generated, the REST POST request passes that information to the SIP call endpoint:
+Once the session has been established and the SIP token (`sipToken`) has been generated, the `opentok.dial()` method passes that information to the SIP call endpoint:
 
 
 ```javascript
-router.post('/sip/start', function(req, res, next) {
-  console.log('received sip start call');
-  var sessionId = req.body.sessionId;
-  var apiKey = req.body.apiKey;
-
-  var options = {
-    uri: 'http://api.opentok.com/v2/project/' + apiKey + '/dial',
-    method: 'POST',
-    json: {
-      sessionId: sessionId,
-      token: sipToken,
-      sip: {
-        uri: config.sipUri
-      },
-      auth: {
-        username: config.sipUsername,
-        password: config.sipPassword
-      },
-      secure: true
-    },
-    headers: {
-      'X-TB-PARTNER-AUTH': apiKey + ':' + config.apiSecret
+  opentok.dial(sessionId, sipToken, config.sipUri, {
+    auth: {
+      username: config.sipUsername,
+      password: config.sipPassword
     }
-  };
-
-  // Pass in headers if specified
-  if (config.sipHeaders && Object.keys(config.sipHeaders).length !== 0) {
-    options.sip.headers = config.sipHeaders;
-  }
-
-  request(options, function (error, response, body) {
-    if (!error && response.statusCode === 200) {
-      console.log('Successfully started SIP call!');
-      res.send(body);
-    } else {
-      console.log('Failure to start SIP call!');
-      console.log(response);
-      res.status(response.statusCode).send(body);
-    }
+  }, function (err, sipCall) {
+    console.error(err);
+    if (err) return res.status(500).send('Platform error starting SIP Call:'+err);
+    res.send(sipCall);
   });
 });
 ```
