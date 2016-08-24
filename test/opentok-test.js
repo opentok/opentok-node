@@ -700,7 +700,7 @@ describe('#dial', function() {
         });
     });
 
-    it('complains if sessionId, token, or SIP URI are missing or invalid', function() {
+    it('complains if sessionId, token, SIP URI, or callback are missing or invalid', function() {
       // Missing all params
       expect(function() {
         this.opentok.dial();
@@ -732,6 +732,10 @@ describe('#dial', function() {
       // Good sessionId, bad token and good SIP URI
       expect(function() {
         this.opentok.dial(this.sessionId, 'blahblahblah', goodSipUri);
+      }).to.throw(Error);
+      // Good sessionId, good token, good SIP URI, null options, missing callback func
+      expect(function() {
+        this.opentok.dial(this.sessionId, this.token, goodSipUri, null);
       }).to.throw(Error);
     });
 
