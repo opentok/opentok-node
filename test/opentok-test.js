@@ -592,23 +592,15 @@ describe('#dial', function() {
         })
         .reply(200,  {
            id: 'CONFERENCEID',
-           projectId: '123123',
-           sessionId: 'SESSIONID',
            connectionId: 'CONNECTIONID',
-           streamId: 'STREAMID',
-           createdAt: 1471246754353,
-           updatedAt: 1471246754353
+           streamId: 'STREAMID'
         });
       this.opentok.dial(this.sessionId, this.token, goodSipUri, function (err, sipCall) {
         if (err) return done(err);
         expect(sipCall).to.be.an.instanceof(SipInterconnect);
-        expect(sipCall.sessionId).to.equal('SESSIONID');
-        expect(sipCall.projectId).to.equal('123123');
         expect(sipCall.id).to.equal('CONFERENCEID');
         expect(sipCall.streamId).to.equal('STREAMID');
         expect(sipCall.connectionId).to.equal('CONNECTIONID');
-        expect(sipCall.createdAt).to.equal(1471246754353);
-        expect(sipCall.updatedAt).to.equal(1471246754353);
         scope.done();
         done(err);
       });
@@ -630,24 +622,16 @@ describe('#dial', function() {
         })
         .reply(200,  {
            id: 'CONFERENCEID',
-           projectId: '123123',
-           sessionId: 'SESSIONID',
            connectionId: 'CONNECTIONID',
-           streamId: 'STREAMID',
-           createdAt: 1471246754353,
-           updatedAt: 1471246754353
+           streamId: 'STREAMID'
         });
       this.opentok.dial(this.sessionId, this.token, goodSipUri, {headers: {someKey: 'someValue'}},
         function (err, sipCall) {
           if (err) return done(err);
           expect(sipCall).to.be.an.instanceof(SipInterconnect);
-          expect(sipCall.sessionId).to.equal('SESSIONID');
-          expect(sipCall.projectId).to.equal('123123');
           expect(sipCall.id).to.equal('CONFERENCEID');
           expect(sipCall.streamId).to.equal('STREAMID');
           expect(sipCall.connectionId).to.equal('CONNECTIONID');
-          expect(sipCall.createdAt).to.equal(1471246754353);
-          expect(sipCall.updatedAt).to.equal(1471246754353);
           scope.done();
           done(err);
         });
@@ -670,12 +654,8 @@ describe('#dial', function() {
         })
         .reply(200,  {
            id: 'CONFERENCEID',
-           projectId: '123123',
-           sessionId: 'SESSIONID',
            connectionId: 'CONNECTIONID',
            streamId: 'STREAMID',
-           createdAt: 1471246754353,
-           updatedAt: 1471246754353
         });
       this.opentok.dial(this.sessionId, this.token, goodSipUri, {auth: {
           username: 'someUsername', password: 'somePassword'}
@@ -683,13 +663,9 @@ describe('#dial', function() {
         function (err, sipCall) {
           if (err) return done(err);
           expect(sipCall).to.be.an.instanceof(SipInterconnect);
-          expect(sipCall.sessionId).to.equal('SESSIONID');
-          expect(sipCall.projectId).to.equal('123123');
           expect(sipCall.id).to.equal('CONFERENCEID');
           expect(sipCall.streamId).to.equal('STREAMID');
           expect(sipCall.connectionId).to.equal('CONNECTIONID');
-          expect(sipCall.createdAt).to.equal(1471246754353);
-          expect(sipCall.updatedAt).to.equal(1471246754353);
           scope.done();
           done(err);
         });
@@ -709,24 +685,16 @@ describe('#dial', function() {
         })
         .reply(200,  {
            id: 'CONFERENCEID',
-           projectId: '123123',
-           sessionId: 'SESSIONID',
            connectionId: 'CONNECTIONID',
            streamId: 'STREAMID',
-           createdAt: 1471246754353,
-           updatedAt: 1471246754353
         });
       this.opentok.dial(this.sessionId, this.token, goodSipUri, {secure: true},
         function (err, sipCall) {
           if (err) return done(err);
           expect(sipCall).to.be.an.instanceof(SipInterconnect);
-          expect(sipCall.sessionId).to.equal('SESSIONID');
-          expect(sipCall.projectId).to.equal('123123');
           expect(sipCall.id).to.equal('CONFERENCEID');
           expect(sipCall.streamId).to.equal('STREAMID');
           expect(sipCall.connectionId).to.equal('CONNECTIONID');
-          expect(sipCall.createdAt).to.equal(1471246754353);
-          expect(sipCall.updatedAt).to.equal(1471246754353);
           scope.done();
           done(err);
         });
