@@ -5,6 +5,7 @@ var expect = require('chai').expect,
 // Subject
 var OpenTok = require('../lib/opentok.js'),
     Session = require('../lib/session.js'),
+    SipInterconnect = require('../lib/sipInterconnect.js'),
     pkg = require('../package.json');
 
 // Fixtures
@@ -15,6 +16,8 @@ var apiKey = '123456',
     sessionId = '1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX4',
     badApiKey = 'badkey',
     badApiSecret = 'badsecret',
+    goodSipUri = 'sip:siptesturl@tokbox.com',
+    badSipUri = 'siptesturl@tokbox.com',
     defaultApiUrl = 'https://api.opentok.com',
     defaultTimeoutLength = 20000; // 20 seconds
 nock.disableNetConnect();
@@ -565,6 +568,184 @@ describe('OpenTok', function() {
       var optionsUntouched = _.clone(options);
       this.opentok.generateToken(this.sessionId, options);
       expect(options).to.deep.equal(optionsUntouched);
+    });
+  });
+
+describe('#dial', function() {
+
+    beforeEach(function() {
+      this.opentok = new OpenTok(apiKey, apiSecret);
+      this.sessionId = sessionId;
+      this.token = this.opentok.generateToken(this.sessionId);
+    });
+
+    it('dials a SIP gateway and adds a stream', function(done) {
+      var scope = nock('https://api.opentok.com:443')
+        .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
+        .post('/v2/project/123456/dial', {
+          sessionId: this.sessionId,
+          token: this.token,
+          sip: {
+            uri: goodSipUri
+          }
+        })
+        .reply(200,  {
+           id: 'CONFERENCEID',
+           connectionId: 'CONNECTIONID',
+           streamId: 'STREAMID'
+        });
+      this.opentok.dial(this.sessionId, this.token, goodSipUri, function (err, sipCall) {
+        if (err) return done(err);
+        expect(sipCall).to.be.an.instanceof(SipInterconnect);
+        expect(sipCall.id).to.equal('CONFERENCEID');
+        expect(sipCall.streamId).to.equal('STREAMID');
+        expect(sipCall.connectionId).to.equal('CONNECTIONID');
+        scope.done();
+        done(err);
+      });
+    });
+
+    it('dials a SIP gateway and adds a stream with custom headers', function(done) {
+      var scope = nock('https://api.opentok.com:443')
+        .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
+        .post('/v2/project/123456/dial', {
+          sessionId: this.sessionId,
+          token: this.token,
+          sip: {
+            uri: goodSipUri,
+            headers: {
+              someKey: 'someValue'
+            }
+          }
+        })
+        .reply(200,  {
+           id: 'CONFERENCEID',
+           connectionId: 'CONNECTIONID',
+           streamId: 'STREAMID'
+        });
+      this.opentok.dial(this.sessionId, this.token, goodSipUri, {headers: {someKey: 'someValue'}},
+        function (err, sipCall) {
+          if (err) return done(err);
+          expect(sipCall).to.be.an.instanceof(SipInterconnect);
+          expect(sipCall.id).to.equal('CONFERENCEID');
+          expect(sipCall.streamId).to.equal('STREAMID');
+          expect(sipCall.connectionId).to.equal('CONNECTIONID');
+          scope.done();
+          done(err);
+        });
+    });
+
+    it('dials a SIP gateway and adds a stream with authentication', function(done) {
+      var scope = nock('https://api.opentok.com:443')
+        .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
+        .post('/v2/project/123456/dial', {
+          sessionId: this.sessionId,
+          token: this.token,
+          sip: {
+            uri: goodSipUri,
+            auth: {
+              username: 'someUsername',
+              password: 'somePassword'
+            }
+          }
+        })
+        .reply(200,  {
+           id: 'CONFERENCEID',
+           connectionId: 'CONNECTIONID',
+           streamId: 'STREAMID',
+        });
+      this.opentok.dial(this.sessionId, this.token, goodSipUri, {auth: {
+          username: 'someUsername', password: 'somePassword'}
+        },
+        function (err, sipCall) {
+          if (err) return done(err);
+          expect(sipCall).to.be.an.instanceof(SipInterconnect);
+          expect(sipCall.id).to.equal('CONFERENCEID');
+          expect(sipCall.streamId).to.equal('STREAMID');
+          expect(sipCall.connectionId).to.equal('CONNECTIONID');
+          scope.done();
+          done(err);
+        });
+    });
+
+    it('dials a SIP gateway and adds an encrypted media stream', function(done) {
+      var scope = nock('https://api.opentok.com:443')
+        .matchHeader('x-tb-partner-auth', apiKey+':'+apiSecret)
+        .matchHeader('user-agent', new RegExp("OpenTok-Node-SDK\/"+pkg.version))
+        .post('/v2/project/123456/dial', {
+          sessionId: this.sessionId,
+          token: this.token,
+          sip: {
+            uri: goodSipUri,
+            secure: true
+          }
+        })
+        .reply(200,  {
+           id: 'CONFERENCEID',
+           connectionId: 'CONNECTIONID',
+           streamId: 'STREAMID',
+        });
+      this.opentok.dial(this.sessionId, this.token, goodSipUri, {secure: true},
+        function (err, sipCall) {
+          if (err) return done(err);
+          expect(sipCall).to.be.an.instanceof(SipInterconnect);
+          expect(sipCall.id).to.equal('CONFERENCEID');
+          expect(sipCall.streamId).to.equal('STREAMID');
+          expect(sipCall.connectionId).to.equal('CONNECTIONID');
+          scope.done();
+          done(err);
+        });
+    });
+
+    it('complains if sessionId, token, SIP URI, or callback are missing or invalid', function() {
+      // Missing all params
+      expect(function() {
+        this.opentok.dial();
+      }).to.throw(Error);
+      // Bad sessionId
+      expect(function() {
+        this.opentok.dial('blahblahblah');
+      }).to.throw(Error);
+      // Missing token
+      expect(function() {
+        this.opentok.dial(this.sessionId);
+      }).to.throw(Error);
+      // Bad token
+      expect(function() {
+        this.opentok.dial(this.sessionId, 'blahblahblah');
+      }).to.throw(Error);
+      // Missing SIP URI
+      expect(function() {
+        this.opentok.dial(this.sessionId, this.token);
+      }).to.throw(Error);
+      // Bad SIP URI
+      expect(function() {
+        this.opentok.dial(this.sessionId, this.token, badSipUri);
+      }).to.throw(Error);
+      // Bad sessionId, working token and SIP URI
+      expect(function() {
+        this.opentok.dial('someWrongSessionId', this.token, goodSipUri);
+      }).to.throw(Error);
+      // Good sessionId, bad token and good SIP URI
+      expect(function() {
+        this.opentok.dial(this.sessionId, 'blahblahblah', goodSipUri);
+      }).to.throw(Error);
+      // Good sessionId, good token, good SIP URI, null options, missing callback func
+      expect(function() {
+        this.opentok.dial(this.sessionId, this.token, goodSipUri, null);
+      }).to.throw(Error);
+    });
+
+    it('does not modify passed in options', function() {
+      var options = { data: 'test' };
+      var optionsUntouched = _.clone(options);
+      this.opentok.dial(this.sessionId, this.token, 'sip:testsipuri@tokbox.com', options,
+        function (err, sipInterconnect) {
+          expect(options).to.deep.equal(optionsUntouched);
+        });
     });
   });
 
