@@ -63,6 +63,7 @@ describe('OpenTok', function() {
     var opentok = new OpenTok(parseInt(apiKey), apiSecret);
     expect(opentok).to.be.an.instanceof(OpenTok);
   });
+});
 
   describe('when initialized with an apiUrl', function() {
     beforeEach(function() {
