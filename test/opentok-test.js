@@ -174,9 +174,7 @@ describe('when there is too much network latency', function () {
         'access-control-allow-origin': '*',
         'x-tb-host': 'mantis402-oak.tokbox.com',
         'content-length': '274' });
-    this.opentok.createSession(function (err, session) {
-      console.log('sessionId' , session);
-      console.log('err', err);
+    this.opentok.createSession(function (err) {
       expect(err).to.be.an.instanceof(Error);
       scope.done();
       done();

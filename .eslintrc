@@ -1,3 +1,6 @@
 {
-  "extends": "airbnb-base/legacy"
+  "extends": "airbnb-base/legacy",
+  "rules": {
+    "no-restricted-syntax": ["off", "ForInStatement"]
+  }
 }
