@@ -46,17 +46,20 @@ app.get('/', function(req, res, next) {
 
 /* POST to start Wormhole SIP call. */
 app.post('/sip/start', function(req, res, next) {
-  console.log('received sip start call');
   var sessionId = req.body.sessionId;
   var apiKey = req.body.apiKey;
   opentok.dial(sessionId, sipToken, config.sipUri, {
     auth: {
       username: config.sipUsername,
       password: config.sipPassword
-    }
+    },
+    headers: config.sipHeaders
   }, function (err, sipCall) {
-    console.error(err);
-    if (err) return res.status(500).send('Platform error starting SIP Call:'+err);
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Platform error starting SIP Call:'+err);
+    }
+    console.dir(sipCall);
     res.send(sipCall);
   });
 });
