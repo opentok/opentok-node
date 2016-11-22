@@ -49,9 +49,9 @@
     "nock": "^8.0.0"
   },
   "dependencies": {
+    "jsonwebtoken": "^7.1.9",
     "lodash": "^4.14.2",
     "opentok-token": "^1.1.0",
-    "request": "^2.72.0",
-    "xmljson": "~0.2.0"
+    "request": "^2.72.0"
   }
 }
