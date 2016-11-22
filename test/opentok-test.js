@@ -159,7 +159,7 @@ describe('when there is too much network latency', function () {
   beforeEach(function () {
     this.opentok = new OpenTok(apiKey, apiSecret);
   });
-  it.only('times out when the request takes longer than the default timeout', function (done) {
+  it('times out when the request takes longer than the default timeout', function (done) {
     // make sure the mocha test runner doesn't time out for at least as long as we are willing to
     // wait plus some reasonable amount of overhead time (100ms)
     var scope;
