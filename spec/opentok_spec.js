@@ -12,14 +12,11 @@ describe('Archiving', function () {
     it('should return an Archive', function (done) {
       nock('https://api.opentok.com:443')
         .post('/v2/partner/APIKEY/archive', { sessionId: '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg', name: 'Bob' })
-        .reply(200, '{\n  "createdAt" : 1391149936527,\n  "duration" : 0,\n  "id" : "4072fe0f-d499-4f2f-8237-64f5a9d936f5",\n  "name" : "Bob",\n  "partnerId" : "APIKEY",\n  "reason" : "",\n  "sessionId" : "1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg",\n  "size" : 0,\n  "status" : "started",\n  "url" : null\n}',
-        {
-          server: 'nginx',
+        .reply(200, '{\n  "createdAt" : 1391149936527,\n  "duration" : 0,\n  "id" : "4072fe0f-d499-4f2f-8237-64f5a9d936f5",\n  "name" : "Bob",\n  "partnerId" : "APIKEY",\n  "reason" : "",\n  "sessionId" : "1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg",\n  "size" : 0,\n  "status" : "started",\n  "url" : null\n}', { server: 'nginx',
           date: 'Fri, 31 Jan 2014 06:32:16 GMT',
           'content-type': 'application/json',
           'transfer-encoding': 'chunked',
-          connection: 'keep-alive'
-        });
+          connection: 'keep-alive' });
 
       opentok.startArchive(session, { name: 'Bob' }, function (err, archive) {
         expect(err).toBeNull();
