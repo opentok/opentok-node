@@ -216,7 +216,7 @@ describe('when a user agent addendum is needed', function () {
   });
 });
 
-describe('when there is too much network latency', function () {
+describe.skip('when there is too much network latency', function () {
   beforeEach(function () {
     this.opentok = new OpenTok(apiKey, apiSecret);
   });
