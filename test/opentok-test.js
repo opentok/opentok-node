@@ -14,6 +14,7 @@ var pkg = require('../package.json');
 var apiKey = '123456';
 var apiSecret = '1234567890abcdef1234567890abcdef1234567890';
 var apiUrl = 'http://mymock.example.com';
+
 // This is specifically concocted for these tests (uses fake apiKey/apiSecret above)
 var sessionId = '1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX4';
 var badApiKey = 'badkey';
@@ -26,6 +27,17 @@ var recording = false;
 
 // Helpers
 var helpers = require('./helpers.js');
+
+
+var validReply = JSON.stringify([
+  {
+    session_id: 'SESSIONID',
+    project_id: apiKey,
+    partner_id: apiKey,
+    create_dt: 'Fri Nov 18 15:50:36 PST 2016',
+    media_server_url: ''
+  }
+]);
 
 nock.disableNetConnect();
 
@@ -125,7 +137,7 @@ describe('when initialized with an apiUrl', function () {
     })
     .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
     .post('/session/create', 'archiveMode=manual&p2p.preference=enabled')
-    .reply(200, '[{"session_id":"SESSIONID","project_id":"' + apiKey + '","partner_id":"' + apiKey + '","create_dt":"Fri Nov 18 15:50:36 PST 2016","media_server_url":""}]',
+    .reply(200, validReply,
       {
         server: 'nginx',
         date: 'Thu, 20 Mar 2014 06:35:24 GMT',
@@ -159,13 +171,16 @@ describe('when initialized with a proxy', function () {
     this.timeout(10000);
     scope = nock('https://api.opentok.com:443')
       .post('/session/create', 'archiveMode=manual&p2p.preference=enabled')
-      .reply(200, '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><sessions><Session><session_id>1_MX44NTQ1MTF-flN1biBKdWwgMTMgMjE6MjY6MzUgUERUIDIwMTR-MC40OTU0NzA0Nn5Qfg</session_id><partner_id>854511</partner_id><create_dt>Sun Jul 13 21:26:35 PDT 2014</create_dt></Session></sessions>', { server: 'nginx',
+      .reply(200, validReply,
+      {
+        server: 'nginx',
         date: 'Mon, 14 Jul 2014 04:26:35 GMT',
-        'content-type': 'application/xml',
+        'content-type': 'application/json',
         connection: 'keep-alive',
         'access-control-allow-origin': '*',
         'x-tb-host': 'mantis402-oak.tokbox.com',
-        'content-length': '274' });
+        'content-length': '274'
+      });
     this.opentok.createSession(function (err) {
       scope.done();
       done(err);
@@ -192,7 +207,7 @@ describe('when a user agent addendum is needed', function () {
     })
     .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
     .post('/session/create', 'archiveMode=manual&p2p.preference=enabled')
-    .reply(200, '[{"session_id":"SESSIONID","project_id":"' + apiKey + '","partner_id":"' + apiKey + '","create_dt":"Fri Nov 18 15:50:36 PST 2016","media_server_url":""}]',
+    .reply(200, validReply,
       {
         server: 'nginx',
         date: 'Thu, 20 Mar 2014 06:35:24 GMT',
@@ -228,13 +243,16 @@ describe.skip('when there is too much network latency', function () {
     scope = nock('https://api.opentok.com:443')
       .post('/session/create', 'archiveMode=manual&p2p.preference=enabled')
       .delayConnection(defaultTimeoutLength + 10)
-      .reply(200, '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><sessions><Session><session_id>1_MX44NTQ1MTF-flN1biBKdWwgMTMgMjE6MjY6MzUgUERUIDIwMTR-MC40OTU0NzA0Nn5Qfg</session_id><partner_id>854511</partner_id><create_dt>Sun Jul 13 21:26:35 PDT 2014</create_dt></Session></sessions>', { server: 'nginx',
+      .reply(200, validReply,
+      {
+        server: 'nginx',
         date: 'Mon, 14 Jul 2014 04:26:35 GMT',
-        'content-type': 'application/xml',
+        'content-type': 'application/json',
         connection: 'keep-alive',
         'access-control-allow-origin': '*',
         'x-tb-host': 'mantis402-oak.tokbox.com',
-        'content-length': '274' });
+        'content-length': '274'
+      });
     this.opentok.createSession(function (err) {
       expect(err).to.be.an.instanceof(Error);
       scope.done();
@@ -251,11 +269,12 @@ describe('when initialized with bad credentials', function () {
     it('throws a client error', function (done) {
       var scope = nock('https://api.opentok.com:443')
         .post('/session/create', 'archiveMode=manual&p2p.preference=enabled')
-        .reply(403, '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><errorPayload><code>-1</code><message>Invalid partner credentials</message></errorPayload>', { server: 'nginx',
+        .reply(403, JSON.stringify({ code: -1, message: 'No suitable authentication found' }),
+        { server: 'nginx',
           date: 'Fri, 30 May 2014 19:37:12 GMT',
-          'content-type': 'application/xml',
+          'content-type': 'application/json',
           connection: 'keep-alive',
-          'content-length': '145' });
+          'content-length': '56' });
       this.opentok.createSession(function (err) {
         expect(err).to.be.an.instanceof(Error);
         scope.done();
@@ -284,7 +303,7 @@ describe('#createSession', function () {
       })
       .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
       .post('/session/create', 'archiveMode=manual&p2p.preference=enabled')
-      .reply(200, '[{"session_id":"SESSIONID","project_id":"' + apiKey + '","partner_id":"' + apiKey + '","create_dt":"Fri Nov 18 15:50:36 PST 2016","media_server_url":""}]',
+      .reply(200, validReply,
       {
         server: 'nginx',
         date: 'Thu, 20 Mar 2014 06:35:24 GMT',
@@ -297,14 +316,14 @@ describe('#createSession', function () {
     // pass no options parameter
     this.opentok.createSession(function (err, session) {
       if (err) {
-        done();
+        done(err);
         return;
       }
       expect(session).to.be.an.instanceof(Session);
       expect(session.sessionId).to.equal('SESSIONID');
       expect(session.mediaMode).to.equal('relayed');
       scope.done();
-      done(err);
+      done();
     });
   });
 
@@ -322,7 +341,7 @@ describe('#createSession', function () {
     })
     .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
     .post('/session/create', 'archiveMode=manual&p2p.preference=disabled')
-    .reply(200, '[{"session_id":"SESSIONID","project_id":"' + apiKey + '","partner_id":"' + apiKey + '","create_dt":"Fri Nov 18 15:50:36 PST 2016","media_server_url":""}]',
+    .reply(200, validReply,
       {
         server: 'nginx',
         date: 'Thu, 20 Mar 2014 06:35:24 GMT',
@@ -359,7 +378,7 @@ describe('#createSession', function () {
     })
     .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
     .post('/session/create', 'archiveMode=manual&p2p.preference=enabled')
-    .reply(200, '[{"session_id":"SESSIONID","project_id":"' + apiKey + '","partner_id":"' + apiKey + '","create_dt":"Fri Nov 18 15:50:36 PST 2016","media_server_url":""}]',
+    .reply(200, validReply,
       {
         server: 'nginx',
         date: 'Thu, 20 Mar 2014 06:35:24 GMT',
@@ -396,7 +415,7 @@ describe('#createSession', function () {
       })
       .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
       .post('/session/create', 'archiveMode=manual&p2p.preference=disabled')
-      .reply(200, '[{"session_id":"SESSIONID","project_id":"' + apiKey + '","partner_id":"' + apiKey + '","create_dt":"Fri Nov 18 15:50:36 PST 2016","media_server_url":""}]',
+      .reply(200, validReply,
       {
         server: 'nginx',
         date: 'Thu, 20 Mar 2014 06:35:24 GMT',
@@ -433,7 +452,7 @@ describe('#createSession', function () {
       })
       .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
       .post('/session/create', 'archiveMode=always&p2p.preference=disabled')
-      .reply(200, '[{"session_id":"SESSIONID","project_id":"' + apiKey + '","partner_id":"' + apiKey + '","create_dt":"Fri Nov 18 15:50:36 PST 2016","media_server_url":""}]',
+      .reply(200, validReply,
       {
         server: 'nginx',
         date: 'Thu, 20 Mar 2014 06:35:24 GMT',
@@ -470,7 +489,7 @@ describe('#createSession', function () {
       })
       .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
       .post('/session/create', 'archiveMode=manual&p2p.preference=disabled')
-      .reply(200, '[{"session_id":"SESSIONID","project_id":"' + apiKey + '","partner_id":"' + apiKey + '","create_dt":"Fri Nov 18 15:50:36 PST 2016","media_server_url":""}]',
+      .reply(200, validReply,
       {
         server: 'nginx',
         date: 'Thu, 20 Mar 2014 06:35:24 GMT',
@@ -507,7 +526,7 @@ describe('#createSession', function () {
       })
       .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
       .post('/session/create', 'location=12.34.56.78&archiveMode=manual&p2p.preference=enabled')
-      .reply(200, '[{"session_id":"SESSIONID","project_id":"' + apiKey + '","partner_id":"' + apiKey + '","create_dt":"Fri Nov 18 15:50:36 PST 2016","media_server_url":""}]',
+      .reply(200, validReply,
       {
         server: 'nginx',
         date: 'Thu, 20 Mar 2014 06:35:24 GMT',
@@ -625,13 +644,16 @@ describe('#createSession', function () {
         return '*';
       })
       .post('/session/create', '*')
-      .reply(200, '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><sessions><Session><session_id>SESSIONID</session_id><partner_id>123456</partner_id><create_dt>Thu Mar 20 07:02:45 PDT 2014</create_dt></Session></sessions>', { server: 'nginx',
+      .reply(200, validReply,
+      {
+        server: 'nginx',
         date: 'Thu, 20 Mar 2014 14:02:45 GMT',
         'content-type': 'text/xml',
         connection: 'keep-alive',
         'access-control-allow-origin': '*',
         'x-tb-host': 'oms506-nyc.tokbox.com',
-        'content-length': '211' });
+        'content-length': '211'
+      });
     var options = { mediaMode: 'routed', archiveMode: 'manual' };
     var optionsUntouched = _.clone(options);
     this.opentok.createSession(options, function (err) {
@@ -653,7 +675,7 @@ describe('#generateToken', function () {
     this.sessionId = sessionId;
   });
 
-  it('generates a token', function () {
+  it('given a valid session, generates a token', function () {
     // call generateToken with no options
     var token = this.opentok.generateToken(this.sessionId);
     var decoded;
