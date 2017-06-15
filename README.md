@@ -33,9 +33,18 @@ var OpenTok = require('opentok'),
 ## Creating Sessions
 
 To create an OpenTok Session, use the `opentok.createSession(properties, callback)` method. The
-`properties` parameter is an optional object used to specify whether the session uses the OpenTok
-Media Router, to specify a location hint, and to specify whether the session will be automatically
-archived or not. The callback has the signature `function(error, session)`. The `session` returned
+`properties` parameter is an optional object used to specify the following:
+
+* Whether the session uses the [OpenTok Media
+  Router](https://tokbox.com/developer/guides/create-session/#media-mode)or
+  attempt send streams directly between clients. A routed session is required
+  for some OpenTok features (such as archiving).
+
+* A location hint
+
+* Whether the session will be automatically archived or not.
+
+The callback has the signature `function(error, session)`. The `session` returned
 in the callback is an instance of Session. Session objects have a `sessionId` property that is
 useful to be saved to a persistent store (such as a database).
 
@@ -49,7 +58,7 @@ opentok.createSession(function(err, session) {
   db.save('session', session.sessionId, done);
 });
 
-// The session will the OpenTok Media Router:
+// The session will the OpenTok Media Router, which is required for archiving:
 opentok.createSession({mediaMode:"routed"}, function(err, session) {
   if (err) return console.log(err);
 
@@ -96,6 +105,9 @@ token = session.generateToken({
 ```
 
 ## Working with archives
+
+You can only archive sessions that use the OpenTok Media Router
+(sessions with the media mode set to routed).
 
 You can start the recording of an OpenTok Session using the `opentok.startArchive(sessionId,
 options, callback)` method. The `options` parameter is an optional object used to set the name of
