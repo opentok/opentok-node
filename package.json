@@ -1,7 +1,7 @@
 {
   "name": "opentok",
   "description": "OpenTok server-side SDK",
-  "version": "2.3.3-alpha.1",
+  "version": "2.6.0",
   "homepage": "https://github.com/opentok/opentok-node",
   "repository": {
     "type": "git",
@@ -13,6 +13,10 @@
   },
   "license": "MIT",
   "contributors": [
+    {
+      "name": "Hashir Baqai",
+      "email": "hashirbaqai@gmail.com"
+    },
     {
       "name": "Brian Stoner",
       "email": "bsstoner@gmail.com",
@@ -38,16 +42,20 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "eslint": "^3.10.1",
+    "eslint-config-airbnb-base": "^10.0.1",
+    "eslint-plugin-import": "^2.2.0",
     "grunt": "^1.0.1",
     "grunt-jasmine-node": "^0.3.1",
     "grunt-jsdoc": "^2.1.0",
     "grunt-mocha-test": "^0.12.7",
+    "mocha": "^3.1.2",
     "nock": "^8.0.0"
   },
   "dependencies": {
+    "jsonwebtoken": "~7.4.1",
     "lodash": "^4.14.2",
     "opentok-token": "^1.1.0",
-    "request": "^2.72.0",
-    "xmljson": "~0.2.0"
+    "request": "^2.72.0"
   }
 }

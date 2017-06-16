@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Wormhole Sample App</title>
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Muli:300,300italic" type='text/css'>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/pattern.css' />
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script src="https://static.opentok.com/v2/js/opentok.js"></script>
+  </head>
+  <body>
+    <div class="main-header">
+      <header>
+        <h1>SIP Interconnect</h1>
+        <h3>Test OpenTok's SIP Interconnect API</h3>
+      </header>
+
+      <div id="selfPublisherContainer">
+        <h3>Your Publisher</h3>
+      </div>
+
+      <section class="panel panel-default" id="sip-controls">
+         <a href="#" class="btn tb btn-positive" id="startSip">Start SIP Call</a>
+          <a href="#" class="btn tb btn-negative" id="stopSip">End SIP Calls</a>
+      </section>
+    </div>
+
+    <div class="streams">
+      <h3>WebRTC Streams</h3>
+      <div class="main-container" id="webrtcPublisherContainer">
+      </div>
+      <h3>SIP Streams</h3>
+      <div class="main-container" id="sipPublisherContainer"></div>
+    </div>
+
+
+  </body>
+  <script type="text/javascript" charset="utf-8">
+    var sessionId = "<%= sessionId %>";
+    var token = "<%= token %>";
+    var apiKey = "<%= apiKey %>";
+
+    var session = OT.initSession(sessionId);
+    session.on("streamCreated", function (event) {
+      var tokenData = event.stream.connection.data;
+      if (tokenData && tokenData.includes("sip=true")) {
+        var element = "sipPublisherContainer";
+      } else {
+        var element = "webrtcPublisherContainer";
+      }
+      session.subscribe(event.stream, element, { insertMode: "append" });
+    })
+    .connect(apiKey, token, function (err) {
+      if (err) return;
+      session.publish("selfPublisherContainer", {
+        insertMode: "append",
+        height: "120px",
+        width: "160px"
+      });
+    });
+
+    $('#startSip').click(function (event) {
+      $.post('/sip/start', {sessionId: sessionId, apiKey: apiKey})
+      .fail(function () {
+        console.log('Failed to start SIP call - sample app server returned error.');
+      });
+    });
+
+    $('#stopSip').click(function (event) {
+      OT.subscribers.where().forEach(function (subscriber) {
+        var connection = subscriber.stream.connection;
+        if (connection.data && connection.data.includes("sip=true")) {
+          session.forceDisconnect(connection.connectionId);
+        }
+      });
+    });
+  </script>
+</html>

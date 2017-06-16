@@ -1,0 +1,138 @@
+html, body {
+  background-color: #efefef;
+}
+
+#main-nav .bottom {
+  background-color: #303030
+  height: 59px;
+}
+
+#main-nav .bottom .logo img {
+  width: 113px;
+  height: 30px;
+  margin-top: 16px;
+}
+
+.main-header {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding: 17px 208px 0px 208px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+  .main-header {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 1128px) {
+  .main-header {
+    padding-left: 52px;
+    padding-right: 52px;
+  }
+}
+
+@media (max-width: 1232px) {
+  .main-header {
+    padding-left: 104px;
+    padding-right: 104px;
+  }
+}
+
+.main-header > header {
+  margin: 0 auto;
+  margin-bottom: 24px;
+  border-radius: 8px;
+  background: linear-gradient(to bottom, rgba(2,167,211,1) 0%, rgba(5,140,197,1) 100%);
+  border: 1px solid #008ac4;
+  max-width: 1024px;
+  padding: 21px 29px;
+  box-sizing: border-box;
+}
+
+.main-header > header h1 {
+  font-family: Muli;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 41px;
+  margin: 0 0 9px 0;
+  color: #FFF;
+}
+
+.main-header > header h1 sup {
+  font-size: 14px;
+  color: #9ce6ff;
+  padding-left: 10px;
+  vertical-align: top;
+}
+
+.main-header > header hr {
+  opacity: 0.3;
+  border: 0;
+  border-bottom-width: 1px;
+  border-bottom-color: #ffffff;
+  border-bottom-style: solid;
+  width: 100%;
+  margin-top: 18px;
+  margin-bottom: 16px;
+}
+
+
+.main-header > header h3 {
+  font-family: Muli;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: 0.3px;
+  margin: 0;
+  color: #82d0e8;
+}
+
+.main-header > section {
+  max-width: 100%;
+  padding: 21px 29px;
+  box-sizing: border-box;
+}
+
+.main-container {
+  display: block;
+  padding: 21px 29px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+#sip-controls {
+  margin: 0 auto 20px auto;
+  text-align: center;
+}
+
+#sipPublisherContainer, #webrtcPublisherContainer {
+  height: 240px;
+  background-color: #DDD;
+  position: relative;
+  margin: 0px 20px 0px 20px;
+  border-radius: 8px;
+}
+
+#sipPublisherContainer > *, #webrtcPublisherContainer > * {
+  transition-property: all;
+  transition-duration: 0.5s;
+  display: inline-block;
+}
+
+.streams h3 {
+  margin-left: 20px;
+ }
+
+#selfPublisherContainer {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+#selfPublisherContainer h3 {
+  margin-right: 20px;
+}
