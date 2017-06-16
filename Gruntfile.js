@@ -1,5 +1,4 @@
-module.exports = function(grunt) {
-
+module.exports = function (grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -14,17 +13,17 @@ module.exports = function(grunt) {
     jasmine_node: {
       options: {
         extensions: 'js',
-        specNameMatcher: 'spec',
+        specNameMatcher: 'spec'
       },
       all: ['spec/']
     },
-    jsdoc : {
-        dist : {
-            src: ['lib/*.js'],
-            options: {
-                destination: 'docs'
-            }
+    jsdoc: {
+      dist: {
+        src: ['lib/*.js'],
+        options: {
+          destination: 'docs'
         }
+      }
     }
   });
 
@@ -33,5 +32,4 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-jsdoc');
 
   grunt.registerTask('default', ['mochaTest', 'jasmine_node']);
-
 };
