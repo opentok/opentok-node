@@ -38,22 +38,22 @@
     "test": "grunt"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=4"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
+    "chai": "^4.0.2",
     "eslint": "^3.10.1",
-    "eslint-config-airbnb-base": "^10.0.1",
+    "eslint-config-airbnb-base": "^11.2.0",
     "eslint-plugin-import": "^2.2.0",
     "grunt": "^1.0.1",
     "grunt-jasmine-node": "^0.3.1",
     "grunt-jsdoc": "^2.1.0",
     "grunt-mocha-test": "^0.12.7",
     "mocha": "^3.1.2",
-    "nock": "^8.0.0"
+    "nock": "^9.0.13"
   },
   "dependencies": {
-    "jsonwebtoken": "~7.4.1",
+    "jsonwebtoken": "^7.4.1",
     "lodash": "^4.14.2",
     "opentok-token": "^1.1.0",
     "request": "^2.72.0"
