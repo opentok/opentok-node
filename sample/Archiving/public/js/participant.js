@@ -1,7 +1,7 @@
 var session = OT.initSession(sessionId),
     publisher = OT.initPublisher("publisher");
 
-session.connect(apiKey, token, function(err, info) {
+session.connect(apiKey, token, function(err) {
   if(err) {
     alert(err.message || err);
   }
