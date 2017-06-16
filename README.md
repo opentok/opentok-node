@@ -79,19 +79,22 @@ Once a Session is created, you can start generating Tokens for clients to use wh
 You can generate a token by calling the `opentok.generateToken(sessionId, options)` method. Another
 way is to call the `session.generateToken(options)` method of a Session object. The `options`
 parameter is an optional object used to set the role, expire time, and connection data of the Token.
+For layout control in archives and broadcasts, the initial layout class list of streams published
+from connections using this token can be set as well.
 
 ```javascript
 // Generate a Token from just a sessionId (fetched from a database)
 token = opentok.generateToken(sessionId);
 
-// Genrate a Token from a session object (returned from createSession)
+// Generate a Token from a session object (returned from createSession)
 token = session.generateToken();
 
 // Set some options in a Token
 token = session.generateToken({
-  role :       'moderator',
-  expireTime : (new Date().getTime() / 1000)+(7 * 24 * 60 * 60), // in one week
-  data :       'name=Johnny'
+  role :                   'moderator',
+  expireTime :             (new Date().getTime() / 1000)+(7 * 24 * 60 * 60), // in one week
+  data :                   'name=Johnny',
+  initialLayoutClassList : ['focus']
 });
 ```
 
@@ -220,6 +223,7 @@ Sessions," above).
 For more information on archiving, see the
 [OpenTok archiving](https://tokbox.com/opentok/tutorials/archiving/) programming guide.
 
+
 # Disconnecting participants
 
 You can disconnect participants from an OpenTok Session using the
@@ -233,6 +237,20 @@ opentok.forceDisconnect(sessionId, connectionId, function(error) {
 
 This is the server-side equivalent to the forceDisconnect() method in OpenTok.js:
 <https://www.tokbox.com/developer/guides/moderation/js/#force_disconnect>.
+
+## Working with SIP Interconnect
+
+You can add an audio-only stream from an external third party SIP gateway using the SIP Interconnect
+feature. This requires a SIP URI, the session ID you wish to add the audio-only stream to, and a
+token to connect to that session ID.
+
+```javascript
+opentok.dial(sessionId, token, sipUri, options, function (error, sipCall) {
+  if (error) return console.log("error: ", error);
+
+  console.log('SIP audio stream Id: ' + sipCall.streamId+ ' added to session ID: ' + sipCall.sessionId);
+});
+```
 
 # Samples
 
@@ -251,7 +269,7 @@ Reference documentation is available at <https://tokbox.com/developer/sdks/node/
 You need an OpenTok API key and API secret, which you can obtain by logging into your
 [TokBox account](https://tokbox.com/account).
 
-The OpenTok Node SDK requires node 0.10 or higher.
+The OpenTok Node SDK requires Node.js 4 or higher. It may work on older versions but they are no longer tested.
 
 # Release Notes
 
