@@ -756,6 +756,35 @@ describe('#generateToken', function () {
     expect(decoded.expire_time).to.equal(Math.round(fractionalExpireTime).toString());
   });
 
+  it('sets initial layout class list in the token', function() {
+    var layoutClassList = ['focus', 'inactive'];
+    var singleLayoutClass = 'focus';
+
+    var layoutBearingToken = this.opentok.generateToken(this.sessionId, {
+      initialLayoutClassList: layoutClassList
+    });
+    expect(layoutBearingToken).to.be.a('string');
+    expect(helpers.verifyTokenSignature(layoutBearingToken, apiSecret)).to.be.true
+    var decoded = helpers.decodeToken(layoutBearingToken);
+    expect(decoded.initial_layout_class_list).to.equal(layoutClassList.join(' '));
+
+    var singleLayoutBearingToken = this.opentok.generateToken(this.sessionId, {
+      initialLayoutClassList: singleLayoutClass
+    });
+    expect(singleLayoutBearingToken).to.be.a('string');
+    expect(helpers.verifyTokenSignature(singleLayoutBearingToken, apiSecret)).to.be.true
+    decoded = helpers.decodeToken(singleLayoutBearingToken);
+    expect(decoded.initial_layout_class_list).to.equal(singleLayoutClass);
+
+    // NOTE: ignores invalid options instead of throwing an error, except if its too long
+  });
+
+  it('complains if the sessionId is not valid', function() {
+    expect(function() {
+      this.opentok.generateToken();
+    }).to.throw(Error);
+  });
+
   it('sets connection data in the token', function () {
     // expects a token with a connection data to have it
     var sampleData = 'name=Johnny';
