@@ -714,6 +714,7 @@ describe('#generateToken', function () {
     var now = Math.round((new Date().getTime()) / 1000);
     var delta = 10;
     var decoded;
+    var expire_time;
 
     // expects a token with no expiration time to assign 1 day
     var inOneDay = now + (60 * 60 * 24);
@@ -728,7 +729,8 @@ describe('#generateToken', function () {
     expect(defaultExpireToken).to.be.a('string');
     expect(helpers.verifyTokenSignature(defaultExpireToken, apiSecret)).to.be.true;
     decoded = helpers.decodeToken(defaultExpireToken);
-    expect(parseInt(decoded.expire_time, 10)).to.be.within(inOneDay - delta, inOneDay + delta);
+    expire_time = parseInt(decoded.expire_time, 10);
+    expect(expire_time).to.be.closeTo(inOneDay, delta);
 
     // expects a token with an expiration time to have it
     inOneHour = now + (60 * 60);
@@ -736,7 +738,8 @@ describe('#generateToken', function () {
     expect(oneHourToken).to.be.a('string');
     expect(helpers.verifyTokenSignature(oneHourToken, apiSecret)).to.be.true;
     decoded = helpers.decodeToken(oneHourToken);
-    expect(parseInt(decoded.expire_time, 10)).to.be.within(inOneHour - delta, inOneHour + delta);
+    expire_time = parseInt(decoded.expire_time, 10);
+    expect(expire_time).to.be.closeTo(inOneHour, delta);
 
     // expects a token with an invalid expiration time to complain
     expect(function () {
