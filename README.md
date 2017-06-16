@@ -79,6 +79,8 @@ Once a Session is created, you can start generating Tokens for clients to use wh
 You can generate a token by calling the `opentok.generateToken(sessionId, options)` method. Another
 way is to call the `session.generateToken(options)` method of a Session object. The `options`
 parameter is an optional object used to set the role, expire time, and connection data of the Token.
+For layout control in archives and broadcasts, the initial layout class list of streams published
+from connections using this token can be set as well.
 
 ```javascript
 // Generate a Token from just a sessionId (fetched from a database)
@@ -89,9 +91,10 @@ token = session.generateToken();
 
 // Set some options in a Token
 token = session.generateToken({
-  role :       'moderator',
-  expireTime : (new Date().getTime() / 1000)+(7 * 24 * 60 * 60), // in one week
-  data :       'name=Johnny'
+  role :                   'moderator',
+  expireTime :             (new Date().getTime() / 1000)+(7 * 24 * 60 * 60), // in one week
+  data :                   'name=Johnny',
+  initialLayoutClassList : ['focus']
 });
 ```
 
