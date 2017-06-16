@@ -223,6 +223,21 @@ Sessions," above).
 For more information on archiving, see the
 [OpenTok archiving](https://tokbox.com/opentok/tutorials/archiving/) programming guide.
 
+
+# Disconnecting participants
+
+You can disconnect participants from an OpenTok Session using the
+``opentok.forceDisconnect(sessionId, connectionId, callback)`` method.
+
+```javascript
+opentok.forceDisconnect(sessionId, connectionId, function(error) {
+  if (error) return console.log("error:", error);
+});
+```
+
+This is the server-side equivalent to the forceDisconnect() method in OpenTok.js:
+<https://www.tokbox.com/developer/guides/moderation/js/#force_disconnect>.
+
 # Working with Callbacks
 
 You can register callbacks to receive notifications for streams and connections created and destroyed
@@ -277,7 +292,6 @@ opentok.dial(sessionId, token, sipUri, options, function (error, sipCall) {
   console.log('SIP audio stream Id: ' + sipCall.streamId+ ' added to session ID: ' + sipCall.sessionId);
 });
 ```
-
 
 # Samples
 
