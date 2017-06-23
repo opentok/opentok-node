@@ -255,10 +255,10 @@ opentok.registerCallback('connection', 'created', url, function(error, callback)
 });
 ```
 
-Note that you can only register a callback for a specific group&event. When registering a new callback for the
-same event you are replacing the previous registration.
+Note that you can only register a callback for a specific group and event. When registering
+a new callback for the a previously registered event, you replace the previous registration.
 
-To unregister a callback you have can use the ``opentok.unregisterCallback(callbackId, callback)`` method.
+To unregister a callback, use the `OpenTok.unregisterCallback(callbackId, callback) method.
 
 ```javascript
 opentok.unregisterCallback(callbackId, function(error) {
@@ -266,8 +266,8 @@ opentok.unregisterCallback(callbackId, function(error) {
 });
 ```
 
-You can also get a list of all the Callbacks you've registered for your API Key. This is
-done using the ``opentok.listCallbacks(callback)`` method.
+You can also get a list of all the callbacks you've registered for your API key.
+This is done using the `OpenTok.listCallbacks(callback)` method.
 
 ```javascript
 opentok.listCallbacks(function(error, callbacks) {
