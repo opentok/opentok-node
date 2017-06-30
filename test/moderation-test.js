@@ -19,7 +19,7 @@ describe('Moderation', function() {
   describe('forceDisconnect', function() {
 
     function mockRequest(status, body) {
-      var url = '/v2/partner/APIKEY/session/' + SESSIONID + '/connection/' + CONNECTIONID;
+      var url = '/v2/project/APIKEY/session/' + SESSIONID + '/connection/' + CONNECTIONID;
       nock('https://api.opentok.com:443')
         .delete(url)
         .reply(status, body, { server: 'nginx',
