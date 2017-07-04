@@ -20,7 +20,7 @@ describe('Signal', function() {
 
   describe('signalSession', function() {
     function mockRequest(status, body) {
-      var url = '/v2/partner/APIKEY/session/' + SESSIONID + '/signal';
+      var url = '/v2/project/APIKEY/session/' + SESSIONID + '/signal';
       nock('https://api.opentok.com:443')
         .post(url, {'type': TYPE, 'data': DATA})
         .reply(status, body, { server: 'nginx',
@@ -68,7 +68,7 @@ describe('Signal', function() {
 
   describe('signalConnection', function() {
     function mockRequest(status, body) {
-      var url = '/v2/partner/APIKEY/session/' + SESSIONID + '/connection/' + CONNECTIONID + '/signal';
+      var url = '/v2/project/APIKEY/session/' + SESSIONID + '/connection/' + CONNECTIONID + '/signal';
       nock('https://api.opentok.com:443')
         .post(url, {'type': TYPE, 'data': DATA})
         .reply(status, body, { server: 'nginx',
