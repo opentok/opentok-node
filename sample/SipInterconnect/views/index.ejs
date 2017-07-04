@@ -40,7 +40,7 @@
     var token = "<%= token %>";
     var apiKey = "<%= apiKey %>";
 
-    var session = OT.initSession(sessionId);
+    var session = OT.initSession(apiKey, sessionId);
     session.on("streamCreated", function (event) {
       var tokenData = event.stream.connection.data;
       if (tokenData && tokenData.includes("sip=true")) {
@@ -50,7 +50,7 @@
       }
       session.subscribe(event.stream, element, { insertMode: "append" });
     })
-    .connect(apiKey, token, function (err) {
+    .connect(token, function (err) {
       if (err) return;
       session.publish("selfPublisherContainer", {
         insertMode: "append",
