@@ -227,10 +227,10 @@ For more information on archiving, see the
 
 You can send a signal to all the participants in an OpenTok Session using the
 ``opentok.signal(sessionId, payload, callback)`` method or send it to a specific participant in the session using the
-``opentok.signal(sessionId, sessionId, payload, callback)`` method.
+``opentok.signal(sessionId, connectionId, payload, callback)`` method.
 
 ```javascript
-opentok.signal(sessionId, sessionId, { 'type': 'chat', 'data': 'Hello!' }, function(error) {
+opentok.signal(sessionId, connectionId, { 'type': 'chat', 'data': 'Hello!' }, function(error) {
   if (error) return console.log("error:", error);
 });
 ```
