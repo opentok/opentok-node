@@ -8,6 +8,8 @@ The OpenTok Node SDK lets you generate
 [OpenTok](http://www.tokbox.com/) applications, and
 [archive](https://tokbox.com/opentok/tutorials/archiving) OpenTok sessions.
 
+If you are looking for the JavaScript Client SDK please see the [@opentok/client](https://www.npmjs.com/package/@opentok/client) NPM module.
+
 # Installation using npm (recommended):
 
 npm helps manage dependencies for node projects. Find more info here: <http://npmjs.org>
