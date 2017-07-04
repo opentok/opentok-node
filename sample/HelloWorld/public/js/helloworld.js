@@ -1,8 +1,8 @@
 // Initialize an OpenTok Session object
-var session = TB.initSession(sessionId);
+var session = OT.initSession(apiKey, sessionId);
 
 // Initialize a Publisher, and place it into the element with id="publisher"
-var publisher = TB.initPublisher(apiKey, 'publisher');
+var publisher = OT.initPublisher('publisher');
 
 // Attach event handlers
 session.on({
@@ -29,4 +29,4 @@ session.on({
 });
 
 // Connect to the Session using the 'apiKey' of the application and a 'token' for permission
-session.connect(apiKey, token);
+session.connect(token);
