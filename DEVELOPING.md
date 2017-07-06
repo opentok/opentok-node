@@ -31,7 +31,7 @@ Common tasks:
 In order to create a release, the following should be completed in order.
 
 1. Ensure all the tests are passing (`grunt`) and that there is enough test coverage.
-1. Make sure you are on the `master` branch of the repository, with all changes merged/commited
+1. Make sure you are on the `dev` branch of the repository, with all changes merged/commited
    already.
 1. Update the version number anywhere it appears in the source code and documentation. See
    [Versioning](#versioning) for information about selecting an appropriate version number. Files to
@@ -46,7 +46,7 @@ In order to create a release, the following should be completed in order.
 1. Change the version number for future development by incrementing the patch number (z) adding
    "-alpha.1" in the source code (not the documentation). For possible files, see above. Then make
    another commit with the message "Begin development on next version".
-1. Push the changes to the source repository: `git push origin master && git push --tags origin`
+1. Push the changes to the source repository: `git push origin dev && git push --tags origin`
 1. Add a description to the [GitHub Releases](https://github.com/opentok/opentok-node/releases) page
    with any notable changes.
 
@@ -62,7 +62,8 @@ During development the version number should end in "-alpha.x" or "-beta.x", whe
 
 ### Branches
 
-*  `master` - the main development branch.
+*  `dev` - the main development branch.
+*  `master` - reflects the latest stable release.
 *  `feat.foo` - feature branches. these are used for longer running tasks that cannot be accomplished in one commit.
    once merged into master, these branches should be deleted.
 *  `vx.x.x` - if development for a future version/milestone has begun while master is working towards a sooner
