@@ -31,7 +31,8 @@ Common tasks:
 In order to create a release, the following should be completed in order.
 
 1. Ensure all the tests are passing (`grunt`) and that there is enough test coverage.
-1. Make sure you are on the `dev` branch of the repository, with all changes merged/commited
+1. Ensure package-lock.json and yarn.lock have been updated and committed if any dependency has been added/removed.
+1. Make sure you are on the `dev` branch of the repository, with all changes merged/committed
    already.
 1. Update the version number anywhere it appears in the source code and documentation. See
    [Versioning](#versioning) for information about selecting an appropriate version number. Files to
