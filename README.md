@@ -270,11 +270,13 @@ opentok.dial(sessionId, token, sipUri, options, function (error, sipCall) {
 
 # Samples
 
-There are two sample applications included in this repository. To get going as fast as possible, clone the whole
-repository and follow the Walkthroughs:
+There are sample applications included in this repository. To get going as fast as possible,
+clone the whole repository and read the README in each of the sample directories:
 
 *  [HelloWorld](sample/HelloWorld/README.md)
 *  [Archiving](sample/Archiving/README.md)
+*  [StreamInfo](sample/StreamInfo/README.md)
+*  [StreamInfo](sample/StreamInfo/README.md)
 
 # Documentation
 

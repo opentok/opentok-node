@@ -31,6 +31,10 @@
       "name": "Ankur Oberoi",
       "email": "aoberoi@gmail.com",
       "url": "http://aoberoi.me"
+    },
+    {
+      "name": "Jeff Swartz",
+      "email": "swartz@tokbox.com"
     }
   ],
   "main": "lib/opentok.js",
