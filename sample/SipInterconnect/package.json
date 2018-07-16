@@ -1,7 +1,7 @@
 {
-  "name": "wormhole-sample",
+  "name": "opentok-sip-sample",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
   "scripts": {
     "start": "node app.js"
   },
