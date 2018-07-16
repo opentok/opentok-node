@@ -268,6 +268,30 @@ opentok.dial(sessionId, token, sipUri, options, function (error, sipCall) {
 });
 ```
 
+## Getting Stream Info
+
+You can get information on an active stream in an OpenTok session:
+
+```javascript
+# To get stream info:
+var sessionId = '2_MX6xMDB-fjE1MzE3NjQ0MTM2NzZ-cHVTcUIra3JUa0kxUlhsVU55cTBYL0Y1flB';
+var streamId = '2a84cd30-3a33-917f-9150-49e454e01572';
+opentok.getStream(sessionId, streamId, function(error, streamInfo) {
+  if (error) {
+    console.log(error.message);
+  } else {
+    console.log(stream.id); // '2a84cd30-3a33-917f-9150-49e454e01572'
+    console.log(stream.videoType); // 'camera'
+    console.log(stream.name); // 'Bob'
+    console.log(stream.layoutClassList); // ['main']
+  }
+}
+
+Pass a session ID, stream ID, and callback function to the `OpenTok.getStream()` method.
+The callback function is called when the operation completes. It takes two parameters:
+`error` (in the case of an error) or `stream`. On sucessful completion, the `stream` object
+is set, containing properties of the stream.
+
 # Samples
 
 There are sample applications included in this repository. To get going as fast as possible,
@@ -275,7 +299,7 @@ clone the whole repository and read the README in each of the sample directories
 
 *  [HelloWorld](sample/HelloWorld/README.md)
 *  [Archiving](sample/Archiving/README.md)
-*  [StreamInfo](sample/StreamInfo/README.md)
+*  [SipInterconnect](sample/StreamInfo/README.md)
 *  [StreamInfo](sample/StreamInfo/README.md)
 
 # Documentation

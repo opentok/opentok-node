@@ -40,9 +40,14 @@ app.get('/', function(req, res) {
 
 // Get information about a specified OpenTok stream
 app.get('/session/:sessionId/stream/:streamId', function(req, res) {
-  opentok.getStream(req.params.sessionId, req.params.streamId, function(error, streamInfo) {
-    res.send(streamInfo);
-    console.log('streamInfo', streamInfo);
+  opentok.getStream(req.params.sessionId, req.params.streamId, function(error, stream) {
+    if (error) {
+      console.log(error.message);
+      console.log('session ID:', req.params.sessionId)
+      console.log('stream ID:', req.params.streamId)
+    } else {
+      console.log(stream);
+    }
   });
 });
 

@@ -1,9 +1,9 @@
 var session = OT.initSession(apiKey, sessionId);
-var publisher = OT.initPublisher('publisher');
+var publisher = OT.initPublisher('publisher', { name: 'Test stream' });
 
 session.on({
   sessionConnected: function(event) {
-    var publisher = session.publish(publisher);
+    session.publish(publisher);
     publisher.on('streamCreated', function() {
       // Call the endpoint on the sample app server to notify it that the stream was created
       var xhr = new XMLHttpRequest();
@@ -13,10 +13,7 @@ session.on({
   },
 
   streamCreated: function(event) {
-    var subContainer = document.createElement('div');
-    subContainer.id = 'stream-' + event.stream.streamId;
-    document.getElementById('subscribers').appendChild(subContainer);
-    session.subscribe(event.stream, subContainer);
+    session.subscribe(event.stream, 'subscribers', { insertMode: 'append' });
   }
 });
 
