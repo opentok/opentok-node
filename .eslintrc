@@ -2,6 +2,8 @@
   "extends": "airbnb-base/legacy",
   "rules": {
     "no-restricted-syntax": ["off", "ForInStatement"],
-    "brace-style": ["error", "stroustrup", { "allowSingleLine": true }]
+    "brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
+    "no-param-reassign": ["off"],
+    "func-names": ["off"],
   }
 }
