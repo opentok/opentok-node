@@ -24,7 +24,7 @@ session.on('archiveStarted', function(event) {
 session.on('archiveStopped', function(event) {
   archiveID = null;
   console.log('ARCHIVE STOPPED');
-  $('.start').show();
+  $('.start').show();f
   $('.stop').hide();
   enableForm();
 });

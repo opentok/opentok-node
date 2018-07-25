@@ -5,5 +5,6 @@
     "brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
     "no-param-reassign": ["off"],
     "func-names": ["off"],
+    no-plusplus: ["error", { "allowForLoopAfterthoughts": true }],
   }
 }
