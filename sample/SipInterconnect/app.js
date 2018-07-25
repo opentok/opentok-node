@@ -44,7 +44,7 @@ app.get('/', function(req, res, next) {
   });
 });
 
-/* POST to start Wormhole SIP call. */
+/* POST to start SIP call. */
 app.post('/sip/start', function(req, res, next) {
   var sessionId = req.body.sessionId;
   var apiKey = req.body.apiKey;

@@ -1,7 +1,7 @@
 {
   "name": "opentok",
   "description": "OpenTok server-side SDK",
-  "version": "2.6.0",
+  "version": "2.6.3-alpha.1",
   "homepage": "https://github.com/opentok/opentok-node",
   "repository": {
     "type": "git",
@@ -41,21 +41,21 @@
     "node": ">=4"
   },
   "devDependencies": {
-    "chai": "^4.0.2",
-    "eslint": "^3.10.1",
-    "eslint-config-airbnb-base": "^11.2.0",
-    "eslint-plugin-import": "^2.2.0",
-    "grunt": "^1.0.1",
+    "chai": "^4.1.2",
+    "eslint": "^4.18.2",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.9.0",
+    "grunt": "^1.0.2",
     "grunt-jasmine-node": "^0.3.1",
-    "grunt-jsdoc": "^2.1.0",
-    "grunt-mocha-test": "^0.12.7",
-    "mocha": "^3.1.2",
-    "nock": "^9.0.13"
+    "grunt-jsdoc": "^2.2.1",
+    "grunt-mocha-test": "^0.13.3",
+    "mocha": "^5.0.4",
+    "nock": "^9.2.3"
   },
   "dependencies": {
-    "jsonwebtoken": "^7.4.1",
-    "lodash": "^4.14.2",
+    "jsonwebtoken": "^8.2.0",
+    "lodash": "^4.17.5",
     "opentok-token": "^1.1.0",
-    "request": "^2.72.0"
+    "request": "^2.85.0"
   }
 }
