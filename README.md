@@ -3,16 +3,18 @@
 [![Build Status](https://travis-ci.org/opentok/opentok-node.png)](https://travis-ci.org/opentok/opentok-node)
 
 The OpenTok Node SDK lets you generate
-[sessions](http://www.tokbox.com/opentok/tutorials/create-session/) and
-[tokens](http://www.tokbox.com/opentok/tutorials/create-token/) for
-[OpenTok](http://www.tokbox.com/) applications, and
-[archive](https://tokbox.com/opentok/tutorials/archiving) OpenTok sessions.
+[sessions](https://tokbox.com/developer/guides/create-session/) and
+[tokens](https://tokbox.com/developer/guides/create-token/) for
+[OpenTok](http://www.tokbox.com/) applications. It also includes methods for
+working with OpenTok [archives](https://tokbox.com/developer/guides/archiving),
+working with OpenTok [SIP interconnect](https://tokbox.com/developer/guides/sip),
+and [disconnecting clients from sessions](https://tokbox.com/developer/guides/moderation/rest/).
 
 If you are looking for the JavaScript Client SDK please see the [@opentok/client](https://www.npmjs.com/package/@opentok/client) NPM module.
 
-# Installation using npm (recommended):
+## Installation using npm (recommended):
 
-npm helps manage dependencies for node projects. Find more info here: <http://npmjs.org>
+npm helps manage dependencies for node projects. Find more info here: <http://npmjs.org>.
 
 Run this command to install the package and adding it to your `package.json`:
 
@@ -20,9 +22,9 @@ Run this command to install the package and adding it to your `package.json`:
 $ npm install opentok --save
 ```
 
-# Usage
+## Usage
 
-## Initializing
+### Initializing
 
 Import the module to get a constructor function for an OpenTok object, then call it with `new` to
 instantiate an OpenTok object with your own API Key and API Secret.
@@ -32,9 +34,9 @@ var OpenTok = require('opentok'),
     opentok = new OpenTok(apiKey, apiSecret);
 ```
 
-## Creating Sessions
+### Creating Sessions
 
-To create an OpenTok Session, use the `opentok.createSession(properties, callback)` method. The
+To create an OpenTok Session, use the `OpenTok.createSession(properties, callback)` method. The
 `properties` parameter is an optional object used to specify whether the session uses the OpenTok
 Media Router, to specify a location hint, and to specify whether the session will be automatically
 archived or not. The callback has the signature `function(error, session)`. The `session` returned
@@ -75,11 +77,11 @@ opentok.createSession({mediaMode:'routed', archiveMode:'always'}, function(err, 
   db.save('session', session.sessionId, done);
 });
 ```
-## Generating Tokens
+### Generating Tokens
 
 Once a Session is created, you can start generating Tokens for clients to use when connecting to it.
-You can generate a token by calling the `opentok.generateToken(sessionId, options)` method. Another
-way is to call the `session.generateToken(options)` method of a Session object. The `options`
+You can generate a token by calling the `OpenTok.generateToken(sessionId, options)` method. Another
+way is to call the `generateToken(options)` method of a Session object. The `options`
 parameter is an optional object used to set the role, expire time, and connection data of the Token.
 For layout control in archives and broadcasts, the initial layout class list of streams published
 from connections using this token can be set as well.
@@ -100,9 +102,9 @@ token = session.generateToken({
 });
 ```
 
-## Working with archives
+### Working with archives
 
-You can start the recording of an OpenTok Session using the `opentok.startArchive(sessionId,
+You can start the recording of an OpenTok Session using the `OpenTok.startArchive(sessionId,
 options, callback)` method. The `options` parameter is an optional object used to set the name of
 the Archive. The callback has the signature `function(err, archive)`. The `archive` returned in
 the callback is an instance of `Archive`. Note that you can only start an archive on a Session with
@@ -131,7 +133,7 @@ opentok.startArchive(sessionId, archiveOptions, function(err, archive) {
   if (err) {
     return console.log(err);
   } else {
-    // The id property is useful to save off into a database
+    // The id property is useful to save to a database
     console.log("new archive:" + archive.id);
   }
 });
@@ -139,7 +141,7 @@ opentok.startArchive(sessionId, archiveOptions, function(err, archive) {
 
 By default, all streams are recorded to a single (composed) file. You can record the different
 streams in the session to individual files (instead of a single composed file) by setting the
-`outputMode` option to `'individual'` when you call the `opentok.startArchive()`:
+`outputMode` option to `'individual'` when you call the `OpenTok.startArchive()` method:
 
 ```javascript
 var archiveOptions = {
@@ -156,8 +158,8 @@ opentok.startArchive(sessionId, archiveOptions, function(err, archive) {
 });
 ```
 
-You can stop the recording of a started Archive using the `opentok.stopArchive(archiveId, callback)`
-method. You can also do this using the `archive.stop(callback)` method an `Archive` instance. The
+You can stop the recording of a started Archive using the `OpenTok.stopArchive(archiveId, callback)`
+method. You can also do this using the `Archive.stop(callback)` method an `Archive` instance. The
 callback has a signature `function(err, archive)`. The `archive` returned in the callback is an
 instance of `Archive`.
 
@@ -174,7 +176,7 @@ archive.stop(function(err, archive) {
 ```
 
 To get an `Archive` instance (and all the information about it) from an `archiveId`, use the
-`opentok.getArchive(archiveId, callback)` method. The callback has a function signature
+`OpenTok.getArchive(archiveId, callback)` method. The callback has a function signature
 `function(err, archive)`. You can inspect the properties of the archive for more details.
 
 ```javascript
@@ -185,7 +187,7 @@ opentok.getArchive(archiveId, function(err, archive) {
 });
 ```
 
-To delete an Archive, you can call the `opentok.deleteArchive(archiveId, callback)` method or the
+To delete an Archive, you can call the `OpenTok.deleteArchive(archiveId, callback)` method or the
 `delete(callback)` method of an `Archive` instance. The callback has a signature `function(err)`.
 
 ```javascript
@@ -194,14 +196,15 @@ opentok.deleteArchive(archiveId, function(err) {
   if (err) console.log(err);
 });
 
-// Delete an Archive from an Archive instance (returned from archives.create, archives.find)
+// Delete an Archive from an Archive instance, returned from the OpenTok.startArchive(), 
+// OpenTok.getArchive(), or OpenTok.listArchives() methods
 archive.delete(function(err) {
   if (err) console.log(err);
 });
 ```
 
 You can also get a list of all the Archives you've created (up to 1000) with your API Key. This is
-done using the `opentok.listArchives(options, callback)` method. The parameter `options` is an
+done using the `OpenTok.listArchives(options, callback)` method. The parameter `options` is an
 optional object used to specify an `offset` and `count` to help you paginate through the results.
 The callback has a signature `function(err, archives, totalCount)`. The `archives` returned from
 the callback is an array of `Archive` instances. The `totalCount` returned from the callback is
@@ -219,31 +222,44 @@ opentok.listArchives({offset:100, count:50}, function(error, archives, totalCoun
 ```
 
 Note that you can also create an automatically archived session, by passing in `'always'`
-as the `archiveMode` option when you call the `opentok.createSession()` method (see "Creating
+as the `archiveMode` option when you call the `OpenTok.createSession()` method (see "Creating
 Sessions," above).
 
 For more information on archiving, see the
-[OpenTok archiving](https://tokbox.com/opentok/tutorials/archiving/) programming guide.
+[OpenTok archiving developer guide](https://tokbox.com/developer/guides/archiving/).
 
-# Sending signals
+### Sending signals
 
-You can send a signal to all the participants in an OpenTok Session using the
-``opentok.signal(sessionId, payload, callback)`` method or send it to a specific participant in the session using the
-``opentok.signal(sessionId, connectionId, payload, callback)`` method.
+You can send a signal to all participants in an OpenTok Session by calling the
+`OpenTok.signal(sessionId, connectionId, payload, callback)` method and setting
+the `connectionId` parameter to `null`:
 
 ```javascript
+var sessionId = '2_MX2xMDB-flR1ZSBOb3YgMTkgMTE6MDk6NTggUFNUIDIwMTN-MC2zNzQxNzIxNX2';
+opentok.signal(sessionId, null, { 'type': 'chat', 'data': 'Hello!' }, function(error) {
+  if (error) return console.log("error:", error);
+});
+```
+
+Or send a signal to a specific participant in the session by calling the
+`OpenTok.signal(sessionId, connectionId, payload, callback)` method and setting all paramters,
+including `connectionId`:
+
+```javascript
+var sessionId = '2_MX2xMDB-flR1ZSBOb3YgMTkgMTE6MDk6NTggUFNUIDIwMTN-MC2zNzQxNzIxNX2';
+var connectionId = '02e80876-02ab-47cd-8084-6ddc8887afbc';
 opentok.signal(sessionId, connectionId, { 'type': 'chat', 'data': 'Hello!' }, function(error) {
   if (error) return console.log("error:", error);
 });
 ```
 
 This is the server-side equivalent to the signal() method in the OpenTok client SDKs. See
-<https://www.tokbox.com/developer/guides/signaling/js/>.
+[OpenTok signaling developer guide](https://www.tokbox.com/developer/guides/signaling/) .
 
-# Disconnecting participants
+### Disconnecting participants
 
 You can disconnect participants from an OpenTok Session using the
-``opentok.forceDisconnect(sessionId, connectionId, callback)`` method.
+`OpenTok.forceDisconnect(sessionId, connectionId, callback)` method.
 
 ```javascript
 opentok.forceDisconnect(sessionId, connectionId, function(error) {
@@ -254,9 +270,9 @@ opentok.forceDisconnect(sessionId, connectionId, function(error) {
 This is the server-side equivalent to the forceDisconnect() method in OpenTok.js:
 <https://www.tokbox.com/developer/guides/moderation/js/#force_disconnect>.
 
-## Working with SIP Interconnect
+### Working with SIP Interconnect
 
-You can add an audio-only stream from an external third party SIP gateway using the SIP Interconnect
+You can add an audio-only stream from an external third-party SIP gateway using the SIP Interconnect
 feature. This requires a SIP URI, the session ID you wish to add the audio-only stream to, and a
 token to connect to that session ID.
 
@@ -267,6 +283,9 @@ opentok.dial(sessionId, token, sipUri, options, function (error, sipCall) {
   console.log('SIP audio stream Id: ' + sipCall.streamId+ ' added to session ID: ' + sipCall.sessionId);
 });
 ```
+
+For more information, see the
+[OpenTok SIP Interconnect developer guide](https://tokbox.com/developer/guides/sip/).
 
 ## Getting Stream Info
 
@@ -302,23 +321,23 @@ clone the whole repository and read the README in each of the sample directories
 *  [SipInterconnect](sample/StreamInfo/README.md)
 *  [StreamInfo](sample/StreamInfo/README.md)
 
-# Documentation
+## Documentation
 
 Reference documentation is available at <https://tokbox.com/developer/sdks/node/reference/index.html>.
 
-# Requirements
+## Requirements
 
 You need an OpenTok API key and API secret, which you can obtain by logging into your
 [TokBox account](https://tokbox.com/account).
 
 The OpenTok Node SDK requires Node.js 4 or higher. It may work on older versions but they are no longer tested.
 
-# Release Notes
+## Release Notes
 
 See the [Releases](https://github.com/opentok/opentok-node/releases) page for details
 about each release.
 
-## Important changes since v2.2.0
+### Important changes since v2.2.0
 
 **Changes in v2.2.3:**
 
@@ -343,12 +362,12 @@ See the reference documentation
 docs directory of the SDK.
 
 
-# Development and Contributing
+## Development and Contributing
 
 Interested in contributing? We :heart: pull requests! See the [Development](DEVELOPING.md) and
 [Contribution](CONTRIBUTING.md) guidelines.
 
-# Support
+## Support
 
 See <https://support.tokbox.com> for all our support options.
 
