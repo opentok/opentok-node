@@ -15,7 +15,8 @@ _**NOTE**: OpenTok SIP Interconnect supports only audio through the SIP interfac
 
 This guide has the following sections:
 
-* [Architecture](#architecture): This section describes how the OpenTok SIP Interconnect solution works with gateways for third party SIP platforms.
+* [Architecture](#architecture): This section describes how the OpenTok SIP Interconnect feature
+  works with gateways for third-party SIP platforms.
 * [Prerequisites](#prerequisites): A checklist of everything you need to get started.
 * [Quick start](#quick-start): A step-by-step tutorial to help you quickly run the sample app.
 * [Exploring the code](#exploring-the-code): This describes the sample app code design, which uses recommended best practices to implement the OpenTok SIP Interconnect app features. 
@@ -133,7 +134,7 @@ While TokBox hosts [OpenTok.js](https://tokbox.com/developer/sdks/js/), you must
 
 ### SIP Call
 
-A SIP call is made by clicking the **Start SIP Call** button, which results in a call to the `opentok.dial()` method.
+A SIP call is made by clicking the **Start SIP Call** button, which results in a call to the `OpenTok.dial()` method.
 
 The `opentok.dial()` method in [app.js](./app.js) creates a REST request to OpenTok to start the SIP call. `opentok.dial()` takes the following arguments:
 
@@ -162,7 +163,7 @@ opentok.createSession({ mediaMode:"routed" }, function(error, session) {
 
 This metadata can be viewed in the `event.stream.connection.data` property of [ConnectionEvents](https://www.tokbox.com/developer/sdks/js/reference/ConnectionEvent.html).
 
-**NOTE:** Such metadata is not actually necessary to start a SIP call, though it has advantages as shown in this sample app. It is also possible to simply call `opentok.dial(sessionID, token, sipUri, callback)` to start the SIP call.<br/><br/> 
+**NOTE:** Such metadata is not actually necessary to start a SIP call, though it has advantages as shown in this sample app. It is also possible to simply call `OpenTok.dial(sessionID, token, sipUri, callback)` to start the SIP call.<br/><br/> 
 
 
 The `streamCreated` listener, as shown here in [index.ejs](./views/index.ejs), inspects this token metadata to determine if the new participant is joining via a SIP call:
@@ -179,12 +180,10 @@ session.on("streamCreated", function (event) {
 
   . . .
 
-}
+});
 ```
 
-
-Once the session has been established and the SIP token (`sipToken`) has been generated, the `opentok.dial()` method passes that information to the SIP call endpoint:
-
+Once the session has been established and the SIP token (`sipToken`) has been generated, the `OpenTok.dial()` method passes that information to the SIP call endpoint:
 
 ```javascript
   opentok.dial(sessionId, sipToken, config.sipUri, {
