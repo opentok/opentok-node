@@ -15,6 +15,7 @@ if (!apiKey || !apiSecret) {
 // Initialize the express app
 var app = express();
 app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -34,10 +35,13 @@ app.get('/', function(req, res) {
   res.render('index.ejs');
 });
 
-app.get('/host', function(req, res) {
-  var sessionId = app.get('sessionId'),
-      // generate a fresh token for this client
-      token = opentok.generateToken(sessionId, { role: 'moderator' });
+app.get('/host', function (req, res) {
+  var sessionId = app.get('sessionId');
+  // generate a fresh token for this client
+  var token = opentok.generateToken(sessionId, {
+    role: 'moderator',
+    initialLayoutClassList: ['focus']
+  });
 
   res.render('host.ejs', {
     apiKey: apiKey,
@@ -111,6 +115,16 @@ app.get('/delete/:archiveId', function(req, res) {
     res.redirect('/history');
   });
 });
+
+app.post('/archive/:archiveId/layout', function (req, res) {
+  var archiveId = req.param('archiveId');
+  var type = req.body.type;
+  opentok.setArchiveLayout(archiveId, type, null, function (err) {
+    if (err) return res.send(500, 'Could not set layout ' + type + '. error=' + err.message);
+    res.send(200, 'OK');
+  });
+});
+
 
 // Start the express app
 function init() {
