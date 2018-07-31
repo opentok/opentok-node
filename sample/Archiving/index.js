@@ -128,17 +128,23 @@ app.post('/archive/:archiveId/layout', function (req, res) {
   });
 });
 
-app.post('/session/:sessionId/stream/:streamId/focus', function (req, res) {
+app.post('/focus', function (req, res) {
   var otherStreams = req.body.otherStreams;
-  var classListObj = { };
+  var classListArray = [];
   if (otherStreams) {
     var i; 
     for (i = 0; i < otherStreams.length; i++) {
-      classListObj[otherStreams[i]] = [];
+      classListArray.push({
+        id: otherStreams[i],
+        layoutClassList: [],
+      });
     }
   }
-  classListObj[req.body.focus] = ['focus'];
-  opentok.setStreamClassLists(req.param('sessionId'), classListObj, function (err) {
+  classListArray.push({
+    id: req.body.focus,
+    layoutClassList: ['focus'],
+  });
+  opentok.setStreamClassLists(app.get('sessionId'), classListArray, function (err) {
     console.log('err', err)
     if (err) return res.send(500, 'Could not set class lists. Error:' + err.message);
     return res.send(200, 'OK');

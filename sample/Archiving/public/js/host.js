@@ -18,7 +18,7 @@ function createButton(elementId, focusStreamId) {
     otherStreams = streams.filter(function (streamId) {
       return streamId !== focusStreamId;
     });
-    $.post('session/' + sessionId + '/stream/' + focusStreamId + '/focus', {
+    $.post('/focus', {
       focus: focusStreamId,
       otherStreams: otherStreams
     }).done(function () {
