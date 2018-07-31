@@ -1,6 +1,7 @@
 var session = OT.initSession(apiKey, sessionId),
     publisher = OT.initPublisher('publisher', { insertMode: 'append' }),
     archiveID = null;
+var streams = [];
 var currentLayoutClass = 'horizontalPresentation'
 
 function toggleLayoutClass() {
@@ -9,13 +10,18 @@ function toggleLayoutClass() {
     'horizontalPresentation';
 }
 
-function createButton(elementId, streamId) {
-  console.log(elementId, streamId)
+function createButton(elementId, focusStreamId) {
   var streamElement = document.getElementById(elementId);
   var button = $('<button>Focus</button>');
   button.insertAfter("#" + elementId);
   button.click(function() {
-    $.post('session/' + sessionId + '/stream/' + streamId + '/focus').done(function () {
+    otherStreams = streams.filter(function (streamId) {
+      return streamId !== focusStreamId;
+    });
+    $.post('session/' + sessionId + '/stream/' + focusStreamId + '/focus', {
+      focus: focusStreamId,
+      otherStreams: otherStreams
+    }).done(function () {
       console.log('Focus changed.');
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
@@ -32,18 +38,27 @@ session.connect(token, function(err) {
 });
 
 publisher.on('streamCreated', function() {
+  streams.push(publisher.stream.id);
   createButton(publisher.id, publisher.stream.id);
 });
 
 session.on('streamCreated', function(event) {
   var streamContainer = document.createElement('div');
   streamContainer.id = event.stream.id;
+  streams.push(event.stream.id);
   document.getElementById('subscribers').appendChild(streamContainer);
   var subscriber = session.subscribe(event.stream, streamContainer, { insertMode: 'append' });
   createButton(subscriber.id, event.stream.id);
 });
 
 session.on('streamDestroyed', function(event) {
+  var i;
+  for (i = 0; i < streams.length; i += 1) {
+    if (streams[i] === streamId) {
+      streams.splice(1, i);
+      break;
+    }
+  }
   var streamContainer = document.getElementById(event.stream.id);
   streamContainer.parentNode.removeChild(streamContainer);
 });

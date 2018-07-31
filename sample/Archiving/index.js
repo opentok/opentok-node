@@ -91,7 +91,10 @@ app.post('/start', function(req, res) {
     name: 'Node Archiving Sample App',
     hasAudio: hasAudio,
     hasVideo: hasVideo,
-    outputMode: outputMode
+    outputMode: outputMode,
+    layout: {
+      type: 'horizontalPresentation'
+    }
   }, function(err, archive) {
     if (err) return res.send(500,
       'Could not start archive for session '+sessionId+'. error='+err.message
@@ -125,6 +128,22 @@ app.post('/archive/:archiveId/layout', function (req, res) {
   });
 });
 
+app.post('/session/:sessionId/stream/:streamId/focus', function (req, res) {
+  var otherStreams = req.body.otherStreams;
+  var classListObj = { };
+  if (otherStreams) {
+    var i; 
+    for (i = 0; i < otherStreams.length; i++) {
+      classListObj[otherStreams[i]] = [];
+    }
+  }
+  classListObj[req.body.focus] = ['focus'];
+  opentok.setStreamClassLists(req.param('sessionId'), classListObj, function (err) {
+    console.log('err', err)
+    if (err) return res.send(500, 'Could not set class lists. Error:' + err.message);
+    return res.send(200, 'OK');
+  });
+});
 
 // Start the express app
 function init() {
