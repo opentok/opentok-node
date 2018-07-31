@@ -15,8 +15,11 @@ body {
 
 #subscribers div {
   float: left;
+  display: flex;
+  flex-direction: column;
 }
 
+}
 .bump-me {
   padding-top: 40px;
 }

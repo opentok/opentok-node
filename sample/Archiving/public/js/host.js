@@ -1,5 +1,5 @@
 var session = OT.initSession(apiKey, sessionId),
-    publisher = OT.initPublisher('publisher'),
+    publisher = OT.initPublisher('publisher', { insertMode: 'append' }),
     archiveID = null;
 var currentLayoutClass = 'horizontalPresentation'
 
@@ -9,6 +9,21 @@ function toggleLayoutClass() {
     'horizontalPresentation';
 }
 
+function createButton(elementId, streamId) {
+  console.log(elementId, streamId)
+  var streamElement = document.getElementById(elementId);
+  var button = $('<button>Focus</button>');
+  button.insertAfter("#" + elementId);
+  button.click(function() {
+    $.post('session/' + sessionId + '/stream/' + streamId + '/focus').done(function () {
+      console.log('Focus changed.');
+    })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+      console.error('Stream class list error:', errorThrown); // -
+    });
+  });
+}
+
 session.connect(token, function(err) {
   if(err) {
     alert(err.message || err);
@@ -16,8 +31,21 @@ session.connect(token, function(err) {
   session.publish(publisher);
 });
 
+publisher.on('streamCreated', function() {
+  createButton(publisher.id, publisher.stream.id);
+});
+
 session.on('streamCreated', function(event) {
-  session.subscribe(event.stream, 'subscribers', { insertMode: 'append' });
+  var streamContainer = document.createElement('div');
+  streamContainer.id = event.stream.id;
+  document.getElementById('subscribers').appendChild(streamContainer);
+  var subscriber = session.subscribe(event.stream, streamContainer, { insertMode: 'append' });
+  createButton(subscriber.id, event.stream.id);
+});
+
+session.on('streamDestroyed', function(event) {
+  var streamContainer = document.getElementById(event.stream.id);
+  streamContainer.parentNode.removeChild(streamContainer);
 });
 
 session.on('archiveStarted', function(event) {
