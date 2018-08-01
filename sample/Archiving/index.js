@@ -27,6 +27,7 @@ var opentok = new OpenTok(apiKey, apiSecret);
 opentok.createSession({ mediaMode: 'routed' },function(err, session) {
   if (err) throw err;
   app.set('sessionId', session.sessionId);
+  app.set('layout', 'horizontalPresentation');
   // We will wait on starting the app until this is done
   init();
 });
@@ -58,7 +59,9 @@ app.get('/participant', function(req, res) {
   res.render('participant.ejs', {
     apiKey: apiKey,
     sessionId: sessionId,
-    token: token
+    token: token,
+    focusStreamId: app.get('focusStreamId') || '',
+    layout: app.get('layout'),
   });
 });
 
@@ -122,6 +125,7 @@ app.get('/delete/:archiveId', function(req, res) {
 app.post('/archive/:archiveId/layout', function (req, res) {
   var archiveId = req.param('archiveId');
   var type = req.body.type;
+  app.set('layout', type);
   opentok.setArchiveLayout(archiveId, type, null, function (err) {
     if (err) return res.send(500, 'Could not set layout ' + type + '. error=' + err.message);
     res.send(200, 'OK');
@@ -130,6 +134,7 @@ app.post('/archive/:archiveId/layout', function (req, res) {
 
 app.post('/focus', function (req, res) {
   var otherStreams = req.body.otherStreams;
+  var focusStreamId = req.body.focus;
   var classListArray = [];
   if (otherStreams) {
     var i; 
@@ -141,11 +146,11 @@ app.post('/focus', function (req, res) {
     }
   }
   classListArray.push({
-    id: req.body.focus,
+    id: focusStreamId,
     layoutClassList: ['focus'],
   });
+  app.set('focusStreamId', focusStreamId);
   opentok.setStreamClassLists(app.get('sessionId'), classListArray, function (err) {
-    console.log('err', err)
     if (err) return res.send(500, 'Could not set class lists. Error:' + err.message);
     return res.send(200, 'OK');
   });

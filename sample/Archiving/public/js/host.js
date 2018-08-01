@@ -1,22 +1,39 @@
 var session = OT.initSession(apiKey, sessionId),
-    publisher = OT.initPublisher('publisher', { insertMode: 'append' }),
+    publisher = OT.initPublisher('publisher', {
+      insertMode: 'append',
+      width: '100%',
+      height: '100%',
+    }),
     archiveID = null;
 var streams = [];
-var currentLayoutClass = 'horizontalPresentation'
+var currentLayoutClass = 'horizontalPresentation';
 
 function toggleLayoutClass() {
-  return currentLayoutClass === 'horizontalPresentation' ?
-    'verticalPresentation' :
-    'horizontalPresentation';
+  if (currentLayoutClass === 'horizontalPresentation') {
+    currentLayoutClass = 'verticalPresentation';
+    $('#streams').addClass('vertical');
+    $('.focus').appendTo('#streams');
+  } else {
+    currentLayoutClass = 'horizontalPresentation';
+    $('#streams').removeClass('vertical');
+    $('.focus').prependTo('#streams');
+  }
+  session.signal({
+    type: 'layoutClass',
+    data: currentLayoutClass
+  })
+  return currentLayoutClass;
 }
 
-function createButton(elementId, focusStreamId) {
-  var streamElement = document.getElementById(elementId);
-  var button = $('<button>Focus</button>');
-  button.insertAfter("#" + elementId);
-  button.click(function() {
+function createFocusClick(elementId, focusStreamId) {
+  var $focusElement;
+  $("#" + elementId).click(function() {
     otherStreams = streams.filter(function (streamId) {
-      return streamId !== focusStreamId;
+      if (streamId !== focusStreamId) {
+        $('#' + streamId).removeClass('focus');
+        return true;
+      }
+      return false;
     });
     $.post('/focus', {
       focus: focusStreamId,
@@ -27,6 +44,21 @@ function createButton(elementId, focusStreamId) {
     .fail(function (jqXHR, textStatus, errorThrown) {
       console.error('Stream class list error:', errorThrown); // -
     });
+
+    $('.focus').removeClass('focus');
+    $focusElement = (publisher.stream.id === focusStreamId) ? $('#publisher')
+      : $('#' + focusStreamId)
+    $focusElement.addClass('focus');
+    if (currentLayoutClass === 'horizontalPresentation') {
+      $focusElement.prependTo('#streams');
+    } else {
+      $focusElement.appendTo('#streams');
+    }
+
+    session.signal({
+      type: 'focusStream',
+      data: focusStreamId,
+    })
   });
 }
 
@@ -39,19 +71,24 @@ session.connect(token, function(err) {
 
 publisher.on('streamCreated', function() {
   streams.push(publisher.stream.id);
-  createButton(publisher.id, publisher.stream.id);
+  createFocusClick(publisher.id, publisher.stream.id);
 });
 
 session.on('streamCreated', function(event) {
   var streamContainer = document.createElement('div');
   streamContainer.id = event.stream.id;
   streams.push(event.stream.id);
-  document.getElementById('subscribers').appendChild(streamContainer);
-  var subscriber = session.subscribe(event.stream, streamContainer, { insertMode: 'append' });
-  createButton(subscriber.id, event.stream.id);
+  document.getElementById('streams').appendChild(streamContainer);
+  var subscriber = session.subscribe(event.stream, streamContainer, {
+    insertMode: 'append',
+    width: '100%',
+    height: '100%',
+  });
+  createFocusClick(subscriber.id, event.stream.id);
 });
 
 session.on('streamDestroyed', function(event) {
+  var streamId = event.stream.id;
   var i;
   for (i = 0; i < streams.length; i += 1) {
     if (streams[i] === streamId) {
@@ -59,8 +96,7 @@ session.on('streamDestroyed', function(event) {
       break;
     }
   }
-  var streamContainer = document.getElementById(event.stream.id);
-  streamContainer.parentNode.removeChild(streamContainer);
+  $('#' + streamId).remove();
 });
 
 session.on('archiveStarted', function(event) {
