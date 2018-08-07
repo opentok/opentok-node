@@ -47,7 +47,9 @@ app.get('/host', function (req, res) {
   res.render('host.ejs', {
     apiKey: apiKey,
     sessionId: sessionId,
-    token: token
+    token: token,
+    focusStreamId: app.get('focusStreamId') || '',
+    layout: app.get('layout'),
   });
 });
 

@@ -35,6 +35,7 @@ function focusStream(streamId) {
   $focusElement.addClass('focus');
   positionStreams();
 }
+
 session.connect(token, function(err) {
   if(err) {
     alert(err.message || err);

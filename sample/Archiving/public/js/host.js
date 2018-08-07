@@ -6,36 +6,40 @@ var session = OT.initSession(apiKey, sessionId),
     }),
     archiveID = null;
 
+function setFocus(focusStreamId) {
+  var otherStreams = [];
+  $('#streams').children().each(function (i, element) {
+    if (element.id !== focusStreamId) {
+      otherStreams.push(element.id);
+      $('#' + element.id).removeClass('focus');
+    }
+  });
+
+  $.post('/focus', {
+    focus: focusStreamId,
+    otherStreams: otherStreams
+  }).done(function () {
+    console.log('Focus changed.');
+  })
+  .fail(function (jqXHR, textStatus, errorThrown) {
+    console.error('Stream class list error:', errorThrown);
+  });
+
+  $('.focus').removeClass('focus');
+  $focusElement = (publisher.stream && publisher.stream.streamId === focusStreamId) ?
+    $('#publisher') : $('#' + focusStreamId);
+  $focusElement.addClass('focus');
+  session.signal({
+    type: 'focusStream',
+    data: focusStreamId,
+  });
+  positionStreams();
+}
+
 function createFocusClick(elementId, focusStreamId) {
   var $focusElement;
   $("#" + elementId).click(function() {
-    var otherStreams = [];
-    $('#streams').children().each(function (i, element) {
-      if (element.id !== focusStreamId) {
-        otherStreams.push(element.id);
-        $('#' + element.id).removeClass('focus');
-      }
-    });
-
-    $.post('/focus', {
-      focus: focusStreamId,
-      otherStreams: otherStreams
-    }).done(function () {
-      console.log('Focus changed.');
-    })
-    .fail(function (jqXHR, textStatus, errorThrown) {
-      console.error('Stream class list error:', errorThrown);
-    });
-
-    $('.focus').removeClass('focus');
-    $focusElement = (publisher.stream.id === focusStreamId) ? $('#publisher')
-      : $('#' + focusStreamId)
-    $focusElement.addClass('focus');
-    session.signal({
-      type: 'focusStream',
-      data: focusStreamId,
-    });
-    positionStreams();
+    setFocus(focusStreamId);
   });
 }
 
@@ -51,6 +55,10 @@ function positionStreams() {
   }
 }
 
+if (layout === 'verticalPresentation') {
+  $('#streams').addClass('vertical');
+}
+
 session.connect(token, function(err) {
   if(err) {
     alert(err.message || err);
@@ -59,25 +67,33 @@ session.connect(token, function(err) {
 });
 
 publisher.on('streamCreated', function() {
-  createFocusClick(publisher.id, publisher.stream.id);
+  createFocusClick(publisher.id, publisher.stream.streamId);
   positionStreams();
 });
 
 session.on('streamCreated', function(event) {
+  var streamId = event.stream.streamId;
   var $streamContainer = $('<div></div>');
   $streamContainer.attr('id', event.stream.id);
   $('#streams').append($streamContainer);
-  var subscriber = session.subscribe(event.stream, event.stream.id, {
+  var subscriber = session.subscribe(event.stream, streamId, {
     insertMode: 'append',
     width: '100%',
     height: '100%',
   });
-  createFocusClick(subscriber.id, event.stream.id);
+  if (streamId === focusStreamId) {
+    setFocus(streamId);
+  }
+  createFocusClick(subscriber.id, streamId);
   positionStreams();
 });
 
 session.on('streamDestroyed', function(event) {
-  $('#' + event.stream.id).remove();
+  var $streamElem = $('#' + event.stream.id);
+  if ($streamElem.hasClass('focus')) {
+    setFocus(publisher.stream.streamId);
+  }
+  $streamElem.remove();
   positionStreams();
 });
 
