@@ -7,11 +7,12 @@ var session = OT.initSession(apiKey, sessionId),
     archiveID = null;
 
 function setFocus(focusStreamId) {
-  var otherStreams = [];
-  $('#streams').children().each(function (i, element) {
-    if (element.id !== focusStreamId) {
-      otherStreams.push(element.id);
+  var otherStreams = $.map($('#streams').children(), function (element) {
+    var streamId = (element.id === 'publisher' && publisher.stream) ? publisher.stream.streamId
+      : element.id;
+    if (streamId !== focusStreamId) {
       $('#' + element.id).removeClass('focus');
+      return streamId;
     }
   });
 

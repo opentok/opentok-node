@@ -99,7 +99,7 @@ app.post('/start', function(req, res) {
     outputMode: outputMode,
   };
   if (outputMode === 'composed') {
-    startOptions.layout = { type: 'horizontalPresentation' };
+    archiveOptions.layout = { type: 'horizontalPresentation' };
   }
   opentok.startArchive(app.get('sessionId'), archiveOptions, function(err, archive) {
     if (err) return res.send(500,
