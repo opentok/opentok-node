@@ -225,6 +225,25 @@ Note that you can also create an automatically archived session, by passing in `
 as the `archiveMode` option when you call the `OpenTok.createSession()` method (see "Creating
 Sessions," above).
 
+For composed archives, you can set change the layout dynamically, using the `OpenTok.setArchiveLayout(archiveId, type, stylesheet, callback)` method:
+
+```javascript
+opentok.setArchiveLayout(archiveId, type, null, function (err) {
+  if (err) return res.send(500, 'Could not set layout ' + type + '. error=' + err.message);
+  res.send(200, 'OK');
+});
+```
+
+You can set the initial layout class for a client's streams by setting the `layout` option when
+you create the token for the client, using the `OpenTok.generateToken()` method. And you can
+change the layout classes for streams in a session by calling the
+`OpenTok.setStreamClassLists(sessionId, classListArray, callback)` method or the
+`Session.setStreamClassLists(app.get(classListArray, callback)` method.
+
+Setting the layout of composed archives is optional. By default, composed archives use the
+"best fit" layout (see [Customizing the video layout for composed
+archives](https://tokbox.com/developer/guides/archiving/layout-control.html)).
+
 For more information on archiving, see the
 [OpenTok archiving developer guide](https://tokbox.com/developer/guides/archiving/).
 
@@ -319,7 +338,6 @@ clone the whole repository and read the README in each of the sample directories
 *  [HelloWorld](sample/HelloWorld/README.md)
 *  [Archiving](sample/Archiving/README.md)
 *  [SipInterconnect](sample/StreamInfo/README.md)
-*  [StreamInfo](sample/StreamInfo/README.md)
 
 ## Documentation
 

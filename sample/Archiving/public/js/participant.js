@@ -15,18 +15,25 @@ publisher = OT.initPublisher('publisher', {
   height: '100%',
 });
 
+function positionStreams() {
+  $focusElement = $('.focus');
+  if ($('#streams').hasClass('vertical')) {
+    $focusElement.appendTo('#streams');
+    $('#streams').children().css('top', '0')
+    $focusElement.css('top', (-20 * ($('#streams').children().size() - 1)) + '%')
+  } else {
+    $focusElement.prependTo('#streams');
+    $focusElement.css('top', '0');
+  }
+}
+
 function focusStream(streamId) {
   focusStreamId = streamId;
   $focusElement = (publisher.stream && publisher.stream.id === focusStreamId) ? $('#publisher')
     : $('#' + focusStreamId);
   $('.focus').removeClass('focus');
   $focusElement.addClass('focus');
-  if ($('#streams').hasClass('vertical')) {
-    $focusElement.appendTo('#streams');
-  } else {
-    $focusElement.prependTo('#streams');
-  }
-
+  positionStreams();
 }
 session.connect(token, function(err) {
   if(err) {
@@ -48,10 +55,12 @@ session.on('streamCreated', function(event) {
   if (streamId === focusStreamId) {
     focusStream(streamId);
   }
+  positionStreams();
 });
 
 session.on('streamDestroyed', function(event) {
   $('#' + event.stream.id).remove();
+  positionStreams();
 });
 
 session.on('signal:layoutClass', function(event) {
@@ -62,6 +71,7 @@ session.on('signal:layoutClass', function(event) {
     $('#streams').addClass('vertical');
     $('.focus').appendTo('#streams');
   }
+  positionStreams();
 });
 
 session.on('signal:focusStream', function(event) {

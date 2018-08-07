@@ -90,15 +90,16 @@ app.post('/start', function(req, res) {
   var hasAudio = (req.param('hasAudio') !== undefined);
   var hasVideo = (req.param('hasVideo') !== undefined);
   var outputMode = req.param('outputMode');
-  opentok.startArchive(app.get('sessionId'), {
+  var archiveOptions = {
     name: 'Node Archiving Sample App',
     hasAudio: hasAudio,
     hasVideo: hasVideo,
     outputMode: outputMode,
-    layout: {
-      type: 'horizontalPresentation'
-    }
-  }, function(err, archive) {
+  };
+  if (outputMode === 'composed') {
+    startOptions.layout = { type: 'horizontalPresentation' };
+  }
+  opentok.startArchive(app.get('sessionId'), archiveOptions, function(err, archive) {
     if (err) return res.send(500,
       'Could not start archive for session '+sessionId+'. error='+err.message
     );

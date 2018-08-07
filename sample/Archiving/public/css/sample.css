@@ -44,7 +44,6 @@ body {
 
 #streams.vertical .focus {
   padding: 0;
-  top: -40%;
   left: 0;
   margin: 0;
   left: 20%;
@@ -52,6 +51,9 @@ body {
   width: 80%;
 }
 
+.stop {
+  display: none;
+}
 
 .bump-me {
   padding-top: 40px;
