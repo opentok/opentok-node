@@ -29,6 +29,25 @@ var recording = false;
 // Helpers
 var helpers = require('./helpers.js');
 
+function mockListStreamsRequest(sessId, status) {
+  var body;
+  if (!status) {
+    body = JSON.stringify({
+      count: 1,
+      items: [
+        {
+          id: 'fooId',
+          name: 'fooName',
+          layoutClassList: ['fooClass'],
+          videoType: 'screen'
+        }
+      ]
+    });
+  }
+  nock('https://api.opentok.com')
+    .get('/v2/project/123456/session/' + sessId + '/stream')
+    .reply(status || 200, body);
+}
 
 var validReply = JSON.stringify([
   {
@@ -1115,3 +1134,47 @@ describe('getStream', function () {
     });
   });
 });
+
+describe('listStreams', function () {
+  var opentok = new OpenTok('123456', 'APISECRET');
+  var SESSIONID = '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
+
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
+  describe('valid responses', function () {
+    it('should not get an error and get valid stream data given valid parameters', function (done) {
+      mockListStreamsRequest(SESSIONID);
+      opentok.listStreams(SESSIONID, function (err, streams) {
+        var stream = streams[0];
+        expect(err).to.be.null;
+        expect(stream.id).to.equal('fooId');
+        expect(stream.name).to.equal('fooName');
+        expect(stream.layoutClassList.length).to.equal(1);
+        expect(stream.layoutClassList[0]).to.equal('fooClass');
+        expect(stream.videoType).to.equal('screen');
+        done();
+      });
+    });
+
+    it('should return an error if sessionId is null', function (done) {
+      opentok.listStreams(null, function (err, streams) {
+        expect(err).to.not.be.null;
+        expect(streams).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return an error if the REST method returns a 404 response code', function (done) {
+      mockListStreamsRequest(SESSIONID, 404);
+      opentok.listStreams(SESSIONID, function (err, streams) {
+        expect(err).to.not.be.null;
+        expect(streams).to.be.undefined;
+        done();
+      });
+    });
+  });
+});
+
+exports.mockListStreamsRequest = mockListStreamsRequest;
