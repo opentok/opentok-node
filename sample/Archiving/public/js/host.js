@@ -86,16 +86,16 @@ publisher.on('streamCreated', function () {
 });
 
 session.on('streamCreated', function (event) {
+  var subscriber;
   var streamId = event.stream.streamId;
   var $streamContainer = $('<div></div>');
-  var subscriber = session.subscribe(event.stream, streamId, {
+  $streamContainer.attr('id', event.stream.id);
+  $('#streams').append($streamContainer);
+  subscriber = session.subscribe(event.stream, streamId, {
     insertMode: 'append',
     width: '100%',
     height: '100%'
   });
-
-  $streamContainer.attr('id', event.stream.id);
-  $('#streams').append($streamContainer);
 
   if (streamId === focusStreamId) {
     setFocus(streamId);
@@ -140,8 +140,7 @@ $(document).ready(function () {
     $.get('stop/' + archiveID);
   });
   $('.toggle-layout').click(function () {
-    var currentLayoutClass = $('#streams').hasClass('vertical') ? 'verticalPresentation'
-      : 'horizontalPresentation';
+    var newLayoutClass;
 
     if ($('#streams').hasClass('vertical')) {
       $('#streams').removeClass('vertical');
@@ -149,18 +148,23 @@ $(document).ready(function () {
     else {
       $('#streams').addClass('vertical');
     }
+
     positionStreams();
 
+    newLayoutClass = $('#streams').hasClass('vertical') ? 'verticalPresentation'
+      : 'horizontalPresentation';
+
     $.post('archive/' + archiveID + '/layout', {
-      type: currentLayoutClass
+      type: newLayoutClass
     }).done(function () {
       console.log('Archive layout updated.');
     }).fail(function (jqXHR, textStatus, errorThrown) {
-      console.error('Archive layout error:', errorThrown); // -
+      console.error('Archive layout error:', errorThrown);
     });
+
     session.signal({
       type: 'layoutClass',
-      data: currentLayoutClass
+      data: newLayoutClass
     });
   });
 });
