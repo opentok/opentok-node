@@ -78,7 +78,7 @@ describe('Stream', function () {
     });
 
     it('should return an error if the REST method returns a 404 response code', function (done) {
-      mockStreamRequest(SESSIONID, STREAMID, 400);
+      mockStreamRequest(SESSIONID, STREAMID, 404);
       session.getStream(STREAMID, function (err, stream) {
         expect(err).to.not.be.null;
         expect(stream).to.be.undefined;

@@ -1,12 +1,38 @@
-var session = OT.initSession(apiKey, sessionId),
-    publisher = OT.initPublisher('publisher', {
-      insertMode: 'append',
-      width: '100%',
-      height: '100%',
-    }),
-    archiveID = null;
+/* global OT, apiKey, sessionId, token, $, layout, focusStreamId */
+/* eslint-disable no-console */
+
+var session = OT.initSession(apiKey, sessionId);
+var publisher = OT.initPublisher('publisher', {
+  insertMode: 'append',
+  width: '100%',
+  height: '100%'
+});
+var archiveID = null;
+
+function disableForm() {
+  $('.archive-options-fields').attr('disabled', 'disabled');
+}
+
+function enableForm() {
+  $('.archive-options-fields').removeAttr('disabled');
+}
+
+function positionStreams() {
+  var $focusElement;
+  $focusElement = $('.focus');
+  if ($('#streams').hasClass('vertical')) {
+    $('#streams').children().css('top', '0');
+    $focusElement.appendTo('#streams');
+    $focusElement.css('top', (-20 * ($('#streams').children().size() - 1)) + '%');
+  }
+  else {
+    $focusElement.prependTo('#streams');
+    $focusElement.css('top', '0');
+  }
+}
 
 function setFocus(focusStreamId) {
+  var $focusElement;
   var otherStreams = $.map($('#streams').children(), function (element) {
     var streamId = (element.id === 'publisher' && publisher.stream) ? publisher.stream.streamId
       : element.id;
@@ -14,6 +40,7 @@ function setFocus(focusStreamId) {
       $('#' + element.id).removeClass('focus');
       return streamId;
     }
+    return null;
   });
 
   $.post('/focus', {
@@ -21,8 +48,7 @@ function setFocus(focusStreamId) {
     otherStreams: otherStreams
   }).done(function () {
     console.log('Focus changed.');
-  })
-  .fail(function (jqXHR, textStatus, errorThrown) {
+  }).fail(function (jqXHR, textStatus, errorThrown) {
     console.error('Stream class list error:', errorThrown);
   });
 
@@ -32,56 +58,45 @@ function setFocus(focusStreamId) {
   $focusElement.addClass('focus');
   session.signal({
     type: 'focusStream',
-    data: focusStreamId,
+    data: focusStreamId
   });
   positionStreams();
 }
 
 function createFocusClick(elementId, focusStreamId) {
-  var $focusElement;
-  $("#" + elementId).click(function() {
+  $('#' + elementId).click(function () {
     setFocus(focusStreamId);
   });
-}
-
-function positionStreams() {
-  $focusElement = $('.focus');
-  if ($('#streams').hasClass('vertical')) {
-    $('#streams').children().css('top', '0')
-    $focusElement.appendTo('#streams');
-    $focusElement.css('top', (-20 * ($('#streams').children().size() - 1)) + '%');
-  } else {
-    $focusElement.prependTo('#streams');
-    $focusElement.css('top', '0');
-  }
 }
 
 if (layout === 'verticalPresentation') {
   $('#streams').addClass('vertical');
 }
 
-session.connect(token, function(err) {
-  if(err) {
-    alert(err.message || err);
+session.connect(token, function (err) {
+  if (err) {
+    alert(err.message || err); // eslint-disable-line no-alert
   }
   session.publish(publisher);
 });
 
-publisher.on('streamCreated', function() {
+publisher.on('streamCreated', function () {
   createFocusClick(publisher.id, publisher.stream.streamId);
   positionStreams();
 });
 
-session.on('streamCreated', function(event) {
+session.on('streamCreated', function (event) {
   var streamId = event.stream.streamId;
   var $streamContainer = $('<div></div>');
-  $streamContainer.attr('id', event.stream.id);
-  $('#streams').append($streamContainer);
   var subscriber = session.subscribe(event.stream, streamId, {
     insertMode: 'append',
     width: '100%',
-    height: '100%',
+    height: '100%'
   });
+
+  $streamContainer.attr('id', event.stream.id);
+  $('#streams').append($streamContainer);
+
   if (streamId === focusStreamId) {
     setFocus(streamId);
   }
@@ -89,7 +104,7 @@ session.on('streamCreated', function(event) {
   positionStreams();
 });
 
-session.on('streamDestroyed', function(event) {
+session.on('streamDestroyed', function (event) {
   var $streamElem = $('#' + event.stream.id);
   if ($streamElem.hasClass('focus')) {
     setFocus(publisher.stream.streamId);
@@ -98,7 +113,7 @@ session.on('streamDestroyed', function(event) {
   positionStreams();
 });
 
-session.on('archiveStarted', function(event) {
+session.on('archiveStarted', function (event) {
   archiveID = event.id;
   console.log('ARCHIVE STARTED');
   $('.start').hide();
@@ -106,7 +121,7 @@ session.on('archiveStarted', function(event) {
   disableForm();
 });
 
-session.on('archiveStopped', function(event) {
+session.on('archiveStopped', function () {
   archiveID = null;
   console.log('ARCHIVE STOPPED');
   $('.start').show();
@@ -114,44 +129,38 @@ session.on('archiveStopped', function(event) {
   enableForm();
 });
 
-$(document).ready(function() {
-  $('.start').click(function (event) {
+$(document).ready(function () {
+  $('.start').click(function () {
     var options = $('.archive-options').serialize();
     disableForm();
     $.post('/start', options)
       .fail(enableForm);
-  }).prop('disabled', false );
-  $('.stop').click(function(event){
+  }).prop('disabled', false);
+  $('.stop').click(function () {
     $.get('stop/' + archiveID);
   });
   $('.toggle-layout').click(function () {
+    var currentLayoutClass = $('#streams').hasClass('vertical') ? 'verticalPresentation'
+      : 'horizontalPresentation';
+
     if ($('#streams').hasClass('vertical')) {
       $('#streams').removeClass('vertical');
-    } else {
+    }
+    else {
       $('#streams').addClass('vertical');
     }
     positionStreams();
-    var currentLayoutClass = $('#streams').hasClass('vertical') ? 'verticalPresentation'
-      : 'horizontalPresentation';
+
     $.post('archive/' + archiveID + '/layout', {
       type: currentLayoutClass
     }).done(function () {
       console.log('Archive layout updated.');
-    })
-    .fail(function (jqXHR, textStatus, errorThrown) {
+    }).fail(function (jqXHR, textStatus, errorThrown) {
       console.error('Archive layout error:', errorThrown); // -
     });
     session.signal({
       type: 'layoutClass',
       data: currentLayoutClass
-    })
+    });
   });
 });
-
-function disableForm() {
-  $('.archive-options-fields').attr('disabled', 'disabled');
-}
-
-function enableForm() {
-  $('.archive-options-fields').removeAttr('disabled');
-}
