@@ -1,6 +1,4 @@
 var expect = require('chai').expect;
-var mockListStreamsRequest = require('./opentok-test').mockListStreamsRequest;
-var nock = require('nock');
 
 // Subject
 var Session = require('../lib/session.js');
@@ -90,43 +88,6 @@ describe('Session', function () {
       var token = this.session.generateToken({ data: 'name=Johnny' });
       expect(token).to.be.a('string');
       // TODO: decode and check its data
-    });
-  });
-
-  describe('listStreams', function () {
-    beforeEach(function () {
-      this.opentok = new OpenTok(apiKey, apiSecret);
-      this.session = new Session(this.opentok, sessionId);
-    });
-
-    afterEach(function () {
-      nock.cleanAll();
-    });
-
-    describe('valid responses', function () {
-      it('should not get an error and get valid stream data given valid parameters', function (done) {
-        nock.disableNetConnect();
-        mockListStreamsRequest(sessionId);
-        this.session.listStreams(function (err, streams) {
-          var stream = streams[0];
-          expect(err).to.be.null;
-          expect(stream.id).to.equal('fooId');
-          expect(stream.name).to.equal('fooName');
-          expect(stream.layoutClassList.length).to.equal(1);
-          expect(stream.layoutClassList[0]).to.equal('fooClass');
-          expect(stream.videoType).to.equal('screen');
-          done();
-        });
-      });
-
-      it('should return an error if the REST method returns a 404 response code', function (done) {
-        mockListStreamsRequest(sessionId, 404);
-        this.session.listStreams(function (err, streams) {
-          expect(err).to.not.be.null;
-          expect(streams).to.be.undefined;
-          done();
-        });
-      });
     });
   });
 });

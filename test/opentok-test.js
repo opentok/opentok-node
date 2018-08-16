@@ -1,6 +1,5 @@
 /* */
 var expect = require('chai').expect;
-var mockStreamRequest = require('./stream-test').mockStreamRequest;
 var nock = require('nock');
 var _ = require('lodash');
 var jwt = require('jsonwebtoken');
@@ -38,6 +37,21 @@ var validReply = JSON.stringify([
     media_server_url: ''
   }
 ]);
+
+function mockStreamRequest(sessId, streamId, status) {
+  var body;
+  if (!status) {
+    body = JSON.stringify({
+      id: 'fooId',
+      name: 'fooName',
+      layoutClassList: ['fooClass'],
+      videoType: 'screen'
+    });
+  }
+  nock('https://api.opentok.com')
+    .get('/v2/project/APIKEY/session/' + sessId + '/stream/' + streamId)
+    .reply(status || 200, body);
+}
 
 function mockListStreamsRequest(sessId, status) {
   var body;
@@ -1215,5 +1229,3 @@ describe('listStreams', function () {
     });
   });
 });
-
-exports.mockListStreamsRequest = mockListStreamsRequest;
