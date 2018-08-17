@@ -237,8 +237,7 @@ opentok.setArchiveLayout(archiveId, type, null, function (err) {
 You can set the initial layout class for a client's streams by setting the `layout` option when
 you create the token for the client, using the `OpenTok.generateToken()` method. And you can
 change the layout classes for streams in a session by calling the
-`OpenTok.setStreamClassLists(sessionId, classListArray, callback)` method or the
-`Session.setStreamClassLists(app.get(classListArray, callback)` method.
+`OpenTok.setStreamClassLists(sessionId, classListArray, callback)` method.
 
 Setting the layout of composed archives is optional. By default, composed archives use the
 "best fit" layout (see [Customizing the video layout for composed
@@ -331,12 +330,12 @@ The callback function is called when the operation completes. It takes two param
 `error` (in the case of an error) or `stream`. On sucessful completion, the `stream` object
 is set, containing properties of the stream.
 
-To get information on *all* active streams in a session, call the `OpenTok.getStreams()` method,
+To get information on *all* active streams in a session, call the `OpenTok.listStreams()` method,
 passing in a session ID and a callback function. Upon sucess, the callback function is invoked
 with an array of Stream objects passed into the second parameter:
 
 ```javascript
-opentok.getStream(sessionId, function(error, stream) {
+opentok.listStreams(sessionId, function(error, streams) {
   if (error) {
     console.log(error.message);
   } else {
