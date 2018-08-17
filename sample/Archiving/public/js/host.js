@@ -154,13 +154,15 @@ $(document).ready(function () {
     newLayoutClass = $('#streams').hasClass('vertical') ? 'verticalPresentation'
       : 'horizontalPresentation';
 
-    $.post('archive/' + archiveID + '/layout', {
-      type: newLayoutClass
-    }).done(function () {
-      console.log('Archive layout updated.');
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-      console.error('Archive layout error:', errorThrown);
-    });
+    if (archiveID) {
+      $.post('archive/' + archiveID + '/layout', {
+        type: newLayoutClass
+      }).done(function () {
+        console.log('Archive layout updated.');
+      }).fail(function (jqXHR) {
+        console.error('Archive layout error:', jqXHR.responseText);
+      });
+    }
 
     session.signal({
       type: 'layoutClass',

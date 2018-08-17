@@ -144,7 +144,7 @@ app.post('/archive/:archiveId/layout', function (req, res) {
   app.set('layout', type);
   opentok.setArchiveLayout(archiveId, type, null, function (err) {
     if (err) {
-      return res.send(500, 'Could not set layout ' + type + '. error=' + err.message);
+      return res.send(500, 'Could not set layout ' + type + '. Error: ' + err.message);
     }
     return res.send(200, 'OK');
   });
