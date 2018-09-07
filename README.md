@@ -229,8 +229,7 @@ For composed archives, you can set change the layout dynamically, using the `Ope
 
 ```javascript
 opentok.setArchiveLayout(archiveId, type, null, function (err) {
-  if (err) return res.send(500, 'Could not set layout ' + type + '. error=' + err.message);
-  res.send(200, 'OK');
+  if (err) return console.log("error:", error);
 });
 ```
 
