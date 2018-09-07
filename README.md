@@ -309,7 +309,6 @@ For more information, see the
 You can get information on an active stream in an OpenTok session:
 
 ```javascript
-# To get stream info:
 var sessionId = '2_MX6xMDB-fjE1MzE3NjQ0MTM2NzZ-cHVTcUIra3JUa0kxUlhsVU55cTBYL0Y1flB';
 var streamId = '2a84cd30-3a33-917f-9150-49e454e01572';
 opentok.getStream(sessionId, streamId, function(error, streamInfo) {
