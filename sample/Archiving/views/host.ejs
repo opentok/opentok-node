@@ -11,7 +11,9 @@
           <h3 class="panel-title">Host</h3>
         </div>
         <div class="panel-body">
-          <div id="subscribers"><div id="publisher"></div></div>
+          <div id="streams">
+            <div id="publisher" class="focus"></div>
+          </div>
         </div>
         <div class="panel-footer">
           <form class="archive-options">
@@ -37,8 +39,9 @@
                   </div>
               </fieldset>
           </form>
-          <button class="btn btn-danger start">Start archiving</button>
+          <button class="btn btn-danger start" disabled>Start archiving</button>
           <button class="btn btn-success stop">Stop archiving</button>
+          <button class="btn toggle-layout">Toggle layout</button>
         </div>
       </div>
     </div>
@@ -80,6 +83,12 @@
               </tr>
             </tbody>
           </table>
+        <p>
+          Click <strong>Toggle layout</strong> to toggle the layout
+          between a vertical and horizontal presentation. The layout changes in all clients
+          and (in a composed archive) in the archive.
+        <p>
+          Click any stream to set it to be the focus stream in the archive layout.
       </div>
     </div>
   </div>
@@ -88,6 +97,8 @@
         var sessionId = "<%= sessionId %>";
         var apiKey = "<%= apiKey %>";
         var token = "<%= token %>";
+        var focusStreamId = "<%= focusStreamId || '' %>";
+        var layout = "<%= layout %>";
     </script>
     <script src="/js/host.js"></script>
 

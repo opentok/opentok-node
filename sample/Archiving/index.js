@@ -18,6 +18,7 @@ if (!apiKey || !apiSecret) {
 
 // Initialize the express app
 app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -36,6 +37,7 @@ opentok = new OpenTok(apiKey, apiSecret);
 opentok.createSession({ mediaMode: 'routed' }, function (err, session) {
   if (err) throw err;
   app.set('sessionId', session.sessionId);
+  app.set('layout', 'horizontalPresentation');
   // We will wait on starting the app until this is done
   init();
 });
@@ -47,12 +49,17 @@ app.get('/', function (req, res) {
 app.get('/host', function (req, res) {
   var sessionId = app.get('sessionId');
   // generate a fresh token for this client
-  var token = opentok.generateToken(sessionId, { role: 'moderator' });
+  var token = opentok.generateToken(sessionId, {
+    role: 'moderator',
+    initialLayoutClassList: ['focus']
+  });
 
   res.render('host.ejs', {
     apiKey: apiKey,
     sessionId: sessionId,
-    token: token
+    token: token,
+    focusStreamId: app.get('focusStreamId') || '',
+    layout: app.get('layout')
   });
 });
 
@@ -64,7 +71,9 @@ app.get('/participant', function (req, res) {
   res.render('participant.ejs', {
     apiKey: apiKey,
     sessionId: sessionId,
-    token: token
+    token: token,
+    focusStreamId: app.get('focusStreamId') || '',
+    layout: app.get('layout')
   });
 });
 
@@ -93,17 +102,20 @@ app.post('/start', function (req, res) {
   var hasAudio = (req.param('hasAudio') !== undefined);
   var hasVideo = (req.param('hasVideo') !== undefined);
   var outputMode = req.param('outputMode');
-  var sessionId = app.get('sessionId');
-  opentok.startArchive(sessionId, {
+  var archiveOptions = {
     name: 'Node Archiving Sample App',
     hasAudio: hasAudio,
     hasVideo: hasVideo,
     outputMode: outputMode
-  }, function (err, archive) {
+  };
+  if (outputMode === 'composed') {
+    archiveOptions.layout = { type: 'horizontalPresentation' };
+  }
+  opentok.startArchive(app.get('sessionId'), archiveOptions, function (err, archive) {
     if (err) {
       return res.send(
         500,
-        'Could not start archive for session ' + sessionId + '. error=' + err.message
+        'Could not start archive for session ' + app.get('sessionId') + '. error=' + err.message
       );
     }
     return res.json(archive);
@@ -123,5 +135,42 @@ app.get('/delete/:archiveId', function (req, res) {
   opentok.deleteArchive(archiveId, function (err) {
     if (err) return res.send(500, 'Could not stop archive ' + archiveId + '. error=' + err.message);
     return res.redirect('/history');
+  });
+});
+
+app.post('/archive/:archiveId/layout', function (req, res) {
+  var archiveId = req.param('archiveId');
+  var type = req.body.type;
+  app.set('layout', type);
+  opentok.setArchiveLayout(archiveId, type, null, function (err) {
+    if (err) {
+      return res.send(500, 'Could not set layout ' + type + '. Error: ' + err.message);
+    }
+    return res.send(200, 'OK');
+  });
+});
+
+app.post('/focus', function (req, res) {
+  var otherStreams = req.body.otherStreams;
+  var focusStreamId = req.body.focus;
+  var classListArray = [];
+  var i;
+
+  if (otherStreams) {
+    for (i = 0; i < otherStreams.length; i++) {
+      classListArray.push({
+        id: otherStreams[i],
+        layoutClassList: []
+      });
+    }
+  }
+  classListArray.push({
+    id: focusStreamId,
+    layoutClassList: ['focus']
+  });
+  app.set('focusStreamId', focusStreamId);
+  opentok.setStreamClassLists(app.get('sessionId'), classListArray, function (err) {
+    if (err) return res.send(500, 'Could not set class lists. Error:' + err.message);
+    return res.send(200, 'OK');
   });
 });

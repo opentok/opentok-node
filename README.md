@@ -225,6 +225,23 @@ Note that you can also create an automatically archived session, by passing in `
 as the `archiveMode` option when you call the `OpenTok.createSession()` method (see "Creating
 Sessions," above).
 
+For composed archives, you can set change the layout dynamically, using the `OpenTok.setArchiveLayout(archiveId, type, stylesheet, callback)` method:
+
+```javascript
+opentok.setArchiveLayout(archiveId, type, null, function (err) {
+  if (err) return console.log("error:", error);
+});
+```
+
+You can set the initial layout class for a client's streams by setting the `layout` option when
+you create the token for the client, using the `OpenTok.generateToken()` method. And you can
+change the layout classes for streams in a session by calling the
+`OpenTok.setStreamClassLists(sessionId, classListArray, callback)` method.
+
+Setting the layout of composed archives is optional. By default, composed archives use the
+"best fit" layout (see [Customizing the video layout for composed
+archives](https://tokbox.com/developer/guides/archiving/layout-control.html)).
+
 For more information on archiving, see the
 [OpenTok archiving developer guide](https://tokbox.com/developer/guides/archiving/).
 
@@ -287,11 +304,53 @@ opentok.dial(sessionId, token, sipUri, options, function (error, sipCall) {
 For more information, see the
 [OpenTok SIP Interconnect developer guide](https://tokbox.com/developer/guides/sip/).
 
+## Getting Stream Info
 
-## Samples
+You can get information on an active stream in an OpenTok session:
 
-There are sample applications included in this repository. To get going as fast as possible, clone the whole
-repository and follow the Walkthroughs:
+```javascript
+var sessionId = '2_MX6xMDB-fjE1MzE3NjQ0MTM2NzZ-cHVTcUIra3JUa0kxUlhsVU55cTBYL0Y1flB';
+var streamId = '2a84cd30-3a33-917f-9150-49e454e01572';
+opentok.getStream(sessionId, streamId, function(error, streamInfo) {
+  if (error) {
+    console.log(error.message);
+  } else {
+    console.log(stream.id); // '2a84cd30-3a33-917f-9150-49e454e01572'
+    console.log(stream.videoType); // 'camera'
+    console.log(stream.name); // 'Bob'
+    console.log(stream.layoutClassList); // ['main']
+  }
+});
+```
+
+Pass a session ID, stream ID, and callback function to the `OpenTok.getStream()` method.
+The callback function is called when the operation completes. It takes two parameters:
+`error` (in the case of an error) or `stream`. On sucessful completion, the `stream` object
+is set, containing properties of the stream.
+
+To get information on *all* active streams in a session, call the `OpenTok.listStreams()` method,
+passing in a session ID and a callback function. Upon sucess, the callback function is invoked
+with an array of Stream objects passed into the second parameter:
+
+```javascript
+opentok.listStreams(sessionId, function(error, streams) {
+  if (error) {
+    console.log(error.message);
+  } else {
+    streams.map(function(stream) {
+      console.log(stream.id); // '2a84cd30-3a33-917f-9150-49e454e01572'
+      console.log(stream.videoType); // 'camera'
+      console.log(stream.name); // 'Bob'
+      console.log(stream.layoutClassList); // ['main']
+    }));
+  }
+});
+```
+
+# Samples
+
+There are sample applications included in this repository. To get going as fast as possible,
+clone the whole repository and read the README in each of the sample directories:
 
 *  [HelloWorld](sample/HelloWorld/README.md)
 *  [Archiving](sample/Archiving/README.md)
