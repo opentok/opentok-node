@@ -11,8 +11,8 @@ function signString(unsigned, key) {
 
 exports.decodeToken = function (token) {
   var parsed = {};
-  var encoded = token.substring(4);   // remove 'T1=='
-  var decoded = new Buffer(encoded, 'base64').toString('ascii');
+  var encoded = token.substring(4); // remove 'T1=='
+  var decoded = Buffer.from(encoded, 'base64').toString('ascii');
   var tokenParts = decoded.split(':');
   tokenParts.forEach(function (part) {
     _.merge(parsed, qs.parse(part));
@@ -21,8 +21,8 @@ exports.decodeToken = function (token) {
 };
 
 exports.verifyTokenSignature = function (token, apiSecret) {
-  var encoded = token.substring(4);   // remove 'T1=='
-  var decoded = new Buffer(encoded, 'base64').toString('ascii');
+  var encoded = token.substring(4); // remove 'T1=='
+  var decoded = Buffer.from(encoded, 'base64').toString('ascii');
   var tokenParts = decoded.split(':');
   var sig = qs.parse(tokenParts[0]).sig;
   return signString(tokenParts[1], apiSecret) === sig;

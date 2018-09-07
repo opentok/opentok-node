@@ -73,12 +73,16 @@ app.post('/start', function(req, res) {
   var hasAudio = (req.param('hasAudio') !== undefined);
   var hasVideo = (req.param('hasVideo') !== undefined);
   var outputMode = req.param('outputMode');
-  opentok.startArchive(app.get('sessionId'), {
+  var archiveOptions = {
     name: 'Node Archiving Sample App',
     hasAudio: hasAudio,
     hasVideo: hasVideo,
-    outputMode: outputMode
-  }, function(err, archive) {
+    outputMode: outputMode,
+  };
+  if (outputMode === 'composed') {
+    startOptions.layout = { type: 'horizontalPresentation' };
+  }
+  opentok.startArchive(app.get('sessionId'), archiveOptions, function(err, archive) {
     if (err) return res.send(500,
       'Could not start archive for session '+sessionId+'. error='+err.message
     );
@@ -90,13 +94,17 @@ app.post('/start', function(req, res) {
 In this handler, the `startArchive()` method of the `opentok` instance is called with the
 `sessionId` for the session that needs to be archived. In this case, as in the HelloWorld
 sample app, there is only one session created and it is used here and for the participant view.
-This will trigger the recording to begin. The optional second argument is for options.
-The `name` is stored with the archive and can be read later. The `hasAudio`, `hasVideo`,
-and `outputMode` values are read from the request body; these define whether the archive
-will record audio and video, and whether it will record streams individually or to a
-single file composed of all streams. The last argument is the callback for the result of this
-asynchronous function. The callback signature follows the common node pattern of using the first
-argument for an error if one occurred, otherwise the second parameter is an Archive object. As long
+This will trigger the recording to begin.
+
+The optional second argument is for options. The `name` is stored with the archive and can
+be read later. The `hasAudio`, `hasVideo`, `outputMode`, values are read from the request body;
+these define whether the archive will record audio and video, and whether it will record streams
+individually or to a single file composed of all streams. See the "Changing Archive Layout" section
+below for information on the `layout` option.
+
+The last argument is the callback for the result of this asynchronous function.
+The callback signature follows the common node pattern of using the first argument fo
+an error if one occurred, otherwise the second parameter is an Archive object. As long
 as there is no error, a response is sent back to the client's XHR request with the JSON
 representation of the archive. The client is also listening for the `archiveStarted` event, and uses
 that event to change the 'Start Archiving' button to show 'Stop Archiving' instead. When the user
@@ -152,6 +160,117 @@ app.get('/participant', function(req, res) {
 Since this view has no further interactivity with buttons, this is all that is needed for a client
 that is participating in an archived session. Once again, much of the functionality is implemented
 in the client, in code that can be found in the `public/js/participant.js` file.
+
+### Changing Archive Layout
+
+*Note:* Changing archive layout is only available for composed archives, and setting the layout
+is not required. By default, composed archives use the "best fit" layout. For more information,
+see the OpenTok developer guide for [Customizing the video layout for composed
+archives](https://tokbox.com/developer/guides/archiving/layout-control.html).
+
+When you create a composed archive (when the `outputMode` is set to 'composed), we set the
+`layout` property of the `options` object passed into `OpenTok.startArchive()` to
+`'horizontalPresentation'`. This sets the initial layout type of the archive.
+`'horizontalPresentation'` is one of the predefined layout types for composed archives.
+
+For composed archives, you can change the layout dynamically. The host view includes a
+*Toggle layout* button. This toggles the layout of the streams between a horizontal and vertical
+presentation. When you click this button, the host client switches makes an HTTP POST request to
+the '/archive/:archiveId/layout' endpoint:
+
+```javascript
+app.post('/archive/:archiveId/layout', function (req, res) {
+  var archiveId = req.param('archiveId');
+  var type = req.body.type;
+  app.set('layout', type);
+  opentok.setArchiveLayout(archiveId, type, null, function (err) {
+    if (err) return res.send(500, 'Could not set layout ' + type + '. error=' + err.message);
+    res.send(200, 'OK');
+  });
+});
+```
+
+This calls the `OpenTok.setArchiveLayout()` method of the OpenTok Node.js SDK, setting the
+archive layout to the layout type defined in the POST request's body. The layout type will
+either be set to `horizontalPresentation` or `verticalPresentation`, which are two of the predefined layout types for OpenTok composed archives.
+
+Also, in the host view, you can click any stream to set it to be the focus stream in the
+archive layout. (Click outside of the mute audio icon.) Doing so sends an HTTP POST request
+to the `/focus` endpoint:
+
+```javascript
+app.post('/focus', function (req, res) {
+  var otherStreams = req.body.otherStreams;
+  var focusStreamId = req.body.focus;
+  var classListArray = [];
+  if (otherStreams) {
+    var i; 
+    for (i = 0; i < otherStreams.length; i++) {
+      classListArray.push({
+        id: otherStreams[i],
+        layoutClassList: [],
+      });
+    }
+  }
+  classListArray.push({
+    id: focusStreamId,
+    layoutClassList: ['focus'],
+  });
+  app.set('focusStreamId', focusStreamId);
+  opentok.setStreamClassLists(app.get('sessionId'), classListArray, function (err) {
+    if (err) return res.send(500, 'Could not set class lists. Error:' + err.message);
+    return res.send(200, 'OK');
+  });
+});
+```
+
+The body of the  POST request includes the stream ID of the "focus" stream and an array of
+other stream IDs in the session. The server-side method that handles the POST requests assembles
+a `classListArray` array, based on these stream IDs:
+
+```javascript
+[
+  {
+    "id": "6ad90229-df4f-4849-8974-5d675727c8b5",
+    "layoutClassList": []
+  },
+  {
+    "id": "aef616a5-769c-43e9-96d2-221edb986cbf",
+    "layoutClassList": []
+  },
+  {
+    "id": "db9f2372-7564-4b38-9bb2-d6ba4249fe63",
+    "layoutClassList": ["focus"]
+  }
+]
+```
+
+This is passed in as the `classListArray` parameter of the `OpenTok.setStreamClassLists()` method
+of the OpenTok Node.js SDK: 
+
+```javascript
+opentok.setStreamClassLists(app.get('sessionId'), classListArray, function (err) {
+  if (err) return res.send(500, 'Could not set class lists. Error:' + err.message);
+  return res.send(200, 'OK');
+});
+```
+
+This sets one stream to have the `focus` class, which causes it to be the large stream
+displayed in the composed archive. (This is the behavior of the `horizontalPresentation` and
+`verticalPresentation` layout types.) To see this effect, you should open the host and participant
+pages on different computers (using different cameras). Or, if you have multiple cameras connected
+to your machine, you can use one camera for publishing from the host, and use another for the
+participant. Or, if you are using a laptop with an external monitor, you can load the host page
+with the laptop closed (no camera) and open the participant page with the laptop open.
+
+The host client page also uses OpenTok signaling to notify other clients when the layout type and
+focus stream changes, and they then update the local display of streams in the HTML DOM accordingly.
+However, this is not necessary. The layout of the composed archive is unrelated to the layout of
+streams in the web clients.
+
+When you playback the composed archive, the layout type and focus stream changes, based on calls
+to the `OpenTok.setArchiveLayout()` and `OpenTok.setStreamClassLists()` methods during
+the recording.
 
 ### Past Archives
 
