@@ -16,7 +16,7 @@ body {
 #streams {
   background-color: gray;
   width: 320px;
-  height: 240px;
+  height: 180px;
 }
 
 #streams > div {
@@ -38,7 +38,7 @@ body {
   top: 0;
   left: 0;
   margin-top: 0;
-  height: 80%;
+  height: 100%;
   width: 100%;
 }
 
@@ -57,4 +57,8 @@ body {
 
 .bump-me {
   padding-top: 40px;
+}
+
+.help-block {
+  font-weight: bold;
 }

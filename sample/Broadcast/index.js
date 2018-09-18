@@ -61,13 +61,10 @@ app.get('/', function (req, res) {
 
 app.get('/broadcast', function (req, res) {
   var broadcastId = app.get('broadcastId');
-  console.log('broadcastId', broadcastId);
   opentok.getBroadcast(broadcastId, function (err, broadcast) {
     if (err) {
       return res.send(500, 'Could not get broadcast ' + broadcastId + '. error=' + err.message);
     }
-    console.log('broadcast', broadcast);
-    console.log('broadcast', broadcast.status);
     if (broadcast.status === 'started') {
       return res.redirect(broadcast.broadcastUrls.hls);
     }
@@ -76,12 +73,12 @@ app.get('/broadcast', function (req, res) {
 });
 
 app.post('/start', function (req, res) {
-  // var duration = (req.param('duration') !== undefined);
-  // var resolution = (req.param('resolution') !== undefined);
   var broadcastOptions = {
-    // duration: duration,
-    // resolution: resolution,
-    outputs: { hls: {} }
+    duration: req.param('duration'),
+    resolution: req.param('resolution'),
+    outputs: {
+      hls: {}
+    }
   };
   opentok.startBroadcast(app.get('sessionId'), broadcastOptions, function (err, broadcast) {
     if (err) {
@@ -96,9 +93,12 @@ app.post('/start', function (req, res) {
 });
 
 app.get('/stop/:broadcastId', function (req, res) {
-  var broadcastId = app.get('broadcastId');
+  var broadcastId = req.param('broadcastId');
   opentok.stopBroadcast(broadcastId, function (err, broadcast) {
-    if (err) return res.send(500, 'Could not stop broadcast ' + broadcastId + '. error=' + err.message);
+    if (err) {
+      return res.send(500, 'Could not stop broadcast ' + broadcastId + '. Error = ' + err.message);
+    }
+    app.set('broadcastId', null);
     return res.json(broadcast);
   });
 });

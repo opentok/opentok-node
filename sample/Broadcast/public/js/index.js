@@ -5,16 +5,21 @@ var session = OT.initSession(apiKey, sessionId);
 var publisher = OT.initPublisher('publisher', {
   insertMode: 'append',
   width: '100%',
-  height: '100%'
+  height: '100%',
+  resolution: '1280x720'
 });
-var archiveID = null;
+var broadcastId = null;
 
 function disableForm() {
-  $('.archive-options-fields').attr('disabled', 'disabled');
+  $('.broadcast-options-fields').attr('disabled', 'disabled');
+  $('.start').hide();
+  $('.stop').show();
 }
 
 function enableForm() {
-  $('.archive-options-fields').removeAttr('disabled');
+  $('.broadcast-options-fields').removeAttr('disabled');
+  $('.start').show();
+  $('.stop').hide();
 }
 
 function positionStreams() {
@@ -113,37 +118,33 @@ session.on('streamDestroyed', function (event) {
   positionStreams();
 });
 
-session.on('archiveStarted', function (event) {
-  archiveID = event.id;
-  console.log('ARCHIVE STARTED');
-  $('.start').hide();
-  $('.stop').show();
-  disableForm();
-});
-
-session.on('archiveStopped', function () {
-  archiveID = null;
-  console.log('ARCHIVE STOPPED');
-  $('.start').show();
-  $('.stop').hide();
-  enableForm();
-});
-
 $(document).ready(function () {
   $('.start').click(function () {
-    var options = $('.broadcast-options').serialize();
+    var options = {
+      duration: $('input[name=duration]').val() || undefined,
+      resolution: $('input[name=resolution]:checked').val()
+    };
     disableForm();
     $.post('/start', options)
-      .done(function () {
-        console.log('success');
+      .done(function (response) {
+        console.log('start success.');
+        broadcastId = response.id;
       })
-      .fail(function (foo) {
-        console.log('fail', foo);
+      .fail(function (error) {
+        console.log('start failure: ', error);
         enableForm();
       });
   }).prop('disabled', false);
   $('.stop').click(function () {
-    $.get('stop/' + archiveID);
+    $.get('stop/' + broadcastId)
+      .done(function () {
+        console.log('stop success.');
+        broadcastId = null;
+        enableForm();
+      })
+      .fail(function (error) {
+        console.log('stop failure: ', error);
+      });
   });
   $('.toggle-layout').click(function () {
     var newLayoutClass;
@@ -160,13 +161,13 @@ $(document).ready(function () {
     newLayoutClass = $('#streams').hasClass('vertical') ? 'verticalPresentation'
       : 'horizontalPresentation';
 
-    if (archiveID) {
-      $.post('archive/' + archiveID + '/layout', {
+    if (broadcastId) {
+      $.post('broadcast/' + broadcastId + '/layout', {
         type: newLayoutClass
       }).done(function () {
-        console.log('Archive layout updated.');
+        console.log('Broadcast layout updated.');
       }).fail(function (jqXHR) {
-        console.error('Archive layout error:', jqXHR.responseText);
+        console.error('Broadcast layout error:', jqXHR.responseText);
       });
     }
 

@@ -26,8 +26,10 @@ Finally, start the app using node
 $ node index.js
 ```
 
-Visit <http://localhost:3000> in your browser. Click the Start Broadcast button to start
+Visit <http://localhost:3000> in your browser. Click the **Start Broadcast** button to start
 the live streaming broadcast of the session.
 
 Visit <http://localhost:3000/broadcast> in Safari. This page shows the live streaming HLS
-broadcast of the session.
+broadcast of the session. Safari supports HLS streams natively. To support the HLS broadcast
+in other browsers, you will need to use an extension or script such as
+[videojs-http-streaming](https://github.com/videojs/http-streaming).

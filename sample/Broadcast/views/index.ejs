@@ -19,19 +19,21 @@
           <form class="broadcast-options">
               <fieldset class="broadcast-options-fields">
                   <div class="form-group">
-                      <p class="help-block">Broadcast Options:</p>
-                      <label class="checkbox-inline">
-                         Maximum duration <input type="text" name="duration" checked>
+                      <h4>Broadcast Options:</h4>
+                      <label>
+                         Maximum duration (seconds, max = 36000):
+                         <input type="number" step="30" min="0" max="36000" name="duration">
                       </label>
                   </div>
 
                   <div class="form-group">
-                      <p class="help-block">Resolution:
-                      <label class="radio-inline">
-                          <input type="radio" name="resolution" value="vga" checked> 640x480
+                      <p>
+                      <label>Resolution:</label>
+                      <label class="help-block">
+                          <input type="radio" name="resolution" value="640x480" checked> 640x480
                       </label>
-                      <label class="radio-inline">
-                          <input type="radio" name="resolution" value="hd"> 1280x720
+                      <label class="help-block">
+                          <input type="radio" name="resolution" value="1280x720"> 1280x720
                       </label>
                       </p>
                   </div>
