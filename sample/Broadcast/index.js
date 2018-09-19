@@ -43,6 +43,10 @@ opentok.createSession({ mediaMode: 'routed' }, function (err, session) {
 });
 
 app.get('/', function (req, res) {
+  res.render('index.ejs');
+});
+
+app.get('/host', function (req, res) {
   var sessionId = app.get('sessionId');
   // generate a fresh token for this client
   var token = opentok.generateToken(sessionId, {
@@ -50,7 +54,22 @@ app.get('/', function (req, res) {
     initialLayoutClassList: ['focus']
   });
 
-  res.render('index.ejs', {
+  res.render('host.ejs', {
+    apiKey: apiKey,
+    sessionId: sessionId,
+    initialBroadcastId: app.get('broadcastId'),
+    token: token,
+    focusStreamId: app.get('focusStreamId') || '',
+    initialLayout: app.get('layout')
+  });
+});
+
+app.get('/participant', function (req, res) {
+  var sessionId = app.get('sessionId');
+  // generate a fresh token for this client
+  var token = opentok.generateToken(sessionId, { role: 'moderator' });
+
+  res.render('participant.ejs', {
     apiKey: apiKey,
     sessionId: sessionId,
     token: token,
@@ -74,8 +93,9 @@ app.get('/broadcast', function (req, res) {
 
 app.post('/start', function (req, res) {
   var broadcastOptions = {
-    duration: req.param('duration'),
+    maxDuration: Number(req.param('maxDuration')) || undefined,
     resolution: req.param('resolution'),
+    layout: req.param('layout'),
     outputs: {
       hls: {}
     }
@@ -107,12 +127,14 @@ app.post('/broadcast/:broadcastId/layout', function (req, res) {
   var broadcastId = req.param('broadcastId');
   var type = req.body.type;
   app.set('layout', type);
-  opentok.setBroadcastLayout(broadcastId, type, null, function (err) {
-    if (err) {
-      return res.send(500, 'Could not set layout ' + type + '. Error: ' + err.message);
-    }
-    return res.send(200, 'OK');
-  });
+  if (broadcastId) {
+    opentok.setBroadcastLayout(broadcastId, type, null, function (err) {
+      if (err) {
+        return res.send(500, 'Could not set layout ' + type + '. Error: ' + err.message);
+      }
+      return res.send(200, 'OK');
+    });
+  }
 });
 
 app.post('/focus', function (req, res) {

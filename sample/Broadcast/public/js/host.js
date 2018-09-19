@@ -1,4 +1,4 @@
-/* global OT, apiKey, sessionId, token, $, layout, focusStreamId */
+/* global OT, apiKey, sessionId, initialBroadcastId, token, $, initialLayout, focusStreamId */
 /* eslint-disable no-console */
 
 var session = OT.initSession(apiKey, sessionId);
@@ -8,7 +8,8 @@ var publisher = OT.initPublisher('publisher', {
   height: '100%',
   resolution: '1280x720'
 });
-var broadcastId = null;
+var broadcastId = initialBroadcastId;
+var layout = initialLayout;
 
 function disableForm() {
   $('.broadcast-options-fields').attr('disabled', 'disabled');
@@ -74,8 +75,13 @@ function createFocusClick(elementId, focusStreamId) {
   });
 }
 
-if (layout === 'verticalPresentation') {
+if (initialLayout === 'verticalPresentation') {
   $('#streams').addClass('vertical');
+}
+
+if (initialLayout === 'verticalPresentation') {
+  $('.start').hide();
+  $('.stop').show();
 }
 
 session.connect(token, function (err) {
@@ -121,13 +127,16 @@ session.on('streamDestroyed', function (event) {
 $(document).ready(function () {
   $('.start').click(function () {
     var options = {
-      duration: $('input[name=duration]').val() || undefined,
-      resolution: $('input[name=resolution]:checked').val()
+      maxDuration: $('input[name=maxDuration]').val() || undefined,
+      resolution: $('input[name=resolution]:checked').val(),
+      layout: {
+        type: layout
+      }
     };
     disableForm();
     $.post('/start', options)
       .done(function (response) {
-        console.log('start success.');
+        console.log('start success.', response);
         broadcastId = response.id;
       })
       .fail(function (error) {
@@ -147,8 +156,6 @@ $(document).ready(function () {
       });
   });
   $('.toggle-layout').click(function () {
-    var newLayoutClass;
-
     if ($('#streams').hasClass('vertical')) {
       $('#streams').removeClass('vertical');
     }
@@ -158,22 +165,20 @@ $(document).ready(function () {
 
     positionStreams();
 
-    newLayoutClass = $('#streams').hasClass('vertical') ? 'verticalPresentation'
+    layout = $('#streams').hasClass('vertical') ? 'verticalPresentation'
       : 'horizontalPresentation';
 
-    if (broadcastId) {
-      $.post('broadcast/' + broadcastId + '/layout', {
-        type: newLayoutClass
-      }).done(function () {
-        console.log('Broadcast layout updated.');
-      }).fail(function (jqXHR) {
-        console.error('Broadcast layout error:', jqXHR.responseText);
-      });
-    }
+    $.post('broadcast/' + broadcastId + '/layout', {
+      type: layout
+    }).done(function () {
+      console.log('Broadcast layout updated.');
+    }).fail(function (jqXHR) {
+      console.error('Broadcast layout error:', jqXHR.responseText);
+    });
 
     session.signal({
       type: 'layoutClass',
-      data: newLayoutClass
+      data: layout
     });
   });
 });

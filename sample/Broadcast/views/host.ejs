@@ -1,0 +1,84 @@
+<% include header %>
+
+<script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
+
+  <div class="container bump-me">
+
+    <div class="body-content">
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Host</h3>
+        </div>
+        <div class="panel-body">
+          <div id="streams">
+            <div id="publisher" class="focus"></div>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <form class="broadcast-options">
+              <fieldset class="broadcast-options-fields">
+                  <div class="form-group">
+                      <h4>Broadcast Options:</h4>
+                      <label>
+                         Maximum duration (seconds, minimum 60, maximum 36000):
+                         <input type="number" step="30" min="60" max="36000" name="maxDuration">
+                      </label>
+                  </div>
+
+                  <div class="form-group">
+                      <p>
+                      <label>Resolution:</label>
+                      <label class="help-block">
+                          <input type="radio" name="resolution" value="640x480"> 640x480
+                      </label>
+                      <label class="help-block">
+                          <input type="radio" name="resolution" value="1280x720" checked> 1280x720
+                      </label>
+                      </p>
+                  </div>
+              </fieldset>
+          </form>
+          <button class="btn btn-danger start" disabled>Start broadcast</button>
+          <button class="btn btn-success stop">Stop broadcast</button>
+          <button class="btn toggle-layout">Toggle layout</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Instructions</h3>
+      </div>
+      <div class="panel-body">
+        <p>
+          Click <strong>Start broadcast</strong> to start broadcasting this session.
+          All publishers in the session will be included, and all publishers that
+          join the session will be included as well.
+        </p>
+        <p>
+          Click <strong>Stop broadcast</strong> to stop broadcasting this session.
+        </p>
+        <p>
+          Click <strong>Toggle layout</strong> to toggle the layout
+          between a vertical and horizontal presentation. The layout changes in all clients
+          and in the broadcast.
+        <p>
+          Click any stream to set it to be the focus stream in the broadcast layout.
+      </div>
+    </div>
+  </div>
+
+    <script>
+        var sessionId = "<%= sessionId %>";
+        var initialBroadcastId = "<%= initialBroadcastId || '' %>";
+        var apiKey = "<%= apiKey %>";
+        var token = "<%= token %>";
+        var focusStreamId = "<%= focusStreamId || '' %>";
+        var initialLayout = "<%= initialLayout %>";
+    </script>
+    <script src="/js/host.js"></script>
+
+  </div>
+
+<% include footer %>
