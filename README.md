@@ -249,6 +249,10 @@ For more information on archiving, see the
 
 ### Working with live streaming broadcasts
 
+*Important:*
+Only [routed OpenTok sessions](https://tokbox.com/developer/guides/create-session/#media-mode)
+support live streaming broadcasts. 
+
 To start a [live streaming
 broadcast](https://tokbox.com/developer/guides/broadcast/live-streaming) of an OpenTok session,
 call the `OpenTok.startBroadcast()` method. Pass in three parameters: the session ID for the

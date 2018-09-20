@@ -102,10 +102,7 @@ app.post('/start', function (req, res) {
   };
   opentok.startBroadcast(app.get('sessionId'), broadcastOptions, function (err, broadcast) {
     if (err) {
-      return res.send(
-        500,
-        'Could not start broadcast for session ' + app.get('sessionId') + '. error=' + err.message
-      );
+      return res.send(500, err.message);
     }
     app.set('broadcastId', broadcast.id);
     return res.json(broadcast);
@@ -116,7 +113,7 @@ app.get('/stop/:broadcastId', function (req, res) {
   var broadcastId = req.param('broadcastId');
   opentok.stopBroadcast(broadcastId, function (err, broadcast) {
     if (err) {
-      return res.send(500, 'Could not stop broadcast ' + broadcastId + '. Error = ' + err.message);
+      return res.send(500, 'Error = ' + err.message);
     }
     app.set('broadcastId', null);
     return res.json(broadcast);
@@ -158,7 +155,7 @@ app.post('/focus', function (req, res) {
   app.set('focusStreamId', focusStreamId);
   opentok.setStreamClassLists(app.get('sessionId'), classListArray, function (err) {
     if (err) {
-      return res.send(500, 'Could not set class lists. Error:' + err.message);
+      return res.send(500, 'Could not set class lists.' + err.message);
     }
     return res.send(200, 'OK');
   });

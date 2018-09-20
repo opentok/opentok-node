@@ -54,8 +54,8 @@ function setFocus(focusStreamId) {
     otherStreams: otherStreams
   }).done(function () {
     console.log('Focus changed.');
-  }).fail(function (jqXHR, textStatus, errorThrown) {
-    console.error('Stream class list error:', errorThrown);
+  }).fail(function (jqXHR) {
+    console.error('Stream class list error:', jqXHR.responseText);
   });
 
   $('.focus').removeClass('focus');
@@ -136,11 +136,11 @@ $(document).ready(function () {
     disableForm();
     $.post('/start', options)
       .done(function (response) {
-        console.log('start success.', response);
+        console.log('start success.');
         broadcastId = response.id;
       })
-      .fail(function (error) {
-        console.log('start failure: ', error);
+      .fail(function (jqXHR) {
+        console.error(jqXHR.responseText);
         enableForm();
       });
   }).prop('disabled', false);
@@ -151,8 +151,8 @@ $(document).ready(function () {
         broadcastId = null;
         enableForm();
       })
-      .fail(function (error) {
-        console.log('stop failure: ', error);
+      .fail(function (jqXHR) {
+        console.error(jqXHR.responseText);
       });
   });
   $('.toggle-layout').click(function () {
