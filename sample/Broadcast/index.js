@@ -57,8 +57,8 @@ app.get('/host', function (req, res) {
   res.render('host.ejs', {
     apiKey: apiKey,
     sessionId: sessionId,
-    initialBroadcastId: app.get('broadcastId'),
     token: token,
+    initialBroadcastId: app.get('broadcastId'),
     focusStreamId: app.get('focusStreamId') || '',
     initialLayout: app.get('layout')
   });
@@ -67,7 +67,7 @@ app.get('/host', function (req, res) {
 app.get('/participant', function (req, res) {
   var sessionId = app.get('sessionId');
   // generate a fresh token for this client
-  var token = opentok.generateToken(sessionId, { role: 'moderator' });
+  var token = opentok.generateToken(sessionId, { role: 'publisher' });
 
   res.render('participant.ejs', {
     apiKey: apiKey,
@@ -157,7 +157,9 @@ app.post('/focus', function (req, res) {
   });
   app.set('focusStreamId', focusStreamId);
   opentok.setStreamClassLists(app.get('sessionId'), classListArray, function (err) {
-    if (err) return res.send(500, 'Could not set class lists. Error:' + err.message);
+    if (err) {
+      return res.send(500, 'Could not set class lists. Error:' + err.message);
+    }
     return res.send(200, 'OK');
   });
 });
