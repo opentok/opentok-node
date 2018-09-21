@@ -38,6 +38,33 @@ var validReply = JSON.stringify([
   }
 ]);
 
+var mockBroadcastObject = {
+  id: 'fooId',
+  sessionId: 'fooSessionId',
+  projectId: 1234,
+  createdAt: 1537477584724,
+  updatedAt: 1537477584725,
+  broadcastUrls: { hls: 'hlsUrl' },
+  maxDuration: 7200,
+  resolution: '1280x720',
+  event: 'broadcast',
+  status: 'stopped'
+};
+
+function validateBroadcastObject(broadcast, status) {
+  expect(broadcast.id).to.equal('fooId');
+  expect(broadcast.id).to.equal('fooId');
+  expect(broadcast.sessionId).to.equal('fooSessionId');
+  expect(broadcast.projectId).to.equal(1234);
+  expect(broadcast.createdAt).to.equal(1537477584724);
+  expect(broadcast.updatedAt).to.equal(1537477584725);
+  expect(broadcast.broadcastUrls.hls).to.equal('hlsUrl');
+  expect(broadcast.maxDuration).to.equal(7200);
+  expect(broadcast.resolution).to.equal('1280x720');
+  expect(broadcast.status).to.equal(status || 'stopped');
+  expect(typeof broadcast.stop).to.equal('function');
+}
+
 function mockStreamRequest(sessId, streamId, status) {
   var body;
   if (!status) {
@@ -1133,6 +1160,221 @@ describe('#dial', function () {
         expect(options).to.deep.equal(optionsUntouched);
       }
     );
+  });
+});
+
+describe('#startBroadcast', function () {
+  var opentok = new OpenTok('APIKEY', 'APISECRET');
+  var SESSIONID = '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
+  var options = {
+    outputs: {
+      hls: { }
+    }
+  };
+
+  function mockStartBroadcastRequest(sessId, status) {
+    var body;
+    var broadcastObj;
+    if (!status) {
+      broadcastObj = _.clone(mockBroadcastObject);
+      broadcastObj.status = 'started';
+      body = JSON.stringify(broadcastObj);
+    }
+    nock('https://api.opentok.com')
+      .post('/v2/project/APIKEY/broadcast')
+      .reply(status || 200, body);
+  }
+
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
+  it('succeeds given valid parameters', function (done) {
+    mockStartBroadcastRequest(SESSIONID);
+    opentok.startBroadcast(SESSIONID, options, function (err, broadcast) {
+      validateBroadcastObject(broadcast, 'started');
+      done();
+    });
+  });
+
+  it('results in error if no callback method provided', function (done) {
+    mockStartBroadcastRequest(SESSIONID);
+    try {
+      opentok.startBroadcast(SESSIONID, {});
+    }
+    catch (err) {
+      expect(err.message).to.equal('No callback given to startBroadcast');
+      done();
+    }
+  });
+
+  it('results in error if no session ID provided', function (done) {
+    mockStartBroadcastRequest(SESSIONID);
+    opentok.startBroadcast(null, options, function (err) {
+      expect(err.message).to.equal('No sessionId given to startBroadcast');
+      done();
+    });
+  });
+
+  it('results in error if no options provided', function (done) {
+    mockStartBroadcastRequest(SESSIONID);
+    opentok.startBroadcast(SESSIONID, null, function (err) {
+      expect(err.message).to.equal('No options given to startBroadcast');
+      done();
+    });
+  });
+
+  it('results in error a response other than 200', function (done) {
+    mockStartBroadcastRequest(SESSIONID, 400);
+    opentok.startBroadcast(SESSIONID, options, function (err, broadcast) {
+      expect(err).not.to.be.null;
+      expect(broadcast).to.be.undefined;
+      done();
+    });
+  });
+});
+
+describe('#stopBroadcast', function () {
+  var opentok = new OpenTok('APIKEY', 'APISECRET');
+  var BROADCAST_ID = 'BROADCAST_ID';
+
+  function mockStopBroadcastRequest(broadcastId, status) {
+    var body;
+    if (status) {
+      body = JSON.stringify({
+        message: 'error message'
+      });
+    }
+    else {
+      body = JSON.stringify(mockBroadcastObject);
+    }
+    nock('https://api.opentok.com')
+      .post('/v2/project/APIKEY/broadcast/' + broadcastId + '/stop')
+      .reply(status || 200, body);
+  }
+
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
+  it('succeeds given valid parameters', function (done) {
+    mockStopBroadcastRequest(BROADCAST_ID);
+    opentok.stopBroadcast(BROADCAST_ID, function (err, broadcast) {
+      expect(err).to.be.null;
+      validateBroadcastObject(broadcast);
+      done();
+    });
+  });
+
+  it('results in error if no broadcastId provided', function (done) {
+    mockStopBroadcastRequest();
+    opentok.stopBroadcast(null, function (err, broadcast) {
+      expect(err.message).to.equal('No broadcast ID given');
+      expect(broadcast).to.be.undefined;
+      done();
+    });
+  });
+
+  it('results in error a response other than 200', function (done) {
+    mockStopBroadcastRequest(BROADCAST_ID, 400);
+    opentok.stopBroadcast(BROADCAST_ID, function (err, broadcast) {
+      expect(err).not.to.be.null;
+      expect(broadcast).to.be.undefined;
+      done();
+    });
+  });
+});
+
+describe('#getBroadcast', function () {
+  var opentok = new OpenTok('APIKEY', 'APISECRET');
+  var BROADCAST_ID = 'BROADCAST_ID';
+
+  function mockGetBroadcastRequest(broadcastId, status) {
+    var body;
+    if (status) {
+      body = JSON.stringify({
+        message: 'error message'
+      });
+    }
+    else {
+      body = JSON.stringify(mockBroadcastObject);
+    }
+    nock('https://api.opentok.com')
+      .post('/v2/project/APIKEY/broadcast/' + broadcastId + '/stop')
+      .reply(status || 200, body);
+  }
+
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
+  it('succeeds given valid parameters', function (done) {
+    mockGetBroadcastRequest(BROADCAST_ID);
+    opentok.stopBroadcast(BROADCAST_ID, function (err, broadcast) {
+      expect(err).to.be.null;
+      validateBroadcastObject(broadcast);
+      done();
+    });
+  });
+
+  it('results in error if no broadcastId provided', function (done) {
+    mockGetBroadcastRequest();
+    opentok.getBroadcast(null, function (err, broadcast) {
+      expect(err.message).to.equal('No broadcast ID given');
+      expect(broadcast).to.be.undefined;
+      done();
+    });
+  });
+
+  it('results in error if no callback method provided', function (done) {
+    mockGetBroadcastRequest(BROADCAST_ID);
+    try {
+      opentok.getBroadcast(BROADCAST_ID);
+    }
+    catch (err) {
+      expect(err.message).to.equal('No callback given to getBroadcast');
+      done();
+    }
+  });
+
+  it('results in error a response other than 200', function (done) {
+    mockGetBroadcastRequest(BROADCAST_ID, 400);
+    opentok.stopBroadcast(BROADCAST_ID, function (err, broadcast) {
+      expect(err).not.to.be.null;
+      expect(broadcast).to.be.undefined;
+      done();
+    });
+  });
+});
+
+describe('#setBroadcastLayout', function () {
+  var opentok = new OpenTok('APIKEY', 'APISECRET');
+  var BROADCAST_ID = 'BROADCAST_ID';
+  var LAYOUT_TYPE = 'custom';
+  var STYLESHEET = 'stylesheet';
+
+  function mockSetBroadcastLayout(broadcastId, status) {
+    var body;
+    if (status) {
+      body = JSON.stringify({
+        message: 'error message'
+      });
+    }
+    nock('https://api.opentok.com')
+      .put('/v2/project/APIKEY/broadcast/' + broadcastId + '/layout')
+      .reply(status || 200, body);
+  }
+
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
+  it('succeeds given valid parameters', function (done) {
+    mockSetBroadcastLayout(BROADCAST_ID);
+    opentok.setBroadcastLayout(BROADCAST_ID, LAYOUT_TYPE, STYLESHEET, function (err) {
+      expect(err).to.be.null;
+      done();
+    });
   });
 });
 

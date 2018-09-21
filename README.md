@@ -7,6 +7,8 @@ The OpenTok Node SDK lets you generate
 [tokens](https://tokbox.com/developer/guides/create-token/) for
 [OpenTok](http://www.tokbox.com/) applications. It also includes methods for
 working with OpenTok [archives](https://tokbox.com/developer/guides/archiving),
+working with OpenTok [live streaming
+broadcasts](https://tokbox.com/developer/guides/broadcast/live-streaming/),
 working with OpenTok [SIP interconnect](https://tokbox.com/developer/guides/sip),
 and [disconnecting clients from sessions](https://tokbox.com/developer/guides/moderation/rest/).
 
@@ -244,6 +246,81 @@ archives](https://tokbox.com/developer/guides/archiving/layout-control.html)).
 
 For more information on archiving, see the
 [OpenTok archiving developer guide](https://tokbox.com/developer/guides/archiving/).
+
+### Working with live streaming broadcasts
+
+*Important:*
+Only [routed OpenTok sessions](https://tokbox.com/developer/guides/create-session/#media-mode)
+support live streaming broadcasts. 
+
+To start a [live streaming
+broadcast](https://tokbox.com/developer/guides/broadcast/live-streaming) of an OpenTok session,
+call the `OpenTok.startBroadcast()` method. Pass in three parameters: the session ID for the
+session, options for the broadcast, and a callback function:
+
+```javascript
+var broadcastOptions = {
+  outputs: {
+    hls: {},
+    rtmp: [{
+      id: 'foo',
+      serverUrl: 'rtmp://myfooserver/myfooapp',
+      streamName: 'myfoostream'
+    },
+    {
+      id: 'bar',
+      serverUrl: 'rtmp://mybarserver/mybarapp',
+      streamName: 'mybarstream'
+    }]
+  },
+  maxDuration: 5400,
+  resolution: '640x480'
+  layout: {
+    type: 'verticalPresentation'
+  }
+};
+opentok.startBroadcast(sessionId, options, function(error, broadcast) {
+  if (error) {
+    return console.log(error);
+  }
+  return console.log('Broadcast started: ', broadcast.id);
+});
+```
+
+See the API reference for details on the `options` parameter.
+  
+On success, a Broadcast object is passed into the callback function as the second parameter.
+The Broadcast object has properties that define the broadcast, including a `broadcastUrls`
+property, which has URLs for the broadcast streams. See the API reference for details.
+
+Call the `OpenTok.stopBroadcast()` method to stop a live streaming broadcast pass in the
+broadcast ID (the `id` property of the Broadcast object) as the first parameter. The second
+parameter is the callback function:
+
+```javascript
+opentok.stopBroadcast(sessionId, function(error, broadcast) {
+  if (error) {
+    return console.log(error);
+  }
+  return console.log('Broadcast stopped: ', broadcast.id);
+});
+```
+
+You can also call the `stop()` method of the Broadcast object to stop a broadcast.
+
+Call the `Opentok.getBroadcast()` method, passing in a broadcast ID, to get a Broadcast object.
+
+To change the broadcast layout, call the `OpenTok.setBroadcastLayout()` method,
+passing in the broadcast ID and the [layout
+type](https://tokbox.com/developer/guides/broadcast/live-streaming/#configuring-video-layout-for-opentok-live-streaming-broadcasts).
+
+You can set the initial layout class for a client's streams by setting the `layout` option when
+you create the token for the client, using the `OpenTok.generateToken()` method. And you can
+change the layout classes for streams in a session by calling the
+`OpenTok.setStreamClassLists(sessionId, classListArray, callback)` method.
+
+Setting the layout of a live streaming broadcast is optional. By default, ive streaming broadcasts
+use the "best fit" layout.
 
 ### Sending signals
 
