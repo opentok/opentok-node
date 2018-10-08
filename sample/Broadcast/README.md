@@ -182,14 +182,17 @@ is invoked:
 ```javascript
 app.get('/broadcast', function (req, res) {
   var broadcastId = app.get('broadcastId');
-  opentok.getBroadcast(broadcastId, function (err, broadcast) {
+  if (!broadcastId) {
+    return res.send(404, 'Broadcast not in progress.');
+  }
+  return opentok.getBroadcast(broadcastId, function (err, broadcast) {
     if (err) {
       return res.send(500, 'Could not get broadcast ' + broadcastId + '. error=' + err.message);
     }
     if (broadcast.status === 'started') {
       return res.redirect(broadcast.broadcastUrls.hls);
     }
-    return res.send(500, 'Broadcast not in progress.');
+    return res.send(404, 'Broadcast not in progress.');
   });
 });
 ```
