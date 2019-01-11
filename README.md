@@ -274,12 +274,12 @@ var broadcastOptions = {
     }]
   },
   maxDuration: 5400,
-  resolution: '640x480'
+  resolution: '640x480',
   layout: {
     type: 'verticalPresentation'
   }
 };
-opentok.startBroadcast(sessionId, options, function(error, broadcast) {
+opentok.startBroadcast(sessionId, broadcastOptions, function(error, broadcast) {
   if (error) {
     return console.log(error);
   }
@@ -298,7 +298,7 @@ broadcast ID (the `id` property of the Broadcast object) as the first parameter.
 parameter is the callback function:
 
 ```javascript
-opentok.stopBroadcast(sessionId, function(error, broadcast) {
+opentok.stopBroadcast(broadcastId, function(error, broadcast) {
   if (error) {
     return console.log(error);
   }
