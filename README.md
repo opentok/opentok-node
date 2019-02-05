@@ -371,6 +371,10 @@ feature. This requires a SIP URI, the session ID you wish to add the audio-only 
 token to connect to that session ID.
 
 ```javascript
+var options = {
+  from: '15551115555',
+  secure: true,
+};
 opentok.dial(sessionId, token, sipUri, options, function (error, sipCall) {
   if (error) return console.log("error: ", error);
 
