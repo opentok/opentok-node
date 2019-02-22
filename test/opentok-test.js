@@ -1112,6 +1112,48 @@ describe('#dial', function () {
     );
   });
 
+  it('dials a SIP gateway and adds a from field', function (done) {
+    var scope = nock('https://api.opentok.com:443')
+      .matchHeader('x-opentok-auth', function (value) {
+        try {
+          jwt.verify(value, apiSecret, { issuer: apiKey });
+          return true;
+        }
+        catch (error) {
+          done(error);
+          return false;
+        }
+      })
+      .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
+      .post('/v2/project/123456/dial', {
+        sessionId: this.sessionId,
+        token: this.token,
+        sip: {
+          uri: goodSipUri,
+          from: '15551115555'
+        }
+      })
+      .reply(200, {
+        id: 'CONFERENCEID',
+        connectionId: 'CONNECTIONID',
+        streamId: 'STREAMID'
+      });
+    this.opentok.dial(
+      this.sessionId, this.token, goodSipUri, { from: '15551115555' },
+      function (err, sipCall) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(sipCall).to.be.an.instanceof(SipInterconnect);
+        expect(sipCall.id).to.equal('CONFERENCEID');
+        expect(sipCall.streamId).to.equal('STREAMID');
+        expect(sipCall.connectionId).to.equal('CONNECTIONID');
+        done();
+      }
+    );
+  });
+
   it('complains if sessionId, token, SIP URI, or callback are missing or invalid', function () {
     // Missing all params
     expect(function () {

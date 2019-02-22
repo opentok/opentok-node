@@ -274,12 +274,12 @@ var broadcastOptions = {
     }]
   },
   maxDuration: 5400,
-  resolution: '640x480'
+  resolution: '640x480',
   layout: {
     type: 'verticalPresentation'
   }
 };
-opentok.startBroadcast(sessionId, options, function(error, broadcast) {
+opentok.startBroadcast(sessionId, broadcastOptions, function(error, broadcast) {
   if (error) {
     return console.log(error);
   }
@@ -298,7 +298,7 @@ broadcast ID (the `id` property of the Broadcast object) as the first parameter.
 parameter is the callback function:
 
 ```javascript
-opentok.stopBroadcast(sessionId, function(error, broadcast) {
+opentok.stopBroadcast(broadcastId, function(error, broadcast) {
   if (error) {
     return console.log(error);
   }
@@ -371,6 +371,10 @@ feature. This requires a SIP URI, the session ID you wish to add the audio-only 
 token to connect to that session ID.
 
 ```javascript
+var options = {
+  from: '15551115555',
+  secure: true,
+};
 opentok.dial(sessionId, token, sipUri, options, function (error, sipCall) {
   if (error) return console.log("error: ", error);
 
