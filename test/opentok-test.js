@@ -51,6 +51,22 @@ var mockBroadcastObject = {
   status: 'stopped'
 };
 
+var mockListBroadcastsObject = {
+  "count": 1,
+  "items": [{
+    id: 'fooId',
+    sessionId: 'fooSessionId',
+    projectId: 1234,
+    createdAt: 1537477584724,
+    updatedAt: 1537477584725,
+    broadcastUrls: { hls: 'hlsUrl' },
+    maxDuration: 7200,
+    resolution: '1280x720',
+    event: 'broadcast',
+    status: 'stopped'
+  }]
+};
+
 function validateBroadcastObject(broadcast, status) {
   expect(broadcast.id).to.equal('fooId');
   expect(broadcast.id).to.equal('fooId');
@@ -63,6 +79,16 @@ function validateBroadcastObject(broadcast, status) {
   expect(broadcast.resolution).to.equal('1280x720');
   expect(broadcast.status).to.equal(status || 'stopped');
   expect(typeof broadcast.stop).to.equal('function');
+}
+
+function validateListBroadcastsObject(broadcastListObject) {
+  expect(broadcastListObject).to.be.an('array');
+  var broadcast = broadcastListObject[0];
+  validateBroadcastObject(broadcast);
+}
+
+function validateTotalCount(totalCount) {
+  expect(totalCount).to.be.a('number');
 }
 
 function mockStreamRequest(sessId, streamId, status) {
@@ -98,6 +124,22 @@ function mockListStreamsRequest(sessId, status) {
   nock('https://api.opentok.com')
     .get('/v2/project/123456/session/' + sessId + '/stream')
     .reply(status || 200, body);
+}
+
+function mockListBroadcastsRequest(query, status) {
+  var body;
+  if (status) {
+    body = JSON.stringify({
+      message: 'error message'
+    });
+  }
+  else {
+    body = JSON.stringify(mockListBroadcastsObject);
+  }
+  nock('https://api.opentok.com')
+  .get('/v2/project/APIKEY/broadcast')
+  .query(query)
+  .reply(status || 200, body);
 }
 
 nock.disableNetConnect();
@@ -1388,6 +1430,59 @@ describe('#getBroadcast', function () {
     });
   });
 });
+
+describe('#listBroadcasts', function () {
+  var opentok = new OpenTok('APIKEY', 'APISECRET');
+  var options = {
+    sessionId: 'SESSIONID',
+  };
+  afterEach(function () {
+    nock.cleanAll();
+  });
+  it('succeeds given valid parameters', function (done) {
+    mockListBroadcastsRequest();
+    opentok.listBroadcasts(function (err, broadcastList, totalCount) {
+      expect(err).to.be.null;
+      validateListBroadcastsObject(broadcastList);
+      validateTotalCount(totalCount);
+      done();
+    });
+  });
+
+  it('succeeds given options as valid parameters', function (done) {
+    mockListBroadcastsRequest({
+      sessionId: 'SESSIONID',
+    });
+    opentok.listBroadcasts(options, function (err, broadcastList, totalCount) {
+      expect(err).to.be.null;
+      validateListBroadcastsObject(broadcastList);
+      validateTotalCount(totalCount);
+      done();
+    });
+  });
+
+  it('results in error if no callback method provided', function (done) {
+    mockListBroadcastsRequest();
+    try {
+      opentok.listBroadcasts();
+    }
+    catch (err) {
+      expect(err.message).to.equal('No callback given to listBroadcasts');
+      done();
+    }
+  });
+
+  it('results in error a response other than 200', function (done) {
+    mockListBroadcastsRequest(400);
+    opentok.listBroadcasts(options, function (err, broadcastList, totalCount) {
+      expect(err).not.to.be.null;
+      expect(broadcastList).to.be.undefined;
+      expect(totalCount).to.be.undefined;
+      done();
+    });
+  });
+});
+
 
 describe('#setBroadcastLayout', function () {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
