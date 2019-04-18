@@ -52,8 +52,8 @@ var mockBroadcastObject = {
 };
 
 var mockListBroadcastsObject = {
-  "count": 1,
-  "items": [{
+  count: 1,
+  items: [{
     id: 'fooId',
     sessionId: 'fooSessionId',
     projectId: 1234,
@@ -82,8 +82,9 @@ function validateBroadcastObject(broadcast, status) {
 }
 
 function validateListBroadcastsObject(broadcastListObject) {
+  var broadcast;
   expect(broadcastListObject).to.be.an('array');
-  var broadcast = broadcastListObject[0];
+  broadcast = broadcastListObject[0];
   validateBroadcastObject(broadcast);
 }
 
@@ -137,9 +138,9 @@ function mockListBroadcastsRequest(query, status) {
     body = JSON.stringify(mockListBroadcastsObject);
   }
   nock('https://api.opentok.com')
-  .get('/v2/project/APIKEY/broadcast')
-  .query(query)
-  .reply(status || 200, body);
+    .get('/v2/project/APIKEY/broadcast')
+    .query(query)
+    .reply(status || 200, body);
 }
 
 nock.disableNetConnect();
@@ -1434,7 +1435,7 @@ describe('#getBroadcast', function () {
 describe('#listBroadcasts', function () {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
   var options = {
-    sessionId: 'SESSIONID',
+    sessionId: 'SESSIONID'
   };
   afterEach(function () {
     nock.cleanAll();
@@ -1451,7 +1452,7 @@ describe('#listBroadcasts', function () {
 
   it('succeeds given options as valid parameters', function (done) {
     mockListBroadcastsRequest({
-      sessionId: 'SESSIONID',
+      sessionId: 'SESSIONID'
     });
     opentok.listBroadcasts(options, function (err, broadcastList, totalCount) {
       expect(err).to.be.null;
