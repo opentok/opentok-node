@@ -69,7 +69,6 @@ var mockListBroadcastsObject = {
 
 function validateBroadcastObject(broadcast, status) {
   expect(broadcast.id).to.equal('fooId');
-  expect(broadcast.id).to.equal('fooId');
   expect(broadcast.sessionId).to.equal('fooSessionId');
   expect(broadcast.projectId).to.equal(1234);
   expect(broadcast.createdAt).to.equal(1537477584724);
