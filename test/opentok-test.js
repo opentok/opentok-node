@@ -1191,6 +1191,7 @@ describe('#dial', function () {
         expect(sipCall.id).to.equal('CONFERENCEID');
         expect(sipCall.streamId).to.equal('STREAMID');
         expect(sipCall.connectionId).to.equal('CONNECTIONID');
+        scope.done();
         done();
       }
     );
