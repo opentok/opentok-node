@@ -35,6 +35,10 @@
     {
       "name": "Jeff Swartz",
       "email": "swartz@tokbox.com"
+    },
+    {
+      "name": "Manik Sachdeva",
+      "url": "http://maniksach.dev"
     }
   ],
   "main": "lib/opentok.js",
