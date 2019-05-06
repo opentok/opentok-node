@@ -310,6 +310,24 @@ You can also call the `stop()` method of the Broadcast object to stop a broadcas
 
 Call the `Opentok.getBroadcast()` method, passing in a broadcast ID, to get a Broadcast object.
 
+You can also get a list of all the Broadcasts you've created (up to 1000) with your API Key. This is
+done using the `OpenTok.listBroadcasts(options, callback)` method. The parameter `options` is an
+optional object used to specify an `offset`, `count`, and `sessionId` to help you paginate through the results.
+The callback has a signature `function(err, broadcasts, totalCount)`. The `broadcasts` returned from
+the callback is an array of `Broadcast` instances. The `totalCount` returned from the callback is
+the total number of broadcasts your API Key has generated.
+
+```javascript
+opentok.listBroadcasts({offset:100, count:50}, function(error, broadcasts, totalCount) {
+  if (error) return console.log("error:", error);
+
+  console.log(totalCount + " broadcasts");
+  for (var i = 0; i < broadcasts.length; i++) {
+    console.log(broadcasts[i].id);
+  }
+});
+```
+
 To change the broadcast layout, call the `OpenTok.setBroadcastLayout()` method,
 passing in the broadcast ID and the [layout
 type](https://tokbox.com/developer/guides/broadcast/live-streaming/#configuring-video-layout-for-opentok-live-streaming-broadcasts).

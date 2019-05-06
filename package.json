@@ -1,7 +1,7 @@
 {
   "name": "opentok",
   "description": "OpenTok server-side SDK",
-  "version": "2.8.1",
+  "version": "2.9.0",
   "homepage": "https://github.com/opentok/opentok-node",
   "repository": {
     "type": "git",
@@ -35,6 +35,10 @@
     {
       "name": "Jeff Swartz",
       "email": "swartz@tokbox.com"
+    },
+    {
+      "name": "Manik Sachdeva",
+      "url": "http://maniksach.dev"
     }
   ],
   "main": "lib/opentok.js",
