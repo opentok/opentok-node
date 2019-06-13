@@ -62,7 +62,7 @@
   },
   "dependencies": {
     "jsonwebtoken": "^8.2.0",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.11",
     "opentok-token": "^1.1.1",
     "request": "^2.88.0"
   }
