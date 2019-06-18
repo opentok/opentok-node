@@ -16,20 +16,11 @@ module.exports = function (grunt) {
         specNameMatcher: 'spec'
       },
       all: ['spec/']
-    },
-    jsdoc: {
-      dist: {
-        src: ['lib/*.js'],
-        options: {
-          destination: 'docs'
-        }
-      }
     }
   });
 
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-jasmine-node');
-  grunt.loadNpmTasks('grunt-jsdoc');
 
   grunt.registerTask('default', ['mochaTest', 'jasmine_node']);
 };
