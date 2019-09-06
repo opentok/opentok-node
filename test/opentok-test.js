@@ -108,7 +108,11 @@ function mockStreamRequest(sessId, streamId, status) {
 
 function mockListStreamsRequest(sessId, status) {
   var body;
-  if (!status) {
+  if (status) {
+    body = JSON.stringify({
+      message: 'error message'
+    });
+  } else {
     body = JSON.stringify({
       count: 1,
       items: [
@@ -1603,6 +1607,7 @@ describe('listStreams', function () {
       mockListStreamsRequest(SESSIONID, 400);
       opentok.listStreams(SESSIONID, function (err, streams) {
         expect(err).to.not.be.null;
+        expect(err.message).to.contain('error message');
         expect(streams).to.be.undefined;
         done();
       });
