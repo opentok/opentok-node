@@ -4,26 +4,21 @@ This document describes tools, tasks and workflow that one needs to be familiar 
 this project. If you use this package within your own software as is but don't plan on modifying it, this guide is
 **not** for you.
 
-## Tools
-
-*  [Grunt](http://gruntjs.com/): used to run predefined tasks. Install all development dependencies (`npm install`)
-   and also install the grunt CLI (`npm install -g grunt-cli`).
-
 ## Tasks
 
 ### Testing
 
 This project's tests are written with Mocha and with Jasmine. Common tasks:
 
-*  `grunt` - run the complete test suite.
-*  `grunt mochaTest` - run just the mocha tests
-*  `grunt jasmine_node` - run just the jasmine tests
+*  `npm run test` - run the complete test suite.
+*  `npm run mochaTest` - run just the mocha tests
+*  `npm run jasmine_node` - run just the jasmine tests
 
 ### Releasing
 
 In order to create a release, the following should be completed in order.
 
-1. Ensure all the tests are passing (`grunt`) and that there is enough test coverage.
+1. Ensure all the tests are passing (`pm run test`) and that there is enough test coverage.
 1. Ensure package-lock.json and yarn.lock have been updated and committed if any dependency has been added/removed.
 1. Make sure you are on the `dev` branch of the repository, with all changes merged/committed
    already.
