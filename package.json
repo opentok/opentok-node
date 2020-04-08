@@ -39,6 +39,10 @@
     {
       "name": "Manik Sachdeva",
       "url": "http://maniksach.dev"
+    },
+    {
+      "name": "Michael Jolley",
+      "url": "https://baldbeardedbuilder.com"
     }
   ],
   "main": "lib/opentok.js",
