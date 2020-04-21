@@ -34,8 +34,16 @@ Import the module to get a constructor function for an OpenTok object, then call
 instantiate an OpenTok object with your own API Key and API Secret.
 
 ```javascript
-var OpenTok = require("opentok"),
-  opentok = new OpenTok(apiKey, apiSecret);
+const OpenTok = require("opentok");
+const opentok = new OpenTok(apiKey, apiSecret);
+```
+
+#### Increasing Timeouts
+The library currently has a 20 second timeout for requests. If you're on a slow network, and you need to increase the timeout, you can pass it (in milliseconds) when instantiating the OpenTok object.
+
+```javascript
+const OpenTok = require("opentok");
+const opentok = new OpenTok(apiKey, apiSecret, { timeout: 30000});
 ```
 
 ### Creating Sessions
