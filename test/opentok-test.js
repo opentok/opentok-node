@@ -304,6 +304,15 @@ describe('when initialized with a timeout', function () {
   });
 });
 
+describe('when initialized without a timeout', function () {
+  beforeEach(function () {
+    this.opentok = new OpenTok(apiKey, apiSecret);
+  });
+  it('sends its requests with 20000 timeout', function () {
+    expect(this.opentok.client.c.request.timeout).to.equal(20000);
+  });
+});
+
 describe('when a user agent addendum is needed', function () {
   beforeEach(function () {
     this.addendum = 'my-special-app';
