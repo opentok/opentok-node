@@ -1,6 +1,8 @@
 # OpenTok Node SDK
 
-[![Build Status](https://travis-ci.org/opentok/opentok-node.png)](https://travis-ci.org/opentok/opentok-node)
+[![Build Status](https://travis-ci.org/opentok/opentok-node.png)](https://travis-ci.org/opentok/opentok-node) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
+
+<img src="https://assets.tokbox.com/img/vonage/Vonage_VideoAPI_black.svg" height="48px" alt="Tokbox is now known as Vonage" />
 
 The OpenTok Node SDK lets you generate
 [sessions](https://tokbox.com/developer/guides/create-session/) and
@@ -32,8 +34,16 @@ Import the module to get a constructor function for an OpenTok object, then call
 instantiate an OpenTok object with your own API Key and API Secret.
 
 ```javascript
-var OpenTok = require('opentok'),
-    opentok = new OpenTok(apiKey, apiSecret);
+const OpenTok = require("opentok");
+const opentok = new OpenTok(apiKey, apiSecret);
+```
+
+#### Increasing Timeouts
+The library currently has a 20 second timeout for requests. If you're on a slow network, and you need to increase the timeout, you can pass it (in milliseconds) when instantiating the OpenTok object.
+
+```javascript
+const OpenTok = require("opentok");
+const opentok = new OpenTok(apiKey, apiSecret, { timeout: 30000});
 ```
 
 ### Creating Sessions
@@ -48,37 +58,41 @@ useful to be saved to a persistent store (such as a database).
 ```javascript
 // Create a session that will attempt to transmit streams directly between
 // clients. If clients cannot connect, the session uses the OpenTok TURN server:
-opentok.createSession(function(err, session) {
+opentok.createSession(function (err, session) {
   if (err) return console.log(err);
 
   // save the sessionId
-  db.save('session', session.sessionId, done);
+  db.save("session", session.sessionId, done);
 });
 
 // The session will the OpenTok Media Router:
-opentok.createSession({mediaMode:"routed"}, function(err, session) {
+opentok.createSession({ mediaMode: "routed" }, function (err, session) {
   if (err) return console.log(err);
 
   // save the sessionId
-  db.save('session', session.sessionId, done);
+  db.save("session", session.sessionId, done);
 });
 
 // A Session with a location hint
-opentok.createSession({location:'12.34.56.78'}, function(err, session) {
+opentok.createSession({ location: "12.34.56.78" }, function (err, session) {
   if (err) return console.log(err);
 
   // save the sessionId
-  db.save('session', session.sessionId, done);
+  db.save("session", session.sessionId, done);
 });
 
 // A Session with an automatic archiving
-opentok.createSession({mediaMode:'routed', archiveMode:'always'}, function(err, session) {
+opentok.createSession({ mediaMode: "routed", archiveMode: "always" }, function (
+  err,
+  session
+) {
   if (err) return console.log(err);
 
   // save the sessionId
-  db.save('session', session.sessionId, done);
+  db.save("session", session.sessionId, done);
 });
 ```
+
 ### Generating Tokens
 
 Once a Session is created, you can start generating Tokens for clients to use when connecting to it.
@@ -97,23 +111,25 @@ token = session.generateToken();
 
 // Set some options in a Token
 token = session.generateToken({
-  role :                   'moderator',
-  expireTime :             (new Date().getTime() / 1000)+(7 * 24 * 60 * 60), // in one week
-  data :                   'name=Johnny',
-  initialLayoutClassList : ['focus']
+  role: "moderator",
+  expireTime: new Date().getTime() / 1000 + 7 * 24 * 60 * 60, // in one week
+  data: "name=Johnny",
+  initialLayoutClassList: ["focus"],
 });
 ```
 
 ### Working with archives
 
-You can start the recording of an OpenTok Session using the `OpenTok.startArchive(sessionId,
-options, callback)` method. The `options` parameter is an optional object used to set the name of
+You can start the recording of an OpenTok Session using the `OpenTok.startArchive(sessionId, options, callback)` method. The `options` parameter is an optional object used to set the name of
 the Archive. The callback has the signature `function(err, archive)`. The `archive` returned in
 the callback is an instance of `Archive`. Note that you can only start an archive on a Session with
 connected clients.
 
 ```javascript
-opentok.startArchive(sessionId, { name: 'Important Presentation' }, function(err, archive) {
+opentok.startArchive(sessionId, { name: "Important Presentation" }, function (
+  err,
+  archive
+) {
   if (err) {
     return console.log(err);
   } else {
@@ -128,10 +144,10 @@ the `options` parameter to `false`:
 
 ```javascript
 var archiveOptions = {
-  name: 'Important Presentation',
-  hasVideo: false  // Record audio only
+  name: "Important Presentation",
+  hasVideo: false, // Record audio only
 };
-opentok.startArchive(sessionId, archiveOptions, function(err, archive) {
+opentok.startArchive(sessionId, archiveOptions, function (err, archive) {
   if (err) {
     return console.log(err);
   } else {
@@ -147,10 +163,10 @@ streams in the session to individual files (instead of a single composed file) b
 
 ```javascript
 var archiveOptions = {
-  name: 'Important Presentation',
-  outputMode: 'individual'
+  name: "Important Presentation",
+  outputMode: "individual",
 };
-opentok.startArchive(sessionId, archiveOptions, function(err, archive) {
+opentok.startArchive(sessionId, archiveOptions, function (err, archive) {
   if (err) {
     return console.log(err);
   } else {
@@ -166,13 +182,13 @@ callback has a signature `function(err, archive)`. The `archive` returned in the
 instance of `Archive`.
 
 ```javascript
-opentok.stopArchive(archiveId, function(err, archive) {
+opentok.stopArchive(archiveId, function (err, archive) {
   if (err) return console.log(err);
 
   console.log("Stopped archive:" + archive.id);
 });
 
-archive.stop(function(err, archive) {
+archive.stop(function (err, archive) {
   if (err) return console.log(err);
 });
 ```
@@ -182,7 +198,7 @@ To get an `Archive` instance (and all the information about it) from an `archive
 `function(err, archive)`. You can inspect the properties of the archive for more details.
 
 ```javascript
-opentok.getArchive(archiveId, function(err, archive) {
+opentok.getArchive(archiveId, function (err, archive) {
   if (err) return console.log(err);
 
   console.log(archive);
@@ -194,13 +210,13 @@ To delete an Archive, you can call the `OpenTok.deleteArchive(archiveId, callbac
 
 ```javascript
 // Delete an Archive from an archiveId (fetched from database)
-opentok.deleteArchive(archiveId, function(err) {
+opentok.deleteArchive(archiveId, function (err) {
   if (err) console.log(err);
 });
 
-// Delete an Archive from an Archive instance, returned from the OpenTok.startArchive(), 
+// Delete an Archive from an Archive instance, returned from the OpenTok.startArchive(),
 // OpenTok.getArchive(), or OpenTok.listArchives() methods
-archive.delete(function(err) {
+archive.delete(function (err) {
   if (err) console.log(err);
 });
 ```
@@ -213,7 +229,11 @@ the callback is an array of `Archive` instances. The `totalCount` returned from 
 the total number of archives your API Key has generated.
 
 ```javascript
-opentok.listArchives({offset:100, count:50}, function(error, archives, totalCount) {
+opentok.listArchives({ offset: 100, count: 50 }, function (
+  error,
+  archives,
+  totalCount
+) {
   if (error) return console.log("error:", error);
 
   console.log(totalCount + " archives");
@@ -249,9 +269,9 @@ For more information on archiving, see the
 
 ### Working with live streaming broadcasts
 
-*Important:*
+_Important:_
 Only [routed OpenTok sessions](https://tokbox.com/developer/guides/create-session/#media-mode)
-support live streaming broadcasts. 
+support live streaming broadcasts.
 
 To start a [live streaming
 broadcast](https://tokbox.com/developer/guides/broadcast/live-streaming) of an OpenTok session,
@@ -262,33 +282,38 @@ session, options for the broadcast, and a callback function:
 var broadcastOptions = {
   outputs: {
     hls: {},
-    rtmp: [{
-      id: 'foo',
-      serverUrl: 'rtmp://myfooserver/myfooapp',
-      streamName: 'myfoostream'
-    },
-    {
-      id: 'bar',
-      serverUrl: 'rtmp://mybarserver/mybarapp',
-      streamName: 'mybarstream'
-    }]
+    rtmp: [
+      {
+        id: "foo",
+        serverUrl: "rtmp://myfooserver/myfooapp",
+        streamName: "myfoostream",
+      },
+      {
+        id: "bar",
+        serverUrl: "rtmp://mybarserver/mybarapp",
+        streamName: "mybarstream",
+      },
+    ],
   },
   maxDuration: 5400,
-  resolution: '640x480',
+  resolution: "640x480",
   layout: {
-    type: 'verticalPresentation'
-  }
+    type: "verticalPresentation",
+  },
 };
-opentok.startBroadcast(sessionId, broadcastOptions, function(error, broadcast) {
+opentok.startBroadcast(sessionId, broadcastOptions, function (
+  error,
+  broadcast
+) {
   if (error) {
     return console.log(error);
   }
-  return console.log('Broadcast started: ', broadcast.id);
+  return console.log("Broadcast started: ", broadcast.id);
 });
 ```
 
 See the API reference for details on the `options` parameter.
-  
+
 On success, a Broadcast object is passed into the callback function as the second parameter.
 The Broadcast object has properties that define the broadcast, including a `broadcastUrls`
 property, which has URLs for the broadcast streams. See the API reference for details.
@@ -298,11 +323,11 @@ broadcast ID (the `id` property of the Broadcast object) as the first parameter.
 parameter is the callback function:
 
 ```javascript
-opentok.stopBroadcast(broadcastId, function(error, broadcast) {
+opentok.stopBroadcast(broadcastId, function (error, broadcast) {
   if (error) {
     return console.log(error);
   }
-  return console.log('Broadcast stopped: ', broadcast.id);
+  return console.log("Broadcast stopped: ", broadcast.id);
 });
 ```
 
@@ -318,7 +343,11 @@ the callback is an array of `Broadcast` instances. The `totalCount` returned fro
 the total number of broadcasts your API Key has generated.
 
 ```javascript
-opentok.listBroadcasts({offset:100, count:50}, function(error, broadcasts, totalCount) {
+opentok.listBroadcasts({ offset: 100, count: 50 }, function (
+  error,
+  broadcasts,
+  totalCount
+) {
   if (error) return console.log("error:", error);
 
   console.log(totalCount + " broadcasts");
@@ -347,8 +376,11 @@ You can send a signal to all participants in an OpenTok Session by calling the
 the `connectionId` parameter to `null`:
 
 ```javascript
-var sessionId = '2_MX2xMDB-flR1ZSBOb3YgMTkgMTE6MDk6NTggUFNUIDIwMTN-MC2zNzQxNzIxNX2';
-opentok.signal(sessionId, null, { 'type': 'chat', 'data': 'Hello!' }, function(error) {
+var sessionId =
+  "2_MX2xMDB-flR1ZSBOb3YgMTkgMTE6MDk6NTggUFNUIDIwMTN-MC2zNzQxNzIxNX2";
+opentok.signal(sessionId, null, { type: "chat", data: "Hello!" }, function (
+  error
+) {
   if (error) return console.log("error:", error);
 });
 ```
@@ -358,11 +390,17 @@ Or send a signal to a specific participant in the session by calling the
 including `connectionId`:
 
 ```javascript
-var sessionId = '2_MX2xMDB-flR1ZSBOb3YgMTkgMTE6MDk6NTggUFNUIDIwMTN-MC2zNzQxNzIxNX2';
-var connectionId = '02e80876-02ab-47cd-8084-6ddc8887afbc';
-opentok.signal(sessionId, connectionId, { 'type': 'chat', 'data': 'Hello!' }, function(error) {
-  if (error) return console.log("error:", error);
-});
+var sessionId =
+  "2_MX2xMDB-flR1ZSBOb3YgMTkgMTE6MDk6NTggUFNUIDIwMTN-MC2zNzQxNzIxNX2";
+var connectionId = "02e80876-02ab-47cd-8084-6ddc8887afbc";
+opentok.signal(
+  sessionId,
+  connectionId,
+  { type: "chat", data: "Hello!" },
+  function (error) {
+    if (error) return console.log("error:", error);
+  }
+);
 ```
 
 This is the server-side equivalent to the signal() method in the OpenTok client SDKs. See
@@ -374,7 +412,7 @@ You can disconnect participants from an OpenTok Session using the
 `OpenTok.forceDisconnect(sessionId, connectionId, callback)` method.
 
 ```javascript
-opentok.forceDisconnect(sessionId, connectionId, function(error) {
+opentok.forceDisconnect(sessionId, connectionId, function (error) {
   if (error) return console.log("error:", error);
 });
 ```
@@ -390,13 +428,18 @@ token to connect to that session ID.
 
 ```javascript
 var options = {
-  from: '15551115555',
+  from: "15551115555",
   secure: true,
 };
 opentok.dial(sessionId, token, sipUri, options, function (error, sipCall) {
   if (error) return console.log("error: ", error);
 
-  console.log('SIP audio stream Id: ' + sipCall.streamId+ ' added to session ID: ' + sipCall.sessionId);
+  console.log(
+    "SIP audio stream Id: " +
+      sipCall.streamId +
+      " added to session ID: " +
+      sipCall.sessionId
+  );
 });
 ```
 
@@ -408,9 +451,10 @@ For more information, see the
 You can get information on an active stream in an OpenTok session:
 
 ```javascript
-var sessionId = '2_MX6xMDB-fjE1MzE3NjQ0MTM2NzZ-cHVTcUIra3JUa0kxUlhsVU55cTBYL0Y1flB';
-var streamId = '2a84cd30-3a33-917f-9150-49e454e01572';
-opentok.getStream(sessionId, streamId, function(error, streamInfo) {
+var sessionId =
+  "2_MX6xMDB-fjE1MzE3NjQ0MTM2NzZ-cHVTcUIra3JUa0kxUlhsVU55cTBYL0Y1flB";
+var streamId = "2a84cd30-3a33-917f-9150-49e454e01572";
+opentok.getStream(sessionId, streamId, function (error, streamInfo) {
   if (error) {
     console.log(error.message);
   } else {
@@ -427,7 +471,7 @@ The callback function is called when the operation completes. It takes two param
 `error` (in the case of an error) or `stream`. On sucessful completion, the `stream` object
 is set, containing properties of the stream.
 
-To get information on *all* active streams in a session, call the `OpenTok.listStreams()` method,
+To get information on _all_ active streams in a session, call the `OpenTok.listStreams()` method,
 passing in a session ID and a callback function. Upon sucess, the callback function is invoked
 with an array of Stream objects passed into the second parameter:
 
@@ -451,9 +495,9 @@ opentok.listStreams(sessionId, function(error, streams) {
 There are sample applications included in this repository. To get going as fast as possible,
 clone the whole repository and read the README in each of the sample directories:
 
-*  [HelloWorld](sample/HelloWorld/README.md)
-*  [Archiving](sample/Archiving/README.md)
-*  [SipInterconnect](sample/StreamInfo/README.md)
+- [HelloWorld](sample/HelloWorld/README.md)
+- [Archiving](sample/Archiving/README.md)
+- [SipInterconnect](sample/StreamInfo/README.md)
 
 ## Documentation
 
@@ -495,15 +539,16 @@ See the reference documentation
 <http://www.tokbox.com/opentok/libraries/server/node/reference/index.html> and in the
 docs directory of the SDK.
 
-
 ## Development and Contributing
 
 Interested in contributing? We :heart: pull requests! See the [Development](DEVELOPING.md) and
 [Contribution](CONTRIBUTING.md) guidelines.
 
-## Support
+## Getting Help
 
-See <https://support.tokbox.com> for all our support options.
+We love to hear from you so if you have questions, comments or find a bug in the project, let us know! You can either:
 
-Find a bug? File it on the [Issues](https://github.com/opentok/opentok-node/issues) page. Hint:
-test cases are really helpful!
+- Open an issue on this repository
+- See <https://support.tokbox.com/> for support options
+- Tweet at us! We're [@VonageDev on Twitter](https://twitter.com/VonageDev)
+- Or [join the Vonage Developer Community Slack](https://developer.nexmo.com/community/slack)
