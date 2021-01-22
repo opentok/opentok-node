@@ -1275,7 +1275,7 @@ describe('#startBroadcast', function () {
     }
   };
 
-  function mockStartBroadcastRequest(sessId, status) {
+  function mockStartBroadcastRequest(sessId, status, optionalBody) {
     var body;
     var broadcastObj;
     if (!status) {
@@ -1285,7 +1285,7 @@ describe('#startBroadcast', function () {
     }
     nock('https://api.opentok.com')
       .post('/v2/project/APIKEY/broadcast')
-      .reply(status || 200, body);
+      .reply(status || 200, body || optionalBody);
   }
 
   afterEach(function () {
@@ -1328,9 +1328,9 @@ describe('#startBroadcast', function () {
   });
 
   it('results in error a response other than 200', function (done) {
-    mockStartBroadcastRequest(SESSIONID, 400);
+    mockStartBroadcastRequest(SESSIONID, 400, { error: 'remote error message' });
     opentok.startBroadcast(SESSIONID, options, function (err, broadcast) {
-      expect(err).not.to.be.null;
+      expect(err.message).to.equal('Failed to start broadcast. Error: (400) {"error":"remote error message"}');
       expect(broadcast).to.be.undefined;
       done();
     });
