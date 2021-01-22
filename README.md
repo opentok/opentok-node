@@ -247,10 +247,11 @@ Note that you can also create an automatically archived session, by passing in `
 as the `archiveMode` option when you call the `OpenTok.createSession()` method (see "Creating
 Sessions," above).
 
-For composed archives, you can set change the layout dynamically, using the `OpenTok.setArchiveLayout(archiveId, type, stylesheet, callback)` method:
+For composed archives, you can set change the layout dynamically, using the
+`OpenTok.setArchiveLayout(archiveId, type, stylesheet, screenshareType, callback)` method:
 
 ```javascript
-opentok.setArchiveLayout(archiveId, type, null, function (err) {
+opentok.setArchiveLayout(archiveId, type, null, null, function (err) {
   if (err) return console.log("error:", error);
 });
 ```

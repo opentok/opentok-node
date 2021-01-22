@@ -1275,7 +1275,7 @@ describe('#startBroadcast', function () {
     }
   };
 
-  function mockStartBroadcastRequest(sessId, status) {
+  function mockStartBroadcastRequest(sessId, status, optionalBody) {
     var body;
     var broadcastObj;
     if (!status) {
@@ -1285,7 +1285,7 @@ describe('#startBroadcast', function () {
     }
     nock('https://api.opentok.com')
       .post('/v2/project/APIKEY/broadcast')
-      .reply(status || 200, body);
+      .reply(status || 200, body || optionalBody);
   }
 
   afterEach(function () {
@@ -1328,9 +1328,9 @@ describe('#startBroadcast', function () {
   });
 
   it('results in error a response other than 200', function (done) {
-    mockStartBroadcastRequest(SESSIONID, 400);
+    mockStartBroadcastRequest(SESSIONID, 400, { error: 'remote error message' });
     opentok.startBroadcast(SESSIONID, options, function (err, broadcast) {
-      expect(err).not.to.be.null;
+      expect(err.message).to.equal('Failed to start broadcast. Error: (400) {"error":"remote error message"}');
       expect(broadcast).to.be.undefined;
       done();
     });
@@ -1506,7 +1506,9 @@ describe('#listBroadcasts', function () {
 describe('#setBroadcastLayout', function () {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
   var BROADCAST_ID = 'BROADCAST_ID';
-  var LAYOUT_TYPE = 'custom';
+  var CUSTOM_LAYOUT_TYPE = 'custom';
+  var BEST_FIT_LAYOUT_TYPE = 'bestFit';
+  var HORIZONTAL_LAYOUT_TYPE = 'horizontalPresentation';
   var STYLESHEET = 'stylesheet';
 
   function mockSetBroadcastLayout(broadcastId, status) {
@@ -1527,10 +1529,87 @@ describe('#setBroadcastLayout', function () {
 
   it('succeeds given valid parameters', function (done) {
     mockSetBroadcastLayout(BROADCAST_ID);
-    opentok.setBroadcastLayout(BROADCAST_ID, LAYOUT_TYPE, STYLESHEET, function (err) {
+    opentok.setBroadcastLayout(BROADCAST_ID, BEST_FIT_LAYOUT_TYPE, function (err) {
       expect(err).to.be.null;
       done();
     });
+  });
+
+  it('succeeds given custom layout and stylesheet', function (done) {
+    mockSetBroadcastLayout(BROADCAST_ID);
+    opentok.setBroadcastLayout(BROADCAST_ID, CUSTOM_LAYOUT_TYPE, STYLESHEET, function (err) {
+      expect(err).to.be.null;
+      done();
+    });
+  });
+
+  it('succeeds given a screenshareType', function (done) {
+    mockSetBroadcastLayout(BROADCAST_ID);
+    opentok.setBroadcastLayout(
+      BROADCAST_ID,
+      BEST_FIT_LAYOUT_TYPE,
+      null,
+      HORIZONTAL_LAYOUT_TYPE,
+      function (err) {
+        expect(err).to.be.null;
+        done();
+      }
+    );
+  });
+});
+
+describe('#setArchiveLayout', function () {
+  var opentok = new OpenTok('APIKEY', 'APISECRET');
+  var ARCHIVE_ID = 'ARCHIVE_ID';
+  var CUSTOM_LAYOUT_TYPE = 'custom';
+  var BEST_FIT_LAYOUT_TYPE = 'bestFit';
+  var HORIZONTAL_LAYOUT_TYPE = 'horizontalPresentation';
+  var STYLESHEET = 'stylesheet';
+
+  function mockSetArchiveLayout(archiveId, status) {
+    var body;
+    if (status) {
+      body = JSON.stringify({
+        message: 'error message'
+      });
+    }
+    nock('https://api.opentok.com')
+      .put('/v2/project/APIKEY/archive/' + archiveId + '/layout')
+      .reply(status || 200, body);
+  }
+
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
+  it('succeeds given valid parameters', function (done) {
+    mockSetArchiveLayout(ARCHIVE_ID);
+    opentok.setArchiveLayout(ARCHIVE_ID, BEST_FIT_LAYOUT_TYPE, function (err) {
+      expect(err).to.be.null;
+      done();
+    });
+  });
+
+  it('succeeds given custom layout and stylesheet', function (done) {
+    mockSetArchiveLayout(ARCHIVE_ID);
+    opentok.setArchiveLayout(ARCHIVE_ID, CUSTOM_LAYOUT_TYPE, STYLESHEET, function (err) {
+      expect(err).to.be.null;
+      done();
+    });
+  });
+
+  it('succeeds given a screenshareType', function (done) {
+    mockSetArchiveLayout(ARCHIVE_ID);
+    opentok.setArchiveLayout(
+      ARCHIVE_ID,
+      BEST_FIT_LAYOUT_TYPE,
+      null,
+      HORIZONTAL_LAYOUT_TYPE,
+      function (err) {
+        expect(err).to.be.null;
+        done();
+      }
+    );
   });
 });
 
