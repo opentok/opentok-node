@@ -1215,6 +1215,143 @@ describe('#dial', function () {
     );
   });
 
+  it('dials DTMF signal to every connection in the session', function (done) {
+    var scope = nock('https://api.opentok.com:443')
+      .matchHeader('x-opentok-auth', function (value) {
+        try {
+          jwt.verify(value, apiSecret, { issuer: apiKey });
+          return true;
+        }
+        catch (error) {
+          done(error);
+          return false;
+        }
+      })
+      .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
+      .post('/v2/project/123456/dial', {
+        sessionId: this.sessionId,
+        token: this.token,
+        sip: {
+          uri: goodSipUri,
+          headers: {
+            someKey: 'someValue'
+          }
+        }
+      })
+      .reply(200, {
+        id: 'CONFERENCEID',
+        connectionId: 'CONNECTIONID',
+        streamId: 'STREAMID'
+      });
+    var dialDTMFScope = nock('https://api.opentok.com:443')
+      .matchHeader('x-opentok-auth', function (value) {
+        try {
+          jwt.verify(value, apiSecret, { issuer: apiKey });
+          return true;
+        }
+        catch (error) {
+          done(error);
+          return false;
+        }
+      })
+      .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
+      .post('/v2/project/<%apiKey%>/session/<%sessionId%>/play-dtmf'
+        .replace(/<%apiKey%>/g, apiKey)
+        .replace(/<%sessionId%>/g, this.sessionId), {
+        digits: '6'
+      })
+      .reply(200, {});
+    var self = this;
+    this.opentok.dial(
+      this.sessionId, this.token, goodSipUri, { headers: { someKey: 'someValue' } },
+      function (err, sipCall) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(sipCall).to.be.an.instanceof(SipInterconnect);
+        expect(sipCall.id).to.equal('CONFERENCEID');
+        expect(sipCall.streamId).to.equal('STREAMID');
+        expect(sipCall.connectionId).to.equal('CONNECTIONID');
+        scope.done();
+        self.opentok.playDTMF(self.sessionId, null, '6', function (error, res) {
+          expect(res).to.equal('Ok');
+          dialDTMFScope.done();
+          done(error);
+        });
+      }
+    );
+  });
+
+  it('dials DTMF signal to specific connection', function (done) {
+    var scope = nock('https://api.opentok.com:443')
+      .matchHeader('x-opentok-auth', function (value) {
+        try {
+          jwt.verify(value, apiSecret, { issuer: apiKey });
+          return true;
+        }
+        catch (error) {
+          done(error);
+          return false;
+        }
+      })
+      .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
+      .post('/v2/project/123456/dial', {
+        sessionId: this.sessionId,
+        token: this.token,
+        sip: {
+          uri: goodSipUri,
+          headers: {
+            someKey: 'someValue'
+          }
+        }
+      })
+      .reply(200, {
+        id: 'CONFERENCEID',
+        connectionId: 'CONNECTIONID',
+        streamId: 'STREAMID'
+      });
+    var dialDTMFScope = nock('https://api.opentok.com:443')
+      .matchHeader('x-opentok-auth', function (value) {
+        try {
+          jwt.verify(value, apiSecret, { issuer: apiKey });
+          return true;
+        }
+        catch (error) {
+          done(error);
+          return false;
+        }
+      })
+      .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
+      .post('/v2/project/<%apiKey%>/session/<%sessionId%>/connection/<%connectionId%>/play-dtmf'
+        .replace(/<%apiKey%>/g, apiKey)
+        .replace(/<%sessionId%>/g, this.sessionId)
+        .replace(/<%connectionId%>/g, 'CONNECTIONID'), {
+        digits: '6'
+      })
+      .reply(200, {});
+    var self = this;
+    this.opentok.dial(
+      this.sessionId, this.token, goodSipUri, { headers: { someKey: 'someValue' } },
+      function (err, sipCall) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(sipCall).to.be.an.instanceof(SipInterconnect);
+        expect(sipCall.id).to.equal('CONFERENCEID');
+        expect(sipCall.streamId).to.equal('STREAMID');
+        expect(sipCall.connectionId).to.equal('CONNECTIONID');
+        scope.done();
+        self.opentok.playDTMF(self.sessionId, sipCall.connectionId, '6', function (error, res) {
+          expect(res).to.equal('Ok');
+          dialDTMFScope.done();
+          done(error);
+        });
+      }
+    );
+  });
+
   it('complains if sessionId, token, SIP URI, or callback are missing or invalid', function () {
     // Missing all params
     expect(function () {
