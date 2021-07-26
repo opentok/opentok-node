@@ -1274,8 +1274,8 @@ describe('#dial', function () {
         expect(sipCall.streamId).to.equal('STREAMID');
         expect(sipCall.connectionId).to.equal('CONNECTIONID');
         scope.done();
-        self.opentok.playDTMF(self.sessionId, null, '6', function (error, res) {
-          expect(res).to.equal('Ok');
+        self.opentok.playDTMF(self.sessionId, null, '6', function (error) {
+          expect(error).to.equal(null);
           dialDTMFScope.done();
           done(error);
         });
@@ -1343,8 +1343,8 @@ describe('#dial', function () {
         expect(sipCall.streamId).to.equal('STREAMID');
         expect(sipCall.connectionId).to.equal('CONNECTIONID');
         scope.done();
-        self.opentok.playDTMF(self.sessionId, sipCall.connectionId, '6', function (error, res) {
-          expect(res).to.equal('Ok');
+        self.opentok.playDTMF(self.sessionId, sipCall.connectionId, '6', function (error) {
+          expect(error).to.equal(null);
           dialDTMFScope.done();
           done(error);
         });
