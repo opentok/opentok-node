@@ -367,7 +367,7 @@ you create the token for the client, using the `OpenTok.generateToken()` method.
 change the layout classes for streams in a session by calling the
 `OpenTok.setStreamClassLists(sessionId, classListArray, callback)` method.
 
-Setting the layout of a live streaming broadcast is optional. By default, ive streaming broadcasts
+Setting the layout of a live streaming broadcast is optional. By default, live streaming broadcasts
 use the "best fit" layout.
 
 ### Sending signals
