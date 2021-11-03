@@ -1477,6 +1477,7 @@ describe('#startBroadcast', function () {
 describe('#patchBroadcast', function () {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
   var BROADCAST_ID = 'BROADCASTID';
+  var STREAM_ID = 'STREAMID';
   var addStreamOptions = {
     addStream: 'abc123'
   };
@@ -1485,6 +1486,10 @@ describe('#patchBroadcast', function () {
     removeStream: 'abc123'
   };
 
+  var broadcastOptions = {
+    hasAudio: true,
+    hasVideo: true
+  };
 
   function mockPatchBroadcastRequest(broadcastId, optionalBody, status) {
     nock('https://api.opentok.com')
@@ -1498,7 +1503,7 @@ describe('#patchBroadcast', function () {
 
   it('patches broadcast given addStream', function (done) {
     mockPatchBroadcastRequest(BROADCAST_ID, addStreamOptions);
-    opentok.patchBroadcast(BROADCAST_ID, addStreamOptions, function (err) {
+    opentok.addBroadcastStream(BROADCAST_ID, STREAM_ID, broadcastOptions, function (err) {
       expect(err).to.be.null;
       done();
     });
@@ -1506,28 +1511,24 @@ describe('#patchBroadcast', function () {
 
   it('patches broadcast given removeStream', function (done) {
     mockPatchBroadcastRequest(BROADCAST_ID, removeStreamOptions);
-    opentok.patchBroadcast(BROADCAST_ID, removeStreamOptions, function (err) {
+    opentok.removeBroadcastStream(BROADCAST_ID, STREAM_ID, function (err) {
       expect(err).to.be.null;
       done();
     });
   });
 
-  it('fails to patch on emtpy body', function (done) {
-    mockPatchBroadcastRequest(BROADCAST_ID);
-    opentok.patchBroadcast(BROADCAST_ID, null, function (err) {
+  it('fails to patch on emtpy function call', function () {
+    opentok.addBroadcastStream(BROADCAST_ID, null, function (err) {
       expect(err).not.to.be.null;
-      done();
     });
   });
 
-  it('fails to patch if no callback is provided', function (done) {
-    mockPatchBroadcastRequest(BROADCAST_ID, addStreamOptions);
+  it('fails to patch if no callback is provided', function () {
     try {
-      opentok.patchBroadcast(BROADCAST_ID, addStreamOptions);
+      opentok.patchBroadcast(BROADCAST_ID, STREAM_ID);
     }
     catch (err) {
       expect(err).not.to.be.null;
-      done();
     }
   });
 });

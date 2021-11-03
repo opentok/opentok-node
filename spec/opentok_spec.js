@@ -517,9 +517,20 @@ describe('Archiving', function () {
         .patch(archivePatchResource, { addStream: mockStreamId, hasAudio: true, hasVideo: true })
         .reply(200);
 
-      opentok.patchArchive(mockArchiveId, {
-        addStream: mockStreamId, hasAudio: true, hasVideo: true
+      opentok.addArchiveStream(mockArchiveId, mockStreamId, {
+        hasAudio: true, hasVideo: true
       }, function (err) {
+        expect(err).toBeNull();
+        done();
+      });
+    });
+
+    it('should patch an archive with just addStream', function (done) {
+      nock(archiveHostUrl)
+        .patch(archivePatchResource, { addStream: mockStreamId, hasAudio: true, hasVideo: true })
+        .reply(200);
+
+      opentok.addArchiveStream(mockArchiveId, mockStreamId, function (err) {
         expect(err).toBeNull();
         done();
       });
@@ -530,20 +541,22 @@ describe('Archiving', function () {
         .patch(archivePatchResource, { removeStream: mockStreamId })
         .reply(200);
 
-      opentok.patchArchive(mockArchiveId, { removeStream: mockStreamId }, function (err) {
+      opentok.removeArchiveStream(mockArchiveId, mockStreamId, function (err) {
         expect(err).toBeNull();
         done();
       });
     });
 
-    it('should fail to patch if none of addStream and removeStream is present', function (done) {
-      nock(archiveHostUrl)
-        .patch(archivePatchResource);
+    it('should throw error on empty addArchiveStream', function () {
+      expect(function () {
+        opentok.addArchiveStream();
+      }).toThrow(new OpenTok.ArgumentError('No callback given to addArchiveStream'));
+    });
 
-      opentok.patchArchive(mockArchiveId, {}, function (err) {
-        expect(err).not.toBeNull();
-        done();
-      });
+    it('should throw error on empty removeArchiveStream', function () {
+      expect(function () {
+        opentok.removeArchiveStream();
+      }).toThrow(new OpenTok.ArgumentError('No callback given to addArchiveStream'));
     });
   });
 
