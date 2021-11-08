@@ -556,7 +556,7 @@ describe('Archiving', function () {
     it('should throw error on empty removeArchiveStream', function () {
       expect(function () {
         opentok.removeArchiveStream();
-      }).toThrow(new OpenTok.ArgumentError('No callback given to addArchiveStream'));
+      }).toThrow(new OpenTok.ArgumentError('No callback given to removeArchiveStream'));
     });
   });
 
