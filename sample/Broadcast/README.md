@@ -31,8 +31,8 @@ Visit <http://localhost:3000/host> in your browser. Then, mute the audio on your
 (or in a browser on another computer). The two client pages are connected in an OpenTok session.
 
 In the host page, set broadast options -- maximum duration and resolution -- and then click the **Start Broadcast** button to start the live streaming broadcast of the session. (The maximum
-duration setting is optional. The default maximum duration of a broadcast is 2 hours
-(7200 seconds). 
+duration setting is optional. The default maximum duration of a broadcast is 4 hours
+(14,400 seconds). 
 
 Then, visit <http://localhost:3000/broadcast> in Safari. This page shows the live streaming
 HLS broadcast of the session. Safari supports HLS streams natively. To support the HLS
