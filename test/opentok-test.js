@@ -1554,6 +1554,65 @@ describe('#startBroadcast', function () {
   });
 });
 
+describe('#patchBroadcast', function () {
+  var opentok = new OpenTok('APIKEY', 'APISECRET');
+  var BROADCAST_ID = 'BROADCASTID';
+  var STREAM_ID = 'STREAMID';
+  var addStreamOptions = {
+    addStream: 'abc123'
+  };
+
+  var removeStreamOptions = {
+    removeStream: 'abc123'
+  };
+
+  var broadcastOptions = {
+    hasAudio: true,
+    hasVideo: true
+  };
+
+  function mockPatchBroadcastRequest(broadcastId, optionalBody, status) {
+    nock('https://api.opentok.com')
+      .patch('/v2/project/APIKEY/broadcast/' + broadcastId + '/streams')
+      .reply(200 || status, optionalBody);
+  }
+
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
+  it('patches broadcast given addStream', function (done) {
+    mockPatchBroadcastRequest(BROADCAST_ID, addStreamOptions);
+    opentok.addBroadcastStream(BROADCAST_ID, STREAM_ID, broadcastOptions, function (err) {
+      expect(err).to.be.null;
+      done();
+    });
+  });
+
+  it('patches broadcast given removeStream', function (done) {
+    mockPatchBroadcastRequest(BROADCAST_ID, removeStreamOptions);
+    opentok.removeBroadcastStream(BROADCAST_ID, STREAM_ID, function (err) {
+      expect(err).to.be.null;
+      done();
+    });
+  });
+
+  it('fails to patch on emtpy function call', function () {
+    opentok.addBroadcastStream(BROADCAST_ID, null, function (err) {
+      expect(err).not.to.be.null;
+    });
+  });
+
+  it('fails to patch if no callback is provided', function () {
+    try {
+      opentok.patchBroadcast(BROADCAST_ID, STREAM_ID);
+    }
+    catch (err) {
+      expect(err).not.to.be.null;
+    }
+  });
+});
+
 describe('#stopBroadcast', function () {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
   var BROADCAST_ID = 'BROADCAST_ID';

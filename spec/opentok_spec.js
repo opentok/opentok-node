@@ -8,6 +8,7 @@ var apiSecret = 'APISECRET';
 
 var mockArchiveId = 'e85741ce-d280-4efa-a3ba-93379a68be06';
 var mockSessionId = '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
+var mockStreamId = '1_MX4xMDB-MC43NjAyOTYyfg';
 var mockArchiveName = 'test_archive_name';
 var mockS3Url = 'http://tokbox.com.archive2.s3.amazonaws.com/123456/09141e29-8770-439b-b180-337d7e637545/archive.mp4';
 
@@ -15,6 +16,7 @@ var archiveHostUrl = 'https://api.opentok.com:443';
 var archiveResource = '/v2/project/APIKEY/archive';
 var archiveResourceWithId = archiveResource + '/' + encodeURIComponent(mockArchiveId);
 var archiveStopResource = archiveResourceWithId + '/stop';
+var archivePatchResource = archiveResourceWithId + '/streams';
 
 var mockStartArchiveResponseBody;
 var mockStopArchiveResponseBody;
@@ -466,6 +468,55 @@ describe('Archiving', function () {
       expect(function () {
         opentok.listArchives();
       }).toThrow(new OpenTok.ArgumentError('No callback given to listArchives'));
+    });
+  });
+
+  describe('patchArchive', function () {
+    it('should patch an archive with addStream', function (done) {
+      nock(archiveHostUrl)
+        .patch(archivePatchResource, { addStream: mockStreamId, hasAudio: true, hasVideo: true })
+        .reply(200);
+
+      opentok.addArchiveStream(mockArchiveId, mockStreamId, {
+        hasAudio: true, hasVideo: true
+      }, function (err) {
+        expect(err).toBeNull();
+        done();
+      });
+    });
+
+    it('should patch an archive with just addStream', function (done) {
+      nock(archiveHostUrl)
+        .patch(archivePatchResource, { addStream: mockStreamId, hasAudio: true, hasVideo: true })
+        .reply(200);
+
+      opentok.addArchiveStream(mockArchiveId, mockStreamId, function (err) {
+        expect(err).toBeNull();
+        done();
+      });
+    });
+
+    it('should patch an archive with removeStream', function (done) {
+      nock(archiveHostUrl)
+        .patch(archivePatchResource, { removeStream: mockStreamId })
+        .reply(200);
+
+      opentok.removeArchiveStream(mockArchiveId, mockStreamId, function (err) {
+        expect(err).toBeNull();
+        done();
+      });
+    });
+
+    it('should throw error on empty addArchiveStream', function () {
+      expect(function () {
+        opentok.addArchiveStream();
+      }).toThrow(new OpenTok.ArgumentError('No callback given to addArchiveStream'));
+    });
+
+    it('should throw error on empty removeArchiveStream', function () {
+      expect(function () {
+        opentok.removeArchiveStream();
+      }).toThrow(new OpenTok.ArgumentError('No callback given to removeArchiveStream'));
     });
   });
 
