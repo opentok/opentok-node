@@ -16,7 +16,8 @@ var apiSecret = '1234567890abcdef1234567890abcdef1234567890';
 var apiUrl = 'http://mymock.example.com';
 
 // This is specifically concocted for these tests (uses fake apiKey/apiSecret above)
-var sessionId = '1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX4';
+var sessionId =
+  '1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX4';
 var badApiKey = 'badkey';
 var badApiSecret = 'badsecret';
 var goodSipUri = 'sip:siptesturl@tokbox.com';
@@ -53,18 +54,20 @@ var mockBroadcastObject = {
 
 var mockListBroadcastsObject = {
   count: 1,
-  items: [{
-    id: 'fooId',
-    sessionId: 'fooSessionId',
-    projectId: 1234,
-    createdAt: 1537477584724,
-    updatedAt: 1537477584725,
-    broadcastUrls: { hls: 'hlsUrl' },
-    maxDuration: 7200,
-    resolution: '1280x720',
-    event: 'broadcast',
-    status: 'stopped'
-  }]
+  items: [
+    {
+      id: 'fooId',
+      sessionId: 'fooSessionId',
+      projectId: 1234,
+      createdAt: 1537477584724,
+      updatedAt: 1537477584725,
+      broadcastUrls: { hls: 'hlsUrl' },
+      maxDuration: 7200,
+      resolution: '1280x720',
+      event: 'broadcast',
+      status: 'stopped'
+    }
+  ]
 };
 
 function validateBroadcastObject(broadcast, status) {
@@ -124,6 +127,24 @@ function mockListStreamsRequest(sessId, status) {
   nock('https://api.opentok.com')
     .get('/v2/project/123456/session/' + sessId + '/stream')
     .reply(status || 200, body);
+}
+
+function mockMuteStreamRequest(sessId, streamId, status) {
+  nock('https://api.opentok.com')
+    .post('/v2/project/123456/session/' + sessId + '/stream/' + streamId + '/mute')
+    .reply(status || 200);
+}
+
+function mockMuteAllStreamRequest(sessId, status) {
+  nock('https://api.opentok.com')
+    .post('/v2/project/123456/session/' + sessId + '/mute')
+    .reply(status || 200);
+}
+
+function mockDisableForceMuteRequest(sessId, status) {
+  nock('https://api.opentok.com')
+    .post('/v2/project/123456/session/' + sessId + '/mute')
+    .reply(status || 200);
 }
 
 function mockListBroadcastsRequest(query, status) {
@@ -189,7 +210,9 @@ describe('JWT token', function describeJwtToken() {
     var expiration;
     var now;
     try {
-      expiration = jwt.verify(opentok.generateJwt(), apiSecret, { issuer: apiKey }).exp;
+      expiration = jwt.verify(opentok.generateJwt(), apiSecret, {
+        issuer: apiKey
+      }).exp;
       now = Math.floor(Date.now() / 1000);
       expect(expiration).to.be.above(now);
       done();
@@ -202,7 +225,9 @@ describe('JWT token', function describeJwtToken() {
     var opentok = new OpenTok(apiKey, apiSecret);
     var issuer;
     try {
-      issuer = jwt.verify(opentok.generateJwt(), apiSecret, { issuer: apiKey }).iss;
+      issuer = jwt.verify(opentok.generateJwt(), apiSecret, {
+        issuer: apiKey
+      }).iss;
       expect(issuer).to.be.equal(apiKey);
       done();
     }
@@ -240,18 +265,15 @@ describe('when initialized with an apiUrl', function () {
       })
       .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
       .post('/session/create', 'archiveMode=manual&p2p.preference=enabled')
-      .reply(
-        200, validReply,
-        {
-          server: 'nginx',
-          date: 'Thu, 20 Mar 2014 06:35:24 GMT',
-          'content-type': 'application/json',
-          connection: 'keep-alive',
-          'access-control-allow-origin': '*',
-          'strict-transport-security': 'max-age=31536000; includeSubdomains',
-          'content-length': '204'
-        }
-      );
+      .reply(200, validReply, {
+        server: 'nginx',
+        date: 'Thu, 20 Mar 2014 06:35:24 GMT',
+        'content-type': 'application/json',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'strict-transport-security': 'max-age=31536000; includeSubdomains',
+        'content-length': '204'
+      });
     this.opentok.createSession(function (err, session) {
       if (err) {
         done(err);
@@ -276,18 +298,15 @@ describe('when initialized with a proxy', function () {
     this.timeout(10000);
     scope = nock('https://api.opentok.com:443')
       .post('/session/create', 'archiveMode=manual&p2p.preference=enabled')
-      .reply(
-        200, validReply,
-        {
-          server: 'nginx',
-          date: 'Mon, 14 Jul 2014 04:26:35 GMT',
-          'content-type': 'application/json',
-          connection: 'keep-alive',
-          'access-control-allow-origin': '*',
-          'x-tb-host': 'mantis402-oak.tokbox.com',
-          'content-length': '274'
-        }
-      );
+      .reply(200, validReply, {
+        server: 'nginx',
+        date: 'Mon, 14 Jul 2014 04:26:35 GMT',
+        'content-type': 'application/json',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'x-tb-host': 'mantis402-oak.tokbox.com',
+        'content-length': '274'
+      });
     this.opentok.createSession(function (err) {
       scope.done();
       done(err);
@@ -316,7 +335,9 @@ describe('when initialized without a timeout', function () {
 describe('when a user agent addendum is needed', function () {
   beforeEach(function () {
     this.addendum = 'my-special-app';
-    this.opentok = new OpenTok(apiKey, apiSecret, { uaAddendum: this.addendum });
+    this.opentok = new OpenTok(apiKey, apiSecret, {
+      uaAddendum: this.addendum
+    });
   });
   it('appends the addendum in a create session request', function (done) {
     var scope = nock('https://api.opentok.com:443')
@@ -332,18 +353,15 @@ describe('when a user agent addendum is needed', function () {
       })
       .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
       .post('/session/create', 'archiveMode=manual&p2p.preference=enabled')
-      .reply(
-        200, validReply,
-        {
-          server: 'nginx',
-          date: 'Thu, 20 Mar 2014 06:35:24 GMT',
-          'content-type': 'application/json',
-          connection: 'keep-alive',
-          'access-control-allow-origin': '*',
-          'strict-transport-security': 'max-age=31536000; includeSubdomains',
-          'content-length': '204'
-        }
-      );
+      .reply(200, validReply, {
+        server: 'nginx',
+        date: 'Thu, 20 Mar 2014 06:35:24 GMT',
+        'content-type': 'application/json',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'strict-transport-security': 'max-age=31536000; includeSubdomains',
+        'content-length': '204'
+      });
     this.opentok.createSession(function (err) {
       if (err) {
         done(err);
@@ -370,18 +388,15 @@ describe.skip('when there is too much network latency', function () {
     scope = nock('https://api.opentok.com:443')
       .post('/session/create', 'archiveMode=manual&p2p.preference=enabled')
       .delayConnection(defaultTimeoutLength + 10)
-      .reply(
-        200, validReply,
-        {
-          server: 'nginx',
-          date: 'Mon, 14 Jul 2014 04:26:35 GMT',
-          'content-type': 'application/json',
-          connection: 'keep-alive',
-          'access-control-allow-origin': '*',
-          'x-tb-host': 'mantis402-oak.tokbox.com',
-          'content-length': '274'
-        }
-      );
+      .reply(200, validReply, {
+        server: 'nginx',
+        date: 'Mon, 14 Jul 2014 04:26:35 GMT',
+        'content-type': 'application/json',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'x-tb-host': 'mantis402-oak.tokbox.com',
+        'content-length': '274'
+      });
     this.opentok.createSession(function (err) {
       expect(err).to.be.an.instanceof(Error);
       scope.done();
@@ -399,7 +414,11 @@ describe('when initialized with bad credentials', function () {
       var scope = nock('https://api.opentok.com:443')
         .post('/session/create', 'archiveMode=manual&p2p.preference=enabled')
         .reply(
-          403, JSON.stringify({ code: -1, message: 'No suitable authentication found' }),
+          403,
+          JSON.stringify({
+            code: -1,
+            message: 'No suitable authentication found'
+          }),
           {
             server: 'nginx',
             date: 'Fri, 30 May 2014 19:37:12 GMT',
@@ -436,18 +455,15 @@ describe('#createSession', function () {
       })
       .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
       .post('/session/create', 'archiveMode=manual&p2p.preference=enabled')
-      .reply(
-        200, validReply,
-        {
-          server: 'nginx',
-          date: 'Thu, 20 Mar 2014 06:35:24 GMT',
-          'content-type': 'application/json',
-          connection: 'keep-alive',
-          'access-control-allow-origin': '*',
-          'strict-transport-security': 'max-age=31536000; includeSubdomains',
-          'content-length': '204'
-        }
-      );
+      .reply(200, validReply, {
+        server: 'nginx',
+        date: 'Thu, 20 Mar 2014 06:35:24 GMT',
+        'content-type': 'application/json',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'strict-transport-security': 'max-age=31536000; includeSubdomains',
+        'content-length': '204'
+      });
     // pass no options parameter
     this.opentok.createSession(function (err, session) {
       if (err) {
@@ -476,29 +492,29 @@ describe('#createSession', function () {
       })
       .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
       .post('/session/create', 'archiveMode=manual&p2p.preference=disabled')
-      .reply(
-        200, validReply,
-        {
-          server: 'nginx',
-          date: 'Thu, 20 Mar 2014 06:35:24 GMT',
-          'content-type': 'application/json',
-          connection: 'keep-alive',
-          'access-control-allow-origin': '*',
-          'strict-transport-security': 'max-age=31536000; includeSubdomains',
-          'content-length': '204'
+      .reply(200, validReply, {
+        server: 'nginx',
+        date: 'Thu, 20 Mar 2014 06:35:24 GMT',
+        'content-type': 'application/json',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'strict-transport-security': 'max-age=31536000; includeSubdomains',
+        'content-length': '204'
+      });
+    this.opentok.createSession(
+      { mediaMode: 'routed' },
+      function (err, session) {
+        if (err) {
+          done(err);
+          return;
         }
-      );
-    this.opentok.createSession({ mediaMode: 'routed' }, function (err, session) {
-      if (err) {
+        expect(session).to.be.an.instanceof(Session);
+        expect(session.sessionId).to.equal('SESSIONID');
+        expect(session.mediaMode).to.equal('routed');
+        scope.done();
         done(err);
-        return;
       }
-      expect(session).to.be.an.instanceof(Session);
-      expect(session.sessionId).to.equal('SESSIONID');
-      expect(session.mediaMode).to.equal('routed');
-      scope.done();
-      done(err);
-    });
+    );
   });
 
   it('creates a media relayed session even if the media mode is invalid', function (done) {
@@ -515,18 +531,15 @@ describe('#createSession', function () {
       })
       .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
       .post('/session/create', 'archiveMode=manual&p2p.preference=enabled')
-      .reply(
-        200, validReply,
-        {
-          server: 'nginx',
-          date: 'Thu, 20 Mar 2014 06:35:24 GMT',
-          'content-type': 'application/json',
-          connection: 'keep-alive',
-          'access-control-allow-origin': '*',
-          'strict-transport-security': 'max-age=31536000; includeSubdomains',
-          'content-length': '204'
-        }
-      );
+      .reply(200, validReply, {
+        server: 'nginx',
+        date: 'Thu, 20 Mar 2014 06:35:24 GMT',
+        'content-type': 'application/json',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'strict-transport-security': 'max-age=31536000; includeSubdomains',
+        'content-length': '204'
+      });
     this.opentok.createSession({ mediaMode: 'blah' }, function (err, session) {
       if (err) {
         done(err);
@@ -554,29 +567,29 @@ describe('#createSession', function () {
       })
       .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
       .post('/session/create', 'archiveMode=manual&p2p.preference=disabled')
-      .reply(
-        200, validReply,
-        {
-          server: 'nginx',
-          date: 'Thu, 20 Mar 2014 06:35:24 GMT',
-          'content-type': 'application/json',
-          connection: 'keep-alive',
-          'access-control-allow-origin': '*',
-          'strict-transport-security': 'max-age=31536000; includeSubdomains',
-          'content-length': '204'
+      .reply(200, validReply, {
+        server: 'nginx',
+        date: 'Thu, 20 Mar 2014 06:35:24 GMT',
+        'content-type': 'application/json',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'strict-transport-security': 'max-age=31536000; includeSubdomains',
+        'content-length': '204'
+      });
+    this.opentok.createSession(
+      { mediaMode: 'routed', archiveMode: 'manual' },
+      function (err, session) {
+        if (err) {
+          done(err);
+          return;
         }
-      );
-    this.opentok.createSession({ mediaMode: 'routed', archiveMode: 'manual' }, function (err, session) {
-      if (err) {
+        expect(session).to.be.an.instanceof(Session);
+        expect(session.sessionId).to.equal('SESSIONID');
+        expect(session.archiveMode).to.equal('manual');
+        scope.done();
         done(err);
-        return;
       }
-      expect(session).to.be.an.instanceof(Session);
-      expect(session.sessionId).to.equal('SESSIONID');
-      expect(session.archiveMode).to.equal('manual');
-      scope.done();
-      done(err);
-    });
+    );
   });
 
   it('creates a session with always archive mode', function (done) {
@@ -593,29 +606,29 @@ describe('#createSession', function () {
       })
       .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
       .post('/session/create', 'archiveMode=always&p2p.preference=disabled')
-      .reply(
-        200, validReply,
-        {
-          server: 'nginx',
-          date: 'Thu, 20 Mar 2014 06:35:24 GMT',
-          'content-type': 'application/json',
-          connection: 'keep-alive',
-          'access-control-allow-origin': '*',
-          'strict-transport-security': 'max-age=31536000; includeSubdomains',
-          'content-length': '204'
+      .reply(200, validReply, {
+        server: 'nginx',
+        date: 'Thu, 20 Mar 2014 06:35:24 GMT',
+        'content-type': 'application/json',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'strict-transport-security': 'max-age=31536000; includeSubdomains',
+        'content-length': '204'
+      });
+    this.opentok.createSession(
+      { mediaMode: 'routed', archiveMode: 'always' },
+      function (err, session) {
+        if (err) {
+          done(err);
+          return;
         }
-      );
-    this.opentok.createSession({ mediaMode: 'routed', archiveMode: 'always' }, function (err, session) {
-      if (err) {
+        expect(session).to.be.an.instanceof(Session);
+        expect(session.sessionId).to.equal('SESSIONID');
+        expect(session.archiveMode).to.equal('always');
+        scope.done();
         done(err);
-        return;
       }
-      expect(session).to.be.an.instanceof(Session);
-      expect(session.sessionId).to.equal('SESSIONID');
-      expect(session.archiveMode).to.equal('always');
-      scope.done();
-      done(err);
-    });
+    );
   });
 
   it('creates a session with manual archive mode even if the archive mode is invalid', function (done) {
@@ -632,29 +645,29 @@ describe('#createSession', function () {
       })
       .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
       .post('/session/create', 'archiveMode=manual&p2p.preference=disabled')
-      .reply(
-        200, validReply,
-        {
-          server: 'nginx',
-          date: 'Thu, 20 Mar 2014 06:35:24 GMT',
-          'content-type': 'application/json',
-          connection: 'keep-alive',
-          'access-control-allow-origin': '*',
-          'strict-transport-security': 'max-age=31536000; includeSubdomains',
-          'content-length': '204'
+      .reply(200, validReply, {
+        server: 'nginx',
+        date: 'Thu, 20 Mar 2014 06:35:24 GMT',
+        'content-type': 'application/json',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'strict-transport-security': 'max-age=31536000; includeSubdomains',
+        'content-length': '204'
+      });
+    this.opentok.createSession(
+      { mediaMode: 'routed', archiveMode: 'invalid' },
+      function (err, session) {
+        if (err) {
+          done(err);
+          return;
         }
-      );
-    this.opentok.createSession({ mediaMode: 'routed', archiveMode: 'invalid' }, function (err, session) {
-      if (err) {
+        expect(session).to.be.an.instanceof(Session);
+        expect(session.sessionId).to.equal('SESSIONID');
+        expect(session.archiveMode).to.equal('manual');
+        scope.done();
         done(err);
-        return;
       }
-      expect(session).to.be.an.instanceof(Session);
-      expect(session.sessionId).to.equal('SESSIONID');
-      expect(session.archiveMode).to.equal('manual');
-      scope.done();
-      done(err);
-    });
+    );
   });
 
   it('adds a location hint to the created session', function (done) {
@@ -670,46 +683,55 @@ describe('#createSession', function () {
         }
       })
       .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
-      .post('/session/create', 'location=12.34.56.78&archiveMode=manual&p2p.preference=enabled')
-      .reply(
-        200, validReply,
-        {
-          server: 'nginx',
-          date: 'Thu, 20 Mar 2014 06:35:24 GMT',
-          'content-type': 'application/json',
-          connection: 'keep-alive',
-          'access-control-allow-origin': '*',
-          'strict-transport-security': 'max-age=31536000; includeSubdomains',
-          'content-length': '204'
-        }
-      );
+      .post(
+        '/session/create',
+        'location=12.34.56.78&archiveMode=manual&p2p.preference=enabled'
+      )
+      .reply(200, validReply, {
+        server: 'nginx',
+        date: 'Thu, 20 Mar 2014 06:35:24 GMT',
+        'content-type': 'application/json',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'strict-transport-security': 'max-age=31536000; includeSubdomains',
+        'content-length': '204'
+      });
     // passes location: '12.34.56.78'
-    this.opentok.createSession({ location: '12.34.56.78' }, function (err, session) {
-      if (err) {
+    this.opentok.createSession(
+      { location: '12.34.56.78' },
+      function (err, session) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(session).to.be.an.instanceof(Session);
+        expect(session.sessionId).to.equal('SESSIONID');
+        expect(session.mediaMode).to.equal('relayed');
+        expect(session.location).to.equal('12.34.56.78');
+        scope.done();
         done(err);
-        return;
       }
-      expect(session).to.be.an.instanceof(Session);
-      expect(session.sessionId).to.equal('SESSIONID');
-      expect(session.mediaMode).to.equal('relayed');
-      expect(session.location).to.equal('12.34.56.78');
-      scope.done();
-      done(err);
-    });
+    );
   });
 
   it('complains when the location value is not valid', function (done) {
-    this.opentok.createSession({ location: 'not an ip address' }, function (err) {
-      expect(err).to.be.an.instanceof(Error);
-      done();
-    });
+    this.opentok.createSession(
+      { location: 'not an ip address' },
+      function (err) {
+        expect(err).to.be.an.instanceof(Error);
+        done();
+      }
+    );
   });
 
   it('complains when the archive mode is always and the media mode is routed', function (done) {
-    this.opentok.createSession({ archiveMedia: 'always', mediaMode: 'routed' }, function (err) {
-      expect(err).to.be.an.instanceof(Error);
-      done();
-    });
+    this.opentok.createSession(
+      { archiveMedia: 'always', mediaMode: 'routed' },
+      function (err) {
+        expect(err).to.be.an.instanceof(Error);
+        done();
+      }
+    );
   });
 
   it('complains when there is no callback function', function () {
@@ -764,7 +786,14 @@ describe('#createSession', function () {
       .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
       .post('/session/create', 'archiveMode=manual&p2p.preference=enabled')
       .reply(
-        200, '[{"session_id":"' + sessionId + '","project_id":"' + apiKey + '","partner_id":"' + apiKey + '","create_dt":"Fri Nov 18 15:50:36 PST 2016","media_server_url":""}]',
+        200,
+        '[{"session_id":"' +
+          sessionId +
+          '","project_id":"' +
+          apiKey +
+          '","partner_id":"' +
+          apiKey +
+          '","create_dt":"Fri Nov 18 15:50:36 PST 2016","media_server_url":""}]',
         {
           server: 'nginx',
           date: 'Thu, 20 Mar 2014 06:35:24 GMT',
@@ -795,18 +824,15 @@ describe('#createSession', function () {
         return '*';
       })
       .post('/session/create', '*')
-      .reply(
-        200, validReply,
-        {
-          server: 'nginx',
-          date: 'Thu, 20 Mar 2014 14:02:45 GMT',
-          'content-type': 'text/xml',
-          connection: 'keep-alive',
-          'access-control-allow-origin': '*',
-          'x-tb-host': 'oms506-nyc.tokbox.com',
-          'content-length': '211'
-        }
-      );
+      .reply(200, validReply, {
+        server: 'nginx',
+        date: 'Thu, 20 Mar 2014 14:02:45 GMT',
+        'content-type': 'text/xml',
+        connection: 'keep-alive',
+        'access-control-allow-origin': '*',
+        'x-tb-host': 'oms506-nyc.tokbox.com',
+        'content-length': '211'
+      });
     var options = { mediaMode: 'routed', archiveMode: 'manual' };
     var optionsUntouched = _.clone(options);
     this.opentok.createSession(options, function (err) {
@@ -820,7 +846,6 @@ describe('#createSession', function () {
     });
   });
 });
-
 
 describe('#generateToken', function () {
   beforeEach(function () {
@@ -846,12 +871,15 @@ describe('#generateToken', function () {
     var decoded;
     var subscriberToken;
     expect(defaultRoleToken).to.be.a('string');
-    expect(helpers.verifyTokenSignature(defaultRoleToken, apiSecret)).to.be.true;
+    expect(helpers.verifyTokenSignature(defaultRoleToken, apiSecret)).to.be
+      .true;
     decoded = helpers.decodeToken(defaultRoleToken);
     expect(decoded.role).to.equal('publisher');
 
     // expects one with a valid role defined to set it
-    subscriberToken = this.opentok.generateToken(this.sessionId, { role: 'subscriber' });
+    subscriberToken = this.opentok.generateToken(this.sessionId, {
+      role: 'subscriber'
+    });
     expect(subscriberToken).to.be.a('string');
     expect(helpers.verifyTokenSignature(subscriberToken, apiSecret)).to.be.true;
     decoded = helpers.decodeToken(subscriberToken);
@@ -864,7 +892,7 @@ describe('#generateToken', function () {
   });
 
   it('sets an expiration time for the token', function () {
-    var now = Math.round((new Date().getTime()) / 1000);
+    var now = Math.round(new Date().getTime() / 1000);
     var delta = 10;
     var decoded;
     var expireTime;
@@ -880,14 +908,17 @@ describe('#generateToken', function () {
     var roundedToken;
 
     expect(defaultExpireToken).to.be.a('string');
-    expect(helpers.verifyTokenSignature(defaultExpireToken, apiSecret)).to.be.true;
+    expect(helpers.verifyTokenSignature(defaultExpireToken, apiSecret)).to.be
+      .true;
     decoded = helpers.decodeToken(defaultExpireToken);
     expireTime = parseInt(decoded.expire_time, 10);
     expect(expireTime).to.be.closeTo(inOneDay, delta);
 
     // expects a token with an expiration time to have it
     inOneHour = now + (60 * 60);
-    oneHourToken = this.opentok.generateToken(this.sessionId, { expireTime: inOneHour });
+    oneHourToken = this.opentok.generateToken(this.sessionId, {
+      expireTime: inOneHour
+    });
     expect(oneHourToken).to.be.a('string');
     expect(helpers.verifyTokenSignature(oneHourToken, apiSecret)).to.be.true;
     decoded = helpers.decodeToken(oneHourToken);
@@ -905,8 +936,10 @@ describe('#generateToken', function () {
     }).to.throw(Error);
 
     // rounds down fractional expiration time
-    fractionalExpireTime = now + (60.5);
-    roundedToken = this.opentok.generateToken(this.sessionId, { expireTime: fractionalExpireTime });
+    fractionalExpireTime = now + 60.5;
+    roundedToken = this.opentok.generateToken(this.sessionId, {
+      expireTime: fractionalExpireTime
+    });
     expect(helpers.verifyTokenSignature(roundedToken, apiSecret)).to.be.true;
     decoded = helpers.decodeToken(roundedToken);
     expect(decoded.expire_time).to.equal(Math.round(fractionalExpireTime).toString());
@@ -924,10 +957,12 @@ describe('#generateToken', function () {
     });
 
     expect(layoutBearingToken).to.be.a('string');
-    expect(helpers.verifyTokenSignature(layoutBearingToken, apiSecret)).to.be.true;
+    expect(helpers.verifyTokenSignature(layoutBearingToken, apiSecret)).to.be
+      .true;
     expect(decoded.initial_layout_class_list).to.equal(layoutClassList.join(' '));
     expect(singleLayoutBearingToken).to.be.a('string');
-    expect(helpers.verifyTokenSignature(singleLayoutBearingToken, apiSecret)).to.be.true;
+    expect(helpers.verifyTokenSignature(singleLayoutBearingToken, apiSecret)).to
+      .be.true;
     decoded = helpers.decodeToken(singleLayoutBearingToken);
     expect(decoded.initial_layout_class_list).to.equal(singleLayoutClass);
 
@@ -944,9 +979,12 @@ describe('#generateToken', function () {
     // expects a token with a connection data to have it
     var sampleData = 'name=Johnny';
     var decoded;
-    var dataBearingToken = this.opentok.generateToken(this.sessionId, { data: sampleData });
+    var dataBearingToken = this.opentok.generateToken(this.sessionId, {
+      data: sampleData
+    });
     expect(dataBearingToken).to.be.a('string');
-    expect(helpers.verifyTokenSignature(dataBearingToken, apiSecret)).to.be.true;
+    expect(helpers.verifyTokenSignature(dataBearingToken, apiSecret)).to.be
+      .true;
     decoded = helpers.decodeToken(dataBearingToken);
     expect(decoded.connection_data).to.equal(sampleData);
 
@@ -978,7 +1016,9 @@ describe('#generateToken', function () {
       this.opentok.generateToken(this.sessionId),
       this.opentok.generateToken(this.sessionId)
     ];
-    var nonces = _.map(tokens, function (token) { return helpers.decodeToken(token).nonce; });
+    var nonces = _.map(tokens, function (token) {
+      return helpers.decodeToken(token).nonce;
+    });
     expect(_.uniq(nonces)).to.have.length(nonces.length);
   });
 
@@ -1022,18 +1062,23 @@ describe('#dial', function () {
         connectionId: 'CONNECTIONID',
         streamId: 'STREAMID'
       });
-    this.opentok.dial(this.sessionId, this.token, goodSipUri, function (err, sipCall) {
-      if (err) {
+    this.opentok.dial(
+      this.sessionId,
+      this.token,
+      goodSipUri,
+      function (err, sipCall) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(sipCall).to.be.an.instanceof(SipInterconnect);
+        expect(sipCall.id).to.equal('CONFERENCEID');
+        expect(sipCall.streamId).to.equal('STREAMID');
+        expect(sipCall.connectionId).to.equal('CONNECTIONID');
+        scope.done();
         done(err);
-        return;
       }
-      expect(sipCall).to.be.an.instanceof(SipInterconnect);
-      expect(sipCall.id).to.equal('CONFERENCEID');
-      expect(sipCall.streamId).to.equal('STREAMID');
-      expect(sipCall.connectionId).to.equal('CONNECTIONID');
-      scope.done();
-      done(err);
-    });
+    );
   });
 
   it('dials a SIP gateway and adds a stream with custom headers', function (done) {
@@ -1065,7 +1110,10 @@ describe('#dial', function () {
         streamId: 'STREAMID'
       });
     this.opentok.dial(
-      this.sessionId, this.token, goodSipUri, { headers: { someKey: 'someValue' } },
+      this.sessionId,
+      this.token,
+      goodSipUri,
+      { headers: { someKey: 'someValue' } },
       function (err, sipCall) {
         if (err) {
           done(err);
@@ -1111,7 +1159,10 @@ describe('#dial', function () {
         streamId: 'STREAMID'
       });
     this.opentok.dial(
-      this.sessionId, this.token, goodSipUri, {
+      this.sessionId,
+      this.token,
+      goodSipUri,
+      {
         auth: { username: 'someUsername', password: 'somePassword' }
       },
       function (err, sipCall) {
@@ -1156,7 +1207,10 @@ describe('#dial', function () {
         streamId: 'STREAMID'
       });
     this.opentok.dial(
-      this.sessionId, this.token, goodSipUri, { secure: true },
+      this.sessionId,
+      this.token,
+      goodSipUri,
+      { secure: true },
       function (err, sipCall) {
         if (err) {
           done(err);
@@ -1199,7 +1253,10 @@ describe('#dial', function () {
         streamId: 'STREAMID'
       });
     this.opentok.dial(
-      this.sessionId, this.token, goodSipUri, { from: '15551115555' },
+      this.sessionId,
+      this.token,
+      goodSipUri,
+      { from: '15551115555' },
       function (err, sipCall) {
         if (err) {
           done(err);
@@ -1255,15 +1312,21 @@ describe('#dial', function () {
         }
       })
       .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
-      .post('/v2/project/<%apiKey%>/session/<%sessionId%>/play-dtmf'
-        .replace(/<%apiKey%>/g, apiKey)
-        .replace(/<%sessionId%>/g, this.sessionId), {
-        digits: '6'
-      })
+      .post(
+        '/v2/project/<%apiKey%>/session/<%sessionId%>/play-dtmf'
+          .replace(/<%apiKey%>/g, apiKey)
+          .replace(/<%sessionId%>/g, this.sessionId),
+        {
+          digits: '6'
+        }
+      )
       .reply(200, {});
     var self = this;
     this.opentok.dial(
-      this.sessionId, this.token, goodSipUri, { headers: { someKey: 'someValue' } },
+      this.sessionId,
+      this.token,
+      goodSipUri,
+      { headers: { someKey: 'someValue' } },
       function (err, sipCall) {
         if (err) {
           done(err);
@@ -1323,16 +1386,22 @@ describe('#dial', function () {
         }
       })
       .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
-      .post('/v2/project/<%apiKey%>/session/<%sessionId%>/connection/<%connectionId%>/play-dtmf'
-        .replace(/<%apiKey%>/g, apiKey)
-        .replace(/<%sessionId%>/g, this.sessionId)
-        .replace(/<%connectionId%>/g, 'CONNECTIONID'), {
-        digits: '6'
-      })
+      .post(
+        '/v2/project/<%apiKey%>/session/<%sessionId%>/connection/<%connectionId%>/play-dtmf'
+          .replace(/<%apiKey%>/g, apiKey)
+          .replace(/<%sessionId%>/g, this.sessionId)
+          .replace(/<%connectionId%>/g, 'CONNECTIONID'),
+        {
+          digits: '6'
+        }
+      )
       .reply(200, {});
     var self = this;
     this.opentok.dial(
-      this.sessionId, this.token, goodSipUri, { headers: { someKey: 'someValue' } },
+      this.sessionId,
+      this.token,
+      goodSipUri,
+      { headers: { someKey: 'someValue' } },
       function (err, sipCall) {
         if (err) {
           done(err);
@@ -1343,11 +1412,16 @@ describe('#dial', function () {
         expect(sipCall.streamId).to.equal('STREAMID');
         expect(sipCall.connectionId).to.equal('CONNECTIONID');
         scope.done();
-        self.opentok.playDTMF(self.sessionId, sipCall.connectionId, '6', function (error) {
-          expect(error).to.equal(null);
-          dialDTMFScope.done();
-          done(error);
-        });
+        self.opentok.playDTMF(
+          self.sessionId,
+          sipCall.connectionId,
+          '6',
+          function (error) {
+            expect(error).to.equal(null);
+            dialDTMFScope.done();
+            done(error);
+          }
+        );
       }
     );
   });
@@ -1395,7 +1469,10 @@ describe('#dial', function () {
     var options = { data: 'test' };
     var optionsUntouched = _.clone(options);
     this.opentok.dial(
-      this.sessionId, this.token, 'sip:testsipuri@tokbox.com', options,
+      this.sessionId,
+      this.token,
+      'sip:testsipuri@tokbox.com',
+      options,
       function () {
         expect(options).to.deep.equal(optionsUntouched);
       }
@@ -1405,10 +1482,11 @@ describe('#dial', function () {
 
 describe('#startBroadcast', function () {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
-  var SESSIONID = '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
+  var SESSIONID =
+    '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
   var options = {
     outputs: {
-      hls: { }
+      hls: {}
     }
   };
 
@@ -1465,7 +1543,9 @@ describe('#startBroadcast', function () {
   });
 
   it('results in error a response other than 200', function (done) {
-    mockStartBroadcastRequest(SESSIONID, 400, { error: 'remote error message' });
+    mockStartBroadcastRequest(SESSIONID, 400, {
+      error: 'remote error message'
+    });
     opentok.startBroadcast(SESSIONID, options, function (err, broadcast) {
       expect(err.message).to.equal('Failed to start broadcast. Error: (400) {"error":"remote error message"}');
       expect(broadcast).to.be.undefined;
@@ -1639,7 +1719,6 @@ describe('#listBroadcasts', function () {
   });
 });
 
-
 describe('#setBroadcastLayout', function () {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
   var BROADCAST_ID = 'BROADCAST_ID';
@@ -1666,18 +1745,27 @@ describe('#setBroadcastLayout', function () {
 
   it('succeeds given valid parameters', function (done) {
     mockSetBroadcastLayout(BROADCAST_ID);
-    opentok.setBroadcastLayout(BROADCAST_ID, BEST_FIT_LAYOUT_TYPE, function (err) {
-      expect(err).to.be.null;
-      done();
-    });
+    opentok.setBroadcastLayout(
+      BROADCAST_ID,
+      BEST_FIT_LAYOUT_TYPE,
+      function (err) {
+        expect(err).to.be.null;
+        done();
+      }
+    );
   });
 
   it('succeeds given custom layout and stylesheet', function (done) {
     mockSetBroadcastLayout(BROADCAST_ID);
-    opentok.setBroadcastLayout(BROADCAST_ID, CUSTOM_LAYOUT_TYPE, STYLESHEET, function (err) {
-      expect(err).to.be.null;
-      done();
-    });
+    opentok.setBroadcastLayout(
+      BROADCAST_ID,
+      CUSTOM_LAYOUT_TYPE,
+      STYLESHEET,
+      function (err) {
+        expect(err).to.be.null;
+        done();
+      }
+    );
   });
 
   it('succeeds given a screenshareType', function (done) {
@@ -1729,10 +1817,15 @@ describe('#setArchiveLayout', function () {
 
   it('succeeds given custom layout and stylesheet', function (done) {
     mockSetArchiveLayout(ARCHIVE_ID);
-    opentok.setArchiveLayout(ARCHIVE_ID, CUSTOM_LAYOUT_TYPE, STYLESHEET, function (err) {
-      expect(err).to.be.null;
-      done();
-    });
+    opentok.setArchiveLayout(
+      ARCHIVE_ID,
+      CUSTOM_LAYOUT_TYPE,
+      STYLESHEET,
+      function (err) {
+        expect(err).to.be.null;
+        done();
+      }
+    );
   });
 
   it('succeeds given a screenshareType', function (done) {
@@ -1752,7 +1845,8 @@ describe('#setArchiveLayout', function () {
 
 describe('getStream', function () {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
-  var SESSIONID = '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
+  var SESSIONID =
+    '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
   var STREAMID = '4072fe0f-d499-4f2f-8237-64f5a9d936f5';
 
   afterEach(function () {
@@ -1802,9 +1896,43 @@ describe('getStream', function () {
   });
 });
 
+describe('muteStreams', function () {
+  var opentok = new OpenTok(apiKey, apiSecret);
+  var SESSIONID = sessionId;
+  var STREAMID = 'streamId';
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
+  describe('valid responses', function () {
+    it('should not get an error and mute the stream', function (done) {
+      mockMuteStreamRequest(SESSIONID, STREAMID);
+      opentok.forceMuteStream(SESSIONID, STREAMID, function (err) {
+        expect(err).to.be.null;
+        done();
+      });
+    });
+    it('should not get an error and mute all streams', function (done) {
+      mockMuteAllStreamRequest(SESSIONID);
+      opentok.forceMuteAll(SESSIONID, function (err) {
+        expect(err).to.be.null;
+        done();
+      });
+    });
+    it('should not get an error and disable force mute', function (done) {
+      mockDisableForceMuteRequest(SESSIONID);
+      opentok.disableForceMute(SESSIONID, function (err) {
+        expect(err).to.be.null;
+        done();
+      });
+    });
+  });
+});
+
 describe('listStreams', function () {
   var opentok = new OpenTok('123456', 'APISECRET');
-  var SESSIONID = '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
+  var SESSIONID =
+    '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
 
   afterEach(function () {
     nock.cleanAll();
