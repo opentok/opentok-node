@@ -4,17 +4,19 @@
 
 <img src="https://assets.tokbox.com/img/vonage/Vonage_VideoAPI_black.svg" height="48px" alt="Tokbox is now known as Vonage" />
 
-The OpenTok Node SDK lets you generate
-[sessions](https://tokbox.com/developer/guides/create-session/) and
-[tokens](https://tokbox.com/developer/guides/create-token/) for
-[OpenTok](http://www.tokbox.com/) applications. It also includes methods for
-working with OpenTok [archives](https://tokbox.com/developer/guides/archiving),
-working with OpenTok [live streaming
-broadcasts](https://tokbox.com/developer/guides/broadcast/live-streaming/),
-working with OpenTok [SIP interconnect](https://tokbox.com/developer/guides/sip),
-and [disconnecting clients from sessions](https://tokbox.com/developer/guides/moderation/rest/).
+The OpenTok .NET SDK provides methods for:
 
-If you are looking for the JavaScript Client SDK please see the [@opentok/client](https://www.npmjs.com/package/@opentok/client) NPM module.
+* Generating [sessions](https://tokbox.com/developer/guides/create-session/) and
+  [tokens](https://tokbox.com/developer/guides/create-token/) for
+  [OpenTok](https://www.vonage.com/communications-apis/video/) applications
+* Working with OpenTok [archives](https://tokbox.com/developer/guides/archiving)
+* Working with OpenTok [live streaming broadcasts](https://tokbox.com/developer/guides/broadcast/live-streaming/)
+* Working with OpenTok [SIP interconnect](https://tokbox.com/developer/guides/sip)
+* [Sending signals to clients connected to a session](https://tokbox.com/developer/guides/signaling/)
+* [Disconnecting clients from sessions](https://tokbox.com/developer/guides/moderation/rest/)
+* [Forcing clients in a session to disconnect or mute published audio](https://tokbox.com/developer/guides/moderation/)
+
+`If you are looking for the JavaScript Client SDK please see the [@opentok/client](https://www.npmjs.com/package/@opentok/client) NPM module.
 
 ## Installation using npm (recommended):
 
@@ -420,6 +422,16 @@ opentok.forceDisconnect(sessionId, connectionId, function (error) {
 
 This is the server-side equivalent to the forceDisconnect() method in OpenTok.js:
 <https://www.tokbox.com/developer/guides/moderation/js/#force_disconnect>.
+
+### Forcing clients in a session to mute published audio
+
+You can force the publisher of a specific stream to stop publishing audio using the 
+`Opentok.forceMuteStream(sessionId)`method.
+
+You can force the publisher of all streams in a session (except for an optional list of streams)
+to stop publishing audio using the `Opentok.forceMuteAll()` method.
+You can then disable the mute state of the session by calling the
+`Opentok.disableForceMute()` method.
 
 ### Working with SIP Interconnect
 
