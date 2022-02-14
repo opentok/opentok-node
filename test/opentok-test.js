@@ -141,6 +141,12 @@ function mockMuteAllStreamRequest(sessId, status) {
     .reply(status || 200);
 }
 
+function mockDisableForceMuteRequest(sessId, status) {
+  nock('https://api.opentok.com')
+    .post('/v2/project/123456/session/' + sessId + '/mute')
+    .reply(status || 200);
+}
+
 function mockListBroadcastsRequest(query, status) {
   var body;
   if (status) {
@@ -1968,6 +1974,13 @@ describe('muteStreams', function () {
     it('should not get an error and mute all streams', function (done) {
       mockMuteAllStreamRequest(SESSIONID);
       opentok.forceMuteAll(SESSIONID, function (err) {
+        expect(err).to.be.null;
+        done();
+      });
+    });
+    it('should not get an error and disable force mute', function (done) {
+      mockDisableForceMuteRequest(SESSIONID);
+      opentok.disableForceMute(SESSIONID, function (err) {
         expect(err).to.be.null;
         done();
       });
