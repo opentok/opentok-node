@@ -20,6 +20,8 @@ var sessionId =
   '1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX4';
 var badApiKey = 'badkey';
 var badApiSecret = 'badsecret';
+var goodWebsocketUri = 'wss://service.com/ws-endpoint';
+var badWebsocketUri = 'service.com/ws-endpoint';
 var goodSipUri = 'sip:siptesturl@tokbox.com';
 var badSipUri = 'siptesturl@tokbox.com';
 var defaultApiUrl = 'https://api.opentok.com';
@@ -1472,6 +1474,204 @@ describe('#dial', function () {
       this.sessionId,
       this.token,
       'sip:testsipuri@tokbox.com',
+      options,
+      function () {
+        expect(options).to.deep.equal(optionsUntouched);
+      }
+    );
+  });
+});
+
+describe('#websocketconnect', function () {
+  beforeEach(function () {
+    this.opentok = new OpenTok(apiKey, apiSecret);
+    this.sessionId = sessionId;
+    this.token = this.opentok.generateToken(this.sessionId);
+  });
+
+  it('sends audio from a Vonage Video API session to a WebSocket.', function (done) {
+    var scope = nock('https://api.opentok.com:443')
+      .matchHeader('x-opentok-auth', function (value) {
+        try {
+          jwt.verify(value, apiSecret, { issuer: apiKey });
+          return true;
+        }
+        catch (error) {
+          done(error);
+          return false;
+        }
+      })
+      .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
+      .post('/v2/project/123456/connect', {
+        sessionId: this.sessionId,
+        token: this.token,
+        websocket: {
+          uri: goodWebsocketUri
+        }
+      })
+      .reply(200, {
+        id: 'CONFERENCEID',
+        connectionId: 'CONNECTIONID'
+      });
+    this.opentok.websocketConnect(
+      this.sessionId,
+      this.token,
+      goodWebsocketUri,
+      function (err, connect) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(connect.id).to.equal('CONFERENCEID');
+        expect(connect.connectionId).to.equal('CONNECTIONID');
+        scope.done();
+        done(err);
+      }
+    );
+  });
+
+  it('connect to a websocket with custom headers', function (done) {
+    var scope = nock('https://api.opentok.com:443')
+      .matchHeader('x-opentok-auth', function (value) {
+        try {
+          jwt.verify(value, apiSecret, { issuer: apiKey });
+          return true;
+        }
+        catch (error) {
+          done(error);
+          return false;
+        }
+      })
+      .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
+      .post('/v2/project/123456/connect', {
+        sessionId: this.sessionId,
+        token: this.token,
+        websocket: {
+          uri: goodWebsocketUri,
+          headers: {
+            someKey: 'someValue'
+          }
+        }
+      })
+      .reply(200, {
+        id: 'CONFERENCEID',
+        connectionId: 'CONNECTIONID'
+      });
+    this.opentok.websocketConnect(
+      this.sessionId,
+      this.token,
+      goodWebsocketUri,
+      { headers: { someKey: 'someValue' } },
+      function (err, connect) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(connect.id).to.equal('CONFERENCEID');
+        expect(connect.connectionId).to.equal('CONNECTIONID');
+        scope.done();
+        done(err);
+      }
+    );
+  });
+
+  it('connects to websocket and adds a stream', function (done) {
+    var scope = nock('https://api.opentok.com:443')
+      .matchHeader('x-opentok-auth', function (value) {
+        try {
+          jwt.verify(value, apiSecret, { issuer: apiKey });
+          return true;
+        }
+        catch (error) {
+          done(error);
+          return false;
+        }
+      })
+      .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
+      .post('/v2/project/123456/connect', {
+        sessionId: this.sessionId,
+        token: this.token,
+        websocket: {
+          uri: goodWebsocketUri,
+          streams: [
+            'streamid-1',
+            'streamid-2'
+          ]
+        }
+      })
+      .reply(200, {
+        id: 'CONFERENCEID',
+        connectionId: 'CONNECTIONID'
+      });
+    this.opentok.websocketConnect(
+      this.sessionId,
+      this.token,
+      goodWebsocketUri,
+      {
+        streams: [
+          'streamid-1',
+          'streamid-2'
+        ]
+      },
+      function (err, connect) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(connect.id).to.equal('CONFERENCEID');
+        expect(connect.connectionId).to.equal('CONNECTIONID');
+        scope.done();
+        done(err);
+      }
+    );
+  });
+
+  it('complains if sessionId, token, Websocket URI, or callback are missing or invalid', function () {
+    // Missing all params
+    expect(function () {
+      this.opentok.websocketConnect();
+    }).to.throw(Error);
+    // Bad sessionId
+    expect(function () {
+      this.opentok.websocketConnect('blahblahblah');
+    }).to.throw(Error);
+    // Missing token
+    expect(function () {
+      this.opentok.websocketConnect(this.sessionId);
+    }).to.throw(Error);
+    // Bad token
+    expect(function () {
+      this.opentok.websocketConnect(this.sessionId, 'blahblahblah');
+    }).to.throw(Error);
+    // Missing Websocket URI
+    expect(function () {
+      this.opentok.websocketConnect(this.sessionId, this.token);
+    }).to.throw(Error);
+    // Bad Websocket URI
+    expect(function () {
+      this.opentok.websocketConnect(this.sessionId, this.token, badWebsocketUri);
+    }).to.throw(Error);
+    // Bad sessionId, working token and Websocket URI
+    expect(function () {
+      this.opentok.websocketConnect('someWrongSessionId', this.token, goodWebsocketUri);
+    }).to.throw(Error);
+    // Good sessionId, bad token and good Websocket URI
+    expect(function () {
+      this.opentok.websocketConnect(this.sessionId, 'blahblahblah', goodWebsocketUri);
+    }).to.throw(Error);
+    // Good sessionId, good token, good Websocket URI, null options, missing callback func
+    expect(function () {
+      this.opentok.websocketConnect(this.sessionId, this.token, goodWebsocketUri, null);
+    }).to.throw(Error);
+  });
+
+  it('does not modify passed in options', function () {
+    var options = { data: 'test' };
+    var optionsUntouched = _.clone(options);
+    this.opentok.websocketConnect(
+      this.sessionId,
+      this.token,
+      goodWebsocketUri,
       options,
       function () {
         expect(options).to.deep.equal(optionsUntouched);
