@@ -138,7 +138,7 @@ from the client. These options include:
 
 * `maxDuration` (Optional) -- The maximum duration of the archive, in seconds.
 
-* `resolution` (Optional) -- The resolution of the archive (either '640x480', '1280x720' or '1920x1080).
+* `resolution` (Optional) -- The resolution of the broadcast (either '640x480', '1280x720' or '1920x1080).
 
 * `layout` (Optional) -- The layout type of the broadcast, discussed ahead.
   
