@@ -16,7 +16,7 @@ The OpenTok .NET SDK provides methods for:
 * [Disconnecting clients from sessions](https://tokbox.com/developer/guides/moderation/rest/)
 * [Forcing clients in a session to disconnect or mute published audio](https://tokbox.com/developer/guides/moderation/)
 
-`If you are looking for the JavaScript Client SDK please see the [@opentok/client](https://www.npmjs.com/package/@opentok/client) NPM module.
+If you are looking for the JavaScript Client SDK please see the [@opentok/client](https://www.npmjs.com/package/@opentok/client) NPM module.
 
 ## Installation using npm (recommended):
 
