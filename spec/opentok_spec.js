@@ -169,7 +169,7 @@ describe('Archiving', function () {
 
       opentok.startArchive(mockSessionId, function (err) {
         expect(err).not.toBeNull();
-        expect(err.message).toBe('Unexpected response from OpenTok');
+        expect(err.message).toBe('Unexpected response from OpenTok: {"message":"responseString"}');
         done();
       });
     });
@@ -375,7 +375,7 @@ describe('Archiving', function () {
 
       opentok.getArchive(mockArchiveId, function (err) {
         expect(err).not.toBeNull();
-        expect(err.message).toBe('Unexpected response from OpenTok');
+        expect(err.message).toBe('Unexpected response from OpenTok: {"message":"Something went wrong"}');
         done();
       });
     });
@@ -459,7 +459,7 @@ describe('Archiving', function () {
         expect(archives).toBeUndefined();
         expect(total).toBeUndefined();
         expect(err).not.toBeNull();
-        expect(err.message).toBe('Unexpected response from OpenTok');
+        expect(err.message).toBe('Unexpected response from OpenTok: {"message":"Some error"}');
         done();
       });
     });
@@ -604,7 +604,7 @@ describe('Archiving', function () {
       opentok.stopArchive(mockArchiveId, function (err, archive) {
         expect(archive).toBeUndefined();
         expect(err).not.toBeNull();
-        expect(err.message).toBe('Unexpected response from OpenTok');
+        expect(err.message).toBe('Unexpected response from OpenTok: {"message":"Some other error."}');
         done();
       });
     });
@@ -671,7 +671,7 @@ describe('Archiving', function () {
 
       opentok.deleteArchive(mockArchiveId, function (err) {
         expect(err).not.toBeNull();
-        expect(err.message).toBe('Unexpected response from OpenTok');
+        expect(err.message).toBe('Unexpected response from OpenTok: "{ \\"message\\" : \\"Some other error.\\" }"');
         done();
       });
     });
