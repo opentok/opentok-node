@@ -475,7 +475,7 @@ describe('Archiving', function () {
     it('should patch an archive with addStream', function (done) {
       nock(archiveHostUrl)
         .patch(archivePatchResource, { addStream: mockStreamId, hasAudio: true, hasVideo: true })
-        .reply(200);
+        .reply(204);
 
       opentok.addArchiveStream(mockArchiveId, mockStreamId, {
         hasAudio: true, hasVideo: true
@@ -488,7 +488,7 @@ describe('Archiving', function () {
     it('should patch an archive with just addStream', function (done) {
       nock(archiveHostUrl)
         .patch(archivePatchResource, { addStream: mockStreamId, hasAudio: true, hasVideo: true })
-        .reply(200);
+        .reply(204);
 
       opentok.addArchiveStream(mockArchiveId, mockStreamId, function (err) {
         expect(err).toBeNull();
@@ -499,7 +499,7 @@ describe('Archiving', function () {
     it('should patch an archive with removeStream', function (done) {
       nock(archiveHostUrl)
         .patch(archivePatchResource, { removeStream: mockStreamId })
-        .reply(200);
+        .reply(204);
 
       opentok.removeArchiveStream(mockArchiveId, mockStreamId, function (err) {
         expect(err).toBeNull();
