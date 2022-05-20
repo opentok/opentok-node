@@ -1742,6 +1742,18 @@ describe('#startBroadcast', function () {
     });
   });
 
+  it('results in error if both dvr and lowLatency is provided for options', function (done) {
+    mockStartBroadcastRequest(SESSIONID);
+    opentok.startBroadcast(
+      SESSIONID,
+      { outputs: { hls: { dvr: true, lowLatency: true } } },
+      function (err) {
+        expect(err.message).to.equal('Cannot set both dvr and lowLatency on HLS');
+        done();
+      }
+    );
+  });
+
   it('results in error a response other than 200', function (done) {
     mockStartBroadcastRequest(SESSIONID, 400, {
       error: 'remote error message'
@@ -1783,10 +1795,15 @@ describe('#patchBroadcast', function () {
 
   it('patches broadcast given addStream', function (done) {
     mockPatchBroadcastRequest(BROADCAST_ID, addStreamOptions);
-    opentok.addBroadcastStream(BROADCAST_ID, STREAM_ID, broadcastOptions, function (err) {
-      expect(err).to.be.null;
-      done();
-    });
+    opentok.addBroadcastStream(
+      BROADCAST_ID,
+      STREAM_ID,
+      broadcastOptions,
+      function (err) {
+        expect(err).to.be.null;
+        done();
+      }
+    );
   });
 
   it('patches broadcast given removeStream', function (done) {
