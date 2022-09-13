@@ -59,8 +59,8 @@ function setFocus(focusStreamId) {
   });
 
   $('.focus').removeClass('focus');
-  $focusElement = (publisher.stream && publisher.stream.streamId === focusStreamId) ?
-    $('#publisher') : $('#' + focusStreamId);
+  $focusElement = (publisher.stream && publisher.stream.streamId === focusStreamId)
+    ? $('#publisher') : $('#' + focusStreamId);
   $focusElement.addClass('focus');
   session.signal({
     type: 'focusStream',

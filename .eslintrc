@@ -1,10 +1,21 @@
 {
   "extends": "airbnb-base/legacy",
+  "env": {
+    "node": true,
+    "browser": true,
+    "es6": true,
+    "es2018": true
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+        "impliedStrict": true
+    }
+  },
   "rules": {
     "no-restricted-syntax": ["off", "ForInStatement"],
     "brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
     "no-param-reassign": ["off"],
     "func-names": ["off"],
-    no-plusplus: ["error", { "allowForLoopAfterthoughts": true }],
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }]
   }
 }
