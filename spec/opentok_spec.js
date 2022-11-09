@@ -169,7 +169,7 @@ describe('Archiving', function () {
 
       opentok.startArchive(mockSessionId, function (err) {
         expect(err).not.toBeNull();
-        expect(err.message).toBe('Unexpected response from OpenTok');
+        expect(err.message).toBe('Unexpected response from OpenTok: {"message":"responseString"}');
         done();
       });
     });
@@ -375,7 +375,7 @@ describe('Archiving', function () {
 
       opentok.getArchive(mockArchiveId, function (err) {
         expect(err).not.toBeNull();
-        expect(err.message).toBe('Unexpected response from OpenTok');
+        expect(err.message).toBe('Unexpected response from OpenTok: {"message":"Something went wrong"}');
         done();
       });
     });
@@ -459,7 +459,7 @@ describe('Archiving', function () {
         expect(archives).toBeUndefined();
         expect(total).toBeUndefined();
         expect(err).not.toBeNull();
-        expect(err.message).toBe('Unexpected response from OpenTok');
+        expect(err.message).toBe('Unexpected response from OpenTok: {"message":"Some error"}');
         done();
       });
     });
@@ -475,7 +475,7 @@ describe('Archiving', function () {
     it('should patch an archive with addStream', function (done) {
       nock(archiveHostUrl)
         .patch(archivePatchResource, { addStream: mockStreamId, hasAudio: true, hasVideo: true })
-        .reply(200);
+        .reply(204);
 
       opentok.addArchiveStream(mockArchiveId, mockStreamId, {
         hasAudio: true, hasVideo: true
@@ -488,7 +488,7 @@ describe('Archiving', function () {
     it('should patch an archive with just addStream', function (done) {
       nock(archiveHostUrl)
         .patch(archivePatchResource, { addStream: mockStreamId, hasAudio: true, hasVideo: true })
-        .reply(200);
+        .reply(204);
 
       opentok.addArchiveStream(mockArchiveId, mockStreamId, function (err) {
         expect(err).toBeNull();
@@ -499,7 +499,7 @@ describe('Archiving', function () {
     it('should patch an archive with removeStream', function (done) {
       nock(archiveHostUrl)
         .patch(archivePatchResource, { removeStream: mockStreamId })
-        .reply(200);
+        .reply(204);
 
       opentok.removeArchiveStream(mockArchiveId, mockStreamId, function (err) {
         expect(err).toBeNull();
@@ -604,7 +604,7 @@ describe('Archiving', function () {
       opentok.stopArchive(mockArchiveId, function (err, archive) {
         expect(archive).toBeUndefined();
         expect(err).not.toBeNull();
-        expect(err.message).toBe('Unexpected response from OpenTok');
+        expect(err.message).toBe('Unexpected response from OpenTok: {"message":"Some other error."}');
         done();
       });
     });
@@ -671,7 +671,7 @@ describe('Archiving', function () {
 
       opentok.deleteArchive(mockArchiveId, function (err) {
         expect(err).not.toBeNull();
-        expect(err.message).toBe('Unexpected response from OpenTok');
+        expect(err.message).toBe('Unexpected response from OpenTok: "{ \\"message\\" : \\"Some other error.\\" }"');
         done();
       });
     });
