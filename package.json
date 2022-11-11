@@ -1,7 +1,7 @@
 {
   "name": "opentok",
   "description": "OpenTok server-side SDK",
-  "version": "2.14.3",
+  "version": "2.15.0",
   "homepage": "https://github.com/opentok/opentok-node",
   "repository": {
     "type": "git",
@@ -63,11 +63,10 @@
     "test-coverage": "cross-env NODE_ENV=test nyc mocha",
     "test-coverage-html": "cross-env NODE_ENV=test nyc --reporter html mocha",
     "test-no-lint": "mocha ./test/*-test.js",
-    "lint": "eslint lib test",
+    "lint": "./node_modules/.bin/eslint ./lib/ ./test/ ./sample/",
     "lint-fix": "eslint --fix lib test",
     "jasmine_node": "jasmine spec/opentok_spec.js",
-    "report-coverage": "cross-env NODE_ENV=test nyc --reporter=text-lcov mocha > coverage.lcov",
-    "lint": "./node_modules/.bin/eslint ./lib/ ./test/ ./sample/"
+    "report-coverage": "cross-env NODE_ENV=test nyc --reporter=text-lcov mocha > coverage.lcov"
   },
   "engines": {
     "node": ">=4"
