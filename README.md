@@ -4,7 +4,7 @@
 
 <img src="https://assets.tokbox.com/img/vonage/Vonage_VideoAPI_black.svg" height="48px" alt="Tokbox is now known as Vonage" />
 
-The OpenTok .NET SDK provides methods for:
+The OpenTok Node SDK provides methods for:
 
 * Generating [sessions](https://tokbox.com/developer/guides/create-session/) and
   [tokens](https://tokbox.com/developer/guides/create-token/) for
@@ -459,7 +459,7 @@ opentok.dial(sessionId, token, sipUri, options, function (error, sipCall) {
 For more information, see the
 [OpenTok SIP Interconnect developer guide](https://tokbox.com/developer/guides/sip/).
 
-## Getting Stream Info
+### Getting Stream Info
 
 You can get information on an active stream in an OpenTok session:
 
