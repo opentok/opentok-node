@@ -1586,7 +1586,7 @@ describe('#patchBroadcast', function () {
   function mockPatchBroadcastRequest(broadcastId, optionalBody, status) {
     nock('https://api.opentok.com')
       .patch('/v2/project/APIKEY/broadcast/' + broadcastId + '/streams')
-      .reply(200 || status, optionalBody);
+      .reply(204 || status, optionalBody);
   }
 
   afterEach(function () {
