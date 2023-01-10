@@ -1783,7 +1783,7 @@ describe('#listBroadcasts', function () {
   });
 
   it('results in error a response other than 200', function (done) {
-    mockListBroadcastsRequest(null, 400);
+    mockListBroadcastsRequest({}, 400);
     opentok.listBroadcasts(options, function (err, broadcastList, totalCount) {
       expect(err).not.to.be.null;
       expect(broadcastList).to.be.undefined;
