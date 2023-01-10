@@ -158,7 +158,7 @@ function mockListBroadcastsRequest(query, status) {
   }
   nock('https://api.opentok.com')
     .get('/v2/project/APIKEY/broadcast')
-    .query(query || true)
+    .query(query || {})
     .reply(status || 200, body);
 }
 
