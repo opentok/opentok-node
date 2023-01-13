@@ -16,8 +16,7 @@ var apiSecret = '1234567890abcdef1234567890abcdef1234567890';
 var apiUrl = 'http://mymock.example.com';
 
 // This is specifically concocted for these tests (uses fake apiKey/apiSecret above)
-var sessionId =
-  '1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX4';
+var sessionId = '1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX4';
 var badApiKey = 'badkey';
 var badApiSecret = 'badsecret';
 var goodSipUri = 'sip:siptesturl@tokbox.com';
@@ -159,7 +158,7 @@ function mockListBroadcastsRequest(query, status) {
   }
   nock('https://api.opentok.com')
     .get('/v2/project/APIKEY/broadcast')
-    .query(query)
+    .query(query || {})
     .reply(status || 200, body);
 }
 
@@ -787,13 +786,13 @@ describe('#createSession', function () {
       .post('/session/create', 'archiveMode=manual&p2p.preference=enabled')
       .reply(
         200,
-        '[{"session_id":"' +
-          sessionId +
-          '","project_id":"' +
-          apiKey +
-          '","partner_id":"' +
-          apiKey +
-          '","create_dt":"Fri Nov 18 15:50:36 PST 2016","media_server_url":""}]',
+        '[{"session_id":"'
+          + sessionId
+          + '","project_id":"'
+          + apiKey
+          + '","partner_id":"'
+          + apiKey
+          + '","create_dt":"Fri Nov 18 15:50:36 PST 2016","media_server_url":""}]',
         {
           server: 'nginx',
           date: 'Thu, 20 Mar 2014 06:35:24 GMT',
@@ -1482,8 +1481,7 @@ describe('#dial', function () {
 
 describe('#startBroadcast', function () {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
-  var SESSIONID =
-    '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
+  var SESSIONID = '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
   var options = {
     outputs: {
       hls: {}
@@ -1785,7 +1783,7 @@ describe('#listBroadcasts', function () {
   });
 
   it('results in error a response other than 200', function (done) {
-    mockListBroadcastsRequest(400);
+    mockListBroadcastsRequest({}, 400);
     opentok.listBroadcasts(options, function (err, broadcastList, totalCount) {
       expect(err).not.to.be.null;
       expect(broadcastList).to.be.undefined;
@@ -1921,8 +1919,7 @@ describe('#setArchiveLayout', function () {
 
 describe('getStream', function () {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
-  var SESSIONID =
-    '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
+  var SESSIONID = '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
   var STREAMID = '4072fe0f-d499-4f2f-8237-64f5a9d936f5';
 
   afterEach(function () {
@@ -2007,8 +2004,7 @@ describe('muteStreams', function () {
 
 describe('listStreams', function () {
   var opentok = new OpenTok('123456', 'APISECRET');
-  var SESSIONID =
-    '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
+  var SESSIONID = '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
 
   afterEach(function () {
     nock.cleanAll();

@@ -72,18 +72,18 @@
     "node": ">=4"
   },
   "devDependencies": {
-    "chai": "4.1.2",
+    "chai": "4.3.7",
     "cross-env": "7.0.3",
-    "eslint": "8.23.1",
-    "eslint-config-airbnb-base": "12.1.0",
-    "eslint-plugin-import": "2.9.0",
-    "jasmine": "3.5.0",
-    "mocha": "10.0.0",
-    "nock": "9.2.3",
+    "eslint": "8.31.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-plugin-import": "2.26.0",
+    "jasmine": "4.5.0",
+    "mocha": "10.2.0",
+    "nock": "13.2.9",
     "nyc": "15.1.0"
   },
   "dependencies": {
-    "jsonwebtoken": "8.2.0",
+    "jsonwebtoken": "9.0.0",
     "lodash": "4.17.21",
     "opentok-token": "1.1.1",
     "request": "2.88.2"
