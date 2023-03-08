@@ -15,6 +15,7 @@ The OpenTok Node SDK provides methods for:
 * [Sending signals to clients connected to a session](https://tokbox.com/developer/guides/signaling/)
 * [Disconnecting clients from sessions](https://tokbox.com/developer/guides/moderation/rest/)
 * [Forcing clients in a session to disconnect or mute published audio](https://tokbox.com/developer/guides/moderation/)
+* Working with [Audio Connector](https://tokbox.com/developer/guides/audio-connector)
 
 If you are looking for the JavaScript Client SDK please see the [@opentok/client](https://www.npmjs.com/package/@opentok/client) NPM module.
 
@@ -502,6 +503,11 @@ opentok.listStreams(sessionId, function(error, streams) {
   }
 });
 ```
+
+### Working with Audio Connector
+
+You can start an [Audio Connector](https://tokbox.com/developer/guides/audio-connector) WebSocket
+by calling the `OpenTok.websocketConnect()` method.
 
 # Samples
 
