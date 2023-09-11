@@ -151,7 +151,6 @@ describe('Callbacks', function () {
     });
   });
 
-
   describe('listCallbacks', function () {
     function mockRequest(status, body) {
       nock('https://api.opentok.com:443')
