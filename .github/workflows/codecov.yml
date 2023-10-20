@@ -23,3 +23,5 @@ jobs:
       run: npm run report-coverage
     - name: Run codecov
       uses: codecov/codecov-action@v1
+      with:
+        files: ./mocha.lcov,./jasmine.lcov

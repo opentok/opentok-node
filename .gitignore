@@ -6,3 +6,5 @@ sample/*/package-lock.json
 out/
 .nyc_output
 coverage.lcov
+mocha.lcov
+jasmine.lcov
