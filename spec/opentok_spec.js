@@ -68,7 +68,17 @@ describe('Archiving', function () {
   describe('startArchive', function () {
     it('should return an Archive', function (done) {
       nock(archiveHostUrl)
-        .post(archiveResource, { sessionId: mockSessionId, name: mockArchiveName })
+        .post(archiveResource, { 
+          sessionId: mockSessionId,
+          name: mockArchiveName,
+          hasAudio: '',
+          hasVideo: '',
+          outputMode: '',
+          layout: '',
+          resolution: '',
+          streamMode: '',
+          multiArchiveTag: '',
+         })
         .reply(
           200,
           mockStartArchiveResponseBody,
@@ -100,7 +110,17 @@ describe('Archiving', function () {
       noOptionsArchiveResponseBody.name = null;
       noOptionsArchiveResponseBody = JSON.stringify(noOptionsArchiveResponseBody);
       nock(archiveHostUrl)
-        .post(archiveResource, { sessionId: mockSessionId })
+        .post(archiveResource, {
+          sessionId: mockSessionId,
+          name: '',
+          hasAudio: '',
+          hasVideo: '',
+          outputMode: '',
+          layout: '',
+          resolution: '',
+          streamMode: '',
+          multiArchiveTag: '',
+         })
         .reply(
           200,
           noOptionsArchiveResponseBody,
@@ -136,7 +156,17 @@ describe('Archiving', function () {
 
     it('should return an error if session ID is invalid', function (done) {
       nock(archiveHostUrl)
-        .post(archiveResource, { sessionId: 'invalidSessionIDIam' })
+        .post(archiveResource, { 
+          sessionId: 'invalidSessionIDIam',
+          name: '',
+          hasAudio: '',
+          hasVideo: '',
+          outputMode: '',
+          layout: '',
+          resolution: '',
+          streamMode: '',
+          multiArchiveTag: '',
+      })
         .reply(404, '{ "message" : "responseString" }', {
           server: 'nginx',
           date: 'Fri, 31 Jan 2014 06:37:25 GMT',
@@ -154,7 +184,17 @@ describe('Archiving', function () {
 
     it('should return an error if session is p2p or has no connections', function (done) {
       nock(archiveHostUrl)
-        .post(archiveResource, { sessionId: mockSessionId })
+        .post(archiveResource, {
+          sessionId: mockSessionId,
+          name: '',
+          hasAudio: '',
+          hasVideo: '',
+          outputMode: '',
+          layout: '',
+          resolution: '',
+          streamMode: '',
+          multiArchiveTag: '',
+        })
         .reply(404, '{ "message" : "responseString" }', {
           server: 'nginx',
           date: 'Fri, 31 Jan 2014 06:46:22 GMT',
@@ -172,7 +212,17 @@ describe('Archiving', function () {
 
     it('should return an error if any other HTTP status is returned', function (done) {
       nock(archiveHostUrl)
-        .post(archiveResource, { sessionId: mockSessionId })
+        .post(archiveResource, {
+          sessionId: mockSessionId,
+          name: '',
+          hasAudio: '',
+          hasVideo: '',
+          outputMode: '',
+          layout: '',
+          resolution: '',
+          streamMode: '',
+          multiArchiveTag: '',
+        })
         .reply(500, '{ "message" : "responseString" }', {
           server: 'nginx',
           date: 'Fri, 31 Jan 2014 06:46:22 GMT',
@@ -196,7 +246,17 @@ describe('Archiving', function () {
 
     it('should be able to archive with hasVideo to false', function (done) {
       nock(archiveHostUrl)
-        .post(archiveResource, { sessionId: mockSessionId, hasAudio: true, hasVideo: false })
+        .post(archiveResource, {
+          sessionId: mockSessionId, 
+          outputMode: '',
+          name: '',
+          hasAudio: true,
+          hasVideo: false,
+          layout: '',
+          resolution: '',
+          streamMode: '',
+          multiArchiveTag: ''
+        })
         .reply(
           200,
           '{\n  "createdAt" : 1391149936527,\n  "duration" : 0,\n  "id" : "4072fe0f-d499-4f2f-8237-64f5a9d936f5",\n  "name" : null,\n  "partnerId" : "APIKEY",\n  "reason" : "",\n  "sessionId" : "1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg",\n  "size" : 0,\n  "status" : "started",\n "hasAudio" : true,\n "hasVideo" : false,\n "url" : null\n}',
@@ -219,7 +279,17 @@ describe('Archiving', function () {
 
     it('should be able to archive if outputMode is individual', function (done) {
       nock(archiveHostUrl)
-        .post(archiveResource, { sessionId: mockSessionId, outputMode: 'individual' })
+        .post(archiveResource, {
+          sessionId: mockSessionId, 
+          outputMode: 'individual',
+          name: '',
+          hasAudio: '',
+          hasVideo: '',
+          layout: '',
+          resolution: '',
+          streamMode: '',
+          multiArchiveTag: ''
+         })
         .reply(
           200,
           '{\n  "createdAt" : 1391149936527,\n  "duration" : 0,\n  "id" : "4072fe0f-d499-4f2f-8237-64f5a9d936f5",\n  "name" : null,\n  "partnerId" : "APIKEY",\n  "reason" : "",\n  "sessionId" : "1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg",\n  "size" : 0,\n  "status" : "started",\n "hasAudio" : true,\n "hasVideo" : true,\n "outputMode" : "individual",\n "url" : null\n}',
@@ -241,10 +311,34 @@ describe('Archiving', function () {
 
     it('should be able to archive if outputMode is composed', function (done) {
       nock(archiveHostUrl)
-        .post(archiveResource, { sessionId: mockSessionId, outputMode: 'composed' })
+        .post(archiveResource, {
+          sessionId: mockSessionId, 
+          outputMode: 'composed',
+          name: '',
+          hasAudio: '',
+          hasVideo: '',
+          layout: '',
+          resolution: '',
+          streamMode: '',
+          multiArchiveTag: ''
+        })
         .reply(
           200,
-          '{\n  "createdAt" : 1391149936527,\n  "duration" : 0,\n  "id" : "4072fe0f-d499-4f2f-8237-64f5a9d936f5",\n  "name" : null,\n  "partnerId" : "APIKEY",\n  "reason" : "",\n  "sessionId" : "1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg",\n  "size" : 0,\n  "status" : "started",\n "hasAudio" : true,\n "hasVideo" : true,\n "outputMode" : "composed",\n "url" : null\n}',
+          `{
+              "createdAt" : 1391149936527,
+              "duration" : 0,
+              "id" : "4072fe0f-d499-4f2f-8237-64f5a9d936f5",
+              "name" : null,
+              "partnerId" : "APIKEY",
+              "reason" : "",
+              "sessionId" : "1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg",
+              "size" : 0,
+              "status" : "started",
+              "hasAudio" : true,
+              "hasVideo" : true,
+              "outputMode" : "composed",
+              "url" : null
+           }`,
           {
             server: 'nginx',
             date: 'Fri, 31 Jan 2014 06:32:16 GMT',
@@ -464,7 +558,71 @@ describe('Archiving', function () {
         .get(archiveResource + '?')
         .reply(
           200,
-          '{\n  "count" : 149,\n  "items" : [ {\n    "createdAt" : 1391457926000,\n    "duration" : 3,\n    "id" : "e85741ce-d280-4efa-a3ba-93379a68be06",\n    "name" : "",\n    "partnerId" : "APIKEY",\n    "reason" : "",\n    "sessionId" : "SESSION_ID",\n    "size" : 6590,\n    "status" : "available",\n    "url" : "http://some/video1.mp4"\n  }, {\n    "createdAt" : 1391218315000,\n    "duration" : 0,\n    "id" : "0931d1d7-4198-4db2-bf8a-097924421eb2",\n    "name" : "Archive 3",\n    "partnerId" : "APIKEY",\n    "reason" : "",\n    "sessionId" : "SESSION_ID",\n    "size" : 3150,\n    "status" : "available",\n    "url" : "http://some/video2.mp4"\n  }, {\n    "createdAt" : 1391218274000,\n    "duration" : 9,\n    "id" : "e7198f93-d8fa-448d-b134-ac3355ce2eb7",\n    "name" : "Archive 4",\n    "partnerId" : "APIKEY",\n    "reason" : "",\n    "sessionId" : "SESSION_ID",\n    "size" : 12691,\n    "status" : "available",\n    "url" : "http://some/video3.mp4"\n  }, {\n    "createdAt" : 1391218252000,\n    "duration" : 17,\n    "id" : "ae531f74-218c-4abd-bbe4-1f6bd92e9449",\n    "name" : null,\n    "partnerId" : "APIKEY",\n    "reason" : "",\n    "sessionId" : "SESSION_ID",\n    "size" : 21566,\n    "status" : "available",\n    "url" : "http://some/video4.mp4"\n  }, {\n    "createdAt" : 1391218139000,\n    "duration" : 73,\n    "id" : "cf2fd890-7ea0-4f43-a6a7-432ea9dc4c51",\n    "name" : "Archive 5",\n    "partnerId" : "APIKEY",\n    "reason" : "",\n    "sessionId" : "SESSION_ID",\n    "size" : 83158,\n    "status" : "available",\n    "url" : "http://some/video5.mp4"\n  } ]\n}',
+          `{
+              "count":149,
+              "items": [
+                {
+                  "createdAt" : 1391457926000,
+                  "duration" : 3,
+                  "id" : "e85741ce-d280-4efa-a3ba-93379a68be06",
+                  "name" : "",
+                  "partnerId" : "APIKEY",
+                  "reason" : "",
+                  "sessionId" : "SESSION_ID",
+                  "size" : 6590,
+                  "status" : "available",
+                  "url" : "http://some/video1.mp4"
+                },
+                {
+                  "createdAt" : 1391218315000,
+                  "duration" : 0,
+                  "id" : "0931d1d7-4198-4db2-bf8a-097924421eb2",
+                  "name" : "Archive 3",
+                  "partnerId" : "APIKEY",
+                  "reason" : "",
+                  "sessionId" : "SESSION_ID",
+                  "size" : 3150,
+                  "status" : "available",
+                  "url" : "http://some/video2.mp4"
+                },
+                {
+                  "createdAt" : 1391218274000,
+                  "duration" : 9,
+                  "id" : "e7198f93-d8fa-448d-b134-ac3355ce2eb7",
+                  "name" : "Archive 4",
+                  "partnerId" : "APIKEY",
+                  "reason" : "",
+                  "sessionId" : "SESSION_ID",
+                  "size" : 12691,
+                  "status" : "available",
+                  "url" : "http://some/video3.mp4"
+                },
+                {
+                  "createdAt" : 1391218252000,
+                  "duration" : 17,
+                  "id" : "ae531f74-218c-4abd-bbe4-1f6bd92e9449",
+                  "name" : null,
+                  "partnerId" : "APIKEY",
+                  "reason" : "",
+                  "sessionId" : "SESSION_ID",
+                  "size" : 21566,
+                  "status" : "available",
+                  "url" : "http://some/video4.mp4"
+                },
+                {
+                  "createdAt" : 1391218139000,
+                  "duration" : 73,
+                  "id" : "cf2fd890-7ea0-4f43-a6a7-432ea9dc4c51",
+                  "name" : "Archive 5",
+                  "partnerId" : "APIKEY",
+                  "reason" : "",
+                  "sessionId" : "SESSION_ID",
+                  "size" : 83158,
+                  "status" : "available",
+                  "url" : "http://some/video5.mp4"
+                }
+              ]
+            }`,
           {
             server: 'nginx',
             date: 'Mon, 03 Feb 2014 23:38:53 GMT',
@@ -739,7 +897,7 @@ describe('Archiving', function () {
 
       opentok.deleteArchive(mockArchiveId, function (err) {
         expect(err).not.toBeNull();
-        expect(err.message).toBe('Unexpected response from OpenTok: "{ \\"message\\" : \\"Some other error.\\" }"');
+        expect(err.message).toBe(`Unexpected response from OpenTok: {"message":"Some other error."}`);
         done();
       });
     });
