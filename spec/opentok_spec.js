@@ -664,7 +664,7 @@ describe('Archiving', function () {
       opentok.stopArchive(mockArchiveId, function (err, archive) {
         expect(archive).toBeUndefined();
         expect(err).not.toBeNull();
-        expect(err.message).toBe('Unexpected response from OpenTok: {"message":"Some other error."}');
+        expect(err.message).toBe('Unexpected response from OpenTok: {"statusCode":500}');
         done();
       });
     });
