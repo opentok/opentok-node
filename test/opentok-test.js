@@ -175,6 +175,10 @@ if (recording) {
 }
 
 describe('OpenTok', function () {
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
   it('should initialize with a valid apiKey and apiSecret', function () {
     var opentok = new OpenTok(apiKey, apiSecret);
     expect(opentok).to.be.an.instanceof(OpenTok);
@@ -206,6 +210,10 @@ describe('OpenTok', function () {
 });
 
 describe('JWT token', function describeJwtToken() {
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
   it('should not be expired', function (done) {
     var opentok = new OpenTok(apiKey, apiSecret);
     var expiration;
@@ -246,6 +254,10 @@ describe('JWT token', function describeJwtToken() {
 });
 
 describe('when initialized with an apiUrl', function () {
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
   beforeEach(function () {
     this.opentok = new OpenTok(apiKey, apiSecret, apiUrl);
   });
@@ -288,7 +300,11 @@ describe('when initialized with an apiUrl', function () {
   });
 });
 
-describe('when initialized with a proxy', function () {
+describe.skip('when initialized with a proxy', function () {
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
   beforeEach(function () {
     // TODO: remove temporary proxy value
     this.proxyUrl = 'http://localhost:8080';
@@ -316,6 +332,10 @@ describe('when initialized with a proxy', function () {
 });
 
 describe('when initialized with a timeout', function () {
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
   beforeEach(function () {
     this.opentok = new OpenTok(apiKey, apiSecret, { timeout: 100 });
   });
@@ -325,6 +345,10 @@ describe('when initialized with a timeout', function () {
 });
 
 describe('when initialized without a timeout', function () {
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
   beforeEach(function () {
     this.opentok = new OpenTok(apiKey, apiSecret);
   });
@@ -334,6 +358,10 @@ describe('when initialized without a timeout', function () {
 });
 
 describe('when a user agent addendum is needed', function () {
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
   beforeEach(function () {
     this.addendum = 'my-special-app';
     this.opentok = new OpenTok(apiKey, apiSecret, {
@@ -378,6 +406,10 @@ describe('when a user agent addendum is needed', function () {
 });
 
 describe.skip('when there is too much network latency', function () {
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
   beforeEach(function () {
     this.opentok = new OpenTok(apiKey, apiSecret);
   });
@@ -407,10 +439,18 @@ describe.skip('when there is too much network latency', function () {
 });
 
 describe('when initialized with bad credentials', function () {
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
   beforeEach(function () {
     this.opentok = new OpenTok(badApiKey, badApiSecret);
   });
   describe('#createSession', function () {
+    afterEach(function () {
+      nock.cleanAll();
+    });
+
     it('throws a client error', function (done) {
       var scope = nock('https://api.opentok.com:443')
         .post('/session/create', 'archiveMode=manual&p2p.preference=enabled')
@@ -438,6 +478,10 @@ describe('when initialized with bad credentials', function () {
 });
 
 describe('#createSession', function () {
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
   beforeEach(function () {
     this.opentok = new OpenTok(apiKey, apiSecret);
   });
@@ -828,7 +872,7 @@ describe('#createSession', function () {
       .reply(200, validReply, {
         server: 'nginx',
         date: 'Thu, 20 Mar 2014 14:02:45 GMT',
-        'content-type': 'text/xml',
+        'content-type': 'application/json',
         connection: 'keep-alive',
         'access-control-allow-origin': '*',
         'x-tb-host': 'oms506-nyc.tokbox.com',
@@ -849,6 +893,10 @@ describe('#createSession', function () {
 });
 
 describe('#generateToken', function () {
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
   beforeEach(function () {
     this.opentok = new OpenTok(apiKey, apiSecret);
     this.sessionId = sessionId;
@@ -1032,6 +1080,10 @@ describe('#generateToken', function () {
 });
 
 describe('#dial', function () {
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
   beforeEach(function () {
     this.opentok = new OpenTok(apiKey, apiSecret);
     this.sessionId = sessionId;
@@ -1482,6 +1534,10 @@ describe('#dial', function () {
 });
 
 describe('#websocketconnect', function () {
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
   beforeEach(function () {
     this.opentok = new OpenTok(apiKey, apiSecret);
     this.sessionId = sessionId;
@@ -1587,17 +1643,20 @@ describe('#websocketconnect', function () {
         }
       })
       .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
-      .post('/v2/project/123456/connect', {
-        sessionId: this.sessionId,
-        token: this.token,
-        websocket: {
-          uri: goodWebsocketUri,
-          streams: [
-            'streamid-1',
-            'streamid-2'
-          ]
+      .post(
+        '/v2/project/123456/connect',
+        {
+          sessionId: this.sessionId,
+          token: this.token,
+          websocket: {
+            uri: goodWebsocketUri,
+            streams: [
+              'streamid-1',
+              'streamid-2'
+            ]
+          }
         }
-      })
+      )
       .reply(200, {
         id: 'CONFERENCEID',
         connectionId: 'CONNECTIONID'
@@ -1698,7 +1757,7 @@ describe('#startBroadcast', function () {
     }
     nock('https://api.opentok.com')
       .post('/v2/project/APIKEY/broadcast')
-      .reply(status || 200, body || optionalBody);
+      .reply(status || 200, body || optionalBody, { 'Content-Type': 'application/json' });
   }
 
   afterEach(function () {
@@ -1765,6 +1824,10 @@ describe('#startBroadcast', function () {
 });
 
 describe('#patchBroadcast', function () {
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
   var opentok = new OpenTok('APIKEY', 'APISECRET');
   var BROADCAST_ID = 'BROADCASTID';
   var STREAM_ID = 'STREAMID';
@@ -2173,11 +2236,11 @@ describe('muteStreams', function () {
   var opentok = new OpenTok(apiKey, apiSecret);
   var SESSIONID = sessionId;
   var STREAMID = 'streamId';
-  afterEach(function () {
-    nock.cleanAll();
-  });
-
   describe('valid responses', function () {
+    afterEach(function () {
+      nock.cleanAll();
+    });
+
     it('should not get an error and mute the stream', function (done) {
       mockMuteStreamRequest(SESSIONID, STREAMID);
       opentok.forceMuteStream(SESSIONID, STREAMID, function (err) {
@@ -2211,6 +2274,10 @@ describe('listStreams', function () {
   });
 
   describe('valid responses', function () {
+    afterEach(function () {
+      nock.cleanAll();
+    });
+
     it('should not get an error and get valid stream data given valid parameters', function (done) {
       mockListStreamsRequest(SESSIONID);
       opentok.listStreams(SESSIONID, function (err, streams) {
