@@ -1,15 +1,16 @@
 {
+  "$schema": "https://json.schemastore.org/package.json",
   "name": "opentok",
-  "description": "OpenTok server-side SDK",
   "version": "2.17.0",
+  "description": "OpenTok server-side SDK",
   "homepage": "https://github.com/opentok/opentok-node",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/opentok/opentok-node.git"
-  },
   "bugs": {
     "url": "https://github.com/opentok/opentok-node/issues",
     "email": "support@tokbox.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/opentok/opentok-node.git"
   },
   "license": "MIT",
   "contributors": [
@@ -55,6 +56,11 @@
     {
       "name": "Mofi Rahman",
       "url": "https://twitter.com/moficodes"
+    },
+    {
+      "name": "Chuck \"MANCHUCK\" Reeves",
+      "email": "chuck@manchuck.com",
+      "url": "https://github.com/manchuck"
     }
   ],
   "main": "lib/opentok.js",
@@ -62,19 +68,22 @@
     "lib/"
   ],
   "scripts": {
+    "jasmine-coverage": "cross-env NODE_ENV=test nyc --reporter=text-lcov jasmine-node spec > jasmine.lcov",
+    "jasmine_node": "jasmine spec/opentok_spec.js",
+    "lint": "./node_modules/.bin/eslint ./lib/ ./test/ ./sample/",
+    "lint-fix": "eslint --fix lib test",
+    "mocha-coverage": "cross-env NODE_ENV=test nyc --reporter=text-lcov mocha > mocha.lcov",
+    "report-coverage": "npm run mocha-coverage && npm run jasmine-coverage",
     "test": "npm run test-no-lint && npm run jasmine_node",
     "test-coverage": "cross-env NODE_ENV=test nyc mocha",
     "test-coverage-html": "cross-env NODE_ENV=test nyc --reporter html mocha",
-    "test-no-lint": "mocha ./test/*-test.js",
-    "lint": "./node_modules/.bin/eslint ./lib/ ./test/ ./sample/",
-    "lint-fix": "eslint --fix lib test",
-    "jasmine_node": "jasmine spec/opentok_spec.js",
-    "report-coverage": "npm run mocha-coverage && npm run jasmine-coverage",
-    "mocha-coverage": "cross-env NODE_ENV=test nyc --reporter=text-lcov mocha > mocha.lcov",
-    "jasmine-coverage": "cross-env NODE_ENV=test nyc --reporter=text-lcov jasmine-node spec > jasmine.lcov"
+    "test-no-lint": "mocha ./test/*-test.js"
   },
-  "engines": {
-    "node": ">=4"
+  "dependencies": {
+    "jsonwebtoken": "9.0.2",
+    "lodash": "4.17.21",
+    "node-fetch": "2.7.0",
+    "opentok-token": "1.1.1"
   },
   "devDependencies": {
     "chai": "4.3.10",
@@ -88,11 +97,7 @@
     "nock": "13.3.6",
     "nyc": "15.1.0"
   },
-  "dependencies": {
-    "jsonwebtoken": "9.0.2",
-    "lodash": "4.17.21",
-    "needle": "3.2.0",
-    "node-fetch": "2.7.0",
-    "opentok-token": "1.1.1"
+  "engines": {
+    "node": ">=4"
   }
 }
