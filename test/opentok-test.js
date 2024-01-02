@@ -268,7 +268,7 @@ describe('when initialized with an apiUrl', function () {
     var scope = nock(apiUrl)
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -372,7 +372,7 @@ describe('when a user agent addendum is needed', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -490,7 +490,7 @@ describe('#createSession', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -527,7 +527,7 @@ describe('#createSession', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -566,7 +566,7 @@ describe('#createSession', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -602,7 +602,7 @@ describe('#createSession', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -641,7 +641,7 @@ describe('#createSession', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -680,7 +680,7 @@ describe('#createSession', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -719,7 +719,7 @@ describe('#createSession', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -789,7 +789,7 @@ describe('#createSession', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -820,7 +820,7 @@ describe('#createSession', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -833,12 +833,12 @@ describe('#createSession', function () {
       .reply(
         200,
         '[{"session_id":"'
-          + sessionId
-          + '","project_id":"'
-          + apiKey
-          + '","partner_id":"'
-          + apiKey
-          + '","create_dt":"Fri Nov 18 15:50:36 PST 2016","media_server_url":""}]',
+        + sessionId
+        + '","project_id":"'
+        + apiKey
+        + '","partner_id":"'
+        + apiKey
+        + '","create_dt":"Fri Nov 18 15:50:36 PST 2016","media_server_url":""}]',
         {
           server: 'nginx',
           date: 'Thu, 20 Mar 2014 06:35:24 GMT',
@@ -1094,7 +1094,7 @@ describe('#dial', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -1138,7 +1138,7 @@ describe('#dial', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -1186,7 +1186,7 @@ describe('#dial', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -1237,7 +1237,7 @@ describe('#dial', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -1283,7 +1283,7 @@ describe('#dial', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -1329,7 +1329,7 @@ describe('#dial', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -1356,7 +1356,7 @@ describe('#dial', function () {
     var dialDTMFScope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -1403,7 +1403,7 @@ describe('#dial', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -1430,7 +1430,7 @@ describe('#dial', function () {
     var dialDTMFScope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -1548,7 +1548,7 @@ describe('#websocketconnect', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -1589,7 +1589,7 @@ describe('#websocketconnect', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -1634,7 +1634,7 @@ describe('#websocketconnect', function () {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
         try {
-          jwt.verify(value, apiSecret, { issuer: apiKey });
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
         }
         catch (error) {
@@ -1816,7 +1816,7 @@ describe('#startBroadcast', function () {
       error: 'remote error message'
     });
     opentok.startBroadcast(SESSIONID, options, function (err, broadcast) {
-      expect(err.message).to.equal('Failed to start broadcast. Error: (400) {"error":"remote error message"}');
+      expect(err.message).to.equal('Failed to start broadcast. Error: Bad session ID, token, SIP credentials, or SIP URI (sip:user@domain.tld)');
       expect(broadcast).to.be.undefined;
       done();
     });
