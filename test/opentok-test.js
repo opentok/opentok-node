@@ -127,7 +127,7 @@ function mockListStreamsRequest(sessId, status) {
   }
   nock('https://api.opentok.com')
     .get('/v2/project/123456/session/' + sessId + '/stream')
-    .reply(status || 200, body);
+    .reply(status || 200, body, { 'Content-Type': 'application/json' });
 }
 
 function mockMuteStreamRequest(sessId, streamId, status) {
@@ -151,9 +151,9 @@ function mockDisableForceMuteRequest(sessId, status) {
 function mockListBroadcastsRequest(query, status) {
   var body;
   if (status) {
-    body = JSON.stringify({
+    body = {
       message: 'error message'
-    });
+    };
   }
   else {
     body = JSON.stringify(mockListBroadcastsObject);
@@ -161,7 +161,7 @@ function mockListBroadcastsRequest(query, status) {
   nock('https://api.opentok.com')
     .get('/v2/project/APIKEY/broadcast')
     .query(query || {})
-    .reply(status || 200, body);
+    .reply(status || 200, body, { 'Content-Type': 'application/json' });
 }
 
 nock.disableNetConnect();
