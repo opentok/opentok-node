@@ -18,6 +18,16 @@ The OpenTok Node SDK provides methods for:
 
 If you are looking for the JavaScript Client SDK please see the [@opentok/client](https://www.npmjs.com/package/@opentok/client) NPM module.
 
+## Note!
+
+This library is designed to work with the Tokbox/OpenTok platform, part of the Vonage Video API. If you are looking to use the Vonage Video API and using the Vonage Customer Dashboard, you will want to install the [Vonage Server SDK for Node](https://github.com/vonage/vonage-node-sdk), which includes support for the Vonage Video API.
+
+Not sure which exact platform you are using? Take a look at [this guide](https://api.support.vonage.com/hc/en-us/articles/10817774782492).
+
+If you are using the Tokbox platform, do not worry! The Tokbox platform is not going away, and this library will continue to be updated. While we encourage customers to check out the new Unified platform, there is no rush to switch. Both platforms run the exact same infrastructure and capabilities, with the main difference being a unified billing interface and easier access to [Vonage’s other CPaaS APIs](https://www.vonage.com/communications-apis/).
+
+If you are new to the Vonage Video API, head on over to the [Vonage Customer Dashboard](https://dashboard.vonage.com) to sign up for a developer account and check out the [Vonage Server SDK for Node](https://github.com/vonage/vonage-node-sdk).
+
 ## Installation using npm (recommended):
 
 npm helps manage dependencies for node projects. Find more info here: <http://npmjs.org>.
