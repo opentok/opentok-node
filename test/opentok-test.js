@@ -2292,6 +2292,18 @@ describe('listStreams', function () {
       });
     });
 
+    it('should not error when items is missing in response', function (done) {
+      nock('https://api.opentok.com')
+        .get('/v2/project/123456/session/' + SESSIONID + '/stream')
+        .reply(200, { count: 0 }, { 'Content-Type': 'application/json' });
+
+      opentok.listStreams(SESSIONID, function (err, streams) {
+        expect(err).to.be.null;
+        expect(streams).to.empty;
+        done();
+      });
+    });
+
     it('should return an error if sessionId is null', function (done) {
       opentok.listStreams(null, function (err, streams) {
         expect(err).to.not.be.null;
