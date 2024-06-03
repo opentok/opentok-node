@@ -531,7 +531,7 @@ Reference documentation is available at <https://tokbox.com/developer/sdks/node/
 You need an OpenTok API key and API secret, which you can obtain by logging into your
 [TokBox account](https://tokbox.com/account).
 
-The OpenTok Node SDK requires Node.js 6 or higher. It may work on older versions but they are no longer tested.
+The OpenTok Node SDK requires Node.js 14 or higher. It may work on older versions but they are no longer tested.
 
 ## Release Notes
 
