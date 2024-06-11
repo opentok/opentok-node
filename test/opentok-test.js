@@ -1915,7 +1915,7 @@ describe('#stopBroadcast', function () {
   });
 
   it('succeeds given valid parameters', function (done) {
-    mockStopBroadcastRequest(BROADCAST_ID);
+    mockStopBroadcastRequest(BROADCAST_ID, null, true);
     opentok.stopBroadcast(BROADCAST_ID, function (err, broadcast) {
       expect(err).to.be.null;
       validateBroadcastObject(broadcast);
@@ -1924,7 +1924,7 @@ describe('#stopBroadcast', function () {
   });
 
   it('succeeds with non-json body response', function (done) {
-    mockStopBroadcastRequest(BROADCAST_ID, null, true);
+    mockStopBroadcastRequest(BROADCAST_ID);
     opentok.stopBroadcast(BROADCAST_ID, function (err, broadcast) {
       expect(err).to.be.null;
       validateBroadcastObject(broadcast);
