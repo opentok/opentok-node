@@ -1895,7 +1895,7 @@ describe('#stopBroadcast', function () {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
   var BROADCAST_ID = 'BROADCAST_ID';
 
-  function mockStopBroadcastRequest(broadcastId, status) {
+  function mockStopBroadcastRequest(broadcastId, status, jsonResponse) {
     var body;
     if (status) {
       body = JSON.stringify({
@@ -1903,7 +1903,7 @@ describe('#stopBroadcast', function () {
       });
     }
     else {
-      body = JSON.stringify(mockBroadcastObject);
+      body = jsonResponse ? JSON.stringify(mockBroadcastObject) : mockBroadcastObject;
     }
     nock('https://api.opentok.com')
       .post('/v2/project/APIKEY/broadcast/' + broadcastId + '/stop')
@@ -1916,6 +1916,15 @@ describe('#stopBroadcast', function () {
 
   it('succeeds given valid parameters', function (done) {
     mockStopBroadcastRequest(BROADCAST_ID);
+    opentok.stopBroadcast(BROADCAST_ID, function (err, broadcast) {
+      expect(err).to.be.null;
+      validateBroadcastObject(broadcast);
+      done();
+    });
+  });
+
+  it('succeeds with non-json body response', function (done) {
+    mockStopBroadcastRequest(BROADCAST_ID, null, true);
     opentok.stopBroadcast(BROADCAST_ID, function (err, broadcast) {
       expect(err).to.be.null;
       validateBroadcastObject(broadcast);
