@@ -1,3 +1,5 @@
+'use strict';
+
 // Test Helpers
 var qs = require('querystring');
 var crypto = require('crypto');
