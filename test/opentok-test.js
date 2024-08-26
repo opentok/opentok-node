@@ -907,11 +907,11 @@ describe('#generateToken', function () {
     var token = this.opentok.generateToken(this.sessionId);
     var decoded;
     expect(token).to.be.a('string');
-    expect(helpers.verifyTokenSignature(token, apiSecret)).to.be.true;
-    decoded = helpers.decodeToken(token);
-    expect(decoded.partner_id).to.equal(apiKey);
+    decoded = jwt.verify(token, apiSecret);
+    expect(decoded.session_id).to.equal(this.sessionId);
     expect(decoded.create_time).to.exist;
     expect(decoded.nonce).to.exist;
+    expect(decoded.role).to.equal('publisher');
   });
 
   it('assigns a role in the token', function () {
@@ -920,9 +920,7 @@ describe('#generateToken', function () {
     var decoded;
     var subscriberToken;
     expect(defaultRoleToken).to.be.a('string');
-    expect(helpers.verifyTokenSignature(defaultRoleToken, apiSecret)).to.be
-      .true;
-    decoded = helpers.decodeToken(defaultRoleToken);
+    decoded = jwt.verify(defaultRoleToken, apiSecret);
     expect(decoded.role).to.equal('publisher');
 
     // expects one with a valid role defined to set it
@@ -930,8 +928,7 @@ describe('#generateToken', function () {
       role: 'subscriber'
     });
     expect(subscriberToken).to.be.a('string');
-    expect(helpers.verifyTokenSignature(subscriberToken, apiSecret)).to.be.true;
-    decoded = helpers.decodeToken(subscriberToken);
+    decoded = jwt.verify(subscriberToken, apiSecret);
     expect(decoded.role).to.equal('subscriber');
 
     // expects one with an invalid role to complain
@@ -953,24 +950,19 @@ describe('#generateToken', function () {
     var inOneHour;
     var oneHourAgo;
 
-    var fractionalExpireTime;
     var roundedToken;
 
     expect(defaultExpireToken).to.be.a('string');
-    expect(helpers.verifyTokenSignature(defaultExpireToken, apiSecret)).to.be
-      .true;
-    decoded = helpers.decodeToken(defaultExpireToken);
+    decoded = jwt.verify(defaultExpireToken, apiSecret);
     expireTime = parseInt(decoded.expire_time, 10);
     expect(expireTime).to.be.closeTo(inOneDay, delta);
-
     // expects a token with an expiration time to have it
     inOneHour = now + (60 * 60);
     oneHourToken = this.opentok.generateToken(this.sessionId, {
       expireTime: inOneHour
     });
     expect(oneHourToken).to.be.a('string');
-    expect(helpers.verifyTokenSignature(oneHourToken, apiSecret)).to.be.true;
-    decoded = helpers.decodeToken(oneHourToken);
+    decoded = jwt.verify(oneHourToken, apiSecret);
     expireTime = parseInt(decoded.expire_time, 10);
     expect(expireTime).to.be.closeTo(inOneHour, delta);
 
@@ -985,13 +977,12 @@ describe('#generateToken', function () {
     }).to.throw(Error);
 
     // rounds down fractional expiration time
-    fractionalExpireTime = now + 60.5;
+    const fractionalExpireTime = now + 60.5;
     roundedToken = this.opentok.generateToken(this.sessionId, {
       expireTime: fractionalExpireTime
     });
-    expect(helpers.verifyTokenSignature(roundedToken, apiSecret)).to.be.true;
-    decoded = helpers.decodeToken(roundedToken);
-    expect(decoded.expire_time).to.equal(Math.round(fractionalExpireTime).toString());
+    decoded = jwt.verify(roundedToken, apiSecret);
+    expect(decoded.exp).to.equal(Math.round(fractionalExpireTime));
   });
 
   it('sets initial layout class list in the token', function () {
@@ -1000,19 +991,15 @@ describe('#generateToken', function () {
     var layoutBearingToken = this.opentok.generateToken(this.sessionId, {
       initialLayoutClassList: layoutClassList
     });
-    var decoded = helpers.decodeToken(layoutBearingToken);
+    var decoded = jwt.verify(layoutBearingToken, apiSecret);
     var singleLayoutBearingToken = this.opentok.generateToken(this.sessionId, {
       initialLayoutClassList: singleLayoutClass
     });
 
     expect(layoutBearingToken).to.be.a('string');
-    expect(helpers.verifyTokenSignature(layoutBearingToken, apiSecret)).to.be
-      .true;
     expect(decoded.initial_layout_class_list).to.equal(layoutClassList.join(' '));
     expect(singleLayoutBearingToken).to.be.a('string');
-    expect(helpers.verifyTokenSignature(singleLayoutBearingToken, apiSecret)).to
-      .be.true;
-    decoded = helpers.decodeToken(singleLayoutBearingToken);
+    decoded = jwt.verify(singleLayoutBearingToken, apiSecret);
     expect(decoded.initial_layout_class_list).to.equal(singleLayoutClass);
 
     // NOTE: ignores invalid options instead of throwing an error, except if its too long
@@ -1032,9 +1019,7 @@ describe('#generateToken', function () {
       data: sampleData
     });
     expect(dataBearingToken).to.be.a('string');
-    expect(helpers.verifyTokenSignature(dataBearingToken, apiSecret)).to.be
-      .true;
-    decoded = helpers.decodeToken(dataBearingToken);
+    decoded = jwt.verify(dataBearingToken, apiSecret);
     expect(decoded.connection_data).to.equal(sampleData);
 
     // expects a token with invalid connection data to complain
@@ -1066,8 +1051,9 @@ describe('#generateToken', function () {
       this.opentok.generateToken(this.sessionId)
     ];
     var nonces = _.map(tokens, function (token) {
-      return helpers.decodeToken(token).nonce;
+      return jwt.verify(token, apiSecret).nonce;
     });
+
     expect(_.uniq(nonces)).to.have.length(nonces.length);
   });
 
