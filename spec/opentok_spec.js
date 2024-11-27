@@ -217,6 +217,28 @@ describe('Archiving', function () {
       });
     });
 
+    it('should be able to archive with maxBitrate set to 300000', function (done) {
+      nock(archiveHostUrl)
+        .post(archiveResource, { sessionId: mockSessionId, hasAudio: true, hasVideo: false, maxBitrate: 300000 })
+        .reply(
+          200,
+          '{\n  "createdAt" : 1391149936527,\n  "duration" : 0,\n  "id" : "4072fe0f-d499-4f2f-8237-64f5a9d936f5",\n  "name" : null,\n  "partnerId" : "APIKEY",\n  "reason" : "",\n  "sessionId" : "1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg",\n  "size" : 0,\n  "status" : "started",\n  "maxBitrate" : 300000,\n "url" : null\n}',
+          {
+            server: 'nginx',
+            date: 'Fri, 31 Jan 2014 06:32:16 GMT',
+            'content-type': 'application/json',
+            'transfer-encoding': 'chunked',
+            connection: 'keep-alive'
+          }
+        );
+
+      opentok.startArchive(mockSessionId, { hasAudio: true, hasVideo: false, maxBitrate: 300000 }, function (err, archive) {
+        expect(err).toBeNull();
+        expect(archive.maxBitrate).toEqual(300000)
+        done();
+      });
+    });
+
     it('should be able to archive if outputMode is individual', function (done) {
       nock(archiveHostUrl)
         .post(archiveResource, { sessionId: mockSessionId, outputMode: 'individual' })
