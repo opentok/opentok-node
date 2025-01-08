@@ -907,11 +907,11 @@ describe('#generateToken', function () {
     var token = this.opentok.generateToken(this.sessionId);
     var decoded;
     expect(token).to.be.a('string');
-    expect(helpers.verifyTokenSignature(token, apiSecret)).to.be.true;
-    decoded = helpers.decodeToken(token);
-    expect(decoded.partner_id).to.equal(apiKey);
+    decoded = jwt.verify(token, apiSecret);
+    expect(decoded.session_id).to.equal(this.sessionId);
     expect(decoded.create_time).to.exist;
     expect(decoded.nonce).to.exist;
+    expect(decoded.role).to.equal('publisher');
   });
 
   it('assigns a role in the token', function () {
@@ -920,9 +920,7 @@ describe('#generateToken', function () {
     var decoded;
     var subscriberToken;
     expect(defaultRoleToken).to.be.a('string');
-    expect(helpers.verifyTokenSignature(defaultRoleToken, apiSecret)).to.be
-      .true;
-    decoded = helpers.decodeToken(defaultRoleToken);
+    decoded = jwt.verify(defaultRoleToken, apiSecret);
     expect(decoded.role).to.equal('publisher');
 
     // expects one with a valid role defined to set it
@@ -930,8 +928,7 @@ describe('#generateToken', function () {
       role: 'subscriber'
     });
     expect(subscriberToken).to.be.a('string');
-    expect(helpers.verifyTokenSignature(subscriberToken, apiSecret)).to.be.true;
-    decoded = helpers.decodeToken(subscriberToken);
+    decoded = jwt.verify(subscriberToken, apiSecret);
     expect(decoded.role).to.equal('subscriber');
 
     // expects one with an invalid role to complain
@@ -953,24 +950,19 @@ describe('#generateToken', function () {
     var inOneHour;
     var oneHourAgo;
 
-    var fractionalExpireTime;
     var roundedToken;
 
     expect(defaultExpireToken).to.be.a('string');
-    expect(helpers.verifyTokenSignature(defaultExpireToken, apiSecret)).to.be
-      .true;
-    decoded = helpers.decodeToken(defaultExpireToken);
+    decoded = jwt.verify(defaultExpireToken, apiSecret);
     expireTime = parseInt(decoded.expire_time, 10);
     expect(expireTime).to.be.closeTo(inOneDay, delta);
-
     // expects a token with an expiration time to have it
     inOneHour = now + (60 * 60);
     oneHourToken = this.opentok.generateToken(this.sessionId, {
       expireTime: inOneHour
     });
     expect(oneHourToken).to.be.a('string');
-    expect(helpers.verifyTokenSignature(oneHourToken, apiSecret)).to.be.true;
-    decoded = helpers.decodeToken(oneHourToken);
+    decoded = jwt.verify(oneHourToken, apiSecret);
     expireTime = parseInt(decoded.expire_time, 10);
     expect(expireTime).to.be.closeTo(inOneHour, delta);
 
@@ -985,13 +977,12 @@ describe('#generateToken', function () {
     }).to.throw(Error);
 
     // rounds down fractional expiration time
-    fractionalExpireTime = now + 60.5;
+    const fractionalExpireTime = now + 60.5;
     roundedToken = this.opentok.generateToken(this.sessionId, {
       expireTime: fractionalExpireTime
     });
-    expect(helpers.verifyTokenSignature(roundedToken, apiSecret)).to.be.true;
-    decoded = helpers.decodeToken(roundedToken);
-    expect(decoded.expire_time).to.equal(Math.round(fractionalExpireTime).toString());
+    decoded = jwt.verify(roundedToken, apiSecret);
+    expect(decoded.exp).to.equal(Math.round(fractionalExpireTime));
   });
 
   it('sets initial layout class list in the token', function () {
@@ -1000,19 +991,15 @@ describe('#generateToken', function () {
     var layoutBearingToken = this.opentok.generateToken(this.sessionId, {
       initialLayoutClassList: layoutClassList
     });
-    var decoded = helpers.decodeToken(layoutBearingToken);
+    var decoded = jwt.verify(layoutBearingToken, apiSecret);
     var singleLayoutBearingToken = this.opentok.generateToken(this.sessionId, {
       initialLayoutClassList: singleLayoutClass
     });
 
     expect(layoutBearingToken).to.be.a('string');
-    expect(helpers.verifyTokenSignature(layoutBearingToken, apiSecret)).to.be
-      .true;
     expect(decoded.initial_layout_class_list).to.equal(layoutClassList.join(' '));
     expect(singleLayoutBearingToken).to.be.a('string');
-    expect(helpers.verifyTokenSignature(singleLayoutBearingToken, apiSecret)).to
-      .be.true;
-    decoded = helpers.decodeToken(singleLayoutBearingToken);
+    decoded = jwt.verify(singleLayoutBearingToken, apiSecret);
     expect(decoded.initial_layout_class_list).to.equal(singleLayoutClass);
 
     // NOTE: ignores invalid options instead of throwing an error, except if its too long
@@ -1032,9 +1019,7 @@ describe('#generateToken', function () {
       data: sampleData
     });
     expect(dataBearingToken).to.be.a('string');
-    expect(helpers.verifyTokenSignature(dataBearingToken, apiSecret)).to.be
-      .true;
-    decoded = helpers.decodeToken(dataBearingToken);
+    decoded = jwt.verify(dataBearingToken, apiSecret);
     expect(decoded.connection_data).to.equal(sampleData);
 
     // expects a token with invalid connection data to complain
@@ -1066,6 +1051,196 @@ describe('#generateToken', function () {
       this.opentok.generateToken(this.sessionId)
     ];
     var nonces = _.map(tokens, function (token) {
+      return jwt.verify(token, apiSecret).nonce;
+    });
+
+    expect(_.uniq(nonces)).to.have.length(nonces.length);
+  });
+
+  it('does not modify passed in options', function () {
+    var options = { data: 'test' };
+    var optionsUntouched = _.clone(options);
+    this.opentok.generateToken(this.sessionId, options);
+    expect(options).to.deep.equal(optionsUntouched);
+  });
+});
+
+describe('#generateTokenLegacy', function () {
+  afterEach(function () {
+    nock.cleanAll();
+  });
+
+  beforeEach(function () {
+    this.opentok = new OpenTok(apiKey, apiSecret);
+    this.sessionId = sessionId;
+  });
+
+  it('given a valid session, generates a token', function () {
+    // call generateToken with no options
+    var token = this.opentok.generateToken(this.sessionId, {}, true);
+    var decoded;
+    expect(token).to.be.a('string');
+    expect(helpers.verifyTokenSignature(token, apiSecret)).to.be.true;
+    decoded = helpers.decodeToken(token);
+    expect(decoded.partner_id).to.equal(apiKey);
+    expect(decoded.create_time).to.exist;
+    expect(decoded.nonce).to.exist;
+  });
+
+  it('assigns a role in the token', function () {
+    // expects one with no role defined to assign "publisher"
+    var defaultRoleToken = this.opentok.generateToken(this.sessionId, {}, true);
+    var decoded;
+    var subscriberToken;
+    expect(defaultRoleToken).to.be.a('string');
+    expect(helpers.verifyTokenSignature(defaultRoleToken, apiSecret)).to.be
+      .true;
+    decoded = helpers.decodeToken(defaultRoleToken);
+    expect(decoded.role).to.equal('publisher');
+
+    // expects one with a valid role defined to set it
+    subscriberToken = this.opentok.generateToken(this.sessionId, {
+      role: 'subscriber'
+    },
+      true
+    );
+    expect(subscriberToken).to.be.a('string');
+    expect(helpers.verifyTokenSignature(subscriberToken, apiSecret)).to.be.true;
+    decoded = helpers.decodeToken(subscriberToken);
+    expect(decoded.role).to.equal('subscriber');
+
+    // expects one with an invalid role to complain
+    expect(function () {
+      this.opentok.generateToken(this.sessionId, { role: 5 }, true);
+    }).to.throw(Error);
+  });
+
+  it('sets an expiration time for the token', function () {
+    var now = Math.round(new Date().getTime() / 1000);
+    var delta = 10;
+    var decoded;
+    var expireTime;
+
+    // expects a token with no expiration time to assign 1 day
+    var inOneDay = now + (60 * 60 * 24);
+    var defaultExpireToken = this.opentok.generateToken(this.sessionId, {}, true);
+    var oneHourToken;
+    var inOneHour;
+    var oneHourAgo;
+
+    var fractionalExpireTime;
+    var roundedToken;
+
+    expect(defaultExpireToken).to.be.a('string');
+    expect(helpers.verifyTokenSignature(defaultExpireToken, apiSecret)).to.be
+      .true;
+    decoded = helpers.decodeToken(defaultExpireToken);
+    expireTime = parseInt(decoded.expire_time, 10);
+    expect(expireTime).to.be.closeTo(inOneDay, delta);
+
+    // expects a token with an expiration time to have it
+    inOneHour = now + (60 * 60);
+    oneHourToken = this.opentok.generateToken(this.sessionId, {
+      expireTime: inOneHour
+    }, true);
+    expect(oneHourToken).to.be.a('string');
+    expect(helpers.verifyTokenSignature(oneHourToken, apiSecret)).to.be.true;
+    decoded = helpers.decodeToken(oneHourToken);
+    expireTime = parseInt(decoded.expire_time, 10);
+    expect(expireTime).to.be.closeTo(inOneHour, delta);
+
+    // expects a token with an invalid expiration time to complain
+    expect(function () {
+      this.opentok.generateToken(this.sessionId, { expireTime: 'not a time' }, true);
+    }).to.throw(Error);
+
+    oneHourAgo = now - (60 * 60);
+    expect(function () {
+      this.opentok.generateToken(this.sessionId, { expireTime: oneHourAgo }, true);
+    }).to.throw(Error);
+
+    // rounds down fractional expiration time
+    fractionalExpireTime = now + 60.5;
+    roundedToken = this.opentok.generateToken(this.sessionId, {
+      expireTime: fractionalExpireTime
+    }, true);
+    expect(helpers.verifyTokenSignature(roundedToken, apiSecret)).to.be.true;
+    decoded = helpers.decodeToken(roundedToken);
+    expect(decoded.expire_time).to.equal(Math.round(fractionalExpireTime).toString());
+  });
+
+  it('sets initial layout class list in the token', function () {
+    var layoutClassList = ['focus', 'inactive'];
+    var singleLayoutClass = 'focus';
+    var layoutBearingToken = this.opentok.generateToken(this.sessionId, {
+      initialLayoutClassList: layoutClassList
+    }, true);
+    var decoded = helpers.decodeToken(layoutBearingToken);
+    var singleLayoutBearingToken = this.opentok.generateToken(this.sessionId, {
+      initialLayoutClassList: singleLayoutClass
+    }, true);
+
+    expect(layoutBearingToken).to.be.a('string');
+    expect(helpers.verifyTokenSignature(layoutBearingToken, apiSecret)).to.be
+      .true;
+    expect(decoded.initial_layout_class_list).to.equal(layoutClassList.join(' '));
+    expect(singleLayoutBearingToken).to.be.a('string');
+    expect(helpers.verifyTokenSignature(singleLayoutBearingToken, apiSecret)).to
+      .be.true;
+    decoded = helpers.decodeToken(singleLayoutBearingToken);
+    expect(decoded.initial_layout_class_list).to.equal(singleLayoutClass);
+
+    // NOTE: ignores invalid options instead of throwing an error, except if its too long
+  });
+
+  it('complains if the sessionId is not valid', function () {
+    expect(function () {
+      this.opentok.generateToken();
+    }).to.throw(Error);
+  });
+
+  it('sets connection data in the token', function () {
+    // expects a token with a connection data to have it
+    var sampleData = 'name=Johnny';
+    var decoded;
+    var dataBearingToken = this.opentok.generateToken(this.sessionId, {
+      data: sampleData
+    }, true);
+    expect(dataBearingToken).to.be.a('string');
+    expect(helpers.verifyTokenSignature(dataBearingToken, apiSecret)).to.be
+      .true;
+    decoded = helpers.decodeToken(dataBearingToken);
+    expect(decoded.connection_data).to.equal(sampleData);
+
+    // expects a token with invalid connection data to complain
+    expect(function () {
+      this.opentok.generateToken(this.sessionId, { data: { dont: 'work' } }, true);
+    }).to.throw(Error);
+
+    expect(function () {
+      this.opentok.generateToken(this.sessionId, {
+        data: Array(2000).join('a') // 1999 char string of all 'a's
+      });
+    }).to.throw(Error);
+  });
+
+  it('complains if the sessionId is not valid', function () {
+    expect(function () {
+      this.opentok.generateToken();
+    }).to.throw(Error);
+
+    expect(function () {
+      this.opentok.generateToken('blahblahblah', {}, true);
+    }).to.throw(Error);
+  });
+
+  it('contains a unique nonce', function () {
+    // generate a few and show the nonce exists each time and that they are different
+    var tokens = [
+      this.opentok.generateToken(this.sessionId, {}, true),
+      this.opentok.generateToken(this.sessionId, {}, true)
+    ];
+    var nonces = _.map(tokens, function (token) {
       return helpers.decodeToken(token).nonce;
     });
     expect(_.uniq(nonces)).to.have.length(nonces.length);
@@ -1074,7 +1249,7 @@ describe('#generateToken', function () {
   it('does not modify passed in options', function () {
     var options = { data: 'test' };
     var optionsUntouched = _.clone(options);
-    this.opentok.generateToken(this.sessionId, options);
+    this.opentok.generateToken(this.sessionId, options, true);
     expect(options).to.deep.equal(optionsUntouched);
   });
 });
