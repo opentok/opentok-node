@@ -68,13 +68,11 @@
     "lib/"
   ],
   "scripts": {
-    "jasmine-coverage": "cross-env NODE_ENV=test nyc --reporter=text-lcov jasmine-node spec > jasmine.lcov",
-    "jasmine_node": "jasmine spec/opentok_spec.js",
-    "lint": "./node_modules/.bin/eslint ./lib/ ./test/ ./sample/",
-    "lint-fix": "eslint --fix lib test",
+    "lint": "eslint ./lib/ ./test/ ./sample/",
+    "lint-fix": "eslint --fix",
     "mocha-coverage": "cross-env NODE_ENV=test nyc --reporter=text-lcov mocha > mocha.lcov",
-    "report-coverage": "npm run mocha-coverage && npm run jasmine-coverage",
-    "test": "npm run test-no-lint && npm run jasmine_node",
+    "report-coverage": "npm run mocha-coverage",
+    "test": "npm run test-no-lint",
     "test-coverage": "cross-env NODE_ENV=test nyc mocha",
     "test-coverage-html": "cross-env NODE_ENV=test nyc --reporter html mocha",
     "test-no-lint": "mocha ./test/*-test.js"
@@ -91,9 +89,7 @@
     "eslint": "8.51.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-plugin-import": "2.28.1",
-    "jasmine": "5.1.0",
-    "jasmine-node": "1.16.0",
-    "mocha": "10.2.0",
+    "mocha": "10.8.2",
     "nock": "13.3.6",
     "nyc": "15.1.0"
   },

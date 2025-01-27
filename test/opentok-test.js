@@ -1,4 +1,3 @@
-/* */
 var expect = require('chai').expect;
 var nock = require('nock');
 var _ = require('lodash');
