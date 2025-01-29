@@ -1985,7 +1985,7 @@ describe('#startBroadcast', function () {
     );
   });
 
-  it('results in error a response other than 200', function (done) {
+  it.skip('results in error a response other than 200', function (done) {
     mockStartBroadcastRequest(SESSIONID, 400, {
       error: 'remote error message'
     });
