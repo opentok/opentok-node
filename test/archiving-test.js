@@ -1,19 +1,15 @@
 var expect = require('chai').expect;
-/* global require, describe, it, expect, waitsFor, runs, Buffer, jasmine */
-/* jshint strict:false */
-var OpenTok = require('../lib/opentok');
 var nock = require('nock');
+var OpenTok = require('../lib/opentok.js');
 
 var apiKey = 'APIKEY';
-var apiSecret = 'APISECRET';
-
 var mockArchiveId = 'e85741ce-d280-4efa-a3ba-93379a68be06';
 var mockSessionId = '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
 var mockStreamId = '1_MX4xMDB-MC43NjAyOTYyfg';
 var mockArchiveName = 'test_archive_name';
 var mockS3Url = 'http://tokbox.com.archive2.s3.amazonaws.com/123456/09141e29-8770-439b-b180-337d7e637545/archive.mp4';
 
-var archiveHostUrl = 'https://api.opentok.com:443';
+var archiveHostUrl = 'https://api.opentok.com';
 var archiveResource = '/v2/project/APIKEY/archive';
 var archiveResourceWithId = archiveResource + '/' + encodeURIComponent(mockArchiveId);
 var archiveStopResource = archiveResourceWithId + '/stop';
@@ -43,11 +39,6 @@ mockStartArchiveResponseBody = JSON.stringify({
   partnerId: apiKey
 });
 
-// Stopped archive body
-// status: 'stopped'
-// reason: 'user initiated'
-// size: not 0
-// duration: not 0
 mockStopArchiveResponseBody = JSON.parse(mockStartArchiveResponseBody);
 mockStopArchiveResponseBody.status = 'stopped';
 mockStopArchiveResponseBody.reason = 'user initiated';
@@ -55,22 +46,13 @@ mockStopArchiveResponseBody.size = 347533;
 mockStopArchiveResponseBody.duration = 27;
 mockStopArchiveResponseBody = JSON.stringify(mockStopArchiveResponseBody);
 
-// Get uploaded archive body
-// status: 'available'
-// url: not null
 mockGetUploadedArchiveResponseBody = JSON.parse(mockStopArchiveResponseBody);
 mockGetUploadedArchiveResponseBody.status = 'available';
 mockGetUploadedArchiveResponseBody.url = mockS3Url;
 mockGetUploadedArchiveResponseBody = JSON.stringify(mockGetUploadedArchiveResponseBody);
-var nock = require('nock');
-
-// Subject
-var OpenTok = require('../lib/opentok.js');
 
 describe('Archive Tests', function () {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
-  var SESSIONID = '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
-  var CONNECTIONID = '4072fe0f-d499-4f2f-8237-64f5a9d936f5';
 
   afterEach(function () {
     nock.cleanAll();
@@ -127,7 +109,7 @@ describe('Archive Tests', function () {
         .delete(archiveResourceWithId)
         .reply(
           500,
-          '{ "message" : "Some other error." }',
+          '{ "message" : "Some error." }',
           {
             server: 'nginx',
             date: 'Tue, 04 Feb 2014 00:52:38 GMT',
@@ -139,7 +121,7 @@ describe('Archive Tests', function () {
 
       opentok.deleteArchive(mockArchiveId, function (err) {
         expect(err).not.to.be.null;
-        expect(err.message).to.equal('Unexpected response from OpenTok: "{ \\"message\\" : \\"Some other error.\\" }"');
+        expect(err.message).to.equal('Unexpected response from OpenTok: "{"message":"Some error."}"');
         done();
       });
     });
@@ -235,7 +217,7 @@ describe('Archive Tests', function () {
         .post(archiveStopResource, {})
         .reply(
           500,
-          '{ "message" : "Some other error." }',
+          '{ "message" : "Some error." }',
           {
             server: 'nginx',
             date: 'Tue, 04 Feb 2014 00:52:38 GMT',
@@ -248,7 +230,7 @@ describe('Archive Tests', function () {
       opentok.stopArchive(mockArchiveId, function (err, archive) {
         expect(archive).to.be.undefined;
         expect(err).not.to.be.null;
-        expect(err.message).to.equal('Unexpected response from OpenTok: {"statusCode":500}');
+        expect(err.message).to.equal('Unexpected response from OpenTok: "{"message":"Some error."}"');
         done();
       });
     });
@@ -259,6 +241,7 @@ describe('Archive Tests', function () {
       }).to.throw('No callback given to stopArchive')
     });
   });
+
   describe('patchArchive', function () {
     it('should patch an archive with addStream', function (done) {
       nock(archiveHostUrl)
@@ -266,7 +249,8 @@ describe('Archive Tests', function () {
         .reply(204);
 
       opentok.addArchiveStream(mockArchiveId, mockStreamId, {
-        hasAudio: true, hasVideo: true
+        hasAudio: true,
+        hasVideo: true
       }, function (err) {
         expect(err).to.be.null;
         done();
@@ -375,7 +359,10 @@ describe('Archive Tests', function () {
     it('should return an error if any other HTTP status is returned', function (done) {
       nock(archiveHostUrl)
         .get(archiveResource + '?count=5')
-        .reply(500, '{"message":"Some error"}', {
+        .reply(
+          500,
+          '{ "message" : "Some error." }',
+          {
           server: 'nginx',
           date: 'Mon, 03 Feb 2014 23:38:53 GMT',
           'content-type': 'application/json',
@@ -387,7 +374,8 @@ describe('Archive Tests', function () {
         expect(archives).to.be.undefined;
         expect(total).to.be.undefined;
         expect(err).not.to.be.null;
-        expect(err.message).to.equal('Unexpected response from OpenTok: {"message":"Some error"}');
+        expect(err.message).to.equal('Unexpected response from OpenTok: "{"message":"Some error."}"');
+
         done();
       });
     });
@@ -533,13 +521,11 @@ describe('Archive Tests', function () {
     });
 
     it('should return an error if any other HTTP status is returned', function (done) {
-      // nock.recorder.rec();
-
       nock(archiveHostUrl)
         .get(archiveResourceWithId)
         .reply(
           500,
-          '{ "message" : "Something went wrong" }',
+          '{ "message" : "Some error." }',
           {
             server: 'nginx',
             date: 'Mon, 03 Feb 2014 23:30:54 GMT',
@@ -551,7 +537,7 @@ describe('Archive Tests', function () {
 
       opentok.getArchive(mockArchiveId, function (err) {
         expect(err).not.to.be.null;
-        expect(err.message).to.equal('Unexpected response from OpenTok: {"message":"Something went wrong"}');
+        expect(err.message).to.equal('Unexpected response from OpenTok: "{"message":"Some error."}"');
         done();
       });
     });
@@ -670,7 +656,10 @@ describe('Archive Tests', function () {
     it('should return an error if any other HTTP status is returned', function (done) {
       nock(archiveHostUrl)
         .post(archiveResource, { sessionId: mockSessionId })
-        .reply(500, '{ "message" : "responseString" }', {
+        .reply(
+          500,
+          '{ "message" : "Some error." }',
+          {
           server: 'nginx',
           date: 'Fri, 31 Jan 2014 06:46:22 GMT',
           'content-type': 'application/json',
@@ -680,7 +669,7 @@ describe('Archive Tests', function () {
 
       opentok.startArchive(mockSessionId, function (err) {
         expect(err).not.to.be.null;
-        expect(err.message).to.equal('Unexpected response from OpenTok: {"message":"responseString"}');
+        expect(err.message).to.equal('Unexpected response from OpenTok: "{"message":"Some error."}"');
         done();
       });
     });
@@ -738,16 +727,29 @@ describe('Archive Tests', function () {
 
     it('should be able to archive if outputMode is individual', function (done) {
       nock(archiveHostUrl)
-        .post(archiveResource, { sessionId: mockSessionId, outputMode: 'individual' })
+        .post(
+          archiveResource,
+          JSON.stringify({
+            sessionId: mockSessionId,
+            outputMode: 'individual'
+          }),
+        )
         .reply(
           200,
-          '{\n  "createdAt" : 1391149936527,\n  "duration" : 0,\n  "id" : "4072fe0f-d499-4f2f-8237-64f5a9d936f5",\n  "name" : null,\n  "partnerId" : "APIKEY",\n  "reason" : "",\n  "sessionId" : "1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg",\n  "size" : 0,\n  "status" : "started",\n "hasAudio" : true,\n "hasVideo" : true,\n "outputMode" : "individual",\n "url" : null\n}',
           {
-            server: 'nginx',
-            date: 'Fri, 31 Jan 2014 06:32:16 GMT',
-            'content-type': 'application/json',
-            'transfer-encoding': 'chunked',
-            connection: 'keep-alive'
+            createdAt: 1391149936527,
+            duration: 0,
+            id: "4072fe0f-d499-4f2f-8237-64f5a9d936f5",
+            name: null,
+            partnerId: "APIKEY",
+            reason: "",
+            sessionId: "1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg",
+            size: 0,
+            status: "started",
+            hasAudio: true,
+            hasVideo: true,
+            outputMode: "individual",
+            url: null
           }
         );
 

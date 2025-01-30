@@ -21,7 +21,7 @@ describe('Callbacks', function () {
 
   describe('registerCallback', function () {
     function mockRequest(status, body) {
-      nock('https://api.opentok.com:443')
+      nock('https://api.opentok.com')
         .post('/v2/project/APIKEY/callback', { group: GROUP, event: EVENT, url: URL })
         .reply(status, body, {
           server: 'nginx',
@@ -98,7 +98,7 @@ describe('Callbacks', function () {
 
   describe('unregisterCallback', function () {
     function mockRequest(status, body) {
-      nock('https://api.opentok.com:443')
+      nock('https://api.opentok.com')
         .delete('/v2/project/APIKEY/callback/' + CALLBACK_ID)
         .reply(status, body, {
           server: 'nginx',
@@ -153,7 +153,7 @@ describe('Callbacks', function () {
 
   describe('listCallbacks', function () {
     function mockRequest(status, body) {
-      nock('https://api.opentok.com:443')
+      nock('https://api.opentok.com')
         .get('/v2/project/APIKEY/callback')
         .reply(status, body, {
           server: 'nginx',
