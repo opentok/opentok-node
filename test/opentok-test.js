@@ -299,7 +299,7 @@ describe('when initialized with an apiUrl', function () {
   });
 });
 
-describe.skip('when initialized with a proxy', function () {
+describe('when initialized with a proxy', function () {
   afterEach(function () {
     nock.cleanAll();
   });
@@ -397,42 +397,6 @@ describe('when a user agent addendum is needed', function () {
       }
       scope.done();
       done(err);
-    });
-  });
-  it.skip('appends the addendum in an archiving request', function () {
-    // TODO:
-  });
-});
-
-describe.skip('when there is too much network latency', function () {
-  afterEach(function () {
-    nock.cleanAll();
-  });
-
-  beforeEach(function () {
-    this.opentok = new OpenTok(apiKey, apiSecret);
-  });
-  it('times out when the request takes longer than the default timeout', function (done) {
-    // make sure the mocha test runner doesn't time out for at least as long as we are willing to
-    // wait plus some reasonable amount of overhead time (100ms)
-    var scope;
-    this.timeout(defaultTimeoutLength + 100);
-    scope = nock('https://api.opentok.com:443')
-      .post('/session/create', 'archiveMode=manual&p2p.preference=enabled')
-      .delayConnection(defaultTimeoutLength + 10)
-      .reply(200, validReply, {
-        server: 'nginx',
-        date: 'Mon, 14 Jul 2014 04:26:35 GMT',
-        'content-type': 'application/json',
-        connection: 'keep-alive',
-        'access-control-allow-origin': '*',
-        'x-tb-host': 'mantis402-oak.tokbox.com',
-        'content-length': '274'
-      });
-    this.opentok.createSession(function (err) {
-      expect(err).to.be.an.instanceof(Error);
-      scope.done();
-      done();
     });
   });
 });
@@ -1985,7 +1949,7 @@ describe('#startBroadcast', function () {
     );
   });
 
-  it.skip('results in error a response other than 200', function (done) {
+  it('results in error a response other than 200', function (done) {
     mockStartBroadcastRequest(SESSIONID, 400, {
       error: 'remote error message'
     });

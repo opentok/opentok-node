@@ -77,7 +77,7 @@ describe('Callbacks', function () {
       });
     });
 
-    describe.skip('invalid responses', function () {
+    describe('invalid responses', function () {
       var errors = [400, 403, 500];
       var i;
       function test(error) {
@@ -129,7 +129,7 @@ describe('Callbacks', function () {
       });
     });
 
-    describe.skip('invalid responses', function () {
+    describe('invalid responses', function () {
       var errors = [400, 403, 500];
       var i;
       function test(error) {
@@ -179,7 +179,7 @@ describe('Callbacks', function () {
       });
     });
 
-    describe.skip('invalid responses', function () {
+    describe('invalid responses', function () {
       var errors = [400, 403, 500];
       var i;
       function test(error) {
