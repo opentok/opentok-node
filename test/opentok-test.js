@@ -23,7 +23,6 @@ var badWebsocketUri = 'service.com/ws-endpoint';
 var goodSipUri = 'sip:siptesturl@tokbox.com';
 var badSipUri = 'siptesturl@tokbox.com';
 var defaultApiUrl = 'https://api.opentok.com';
-var defaultTimeoutLength = 20000; // 20 seconds
 var recording = false;
 
 // Helpers
