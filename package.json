@@ -78,10 +78,13 @@
     "test-no-lint": "mocha ./test/*-test.js"
   },
   "dependencies": {
+    "@vonage/jwt": "1.11.0",
+    "debug": "4.4.0",
     "jsonwebtoken": "9.0.2",
     "lodash": "4.17.21",
     "node-fetch": "2.7.0",
-    "opentok-token": "1.1.1"
+    "opentok-token": "1.1.1",
+    "uuid": "11.0.5"
   },
   "devDependencies": {
     "chai": "4.3.10",
