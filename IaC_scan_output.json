@@ -1,0 +1,4726 @@
+{
+    "check_type": "github_actions",
+    "results": {
+        "passed_checks": [
+            {
+                "check_id": "CKV_GHA_1",
+                "bc_check_id": null,
+                "check_name": "Ensure ACTIONS_ALLOW_UNSECURE_COMMANDS isn't true on environment variables",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "strategy": {
+                            "matrix": {
+                                "os": [
+                                    "ubuntu-latest",
+                                    "windows-latest",
+                                    "macos-latest"
+                                ],
+                                "node": [
+                                    "16.x",
+                                    "18.x",
+                                    "20.x"
+                                ],
+                                "__startline__": 12,
+                                "__endline__": 14
+                            },
+                            "__startline__": 11,
+                            "__endline__": 14
+                        },
+                        "runs-on": "${{ matrix.os }}",
+                        "steps": [
+                            {
+                                "uses": "actions/checkout@v2",
+                                "__startline__": 16,
+                                "__endline__": 17
+                            },
+                            {
+                                "name": "Set up Node.js ${{ matrix.node }}",
+                                "uses": "actions/setup-node@v1",
+                                "with": {
+                                    "node-version": "${{ matrix.node }}",
+                                    "__startline__": 20,
+                                    "__endline__": 21
+                                },
+                                "__startline__": 17,
+                                "__endline__": 21
+                            },
+                            {
+                                "name": "Install dependencies",
+                                "run": "npm install",
+                                "__startline__": 21,
+                                "__endline__": 23
+                            },
+                            {
+                                "name": "Lint, Compile, Test",
+                                "run": "npm test",
+                                "__startline__": 23,
+                                "__endline__": 25
+                            }
+                        ],
+                        "__startline__": 10,
+                        "__endline__": 25
+                    }
+                },
+                "code_block": [
+                    [
+                        10,
+                        "    strategy:\n"
+                    ],
+                    [
+                        11,
+                        "      matrix:\n"
+                    ],
+                    [
+                        12,
+                        "        os: [ubuntu-latest, windows-latest, macos-latest]\n"
+                    ],
+                    [
+                        13,
+                        "        node: [16.x, 18.x, 20.x]\n"
+                    ],
+                    [
+                        14,
+                        "    runs-on: ${{ matrix.os }}\n"
+                    ],
+                    [
+                        15,
+                        "    steps:\n"
+                    ],
+                    [
+                        16,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        17,
+                        "    - name: Set up Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        18,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        19,
+                        "      with:\n"
+                    ],
+                    [
+                        20,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        21,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        22,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        23,
+                        "    - name: Lint, Compile, Test\n"
+                    ],
+                    [
+                        24,
+                        "      run: npm test\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    10,
+                    26
+                ],
+                "resource": "jobs(test)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.AllowUnsecureCommandsOnJob",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_5",
+                "bc_check_id": null,
+                "check_name": "Found artifact build without evidence of cosign sign execution in pipeline",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "test": {
+                            "strategy": {
+                                "matrix": {
+                                    "os": [
+                                        "ubuntu-latest",
+                                        "windows-latest",
+                                        "macos-latest"
+                                    ],
+                                    "node": [
+                                        "16.x",
+                                        "18.x",
+                                        "20.x"
+                                    ],
+                                    "__startline__": 12,
+                                    "__endline__": 14
+                                },
+                                "__startline__": 11,
+                                "__endline__": 14
+                            },
+                            "runs-on": "${{ matrix.os }}",
+                            "steps": [
+                                {
+                                    "uses": "actions/checkout@v2",
+                                    "__startline__": 16,
+                                    "__endline__": 17
+                                },
+                                {
+                                    "name": "Set up Node.js ${{ matrix.node }}",
+                                    "uses": "actions/setup-node@v1",
+                                    "with": {
+                                        "node-version": "${{ matrix.node }}",
+                                        "__startline__": 20,
+                                        "__endline__": 21
+                                    },
+                                    "__startline__": 17,
+                                    "__endline__": 21
+                                },
+                                {
+                                    "name": "Install dependencies",
+                                    "run": "npm install",
+                                    "__startline__": 21,
+                                    "__endline__": 23
+                                },
+                                {
+                                    "name": "Lint, Compile, Test",
+                                    "run": "npm test",
+                                    "__startline__": 23,
+                                    "__endline__": 25
+                                }
+                            ],
+                            "__startline__": 10,
+                            "__endline__": 25
+                        },
+                        "__startline__": 9,
+                        "__endline__": 25
+                    }
+                },
+                "code_block": [
+                    [
+                        9,
+                        "  test:\n"
+                    ],
+                    [
+                        10,
+                        "    strategy:\n"
+                    ],
+                    [
+                        11,
+                        "      matrix:\n"
+                    ],
+                    [
+                        12,
+                        "        os: [ubuntu-latest, windows-latest, macos-latest]\n"
+                    ],
+                    [
+                        13,
+                        "        node: [16.x, 18.x, 20.x]\n"
+                    ],
+                    [
+                        14,
+                        "    runs-on: ${{ matrix.os }}\n"
+                    ],
+                    [
+                        15,
+                        "    steps:\n"
+                    ],
+                    [
+                        16,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        17,
+                        "    - name: Set up Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        18,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        19,
+                        "      with:\n"
+                    ],
+                    [
+                        20,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        21,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        22,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        23,
+                        "    - name: Lint, Compile, Test\n"
+                    ],
+                    [
+                        24,
+                        "      run: npm test\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    9,
+                    26
+                ],
+                "resource": "jobs",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.CosignArtifacts",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_6",
+                "bc_check_id": null,
+                "check_name": "Found artifact build without evidence of cosign sbom attestation in pipeline",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "test": {
+                            "strategy": {
+                                "matrix": {
+                                    "os": [
+                                        "ubuntu-latest",
+                                        "windows-latest",
+                                        "macos-latest"
+                                    ],
+                                    "node": [
+                                        "16.x",
+                                        "18.x",
+                                        "20.x"
+                                    ],
+                                    "__startline__": 12,
+                                    "__endline__": 14
+                                },
+                                "__startline__": 11,
+                                "__endline__": 14
+                            },
+                            "runs-on": "${{ matrix.os }}",
+                            "steps": [
+                                {
+                                    "uses": "actions/checkout@v2",
+                                    "__startline__": 16,
+                                    "__endline__": 17
+                                },
+                                {
+                                    "name": "Set up Node.js ${{ matrix.node }}",
+                                    "uses": "actions/setup-node@v1",
+                                    "with": {
+                                        "node-version": "${{ matrix.node }}",
+                                        "__startline__": 20,
+                                        "__endline__": 21
+                                    },
+                                    "__startline__": 17,
+                                    "__endline__": 21
+                                },
+                                {
+                                    "name": "Install dependencies",
+                                    "run": "npm install",
+                                    "__startline__": 21,
+                                    "__endline__": 23
+                                },
+                                {
+                                    "name": "Lint, Compile, Test",
+                                    "run": "npm test",
+                                    "__startline__": 23,
+                                    "__endline__": 25
+                                }
+                            ],
+                            "__startline__": 10,
+                            "__endline__": 25
+                        },
+                        "__startline__": 9,
+                        "__endline__": 25
+                    }
+                },
+                "code_block": [
+                    [
+                        9,
+                        "  test:\n"
+                    ],
+                    [
+                        10,
+                        "    strategy:\n"
+                    ],
+                    [
+                        11,
+                        "      matrix:\n"
+                    ],
+                    [
+                        12,
+                        "        os: [ubuntu-latest, windows-latest, macos-latest]\n"
+                    ],
+                    [
+                        13,
+                        "        node: [16.x, 18.x, 20.x]\n"
+                    ],
+                    [
+                        14,
+                        "    runs-on: ${{ matrix.os }}\n"
+                    ],
+                    [
+                        15,
+                        "    steps:\n"
+                    ],
+                    [
+                        16,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        17,
+                        "    - name: Set up Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        18,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        19,
+                        "      with:\n"
+                    ],
+                    [
+                        20,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        21,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        22,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        23,
+                        "    - name: Lint, Compile, Test\n"
+                    ],
+                    [
+                        24,
+                        "      run: npm test\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    9,
+                    26
+                ],
+                "resource": "jobs",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.CosignSBOM",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_4",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of netcat with IP address",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "strategy": {
+                            "matrix": {
+                                "os": [
+                                    "ubuntu-latest",
+                                    "windows-latest",
+                                    "macos-latest"
+                                ],
+                                "node": [
+                                    "16.x",
+                                    "18.x",
+                                    "20.x"
+                                ],
+                                "__startline__": 12,
+                                "__endline__": 14
+                            },
+                            "__startline__": 11,
+                            "__endline__": 14
+                        },
+                        "runs-on": "${{ matrix.os }}",
+                        "steps": [
+                            {
+                                "uses": "actions/checkout@v2",
+                                "__startline__": 16,
+                                "__endline__": 17
+                            },
+                            {
+                                "name": "Set up Node.js ${{ matrix.node }}",
+                                "uses": "actions/setup-node@v1",
+                                "with": {
+                                    "node-version": "${{ matrix.node }}",
+                                    "__startline__": 20,
+                                    "__endline__": 21
+                                },
+                                "__startline__": 17,
+                                "__endline__": 21
+                            },
+                            {
+                                "name": "Install dependencies",
+                                "run": "npm install",
+                                "__startline__": 21,
+                                "__endline__": 23
+                            },
+                            {
+                                "name": "Lint, Compile, Test",
+                                "run": "npm test",
+                                "__startline__": 23,
+                                "__endline__": 25
+                            }
+                        ],
+                        "__startline__": 10,
+                        "__endline__": 25
+                    }
+                },
+                "code_block": [
+                    [
+                        10,
+                        "    strategy:\n"
+                    ],
+                    [
+                        11,
+                        "      matrix:\n"
+                    ],
+                    [
+                        12,
+                        "        os: [ubuntu-latest, windows-latest, macos-latest]\n"
+                    ],
+                    [
+                        13,
+                        "        node: [16.x, 18.x, 20.x]\n"
+                    ],
+                    [
+                        14,
+                        "    runs-on: ${{ matrix.os }}\n"
+                    ],
+                    [
+                        15,
+                        "    steps:\n"
+                    ],
+                    [
+                        16,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        17,
+                        "    - name: Set up Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        18,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        19,
+                        "      with:\n"
+                    ],
+                    [
+                        20,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        21,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        22,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        23,
+                        "    - name: Lint, Compile, Test\n"
+                    ],
+                    [
+                        24,
+                        "      run: npm test\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    10,
+                    26
+                ],
+                "resource": "jobs(test)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ReverseShellNetcat",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_2",
+                "bc_check_id": null,
+                "check_name": "Ensure run commands are not vulnerable to shell injection",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "strategy": {
+                            "matrix": {
+                                "os": [
+                                    "ubuntu-latest",
+                                    "windows-latest",
+                                    "macos-latest"
+                                ],
+                                "node": [
+                                    "16.x",
+                                    "18.x",
+                                    "20.x"
+                                ],
+                                "__startline__": 12,
+                                "__endline__": 14
+                            },
+                            "__startline__": 11,
+                            "__endline__": 14
+                        },
+                        "runs-on": "${{ matrix.os }}",
+                        "steps": [
+                            {
+                                "uses": "actions/checkout@v2",
+                                "__startline__": 16,
+                                "__endline__": 17
+                            },
+                            {
+                                "name": "Set up Node.js ${{ matrix.node }}",
+                                "uses": "actions/setup-node@v1",
+                                "with": {
+                                    "node-version": "${{ matrix.node }}",
+                                    "__startline__": 20,
+                                    "__endline__": 21
+                                },
+                                "__startline__": 17,
+                                "__endline__": 21
+                            },
+                            {
+                                "name": "Install dependencies",
+                                "run": "npm install",
+                                "__startline__": 21,
+                                "__endline__": 23
+                            },
+                            {
+                                "name": "Lint, Compile, Test",
+                                "run": "npm test",
+                                "__startline__": 23,
+                                "__endline__": 25
+                            }
+                        ],
+                        "__startline__": 10,
+                        "__endline__": 25
+                    }
+                },
+                "code_block": [
+                    [
+                        10,
+                        "    strategy:\n"
+                    ],
+                    [
+                        11,
+                        "      matrix:\n"
+                    ],
+                    [
+                        12,
+                        "        os: [ubuntu-latest, windows-latest, macos-latest]\n"
+                    ],
+                    [
+                        13,
+                        "        node: [16.x, 18.x, 20.x]\n"
+                    ],
+                    [
+                        14,
+                        "    runs-on: ${{ matrix.os }}\n"
+                    ],
+                    [
+                        15,
+                        "    steps:\n"
+                    ],
+                    [
+                        16,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        17,
+                        "    - name: Set up Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        18,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        19,
+                        "      with:\n"
+                    ],
+                    [
+                        20,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        21,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        22,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        23,
+                        "    - name: Lint, Compile, Test\n"
+                    ],
+                    [
+                        24,
+                        "      run: npm test\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    10,
+                    26
+                ],
+                "resource": "jobs(test)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ShellInjection",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_3",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of curl with secrets",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "strategy": {
+                            "matrix": {
+                                "os": [
+                                    "ubuntu-latest",
+                                    "windows-latest",
+                                    "macos-latest"
+                                ],
+                                "node": [
+                                    "16.x",
+                                    "18.x",
+                                    "20.x"
+                                ],
+                                "__startline__": 12,
+                                "__endline__": 14
+                            },
+                            "__startline__": 11,
+                            "__endline__": 14
+                        },
+                        "runs-on": "${{ matrix.os }}",
+                        "steps": [
+                            {
+                                "uses": "actions/checkout@v2",
+                                "__startline__": 16,
+                                "__endline__": 17
+                            },
+                            {
+                                "name": "Set up Node.js ${{ matrix.node }}",
+                                "uses": "actions/setup-node@v1",
+                                "with": {
+                                    "node-version": "${{ matrix.node }}",
+                                    "__startline__": 20,
+                                    "__endline__": 21
+                                },
+                                "__startline__": 17,
+                                "__endline__": 21
+                            },
+                            {
+                                "name": "Install dependencies",
+                                "run": "npm install",
+                                "__startline__": 21,
+                                "__endline__": 23
+                            },
+                            {
+                                "name": "Lint, Compile, Test",
+                                "run": "npm test",
+                                "__startline__": 23,
+                                "__endline__": 25
+                            }
+                        ],
+                        "__startline__": 10,
+                        "__endline__": 25
+                    }
+                },
+                "code_block": [
+                    [
+                        10,
+                        "    strategy:\n"
+                    ],
+                    [
+                        11,
+                        "      matrix:\n"
+                    ],
+                    [
+                        12,
+                        "        os: [ubuntu-latest, windows-latest, macos-latest]\n"
+                    ],
+                    [
+                        13,
+                        "        node: [16.x, 18.x, 20.x]\n"
+                    ],
+                    [
+                        14,
+                        "    runs-on: ${{ matrix.os }}\n"
+                    ],
+                    [
+                        15,
+                        "    steps:\n"
+                    ],
+                    [
+                        16,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        17,
+                        "    - name: Set up Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        18,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        19,
+                        "      with:\n"
+                    ],
+                    [
+                        20,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        21,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        22,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        23,
+                        "    - name: Lint, Compile, Test\n"
+                    ],
+                    [
+                        24,
+                        "      run: npm test\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    10,
+                    26
+                ],
+                "resource": "jobs(test)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.SuspectCurlInScript",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_7",
+                "bc_check_id": null,
+                "check_name": "The build output cannot be affected by user parameters other than the build entry point and the top-level source location. GitHub Actions workflow_dispatch inputs MUST be empty. ",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "pull_request": null,
+                        "__startline__": 7,
+                        "__endline__": 8
+                    }
+                },
+                "code_block": [
+                    [
+                        7,
+                        "  pull_request:\n"
+                    ],
+                    [
+                        8,
+                        "jobs:\n"
+                    ],
+                    [
+                        9,
+                        "  test:\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    7,
+                    9
+                ],
+                "resource": "on(Vonage)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.EmptyWorkflowDispatch",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    ""
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_1",
+                "bc_check_id": null,
+                "check_name": "Ensure ACTIONS_ALLOW_UNSECURE_COMMANDS isn't true on environment variables",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "uses": "actions/checkout@v2",
+                        "__startline__": 16,
+                        "__endline__": 17
+                    }
+                },
+                "code_block": [
+                    [
+                        16,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        17,
+                        "    - name: Set up Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        18,
+                        "      uses: actions/setup-node@v1\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    16,
+                    18
+                ],
+                "resource": "jobs(test).steps[1]",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.AllowUnsecureCommandsOnJob",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_1",
+                "bc_check_id": null,
+                "check_name": "Ensure ACTIONS_ALLOW_UNSECURE_COMMANDS isn't true on environment variables",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Set up Node.js ${{ matrix.node }}",
+                        "uses": "actions/setup-node@v1",
+                        "with": {
+                            "node-version": "${{ matrix.node }}",
+                            "__startline__": 20,
+                            "__endline__": 21
+                        },
+                        "__startline__": 17,
+                        "__endline__": 21
+                    }
+                },
+                "code_block": [
+                    [
+                        17,
+                        "    - name: Set up Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        18,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        19,
+                        "      with:\n"
+                    ],
+                    [
+                        20,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        21,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        22,
+                        "      run: npm install\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    17,
+                    22
+                ],
+                "resource": "jobs(test).steps[2](Set up Node.js ${{ matrix.node }})",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.AllowUnsecureCommandsOnJob",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_1",
+                "bc_check_id": null,
+                "check_name": "Ensure ACTIONS_ALLOW_UNSECURE_COMMANDS isn't true on environment variables",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Install dependencies",
+                        "run": "npm install",
+                        "__startline__": 21,
+                        "__endline__": 23
+                    }
+                },
+                "code_block": [
+                    [
+                        21,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        22,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        23,
+                        "    - name: Lint, Compile, Test\n"
+                    ],
+                    [
+                        24,
+                        "      run: npm test\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    21,
+                    24
+                ],
+                "resource": "jobs(test).steps[3](Install dependencies)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.AllowUnsecureCommandsOnJob",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_1",
+                "bc_check_id": null,
+                "check_name": "Ensure ACTIONS_ALLOW_UNSECURE_COMMANDS isn't true on environment variables",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Lint, Compile, Test",
+                        "run": "npm test",
+                        "__startline__": 23,
+                        "__endline__": 25
+                    }
+                },
+                "code_block": [
+                    [
+                        23,
+                        "    - name: Lint, Compile, Test\n"
+                    ],
+                    [
+                        24,
+                        "      run: npm test\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    23,
+                    26
+                ],
+                "resource": "jobs(test).steps[4](Lint, Compile, Test)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.AllowUnsecureCommandsOnJob",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_4",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of netcat with IP address",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "uses": "actions/checkout@v2",
+                        "__startline__": 16,
+                        "__endline__": 17
+                    }
+                },
+                "code_block": [
+                    [
+                        16,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        17,
+                        "    - name: Set up Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        18,
+                        "      uses: actions/setup-node@v1\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    16,
+                    18
+                ],
+                "resource": "jobs(test).steps[1]",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ReverseShellNetcat",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_4",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of netcat with IP address",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Set up Node.js ${{ matrix.node }}",
+                        "uses": "actions/setup-node@v1",
+                        "with": {
+                            "node-version": "${{ matrix.node }}",
+                            "__startline__": 20,
+                            "__endline__": 21
+                        },
+                        "__startline__": 17,
+                        "__endline__": 21
+                    }
+                },
+                "code_block": [
+                    [
+                        17,
+                        "    - name: Set up Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        18,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        19,
+                        "      with:\n"
+                    ],
+                    [
+                        20,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        21,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        22,
+                        "      run: npm install\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    17,
+                    22
+                ],
+                "resource": "jobs(test).steps[2](Set up Node.js ${{ matrix.node }})",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ReverseShellNetcat",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_4",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of netcat with IP address",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Install dependencies",
+                        "run": "npm install",
+                        "__startline__": 21,
+                        "__endline__": 23
+                    }
+                },
+                "code_block": [
+                    [
+                        21,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        22,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        23,
+                        "    - name: Lint, Compile, Test\n"
+                    ],
+                    [
+                        24,
+                        "      run: npm test\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    21,
+                    24
+                ],
+                "resource": "jobs(test).steps[3](Install dependencies)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ReverseShellNetcat",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_4",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of netcat with IP address",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Lint, Compile, Test",
+                        "run": "npm test",
+                        "__startline__": 23,
+                        "__endline__": 25
+                    }
+                },
+                "code_block": [
+                    [
+                        23,
+                        "    - name: Lint, Compile, Test\n"
+                    ],
+                    [
+                        24,
+                        "      run: npm test\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    23,
+                    26
+                ],
+                "resource": "jobs(test).steps[4](Lint, Compile, Test)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ReverseShellNetcat",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_2",
+                "bc_check_id": null,
+                "check_name": "Ensure run commands are not vulnerable to shell injection",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "uses": "actions/checkout@v2",
+                        "__startline__": 16,
+                        "__endline__": 17
+                    }
+                },
+                "code_block": [
+                    [
+                        16,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        17,
+                        "    - name: Set up Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        18,
+                        "      uses: actions/setup-node@v1\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    16,
+                    18
+                ],
+                "resource": "jobs(test).steps[1]",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ShellInjection",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_2",
+                "bc_check_id": null,
+                "check_name": "Ensure run commands are not vulnerable to shell injection",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Set up Node.js ${{ matrix.node }}",
+                        "uses": "actions/setup-node@v1",
+                        "with": {
+                            "node-version": "${{ matrix.node }}",
+                            "__startline__": 20,
+                            "__endline__": 21
+                        },
+                        "__startline__": 17,
+                        "__endline__": 21
+                    }
+                },
+                "code_block": [
+                    [
+                        17,
+                        "    - name: Set up Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        18,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        19,
+                        "      with:\n"
+                    ],
+                    [
+                        20,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        21,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        22,
+                        "      run: npm install\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    17,
+                    22
+                ],
+                "resource": "jobs(test).steps[2](Set up Node.js ${{ matrix.node }})",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ShellInjection",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_2",
+                "bc_check_id": null,
+                "check_name": "Ensure run commands are not vulnerable to shell injection",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Install dependencies",
+                        "run": "npm install",
+                        "__startline__": 21,
+                        "__endline__": 23
+                    }
+                },
+                "code_block": [
+                    [
+                        21,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        22,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        23,
+                        "    - name: Lint, Compile, Test\n"
+                    ],
+                    [
+                        24,
+                        "      run: npm test\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    21,
+                    24
+                ],
+                "resource": "jobs(test).steps[3](Install dependencies)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ShellInjection",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_2",
+                "bc_check_id": null,
+                "check_name": "Ensure run commands are not vulnerable to shell injection",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Lint, Compile, Test",
+                        "run": "npm test",
+                        "__startline__": 23,
+                        "__endline__": 25
+                    }
+                },
+                "code_block": [
+                    [
+                        23,
+                        "    - name: Lint, Compile, Test\n"
+                    ],
+                    [
+                        24,
+                        "      run: npm test\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    23,
+                    26
+                ],
+                "resource": "jobs(test).steps[4](Lint, Compile, Test)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ShellInjection",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_3",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of curl with secrets",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "uses": "actions/checkout@v2",
+                        "__startline__": 16,
+                        "__endline__": 17
+                    }
+                },
+                "code_block": [
+                    [
+                        16,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        17,
+                        "    - name: Set up Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        18,
+                        "      uses: actions/setup-node@v1\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    16,
+                    18
+                ],
+                "resource": "jobs(test).steps[1]",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.SuspectCurlInScript",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_3",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of curl with secrets",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Set up Node.js ${{ matrix.node }}",
+                        "uses": "actions/setup-node@v1",
+                        "with": {
+                            "node-version": "${{ matrix.node }}",
+                            "__startline__": 20,
+                            "__endline__": 21
+                        },
+                        "__startline__": 17,
+                        "__endline__": 21
+                    }
+                },
+                "code_block": [
+                    [
+                        17,
+                        "    - name: Set up Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        18,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        19,
+                        "      with:\n"
+                    ],
+                    [
+                        20,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        21,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        22,
+                        "      run: npm install\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    17,
+                    22
+                ],
+                "resource": "jobs(test).steps[2](Set up Node.js ${{ matrix.node }})",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.SuspectCurlInScript",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_3",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of curl with secrets",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Install dependencies",
+                        "run": "npm install",
+                        "__startline__": 21,
+                        "__endline__": 23
+                    }
+                },
+                "code_block": [
+                    [
+                        21,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        22,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        23,
+                        "    - name: Lint, Compile, Test\n"
+                    ],
+                    [
+                        24,
+                        "      run: npm test\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    21,
+                    24
+                ],
+                "resource": "jobs(test).steps[3](Install dependencies)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.SuspectCurlInScript",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_3",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of curl with secrets",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Lint, Compile, Test",
+                        "run": "npm test",
+                        "__startline__": 23,
+                        "__endline__": 25
+                    }
+                },
+                "code_block": [
+                    [
+                        23,
+                        "    - name: Lint, Compile, Test\n"
+                    ],
+                    [
+                        24,
+                        "      run: npm test\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    23,
+                    26
+                ],
+                "resource": "jobs(test).steps[4](Lint, Compile, Test)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.SuspectCurlInScript",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "test"
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV_GHA_1",
+                "bc_check_id": null,
+                "check_name": "Ensure ACTIONS_ALLOW_UNSECURE_COMMANDS isn't true on environment variables",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "runs-on": "ubuntu-latest",
+                        "strategy": {
+                            "matrix": {
+                                "node": [
+                                    "18.x"
+                                ],
+                                "__startline__": 13,
+                                "__endline__": 14
+                            },
+                            "__startline__": 12,
+                            "__endline__": 14
+                        },
+                        "steps": [
+                            {
+                                "uses": "actions/checkout@v2",
+                                "__startline__": 15,
+                                "__endline__": 16
+                            },
+                            {
+                                "name": "Use Node.js ${{ matrix.node }}",
+                                "uses": "actions/setup-node@v1",
+                                "with": {
+                                    "node-version": "${{ matrix.node }}",
+                                    "__startline__": 19,
+                                    "__endline__": 20
+                                },
+                                "__startline__": 16,
+                                "__endline__": 20
+                            },
+                            {
+                                "name": "Install dependencies",
+                                "run": "npm install",
+                                "__startline__": 20,
+                                "__endline__": 22
+                            },
+                            {
+                                "name": "Create codecov report",
+                                "run": "npm run report-coverage",
+                                "__startline__": 22,
+                                "__endline__": 24
+                            },
+                            {
+                                "name": "Run codecov",
+                                "uses": "codecov/codecov-action@v1",
+                                "with": {
+                                    "files": "./mocha.lcov,./jasmine.lcov",
+                                    "__startline__": 27,
+                                    "__endline__": 28
+                                },
+                                "__startline__": 24,
+                                "__endline__": 28
+                            }
+                        ],
+                        "__startline__": 10,
+                        "__endline__": 28
+                    }
+                },
+                "code_block": [
+                    [
+                        10,
+                        "    runs-on: ubuntu-latest\n"
+                    ],
+                    [
+                        11,
+                        "    strategy:\n"
+                    ],
+                    [
+                        12,
+                        "      matrix:\n"
+                    ],
+                    [
+                        13,
+                        "        node: [18.x]\n"
+                    ],
+                    [
+                        14,
+                        "    steps:\n"
+                    ],
+                    [
+                        15,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        16,
+                        "    - name: Use Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        17,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        18,
+                        "      with:\n"
+                    ],
+                    [
+                        19,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        20,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        21,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        22,
+                        "    - name: Create codecov report\n"
+                    ],
+                    [
+                        23,
+                        "      run: npm run report-coverage\n"
+                    ],
+                    [
+                        24,
+                        "    - name: Run codecov\n"
+                    ],
+                    [
+                        25,
+                        "      uses: codecov/codecov-action@v1\n"
+                    ],
+                    [
+                        26,
+                        "      with:\n"
+                    ],
+                    [
+                        27,
+                        "        files: ./mocha.lcov,./jasmine.lcov\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    10,
+                    29
+                ],
+                "resource": "jobs(build)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.AllowUnsecureCommandsOnJob",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_5",
+                "bc_check_id": null,
+                "check_name": "Found artifact build without evidence of cosign sign execution in pipeline",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "build": {
+                            "runs-on": "ubuntu-latest",
+                            "strategy": {
+                                "matrix": {
+                                    "node": [
+                                        "18.x"
+                                    ],
+                                    "__startline__": 13,
+                                    "__endline__": 14
+                                },
+                                "__startline__": 12,
+                                "__endline__": 14
+                            },
+                            "steps": [
+                                {
+                                    "uses": "actions/checkout@v2",
+                                    "__startline__": 15,
+                                    "__endline__": 16
+                                },
+                                {
+                                    "name": "Use Node.js ${{ matrix.node }}",
+                                    "uses": "actions/setup-node@v1",
+                                    "with": {
+                                        "node-version": "${{ matrix.node }}",
+                                        "__startline__": 19,
+                                        "__endline__": 20
+                                    },
+                                    "__startline__": 16,
+                                    "__endline__": 20
+                                },
+                                {
+                                    "name": "Install dependencies",
+                                    "run": "npm install",
+                                    "__startline__": 20,
+                                    "__endline__": 22
+                                },
+                                {
+                                    "name": "Create codecov report",
+                                    "run": "npm run report-coverage",
+                                    "__startline__": 22,
+                                    "__endline__": 24
+                                },
+                                {
+                                    "name": "Run codecov",
+                                    "uses": "codecov/codecov-action@v1",
+                                    "with": {
+                                        "files": "./mocha.lcov,./jasmine.lcov",
+                                        "__startline__": 27,
+                                        "__endline__": 28
+                                    },
+                                    "__startline__": 24,
+                                    "__endline__": 28
+                                }
+                            ],
+                            "__startline__": 10,
+                            "__endline__": 28
+                        },
+                        "__startline__": 9,
+                        "__endline__": 28
+                    }
+                },
+                "code_block": [
+                    [
+                        9,
+                        "  build:\n"
+                    ],
+                    [
+                        10,
+                        "    runs-on: ubuntu-latest\n"
+                    ],
+                    [
+                        11,
+                        "    strategy:\n"
+                    ],
+                    [
+                        12,
+                        "      matrix:\n"
+                    ],
+                    [
+                        13,
+                        "        node: [18.x]\n"
+                    ],
+                    [
+                        14,
+                        "    steps:\n"
+                    ],
+                    [
+                        15,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        16,
+                        "    - name: Use Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        17,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        18,
+                        "      with:\n"
+                    ],
+                    [
+                        19,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        20,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        21,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        22,
+                        "    - name: Create codecov report\n"
+                    ],
+                    [
+                        23,
+                        "      run: npm run report-coverage\n"
+                    ],
+                    [
+                        24,
+                        "    - name: Run codecov\n"
+                    ],
+                    [
+                        25,
+                        "      uses: codecov/codecov-action@v1\n"
+                    ],
+                    [
+                        26,
+                        "      with:\n"
+                    ],
+                    [
+                        27,
+                        "        files: ./mocha.lcov,./jasmine.lcov\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    9,
+                    29
+                ],
+                "resource": "jobs",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.CosignArtifacts",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_6",
+                "bc_check_id": null,
+                "check_name": "Found artifact build without evidence of cosign sbom attestation in pipeline",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "build": {
+                            "runs-on": "ubuntu-latest",
+                            "strategy": {
+                                "matrix": {
+                                    "node": [
+                                        "18.x"
+                                    ],
+                                    "__startline__": 13,
+                                    "__endline__": 14
+                                },
+                                "__startline__": 12,
+                                "__endline__": 14
+                            },
+                            "steps": [
+                                {
+                                    "uses": "actions/checkout@v2",
+                                    "__startline__": 15,
+                                    "__endline__": 16
+                                },
+                                {
+                                    "name": "Use Node.js ${{ matrix.node }}",
+                                    "uses": "actions/setup-node@v1",
+                                    "with": {
+                                        "node-version": "${{ matrix.node }}",
+                                        "__startline__": 19,
+                                        "__endline__": 20
+                                    },
+                                    "__startline__": 16,
+                                    "__endline__": 20
+                                },
+                                {
+                                    "name": "Install dependencies",
+                                    "run": "npm install",
+                                    "__startline__": 20,
+                                    "__endline__": 22
+                                },
+                                {
+                                    "name": "Create codecov report",
+                                    "run": "npm run report-coverage",
+                                    "__startline__": 22,
+                                    "__endline__": 24
+                                },
+                                {
+                                    "name": "Run codecov",
+                                    "uses": "codecov/codecov-action@v1",
+                                    "with": {
+                                        "files": "./mocha.lcov,./jasmine.lcov",
+                                        "__startline__": 27,
+                                        "__endline__": 28
+                                    },
+                                    "__startline__": 24,
+                                    "__endline__": 28
+                                }
+                            ],
+                            "__startline__": 10,
+                            "__endline__": 28
+                        },
+                        "__startline__": 9,
+                        "__endline__": 28
+                    }
+                },
+                "code_block": [
+                    [
+                        9,
+                        "  build:\n"
+                    ],
+                    [
+                        10,
+                        "    runs-on: ubuntu-latest\n"
+                    ],
+                    [
+                        11,
+                        "    strategy:\n"
+                    ],
+                    [
+                        12,
+                        "      matrix:\n"
+                    ],
+                    [
+                        13,
+                        "        node: [18.x]\n"
+                    ],
+                    [
+                        14,
+                        "    steps:\n"
+                    ],
+                    [
+                        15,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        16,
+                        "    - name: Use Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        17,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        18,
+                        "      with:\n"
+                    ],
+                    [
+                        19,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        20,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        21,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        22,
+                        "    - name: Create codecov report\n"
+                    ],
+                    [
+                        23,
+                        "      run: npm run report-coverage\n"
+                    ],
+                    [
+                        24,
+                        "    - name: Run codecov\n"
+                    ],
+                    [
+                        25,
+                        "      uses: codecov/codecov-action@v1\n"
+                    ],
+                    [
+                        26,
+                        "      with:\n"
+                    ],
+                    [
+                        27,
+                        "        files: ./mocha.lcov,./jasmine.lcov\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    9,
+                    29
+                ],
+                "resource": "jobs",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.CosignSBOM",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_4",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of netcat with IP address",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "runs-on": "ubuntu-latest",
+                        "strategy": {
+                            "matrix": {
+                                "node": [
+                                    "18.x"
+                                ],
+                                "__startline__": 13,
+                                "__endline__": 14
+                            },
+                            "__startline__": 12,
+                            "__endline__": 14
+                        },
+                        "steps": [
+                            {
+                                "uses": "actions/checkout@v2",
+                                "__startline__": 15,
+                                "__endline__": 16
+                            },
+                            {
+                                "name": "Use Node.js ${{ matrix.node }}",
+                                "uses": "actions/setup-node@v1",
+                                "with": {
+                                    "node-version": "${{ matrix.node }}",
+                                    "__startline__": 19,
+                                    "__endline__": 20
+                                },
+                                "__startline__": 16,
+                                "__endline__": 20
+                            },
+                            {
+                                "name": "Install dependencies",
+                                "run": "npm install",
+                                "__startline__": 20,
+                                "__endline__": 22
+                            },
+                            {
+                                "name": "Create codecov report",
+                                "run": "npm run report-coverage",
+                                "__startline__": 22,
+                                "__endline__": 24
+                            },
+                            {
+                                "name": "Run codecov",
+                                "uses": "codecov/codecov-action@v1",
+                                "with": {
+                                    "files": "./mocha.lcov,./jasmine.lcov",
+                                    "__startline__": 27,
+                                    "__endline__": 28
+                                },
+                                "__startline__": 24,
+                                "__endline__": 28
+                            }
+                        ],
+                        "__startline__": 10,
+                        "__endline__": 28
+                    }
+                },
+                "code_block": [
+                    [
+                        10,
+                        "    runs-on: ubuntu-latest\n"
+                    ],
+                    [
+                        11,
+                        "    strategy:\n"
+                    ],
+                    [
+                        12,
+                        "      matrix:\n"
+                    ],
+                    [
+                        13,
+                        "        node: [18.x]\n"
+                    ],
+                    [
+                        14,
+                        "    steps:\n"
+                    ],
+                    [
+                        15,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        16,
+                        "    - name: Use Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        17,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        18,
+                        "      with:\n"
+                    ],
+                    [
+                        19,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        20,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        21,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        22,
+                        "    - name: Create codecov report\n"
+                    ],
+                    [
+                        23,
+                        "      run: npm run report-coverage\n"
+                    ],
+                    [
+                        24,
+                        "    - name: Run codecov\n"
+                    ],
+                    [
+                        25,
+                        "      uses: codecov/codecov-action@v1\n"
+                    ],
+                    [
+                        26,
+                        "      with:\n"
+                    ],
+                    [
+                        27,
+                        "        files: ./mocha.lcov,./jasmine.lcov\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    10,
+                    29
+                ],
+                "resource": "jobs(build)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ReverseShellNetcat",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_2",
+                "bc_check_id": null,
+                "check_name": "Ensure run commands are not vulnerable to shell injection",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "runs-on": "ubuntu-latest",
+                        "strategy": {
+                            "matrix": {
+                                "node": [
+                                    "18.x"
+                                ],
+                                "__startline__": 13,
+                                "__endline__": 14
+                            },
+                            "__startline__": 12,
+                            "__endline__": 14
+                        },
+                        "steps": [
+                            {
+                                "uses": "actions/checkout@v2",
+                                "__startline__": 15,
+                                "__endline__": 16
+                            },
+                            {
+                                "name": "Use Node.js ${{ matrix.node }}",
+                                "uses": "actions/setup-node@v1",
+                                "with": {
+                                    "node-version": "${{ matrix.node }}",
+                                    "__startline__": 19,
+                                    "__endline__": 20
+                                },
+                                "__startline__": 16,
+                                "__endline__": 20
+                            },
+                            {
+                                "name": "Install dependencies",
+                                "run": "npm install",
+                                "__startline__": 20,
+                                "__endline__": 22
+                            },
+                            {
+                                "name": "Create codecov report",
+                                "run": "npm run report-coverage",
+                                "__startline__": 22,
+                                "__endline__": 24
+                            },
+                            {
+                                "name": "Run codecov",
+                                "uses": "codecov/codecov-action@v1",
+                                "with": {
+                                    "files": "./mocha.lcov,./jasmine.lcov",
+                                    "__startline__": 27,
+                                    "__endline__": 28
+                                },
+                                "__startline__": 24,
+                                "__endline__": 28
+                            }
+                        ],
+                        "__startline__": 10,
+                        "__endline__": 28
+                    }
+                },
+                "code_block": [
+                    [
+                        10,
+                        "    runs-on: ubuntu-latest\n"
+                    ],
+                    [
+                        11,
+                        "    strategy:\n"
+                    ],
+                    [
+                        12,
+                        "      matrix:\n"
+                    ],
+                    [
+                        13,
+                        "        node: [18.x]\n"
+                    ],
+                    [
+                        14,
+                        "    steps:\n"
+                    ],
+                    [
+                        15,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        16,
+                        "    - name: Use Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        17,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        18,
+                        "      with:\n"
+                    ],
+                    [
+                        19,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        20,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        21,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        22,
+                        "    - name: Create codecov report\n"
+                    ],
+                    [
+                        23,
+                        "      run: npm run report-coverage\n"
+                    ],
+                    [
+                        24,
+                        "    - name: Run codecov\n"
+                    ],
+                    [
+                        25,
+                        "      uses: codecov/codecov-action@v1\n"
+                    ],
+                    [
+                        26,
+                        "      with:\n"
+                    ],
+                    [
+                        27,
+                        "        files: ./mocha.lcov,./jasmine.lcov\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    10,
+                    29
+                ],
+                "resource": "jobs(build)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ShellInjection",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_3",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of curl with secrets",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "runs-on": "ubuntu-latest",
+                        "strategy": {
+                            "matrix": {
+                                "node": [
+                                    "18.x"
+                                ],
+                                "__startline__": 13,
+                                "__endline__": 14
+                            },
+                            "__startline__": 12,
+                            "__endline__": 14
+                        },
+                        "steps": [
+                            {
+                                "uses": "actions/checkout@v2",
+                                "__startline__": 15,
+                                "__endline__": 16
+                            },
+                            {
+                                "name": "Use Node.js ${{ matrix.node }}",
+                                "uses": "actions/setup-node@v1",
+                                "with": {
+                                    "node-version": "${{ matrix.node }}",
+                                    "__startline__": 19,
+                                    "__endline__": 20
+                                },
+                                "__startline__": 16,
+                                "__endline__": 20
+                            },
+                            {
+                                "name": "Install dependencies",
+                                "run": "npm install",
+                                "__startline__": 20,
+                                "__endline__": 22
+                            },
+                            {
+                                "name": "Create codecov report",
+                                "run": "npm run report-coverage",
+                                "__startline__": 22,
+                                "__endline__": 24
+                            },
+                            {
+                                "name": "Run codecov",
+                                "uses": "codecov/codecov-action@v1",
+                                "with": {
+                                    "files": "./mocha.lcov,./jasmine.lcov",
+                                    "__startline__": 27,
+                                    "__endline__": 28
+                                },
+                                "__startline__": 24,
+                                "__endline__": 28
+                            }
+                        ],
+                        "__startline__": 10,
+                        "__endline__": 28
+                    }
+                },
+                "code_block": [
+                    [
+                        10,
+                        "    runs-on: ubuntu-latest\n"
+                    ],
+                    [
+                        11,
+                        "    strategy:\n"
+                    ],
+                    [
+                        12,
+                        "      matrix:\n"
+                    ],
+                    [
+                        13,
+                        "        node: [18.x]\n"
+                    ],
+                    [
+                        14,
+                        "    steps:\n"
+                    ],
+                    [
+                        15,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        16,
+                        "    - name: Use Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        17,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        18,
+                        "      with:\n"
+                    ],
+                    [
+                        19,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        20,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        21,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        22,
+                        "    - name: Create codecov report\n"
+                    ],
+                    [
+                        23,
+                        "      run: npm run report-coverage\n"
+                    ],
+                    [
+                        24,
+                        "    - name: Run codecov\n"
+                    ],
+                    [
+                        25,
+                        "      uses: codecov/codecov-action@v1\n"
+                    ],
+                    [
+                        26,
+                        "      with:\n"
+                    ],
+                    [
+                        27,
+                        "        files: ./mocha.lcov,./jasmine.lcov\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    10,
+                    29
+                ],
+                "resource": "jobs(build)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.SuspectCurlInScript",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_7",
+                "bc_check_id": null,
+                "check_name": "The build output cannot be affected by user parameters other than the build entry point and the top-level source location. GitHub Actions workflow_dispatch inputs MUST be empty. ",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "pull_request": null,
+                        "__startline__": 7,
+                        "__endline__": 8
+                    }
+                },
+                "code_block": [
+                    [
+                        7,
+                        "  pull_request:\n"
+                    ],
+                    [
+                        8,
+                        "jobs:\n"
+                    ],
+                    [
+                        9,
+                        "  build:\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    7,
+                    9
+                ],
+                "resource": "on(Codecov Report)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.EmptyWorkflowDispatch",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    ""
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_1",
+                "bc_check_id": null,
+                "check_name": "Ensure ACTIONS_ALLOW_UNSECURE_COMMANDS isn't true on environment variables",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "uses": "actions/checkout@v2",
+                        "__startline__": 15,
+                        "__endline__": 16
+                    }
+                },
+                "code_block": [
+                    [
+                        15,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        16,
+                        "    - name: Use Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        17,
+                        "      uses: actions/setup-node@v1\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    15,
+                    17
+                ],
+                "resource": "jobs(build).steps[1]",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.AllowUnsecureCommandsOnJob",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_1",
+                "bc_check_id": null,
+                "check_name": "Ensure ACTIONS_ALLOW_UNSECURE_COMMANDS isn't true on environment variables",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Use Node.js ${{ matrix.node }}",
+                        "uses": "actions/setup-node@v1",
+                        "with": {
+                            "node-version": "${{ matrix.node }}",
+                            "__startline__": 19,
+                            "__endline__": 20
+                        },
+                        "__startline__": 16,
+                        "__endline__": 20
+                    }
+                },
+                "code_block": [
+                    [
+                        16,
+                        "    - name: Use Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        17,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        18,
+                        "      with:\n"
+                    ],
+                    [
+                        19,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        20,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        21,
+                        "      run: npm install\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    16,
+                    21
+                ],
+                "resource": "jobs(build).steps[2](Use Node.js ${{ matrix.node }})",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.AllowUnsecureCommandsOnJob",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_1",
+                "bc_check_id": null,
+                "check_name": "Ensure ACTIONS_ALLOW_UNSECURE_COMMANDS isn't true on environment variables",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Install dependencies",
+                        "run": "npm install",
+                        "__startline__": 20,
+                        "__endline__": 22
+                    }
+                },
+                "code_block": [
+                    [
+                        20,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        21,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        22,
+                        "    - name: Create codecov report\n"
+                    ],
+                    [
+                        23,
+                        "      run: npm run report-coverage\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    20,
+                    23
+                ],
+                "resource": "jobs(build).steps[3](Install dependencies)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.AllowUnsecureCommandsOnJob",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_1",
+                "bc_check_id": null,
+                "check_name": "Ensure ACTIONS_ALLOW_UNSECURE_COMMANDS isn't true on environment variables",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Create codecov report",
+                        "run": "npm run report-coverage",
+                        "__startline__": 22,
+                        "__endline__": 24
+                    }
+                },
+                "code_block": [
+                    [
+                        22,
+                        "    - name: Create codecov report\n"
+                    ],
+                    [
+                        23,
+                        "      run: npm run report-coverage\n"
+                    ],
+                    [
+                        24,
+                        "    - name: Run codecov\n"
+                    ],
+                    [
+                        25,
+                        "      uses: codecov/codecov-action@v1\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    22,
+                    25
+                ],
+                "resource": "jobs(build).steps[4](Create codecov report)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.AllowUnsecureCommandsOnJob",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_1",
+                "bc_check_id": null,
+                "check_name": "Ensure ACTIONS_ALLOW_UNSECURE_COMMANDS isn't true on environment variables",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Run codecov",
+                        "uses": "codecov/codecov-action@v1",
+                        "with": {
+                            "files": "./mocha.lcov,./jasmine.lcov",
+                            "__startline__": 27,
+                            "__endline__": 28
+                        },
+                        "__startline__": 24,
+                        "__endline__": 28
+                    }
+                },
+                "code_block": [
+                    [
+                        24,
+                        "    - name: Run codecov\n"
+                    ],
+                    [
+                        25,
+                        "      uses: codecov/codecov-action@v1\n"
+                    ],
+                    [
+                        26,
+                        "      with:\n"
+                    ],
+                    [
+                        27,
+                        "        files: ./mocha.lcov,./jasmine.lcov\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    24,
+                    29
+                ],
+                "resource": "jobs(build).steps[5](Run codecov)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.AllowUnsecureCommandsOnJob",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_4",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of netcat with IP address",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "uses": "actions/checkout@v2",
+                        "__startline__": 15,
+                        "__endline__": 16
+                    }
+                },
+                "code_block": [
+                    [
+                        15,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        16,
+                        "    - name: Use Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        17,
+                        "      uses: actions/setup-node@v1\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    15,
+                    17
+                ],
+                "resource": "jobs(build).steps[1]",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ReverseShellNetcat",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_4",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of netcat with IP address",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Use Node.js ${{ matrix.node }}",
+                        "uses": "actions/setup-node@v1",
+                        "with": {
+                            "node-version": "${{ matrix.node }}",
+                            "__startline__": 19,
+                            "__endline__": 20
+                        },
+                        "__startline__": 16,
+                        "__endline__": 20
+                    }
+                },
+                "code_block": [
+                    [
+                        16,
+                        "    - name: Use Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        17,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        18,
+                        "      with:\n"
+                    ],
+                    [
+                        19,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        20,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        21,
+                        "      run: npm install\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    16,
+                    21
+                ],
+                "resource": "jobs(build).steps[2](Use Node.js ${{ matrix.node }})",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ReverseShellNetcat",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_4",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of netcat with IP address",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Install dependencies",
+                        "run": "npm install",
+                        "__startline__": 20,
+                        "__endline__": 22
+                    }
+                },
+                "code_block": [
+                    [
+                        20,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        21,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        22,
+                        "    - name: Create codecov report\n"
+                    ],
+                    [
+                        23,
+                        "      run: npm run report-coverage\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    20,
+                    23
+                ],
+                "resource": "jobs(build).steps[3](Install dependencies)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ReverseShellNetcat",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_4",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of netcat with IP address",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Create codecov report",
+                        "run": "npm run report-coverage",
+                        "__startline__": 22,
+                        "__endline__": 24
+                    }
+                },
+                "code_block": [
+                    [
+                        22,
+                        "    - name: Create codecov report\n"
+                    ],
+                    [
+                        23,
+                        "      run: npm run report-coverage\n"
+                    ],
+                    [
+                        24,
+                        "    - name: Run codecov\n"
+                    ],
+                    [
+                        25,
+                        "      uses: codecov/codecov-action@v1\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    22,
+                    25
+                ],
+                "resource": "jobs(build).steps[4](Create codecov report)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ReverseShellNetcat",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_4",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of netcat with IP address",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Run codecov",
+                        "uses": "codecov/codecov-action@v1",
+                        "with": {
+                            "files": "./mocha.lcov,./jasmine.lcov",
+                            "__startline__": 27,
+                            "__endline__": 28
+                        },
+                        "__startline__": 24,
+                        "__endline__": 28
+                    }
+                },
+                "code_block": [
+                    [
+                        24,
+                        "    - name: Run codecov\n"
+                    ],
+                    [
+                        25,
+                        "      uses: codecov/codecov-action@v1\n"
+                    ],
+                    [
+                        26,
+                        "      with:\n"
+                    ],
+                    [
+                        27,
+                        "        files: ./mocha.lcov,./jasmine.lcov\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    24,
+                    29
+                ],
+                "resource": "jobs(build).steps[5](Run codecov)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ReverseShellNetcat",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_2",
+                "bc_check_id": null,
+                "check_name": "Ensure run commands are not vulnerable to shell injection",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "uses": "actions/checkout@v2",
+                        "__startline__": 15,
+                        "__endline__": 16
+                    }
+                },
+                "code_block": [
+                    [
+                        15,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        16,
+                        "    - name: Use Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        17,
+                        "      uses: actions/setup-node@v1\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    15,
+                    17
+                ],
+                "resource": "jobs(build).steps[1]",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ShellInjection",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_2",
+                "bc_check_id": null,
+                "check_name": "Ensure run commands are not vulnerable to shell injection",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Use Node.js ${{ matrix.node }}",
+                        "uses": "actions/setup-node@v1",
+                        "with": {
+                            "node-version": "${{ matrix.node }}",
+                            "__startline__": 19,
+                            "__endline__": 20
+                        },
+                        "__startline__": 16,
+                        "__endline__": 20
+                    }
+                },
+                "code_block": [
+                    [
+                        16,
+                        "    - name: Use Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        17,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        18,
+                        "      with:\n"
+                    ],
+                    [
+                        19,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        20,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        21,
+                        "      run: npm install\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    16,
+                    21
+                ],
+                "resource": "jobs(build).steps[2](Use Node.js ${{ matrix.node }})",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ShellInjection",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_2",
+                "bc_check_id": null,
+                "check_name": "Ensure run commands are not vulnerable to shell injection",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Install dependencies",
+                        "run": "npm install",
+                        "__startline__": 20,
+                        "__endline__": 22
+                    }
+                },
+                "code_block": [
+                    [
+                        20,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        21,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        22,
+                        "    - name: Create codecov report\n"
+                    ],
+                    [
+                        23,
+                        "      run: npm run report-coverage\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    20,
+                    23
+                ],
+                "resource": "jobs(build).steps[3](Install dependencies)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ShellInjection",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_2",
+                "bc_check_id": null,
+                "check_name": "Ensure run commands are not vulnerable to shell injection",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Create codecov report",
+                        "run": "npm run report-coverage",
+                        "__startline__": 22,
+                        "__endline__": 24
+                    }
+                },
+                "code_block": [
+                    [
+                        22,
+                        "    - name: Create codecov report\n"
+                    ],
+                    [
+                        23,
+                        "      run: npm run report-coverage\n"
+                    ],
+                    [
+                        24,
+                        "    - name: Run codecov\n"
+                    ],
+                    [
+                        25,
+                        "      uses: codecov/codecov-action@v1\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    22,
+                    25
+                ],
+                "resource": "jobs(build).steps[4](Create codecov report)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ShellInjection",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_2",
+                "bc_check_id": null,
+                "check_name": "Ensure run commands are not vulnerable to shell injection",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Run codecov",
+                        "uses": "codecov/codecov-action@v1",
+                        "with": {
+                            "files": "./mocha.lcov,./jasmine.lcov",
+                            "__startline__": 27,
+                            "__endline__": 28
+                        },
+                        "__startline__": 24,
+                        "__endline__": 28
+                    }
+                },
+                "code_block": [
+                    [
+                        24,
+                        "    - name: Run codecov\n"
+                    ],
+                    [
+                        25,
+                        "      uses: codecov/codecov-action@v1\n"
+                    ],
+                    [
+                        26,
+                        "      with:\n"
+                    ],
+                    [
+                        27,
+                        "        files: ./mocha.lcov,./jasmine.lcov\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    24,
+                    29
+                ],
+                "resource": "jobs(build).steps[5](Run codecov)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.ShellInjection",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_3",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of curl with secrets",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "uses": "actions/checkout@v2",
+                        "__startline__": 15,
+                        "__endline__": 16
+                    }
+                },
+                "code_block": [
+                    [
+                        15,
+                        "    - uses: actions/checkout@v2\n"
+                    ],
+                    [
+                        16,
+                        "    - name: Use Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        17,
+                        "      uses: actions/setup-node@v1\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    15,
+                    17
+                ],
+                "resource": "jobs(build).steps[1]",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.SuspectCurlInScript",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_3",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of curl with secrets",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Use Node.js ${{ matrix.node }}",
+                        "uses": "actions/setup-node@v1",
+                        "with": {
+                            "node-version": "${{ matrix.node }}",
+                            "__startline__": 19,
+                            "__endline__": 20
+                        },
+                        "__startline__": 16,
+                        "__endline__": 20
+                    }
+                },
+                "code_block": [
+                    [
+                        16,
+                        "    - name: Use Node.js ${{ matrix.node }}\n"
+                    ],
+                    [
+                        17,
+                        "      uses: actions/setup-node@v1\n"
+                    ],
+                    [
+                        18,
+                        "      with:\n"
+                    ],
+                    [
+                        19,
+                        "        node-version: ${{ matrix.node }}\n"
+                    ],
+                    [
+                        20,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        21,
+                        "      run: npm install\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    16,
+                    21
+                ],
+                "resource": "jobs(build).steps[2](Use Node.js ${{ matrix.node }})",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.SuspectCurlInScript",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_3",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of curl with secrets",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Install dependencies",
+                        "run": "npm install",
+                        "__startline__": 20,
+                        "__endline__": 22
+                    }
+                },
+                "code_block": [
+                    [
+                        20,
+                        "    - name: Install dependencies\n"
+                    ],
+                    [
+                        21,
+                        "      run: npm install\n"
+                    ],
+                    [
+                        22,
+                        "    - name: Create codecov report\n"
+                    ],
+                    [
+                        23,
+                        "      run: npm run report-coverage\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    20,
+                    23
+                ],
+                "resource": "jobs(build).steps[3](Install dependencies)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.SuspectCurlInScript",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_3",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of curl with secrets",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Create codecov report",
+                        "run": "npm run report-coverage",
+                        "__startline__": 22,
+                        "__endline__": 24
+                    }
+                },
+                "code_block": [
+                    [
+                        22,
+                        "    - name: Create codecov report\n"
+                    ],
+                    [
+                        23,
+                        "      run: npm run report-coverage\n"
+                    ],
+                    [
+                        24,
+                        "    - name: Run codecov\n"
+                    ],
+                    [
+                        25,
+                        "      uses: codecov/codecov-action@v1\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    22,
+                    25
+                ],
+                "resource": "jobs(build).steps[4](Create codecov report)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.SuspectCurlInScript",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            },
+            {
+                "check_id": "CKV_GHA_3",
+                "bc_check_id": null,
+                "check_name": "Suspicious use of curl with secrets",
+                "check_result": {
+                    "result": "PASSED",
+                    "results_configuration": {
+                        "name": "Run codecov",
+                        "uses": "codecov/codecov-action@v1",
+                        "with": {
+                            "files": "./mocha.lcov,./jasmine.lcov",
+                            "__startline__": 27,
+                            "__endline__": 28
+                        },
+                        "__startline__": 24,
+                        "__endline__": 28
+                    }
+                },
+                "code_block": [
+                    [
+                        24,
+                        "    - name: Run codecov\n"
+                    ],
+                    [
+                        25,
+                        "      uses: codecov/codecov-action@v1\n"
+                    ],
+                    [
+                        26,
+                        "      with:\n"
+                    ],
+                    [
+                        27,
+                        "        files: ./mocha.lcov,./jasmine.lcov\n"
+                    ]
+                ],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    24,
+                    29
+                ],
+                "resource": "jobs(build).steps[5](Run codecov)",
+                "evaluations": null,
+                "check_class": "checkov.github_actions.checks.job.SuspectCurlInScript",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    "build"
+                ],
+                "workflow_name": "Codecov Report"
+            }
+        ],
+        "failed_checks": [
+            {
+                "check_id": "CKV2_GHA_1",
+                "bc_check_id": null,
+                "check_name": "Ensure top-level permissions are not set to write-all",
+                "check_result": {
+                    "result": "FAILED",
+                    "evaluated_keys": [
+                        "permissions"
+                    ]
+                },
+                "code_block": [],
+                "file_path": "/.github/workflows/ci.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/ci.yml",
+                "repo_file_path": "/.github/workflows/ci.yml",
+                "file_line_range": [
+                    0,
+                    1
+                ],
+                "resource": "on(Vonage)",
+                "evaluations": null,
+                "check_class": "checkov.common.graph.checks_infra.base_check",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    ""
+                ],
+                "workflow_name": "Vonage"
+            },
+            {
+                "check_id": "CKV2_GHA_1",
+                "bc_check_id": null,
+                "check_name": "Ensure top-level permissions are not set to write-all",
+                "check_result": {
+                    "result": "FAILED",
+                    "evaluated_keys": [
+                        "permissions"
+                    ]
+                },
+                "code_block": [],
+                "file_path": "/.github/workflows/codecov.yml",
+                "file_abs_path": "/tmp/ws-scm/opentok-node/.github/workflows/codecov.yml",
+                "repo_file_path": "/.github/workflows/codecov.yml",
+                "file_line_range": [
+                    0,
+                    1
+                ],
+                "resource": "on(Codecov Report)",
+                "evaluations": null,
+                "check_class": "checkov.common.graph.checks_infra.base_check",
+                "fixed_definition": null,
+                "entity_tags": null,
+                "caller_file_path": null,
+                "caller_file_line_range": null,
+                "resource_address": null,
+                "severity": null,
+                "bc_category": null,
+                "benchmarks": null,
+                "description": null,
+                "short_description": null,
+                "vulnerability_details": null,
+                "connected_node": null,
+                "guideline": null,
+                "details": [],
+                "check_len": null,
+                "definition_context_file_path": null,
+                "triggers": [
+                    [
+                        "pull_request"
+                    ]
+                ],
+                "job": [
+                    ""
+                ],
+                "workflow_name": "Codecov Report"
+            }
+        ],
+        "skipped_checks": [],
+        "parsing_errors": []
+    },
+    "summary": {
+        "passed": 50,
+        "failed": 2,
+        "skipped": 0,
+        "parsing_errors": 0,
+        "resource_count": 0,
+        "checkov_version": "3.2.174"
+    },
+    "url": "Add an api key '--bc-api-key <api-key>' to see more detailed insights via https://bridgecrew.cloud"
+}
