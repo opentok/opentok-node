@@ -25,7 +25,7 @@ describe('Captions',  () => {
             "sessionId": sessionId,
             "token": token,
             "languageCode": "en-US",
-            "maxDuration": 1800,
+            "maxDuration": 14400,
             "partialCaptions": true,
           },
         )
@@ -83,7 +83,7 @@ describe('Captions',  () => {
             "sessionId": sessionId,
             "token": token,
             "languageCode": "en-US",
-            "maxDuration": 1800,
+            "maxDuration": 14400,
             "partialCaptions": true,
           },
         )
@@ -111,7 +111,7 @@ describe('Captions',  () => {
             "sessionId": sessionId,
             "token": token,
             "languageCode": "en-US",
-            "maxDuration": 1800,
+            "maxDuration": 14400,
             "partialCaptions": true,
           },
         )
@@ -188,7 +188,7 @@ describe('Captions',  () => {
             "sessionId": sessionId,
             "token": token,
             "languageCode": "en-US",
-            "maxDuration": 1800,
+            "maxDuration": 14400,
             "partialCaptions": true,
           },
         )
@@ -246,7 +246,7 @@ describe('Captions',  () => {
             "sessionId": sessionId,
             "token": token,
             "languageCode": "en-US",
-            "maxDuration": 1800,
+            "maxDuration": 14400,
             "partialCaptions": true,
           },
         )
@@ -274,7 +274,7 @@ describe('Captions',  () => {
             "sessionId": sessionId,
             "token": token,
             "languageCode": "en-US",
-            "maxDuration": 1800,
+            "maxDuration": 14400,
             "partialCaptions": true,
           },
         )
