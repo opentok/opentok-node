@@ -3,9 +3,6 @@
 > [!IMPORTANT]
 > ⚠️ This SDK is intended **only for existing TokBox/OpenTok customers**. New developers should use the [Vonage Server SDK for Node](https://github.com/vonage/vonage-node-sdk) instead.
 
-> [!WARNING]
-> This SDK is in maintenance mode and will only receive bug fixes. New Video API features will only be added to the [Vonage Server SDK for Node](https://github.com/vonage/vonage-node-sdk)
-
 [![Build Status](https://travis-ci.org/opentok/opentok-node.png)](https://travis-ci.org/opentok/opentok-node) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
 
 <img src="https://assets.tokbox.com/img/vonage/Vonage_VideoAPI_black.svg" height="48px" alt="Tokbox is now known as Vonage" />
@@ -28,12 +25,14 @@ If you are looking for the JavaScript Client SDK please see the [@opentok/client
 
 This library is designed to work with the TokBox/OpenTok platform, which is part of the Vonage Video API. **The TokBox platform is no longer accepting new sign-ups.** If you are a new customer or starting a new project, you should use the [Vonage Customer Dashboard](https://dashboard.vonage.com) and the [Vonage Server SDK for Node](https://github.com/vonage/vonage-node-sdk), which includes support for the Vonage Video API.
 
+Not sure which exact platform you are using? Take a look at [this guide](https://api.support.vonage.com/hc/en-us/articles/10817774782492).
+
 If you're an existing TokBox customer, don't worry — the TokBox platform continues to run on the same infrastructure as the Unified Vonage platform and remains supported. 
 
 > [!NOTE]
 > We **strongly encourage migrating** to the Unified platform to benefit from streamlined billing and easier access to [Vonage’s other CPaaS APIs](https://www.vonage.com/communications-apis/).
 
-If you're new to the Vonage Video API, create a developer account at the [Vonage Customer Dashboard](https://dashboard.vonage.com) and get started with the [Vonage Server SDK for Node](https://github.com/vonage/vonage-node-sdk).
+If you are new to the Vonage Video API, create a developer account at the [Vonage Customer Dashboard](https://dashboard.vonage.com) and get started with the [Vonage Server SDK for Node](https://github.com/vonage/vonage-node-sdk).
 
 ## Installation using npm (recommended):
 
