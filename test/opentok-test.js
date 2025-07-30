@@ -1821,6 +1821,49 @@ describe('#websocketconnect', function () {
     );
   });
 
+  it('connect to a websocket with bidirectional enabled', function (done) {
+    var scope = nock('https://api.opentok.com:443')
+      .matchHeader('x-opentok-auth', function (value) {
+        try {
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
+          return true;
+        }
+        catch (error) {
+          done(error);
+          return false;
+        }
+      })
+      .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
+      .post('/v2/project/123456/connect', {
+        sessionId: this.sessionId,
+        token: this.token,
+        websocket: {
+          uri: goodWebsocketUri,
+          bidirectional: true
+        }
+      })
+      .reply(200, {
+        id: 'CONFERENCEID',
+        connectionId: 'CONNECTIONID'
+      });
+    this.opentok.websocketConnect(
+      this.sessionId,
+      this.token,
+      goodWebsocketUri,
+      { bidirectional: true },
+      function (err, connect) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(connect.id).to.equal('CONFERENCEID');
+        expect(connect.connectionId).to.equal('CONNECTIONID');
+        scope.done();
+        done(err);
+      }
+    );
+  });
+
   it('complains if sessionId, token, Websocket URI, or callback are missing or invalid', function () {
     // Missing all params
     expect(function () {
