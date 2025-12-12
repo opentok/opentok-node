@@ -1227,6 +1227,54 @@ describe('#dial', function () {
     this.token = this.opentok.generateToken(this.sessionId);
   });
 
+  it('dials a SIP gateway and explicitely adds a stream', function (done) {
+    var scope = nock('https://api.opentok.com:443')
+      .matchHeader('x-opentok-auth', function (value) {
+        try {
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
+          return true;
+        }
+        catch (error) {
+          done(error);
+          return false;
+        }
+      })
+      .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
+      .post('/v2/project/123456/dial', {
+        sessionId: this.sessionId,
+        token: this.token,
+        sip: {
+          uri: goodSipUri,
+          streams: ["stream-id-1"]
+        },
+      })
+      .reply(200, {
+        id: 'CONFERENCEID',
+        connectionId: 'CONNECTIONID',
+        streamId: 'STREAMID'
+      });
+    this.opentok.dial(
+      this.sessionId,
+      this.token,
+      goodSipUri,
+      {
+        streams: ['stream-id-1']
+      },
+      function (err, sipCall) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(sipCall).to.be.an.instanceof(SipInterconnect);
+        expect(sipCall.id).to.equal('CONFERENCEID');
+        expect(sipCall.streamId).to.equal('STREAMID');
+        expect(sipCall.connectionId).to.equal('CONNECTIONID');
+        scope.done();
+        done(err);
+      }
+    );
+  });
+
   it('dials a SIP gateway and adds a stream', function (done) {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function (value) {
