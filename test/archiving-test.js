@@ -290,6 +290,105 @@ describe('Archive Tests', function () {
         opentok.removeArchiveStream();
       }).to.throw('No callback given to removeArchiveStream')
     });
+
+    it('should properly set flags to false for options', (done) => {
+      const streamId = '12312312-3811-4726-b508-e41a0f96c68f';
+      const archiveId = '54070066-dd9c-4e2c-94d1-c1d82a81cfc9';
+      nock(archiveHostUrl)
+        .patch(
+          `/v2/project/APIKEY/archive/${archiveId}/streams`,
+          { hasAudio: false, hasVideo: false, addStream: streamId }
+        )
+        .reply(
+          200,
+          {
+            createdAt: 1391149936527,
+            duration: 0,
+            id: "4072fe0f-d499-4f2f-8237-64f5a9d936f5",
+            name: null,
+            partnerId: "APIKEY",
+            reason: "",
+            sessionId: "1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg",
+            size: 0,
+            status: "started",
+            hasAudio: false,
+            hasVideo: false,
+            outputMode: "individual",
+            url: null
+          }
+        );
+
+      opentok.addArchiveStream(archiveId, streamId, { hasAudio: false, hasVideo: false }, (err) => {
+        expect(err).to.be.null;
+        done();
+      });
+    });
+
+    it('should properly set flags to true for options', (done) => {
+      const streamId = '12312312-3811-4726-b508-e41a0f96c68f';
+      const archiveId = '54070066-dd9c-4e2c-94d1-c1d82a81cfc9';
+      nock(archiveHostUrl)
+        .patch(
+          `/v2/project/APIKEY/archive/${archiveId}/streams`,
+          { hasAudio: true, hasVideo: true, addStream: streamId }
+        )
+        .reply(
+          200,
+          {
+            createdAt: 1391149936527,
+            duration: 0,
+            id: "4072fe0f-d499-4f2f-8237-64f5a9d936f5",
+            name: null,
+            partnerId: "APIKEY",
+            reason: "",
+            sessionId: "1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg",
+            size: 0,
+            status: "started",
+            hasAudio: true,
+            hasVideo: true,
+            outputMode: "individual",
+            url: null
+          }
+        );
+
+      opentok.addArchiveStream(archiveId, streamId, { hasAudio: true, hasVideo: true }, (err) => {
+        expect(err).to.be.null;
+        done();
+      });
+    });
+
+    it('should properly set flags to true for undefined options', (done) => {
+      const streamId = '12312312-3811-4726-b508-e41a0f96c68f';
+      const archiveId = '54070066-dd9c-4e2c-94d1-c1d82a81cfc9';
+      nock(archiveHostUrl)
+        .patch(
+          `/v2/project/APIKEY/archive/${archiveId}/streams`,
+          { hasAudio: true, hasVideo: true, addStream: streamId }
+        )
+        .reply(
+          200,
+          {
+            createdAt: 1391149936527,
+            duration: 0,
+            id: "4072fe0f-d499-4f2f-8237-64f5a9d936f5",
+            name: null,
+            partnerId: "APIKEY",
+            reason: "",
+            sessionId: "1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg",
+            size: 0,
+            status: "started",
+            outputMode: "individual",
+            url: null
+          }
+        );
+
+      opentok.addArchiveStream(archiveId, streamId, {}, (err) => {
+        expect(err).to.be.null;
+        done();
+      });
+    });
+
+
   });
   describe('listArchives', function () {
     it('should return an array of archives and a total count', function (done) {
@@ -363,12 +462,12 @@ describe('Archive Tests', function () {
           500,
           '{ "message" : "Some error." }',
           {
-          server: 'nginx',
-          date: 'Mon, 03 Feb 2014 23:38:53 GMT',
-          'content-type': 'application/json',
-          'transfer-encoding': 'chunked',
-          connection: 'keep-alive'
-        });
+            server: 'nginx',
+            date: 'Mon, 03 Feb 2014 23:38:53 GMT',
+            'content-type': 'application/json',
+            'transfer-encoding': 'chunked',
+            connection: 'keep-alive'
+          });
 
       opentok.listArchives({ count: 5 }, function (err, archives, total) {
         expect(archives).to.be.undefined;
@@ -660,12 +759,12 @@ describe('Archive Tests', function () {
           500,
           '{ "message" : "Some error." }',
           {
-          server: 'nginx',
-          date: 'Fri, 31 Jan 2014 06:46:22 GMT',
-          'content-type': 'application/json',
-          'transfer-encoding': 'chunked',
-          connection: 'keep-alive'
-        });
+            server: 'nginx',
+            date: 'Fri, 31 Jan 2014 06:46:22 GMT',
+            'content-type': 'application/json',
+            'transfer-encoding': 'chunked',
+            connection: 'keep-alive'
+          });
 
       opentok.startArchive(mockSessionId, function (err) {
         expect(err).not.to.be.null;
@@ -789,30 +888,22 @@ describe('Archive Tests', function () {
         const streamId = '12312312-3811-4726-b508-e41a0f96c68f';
         const archiveId = '54070066-dd9c-4e2c-94d1-c1d82a81cfc9';
         const body = {
-            "code": 500,
-            "message": "System error"
-         }
+          "code": 500,
+          "message": "System error"
+        }
 
         nock('https://api.opentok.com:443')
-            .patch(`/v2/project/APIKEY/archive/${archiveId}/streams`, { hasAudio: true, hasVideo: true, addStream: streamId })
-            .reply(500, body, {
-                server: 'nginx',
-                date: 'Fri, 31 Jan 2014 06:32:16 GMT',
-                connection: 'keep-alive'
-            });
+          .patch(`/v2/project/APIKEY/archive/${archiveId}/streams`, { hasAudio: true, hasVideo: true, addStream: streamId })
+          .reply(500, body, {
+            server: 'nginx',
+            date: 'Fri, 31 Jan 2014 06:32:16 GMT',
+            connection: 'keep-alive'
+          });
 
-        try {
-            console.log('Starting test');
-            opentok.addArchiveStream(archiveId, streamId, { hasAudio: true, hasVideo: true }, function (err) {
-              expect(err).to.not.be.null;
-              done();
-            });
-            console.log('finished test')
-        } catch (err) {
-            console.log('In catch block');
-            console.log(err)
+          opentok.addArchiveStream(archiveId, streamId, { hasAudio: true, hasVideo: true }, function (err) {
+            expect(err).to.not.be.null;
             done();
-        }
+          });
       });
     });
   });
