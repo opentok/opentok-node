@@ -2027,6 +2027,51 @@ describe('#websocketconnect', function() {
       }
     );
   });
+
+  it('connect to a websocket with audioRate enabled', function(done) {
+    var scope = nock('https://api.opentok.com:443')
+      .matchHeader('x-opentok-auth', function(value) {
+        try {
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
+          return true;
+        }
+        catch (error) {
+          done(error);
+          return false;
+        }
+      })
+      .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
+      .post('/v2/project/123456/connect', {
+        sessionId: this.sessionId,
+        token: this.token,
+        websocket: {
+          uri: goodWebsocketUri,
+          audioRate: '24000',
+        }
+      })
+      .reply(200, {
+        id: 'CONFERENCEID',
+        connectionId: 'CONNECTIONID'
+      });
+    this.opentok.websocketConnect(
+      this.sessionId,
+      this.token,
+      goodWebsocketUri,
+      {
+        audioRate: '24000',
+      },
+      function(err, connect) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(connect.id).to.equal('CONFERENCEID');
+        expect(connect.connectionId).to.equal('CONNECTIONID');
+        scope.done();
+        done(err);
+      }
+    );
+  });
 });
 
 describe('#startBroadcast', function() {
