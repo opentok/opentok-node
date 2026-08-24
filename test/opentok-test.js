@@ -172,47 +172,47 @@ if (recording) {
   nock.recorder.rec();
 }
 
-describe('OpenTok', function () {
-  afterEach(function () {
+describe('OpenTok', function() {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  it('should initialize with a valid apiKey and apiSecret', function () {
+  it('should initialize with a valid apiKey and apiSecret', function() {
     var opentok = new OpenTok(apiKey, apiSecret);
     expect(opentok).to.be.an.instanceof(OpenTok);
     expect(opentok.apiKey).to.be.equal(apiKey);
     expect(opentok.apiSecret).to.be.equal(apiSecret);
     expect(opentok.apiUrl).to.be.equal(defaultApiUrl);
   });
-  it('should initialize without `new`', function () {
+  it('should initialize without `new`', function() {
     var opentok = OpenTok(apiKey, apiSecret);
     expect(opentok).to.be.an.instanceof(OpenTok);
   });
-  it('should not initialize with just an apiKey but no apiSecret', function () {
-    expect(function () {
+  it('should not initialize with just an apiKey but no apiSecret', function() {
+    expect(function() {
       var opentok = new OpenTok(apiKey); // eslint-disable-line
     }).to.throw(Error);
   });
-  it('should not initialize with incorrect type parameters', function () {
-    expect(function () {
+  it('should not initialize with incorrect type parameters', function() {
+    expect(function() {
       var opentok = new OpenTok(new Date(), 'asdasdasdasdasd'); // eslint-disable-line
     }).to.throw(Error);
-    expect(function () {
+    expect(function() {
       opentok = new OpenTok(4, {}); // eslint-disable-line
     }).to.throw(Error);
   });
-  it('should cooerce a number for the apiKey', function () {
+  it('should cooerce a number for the apiKey', function() {
     var opentok = new OpenTok(parseInt(apiKey, 10), apiSecret);
     expect(opentok).to.be.an.instanceof(OpenTok);
   });
 });
 
 describe('JWT token', function describeJwtToken() {
-  afterEach(function () {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  it('should not be expired', function (done) {
+  it('should not be expired', function(done) {
     var opentok = new OpenTok(apiKey, apiSecret);
     var expiration;
     var now;
@@ -228,7 +228,7 @@ describe('JWT token', function describeJwtToken() {
       done(error);
     }
   });
-  it('should have the apiKey set as the issuer', function (done) {
+  it('should have the apiKey set as the issuer', function(done) {
     var opentok = new OpenTok(apiKey, apiSecret);
     var issuer;
     try {
@@ -243,28 +243,28 @@ describe('JWT token', function describeJwtToken() {
     }
   });
   // decoding with a valid secret is implicitly covered in the above tests
-  it('should not decode with an invalid secret', function () {
+  it('should not decode with an invalid secret', function() {
     var opentok = new OpenTok(apiKey, apiSecret);
-    expect(function () {
+    expect(function() {
       jwt.verify(opentok.generateJwt(), 'invalid_secret', { issuer: apiKey });
     }).to.throw(Error);
   });
 });
 
-describe('when initialized with an apiUrl', function () {
-  afterEach(function () {
+describe('when initialized with an apiUrl', function() {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  beforeEach(function () {
+  beforeEach(function() {
     this.opentok = new OpenTok(apiKey, apiSecret, apiUrl);
   });
-  it('exposes the custom apiUrl', function () {
+  it('exposes the custom apiUrl', function() {
     expect(this.opentok.apiUrl).to.be.equal(apiUrl);
   });
-  it('sends its requests to the set apiUrl', function (done) {
+  it('sends its requests to the set apiUrl', function(done) {
     var scope = nock(apiUrl)
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -285,7 +285,7 @@ describe('when initialized with an apiUrl', function () {
         'strict-transport-security': 'max-age=31536000; includeSubdomains',
         'content-length': '204'
       });
-    this.opentok.createSession(function (err, session) {
+    this.opentok.createSession(function(err, session) {
       if (err) {
         done(err);
         return;
@@ -298,17 +298,17 @@ describe('when initialized with an apiUrl', function () {
   });
 });
 
-describe('when initialized with a proxy', function () {
-  afterEach(function () {
+describe('when initialized with a proxy', function() {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  beforeEach(function () {
+  beforeEach(function() {
     // TODO: remove temporary proxy value
     this.proxyUrl = 'http://localhost:8080';
     this.opentok = new OpenTok(apiKey, apiSecret, { proxy: this.proxyUrl });
   });
-  it('sends its requests through an http proxy', function (done) {
+  it('sends its requests through an http proxy', function(done) {
     var scope;
     this.timeout(10000);
     scope = nock('https://api.opentok.com:443')
@@ -322,53 +322,53 @@ describe('when initialized with a proxy', function () {
         'x-tb-host': 'mantis402-oak.tokbox.com',
         'content-length': '274'
       });
-    this.opentok.createSession(function (err) {
+    this.opentok.createSession(function(err) {
       scope.done();
       done(err);
     });
   });
 });
 
-describe('when initialized with a timeout', function () {
-  afterEach(function () {
+describe('when initialized with a timeout', function() {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  beforeEach(function () {
+  beforeEach(function() {
     this.opentok = new OpenTok(apiKey, apiSecret, { timeout: 100 });
   });
-  it('sends its requests with a timeout', function () {
+  it('sends its requests with a timeout', function() {
     expect(this.opentok.client.c.request.timeout).to.equal(100);
   });
 });
 
-describe('when initialized without a timeout', function () {
-  afterEach(function () {
+describe('when initialized without a timeout', function() {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  beforeEach(function () {
+  beforeEach(function() {
     this.opentok = new OpenTok(apiKey, apiSecret);
   });
-  it('sends its requests with 20000 timeout', function () {
+  it('sends its requests with 20000 timeout', function() {
     expect(this.opentok.client.c.request.timeout).to.equal(20000);
   });
 });
 
-describe('when a user agent addendum is needed', function () {
-  afterEach(function () {
+describe('when a user agent addendum is needed', function() {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  beforeEach(function () {
+  beforeEach(function() {
     this.addendum = 'my-special-app';
     this.opentok = new OpenTok(apiKey, apiSecret, {
       uaAddendum: this.addendum
     });
   });
-  it('appends the addendum in a create session request', function (done) {
+  it('appends the addendum in a create session request', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -389,7 +389,7 @@ describe('when a user agent addendum is needed', function () {
         'strict-transport-security': 'max-age=31536000; includeSubdomains',
         'content-length': '204'
       });
-    this.opentok.createSession(function (err) {
+    this.opentok.createSession(function(err) {
       if (err) {
         done(err);
         return;
@@ -400,20 +400,20 @@ describe('when a user agent addendum is needed', function () {
   });
 });
 
-describe('when initialized with bad credentials', function () {
-  afterEach(function () {
+describe('when initialized with bad credentials', function() {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  beforeEach(function () {
+  beforeEach(function() {
     this.opentok = new OpenTok(badApiKey, badApiSecret);
   });
-  describe('#createSession', function () {
-    afterEach(function () {
+  describe('#createSession', function() {
+    afterEach(function() {
       nock.cleanAll();
     });
 
-    it('throws a client error', function (done) {
+    it('throws a client error', function(done) {
       var scope = nock('https://api.opentok.com:443')
         .post('/session/create', 'archiveMode=manual&p2p.preference=enabled')
         .reply(
@@ -430,7 +430,7 @@ describe('when initialized with bad credentials', function () {
             'content-length': '56'
           }
         );
-      this.opentok.createSession(function (err) {
+      this.opentok.createSession(function(err) {
         expect(err).to.be.an.instanceof(Error);
         scope.done();
         done();
@@ -439,18 +439,18 @@ describe('when initialized with bad credentials', function () {
   });
 });
 
-describe('#createSession', function () {
-  afterEach(function () {
+describe('#createSession', function() {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  beforeEach(function () {
+  beforeEach(function() {
     this.opentok = new OpenTok(apiKey, apiSecret);
   });
 
-  it('creates a new session', function (done) {
+  it('creates a new session', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -472,7 +472,7 @@ describe('#createSession', function () {
         'content-length': '204'
       });
     // pass no options parameter
-    this.opentok.createSession(function (err, session) {
+    this.opentok.createSession(function(err, session) {
       if (err) {
         done(err);
         return;
@@ -485,9 +485,9 @@ describe('#createSession', function () {
     });
   });
 
-  it('creates a media routed session', function (done) {
+  it('creates a media routed session', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -510,7 +510,7 @@ describe('#createSession', function () {
       });
     this.opentok.createSession(
       { mediaMode: 'routed' },
-      function (err, session) {
+      function(err, session) {
         if (err) {
           done(err);
           return;
@@ -524,9 +524,9 @@ describe('#createSession', function () {
     );
   });
 
-  it('creates a media relayed session even if the media mode is invalid', function (done) {
+  it('creates a media relayed session even if the media mode is invalid', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -547,7 +547,7 @@ describe('#createSession', function () {
         'strict-transport-security': 'max-age=31536000; includeSubdomains',
         'content-length': '204'
       });
-    this.opentok.createSession({ mediaMode: 'blah' }, function (err, session) {
+    this.opentok.createSession({ mediaMode: 'blah' }, function(err, session) {
       if (err) {
         done(err);
         return;
@@ -560,9 +560,9 @@ describe('#createSession', function () {
     });
   });
 
-  it('creates a session with manual archive mode', function (done) {
+  it('creates a session with manual archive mode', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -585,7 +585,7 @@ describe('#createSession', function () {
       });
     this.opentok.createSession(
       { mediaMode: 'routed', archiveMode: 'manual' },
-      function (err, session) {
+      function(err, session) {
         if (err) {
           done(err);
           return;
@@ -599,9 +599,9 @@ describe('#createSession', function () {
     );
   });
 
-  it('creates a session with always archive mode', function (done) {
+  it('creates a session with always archive mode', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -624,7 +624,7 @@ describe('#createSession', function () {
       });
     this.opentok.createSession(
       { mediaMode: 'routed', archiveMode: 'always' },
-      function (err, session) {
+      function(err, session) {
         if (err) {
           done(err);
           return;
@@ -638,9 +638,9 @@ describe('#createSession', function () {
     );
   });
 
-  it('creates a session with manual archive mode even if the archive mode is invalid', function (done) {
+  it('creates a session with manual archive mode even if the archive mode is invalid', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -663,7 +663,7 @@ describe('#createSession', function () {
       });
     this.opentok.createSession(
       { mediaMode: 'routed', archiveMode: 'invalid' },
-      function (err, session) {
+      function(err, session) {
         if (err) {
           done(err);
           return;
@@ -677,9 +677,9 @@ describe('#createSession', function () {
     );
   });
 
-  it('adds a location hint to the created session', function (done) {
+  it('adds a location hint to the created session', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -706,7 +706,7 @@ describe('#createSession', function () {
     // passes location: '12.34.56.78'
     this.opentok.createSession(
       { location: '12.34.56.78' },
-      function (err, session) {
+      function(err, session) {
         if (err) {
           done(err);
           return;
@@ -721,35 +721,35 @@ describe('#createSession', function () {
     );
   });
 
-  it('complains when the location value is not valid', function (done) {
+  it('complains when the location value is not valid', function(done) {
     this.opentok.createSession(
       { location: 'not an ip address' },
-      function (err) {
+      function(err) {
         expect(err).to.be.an.instanceof(Error);
         done();
       }
     );
   });
 
-  it('complains when the archive mode is always and the media mode is routed', function (done) {
+  it('complains when the archive mode is always and the media mode is routed', function(done) {
     this.opentok.createSession(
       { archiveMedia: 'always', mediaMode: 'routed' },
-      function (err) {
+      function(err) {
         expect(err).to.be.an.instanceof(Error);
         done();
       }
     );
   });
 
-  it('complains when there is no callback function', function () {
-    expect(function () {
+  it('complains when there is no callback function', function() {
+    expect(function() {
       this.opentok.createSession();
     }).to.throw(Error);
   });
 
-  it('complains when a server error takes place', function (done) {
+  it('complains when a server error takes place', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -770,7 +770,7 @@ describe('#createSession', function () {
         'x-tb-host': 'mantis503-nyc.tokbox.com',
         'content-length': '0'
       });
-    this.opentok.createSession(function (err) {
+    this.opentok.createSession(function(err) {
       expect(err).to.be.an.instanceof(Error);
       expect(err.message).to.contain('A server error occurred');
       scope.done();
@@ -778,9 +778,9 @@ describe('#createSession', function () {
     });
   });
 
-  it('returns a Session that can generate a token', function (done) {
+  it('returns a Session that can generate a token', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -812,7 +812,7 @@ describe('#createSession', function () {
         }
       );
     // pass no options parameter
-    this.opentok.createSession(function (err, session) {
+    this.opentok.createSession(function(err, session) {
       var token;
       if (err) {
         done(err);
@@ -825,9 +825,9 @@ describe('#createSession', function () {
     });
   });
 
-  it('should not modify the options object parameter', function (done) {
+  it('should not modify the options object parameter', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .filteringRequestBody(function () {
+      .filteringRequestBody(function() {
         return '*';
       })
       .post('/session/create', '*')
@@ -842,7 +842,7 @@ describe('#createSession', function () {
       });
     var options = { mediaMode: 'routed', archiveMode: 'manual' };
     var optionsUntouched = _.clone(options);
-    this.opentok.createSession(options, function (err) {
+    this.opentok.createSession(options, function(err) {
       if (err) {
         done(err);
         return;
@@ -854,17 +854,17 @@ describe('#createSession', function () {
   });
 });
 
-describe('#generateToken', function () {
-  afterEach(function () {
+describe('#generateToken', function() {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  beforeEach(function () {
+  beforeEach(function() {
     this.opentok = new OpenTok(apiKey, apiSecret);
     this.sessionId = sessionId;
   });
 
-  it('given a valid session, generates a token', function () {
+  it('given a valid session, generates a token', function() {
     // call generateToken with no options
     var token = this.opentok.generateToken(this.sessionId);
     var decoded;
@@ -876,7 +876,7 @@ describe('#generateToken', function () {
     expect(decoded.role).to.equal('publisher');
   });
 
-  it('assigns a role in the token', function () {
+  it('assigns a role in the token', function() {
     // expects one with no role defined to assign "publisher"
     var defaultRoleToken = this.opentok.generateToken(this.sessionId);
     var decoded;
@@ -894,12 +894,12 @@ describe('#generateToken', function () {
     expect(decoded.role).to.equal('subscriber');
 
     // expects one with an invalid role to complain
-    expect(function () {
+    expect(function() {
       this.opentok.generateToken(this.sessionId, { role: 5 });
     }).to.throw(Error);
   });
 
-  it('sets an expiration time for the token', function () {
+  it('sets an expiration time for the token', function() {
     var now = Math.round(new Date().getTime() / 1000);
     var delta = 10;
     var decoded;
@@ -929,12 +929,12 @@ describe('#generateToken', function () {
     expect(expireTime).to.be.closeTo(inOneHour, delta);
 
     // expects a token with an invalid expiration time to complain
-    expect(function () {
+    expect(function() {
       this.opentok.generateToken(this.sessionId, { expireTime: 'not a time' });
     }).to.throw(Error);
 
     oneHourAgo = now - (60 * 60);
-    expect(function () {
+    expect(function() {
       this.opentok.generateToken(this.sessionId, { expireTime: oneHourAgo });
     }).to.throw(Error);
 
@@ -947,7 +947,7 @@ describe('#generateToken', function () {
     expect(decoded.exp).to.equal(Math.round(fractionalExpireTime));
   });
 
-  it('sets initial layout class list in the token', function () {
+  it('sets initial layout class list in the token', function() {
     var layoutClassList = ['focus', 'inactive'];
     var singleLayoutClass = 'focus';
     var layoutBearingToken = this.opentok.generateToken(this.sessionId, {
@@ -967,13 +967,13 @@ describe('#generateToken', function () {
     // NOTE: ignores invalid options instead of throwing an error, except if its too long
   });
 
-  it('complains if the sessionId is not valid', function () {
-    expect(function () {
+  it('complains if the sessionId is not valid', function() {
+    expect(function() {
       this.opentok.generateToken();
     }).to.throw(Error);
   });
 
-  it('sets connection data in the token', function () {
+  it('sets connection data in the token', function() {
     // expects a token with a connection data to have it
     var sampleData = 'name=Johnny';
     var decoded;
@@ -985,41 +985,41 @@ describe('#generateToken', function () {
     expect(decoded.connection_data).to.equal(sampleData);
 
     // expects a token with invalid connection data to complain
-    expect(function () {
+    expect(function() {
       this.opentok.generateToken(this.sessionId, { data: { dont: 'work' } });
     }).to.throw(Error);
 
-    expect(function () {
+    expect(function() {
       this.opentok.generateToken(this.sessionId, {
         data: Array(2000).join('a') // 1999 char string of all 'a's
       });
     }).to.throw(Error);
   });
 
-  it('complains if the sessionId is not valid', function () {
-    expect(function () {
+  it('complains if the sessionId is not valid', function() {
+    expect(function() {
       this.opentok.generateToken();
     }).to.throw(Error);
 
-    expect(function () {
+    expect(function() {
       this.opentok.generateToken('blahblahblah');
     }).to.throw(Error);
   });
 
-  it('contains a unique nonce', function () {
+  it('contains a unique nonce', function() {
     // generate a few and show the nonce exists each time and that they are different
     var tokens = [
       this.opentok.generateToken(this.sessionId),
       this.opentok.generateToken(this.sessionId)
     ];
-    var nonces = _.map(tokens, function (token) {
+    var nonces = _.map(tokens, function(token) {
       return jwt.verify(token, apiSecret).nonce;
     });
 
     expect(_.uniq(nonces)).to.have.length(nonces.length);
   });
 
-  it('does not modify passed in options', function () {
+  it('does not modify passed in options', function() {
     var options = { data: 'test' };
     var optionsUntouched = _.clone(options);
     this.opentok.generateToken(this.sessionId, options);
@@ -1027,17 +1027,17 @@ describe('#generateToken', function () {
   });
 });
 
-describe('#generateTokenLegacy', function () {
-  afterEach(function () {
+describe('#generateTokenLegacy', function() {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  beforeEach(function () {
+  beforeEach(function() {
     this.opentok = new OpenTok(apiKey, apiSecret);
     this.sessionId = sessionId;
   });
 
-  it('given a valid session, generates a token', function () {
+  it('given a valid session, generates a token', function() {
     // call generateToken with no options
     var token = this.opentok.generateToken(this.sessionId, {}, true);
     var decoded;
@@ -1049,7 +1049,7 @@ describe('#generateTokenLegacy', function () {
     expect(decoded.nonce).to.exist;
   });
 
-  it('assigns a role in the token', function () {
+  it('assigns a role in the token', function() {
     // expects one with no role defined to assign "publisher"
     var defaultRoleToken = this.opentok.generateToken(this.sessionId, {}, true);
     var decoded;
@@ -1072,12 +1072,12 @@ describe('#generateTokenLegacy', function () {
     expect(decoded.role).to.equal('subscriber');
 
     // expects one with an invalid role to complain
-    expect(function () {
+    expect(function() {
       this.opentok.generateToken(this.sessionId, { role: 5 }, true);
     }).to.throw(Error);
   });
 
-  it('sets an expiration time for the token', function () {
+  it('sets an expiration time for the token', function() {
     var now = Math.round(new Date().getTime() / 1000);
     var delta = 10;
     var decoded;
@@ -1112,12 +1112,12 @@ describe('#generateTokenLegacy', function () {
     expect(expireTime).to.be.closeTo(inOneHour, delta);
 
     // expects a token with an invalid expiration time to complain
-    expect(function () {
+    expect(function() {
       this.opentok.generateToken(this.sessionId, { expireTime: 'not a time' }, true);
     }).to.throw(Error);
 
     oneHourAgo = now - (60 * 60);
-    expect(function () {
+    expect(function() {
       this.opentok.generateToken(this.sessionId, { expireTime: oneHourAgo }, true);
     }).to.throw(Error);
 
@@ -1131,7 +1131,7 @@ describe('#generateTokenLegacy', function () {
     expect(decoded.expire_time).to.equal(Math.round(fractionalExpireTime).toString());
   });
 
-  it('sets initial layout class list in the token', function () {
+  it('sets initial layout class list in the token', function() {
     var layoutClassList = ['focus', 'inactive'];
     var singleLayoutClass = 'focus';
     var layoutBearingToken = this.opentok.generateToken(this.sessionId, {
@@ -1155,13 +1155,13 @@ describe('#generateTokenLegacy', function () {
     // NOTE: ignores invalid options instead of throwing an error, except if its too long
   });
 
-  it('complains if the sessionId is not valid', function () {
-    expect(function () {
+  it('complains if the sessionId is not valid', function() {
+    expect(function() {
       this.opentok.generateToken();
     }).to.throw(Error);
   });
 
-  it('sets connection data in the token', function () {
+  it('sets connection data in the token', function() {
     // expects a token with a connection data to have it
     var sampleData = 'name=Johnny';
     var decoded;
@@ -1175,40 +1175,40 @@ describe('#generateTokenLegacy', function () {
     expect(decoded.connection_data).to.equal(sampleData);
 
     // expects a token with invalid connection data to complain
-    expect(function () {
+    expect(function() {
       this.opentok.generateToken(this.sessionId, { data: { dont: 'work' } }, true);
     }).to.throw(Error);
 
-    expect(function () {
+    expect(function() {
       this.opentok.generateToken(this.sessionId, {
         data: Array(2000).join('a') // 1999 char string of all 'a's
       });
     }).to.throw(Error);
   });
 
-  it('complains if the sessionId is not valid', function () {
-    expect(function () {
+  it('complains if the sessionId is not valid', function() {
+    expect(function() {
       this.opentok.generateToken();
     }).to.throw(Error);
 
-    expect(function () {
+    expect(function() {
       this.opentok.generateToken('blahblahblah', {}, true);
     }).to.throw(Error);
   });
 
-  it('contains a unique nonce', function () {
+  it('contains a unique nonce', function() {
     // generate a few and show the nonce exists each time and that they are different
     var tokens = [
       this.opentok.generateToken(this.sessionId, {}, true),
       this.opentok.generateToken(this.sessionId, {}, true)
     ];
-    var nonces = _.map(tokens, function (token) {
+    var nonces = _.map(tokens, function(token) {
       return helpers.decodeToken(token).nonce;
     });
     expect(_.uniq(nonces)).to.have.length(nonces.length);
   });
 
-  it('does not modify passed in options', function () {
+  it('does not modify passed in options', function() {
     var options = { data: 'test' };
     var optionsUntouched = _.clone(options);
     this.opentok.generateToken(this.sessionId, options, true);
@@ -1216,20 +1216,20 @@ describe('#generateTokenLegacy', function () {
   });
 });
 
-describe('#dial', function () {
-  afterEach(function () {
+describe('#dial', function() {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  beforeEach(function () {
+  beforeEach(function() {
     this.opentok = new OpenTok(apiKey, apiSecret);
     this.sessionId = sessionId;
     this.token = this.opentok.generateToken(this.sessionId);
   });
 
-  it('dials a SIP gateway and explicitely adds a stream', function (done) {
+  it('dials a SIP gateway and explicitely adds a stream', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -1260,7 +1260,7 @@ describe('#dial', function () {
       {
         streams: ['stream-id-1']
       },
-      function (err, sipCall) {
+      function(err, sipCall) {
         if (err) {
           done(err);
           return;
@@ -1275,9 +1275,9 @@ describe('#dial', function () {
     );
   });
 
-  it('dials a SIP gateway and adds a stream', function (done) {
+  it('dials a SIP gateway and adds a stream', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -1304,7 +1304,7 @@ describe('#dial', function () {
       this.sessionId,
       this.token,
       goodSipUri,
-      function (err, sipCall) {
+      function(err, sipCall) {
         if (err) {
           done(err);
           return;
@@ -1319,9 +1319,9 @@ describe('#dial', function () {
     );
   });
 
-  it('dials a SIP gateway and adds a stream with custom headers', function (done) {
+  it('dials a SIP gateway and adds a stream with custom headers', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -1352,7 +1352,7 @@ describe('#dial', function () {
       this.token,
       goodSipUri,
       { headers: { someKey: 'someValue' } },
-      function (err, sipCall) {
+      function(err, sipCall) {
         if (err) {
           done(err);
           return;
@@ -1367,9 +1367,9 @@ describe('#dial', function () {
     );
   });
 
-  it('dials a SIP gateway and adds a stream with authentication', function (done) {
+  it('dials a SIP gateway and adds a stream with authentication', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -1403,7 +1403,7 @@ describe('#dial', function () {
       {
         auth: { username: 'someUsername', password: 'somePassword' }
       },
-      function (err, sipCall) {
+      function(err, sipCall) {
         if (err) {
           done(err);
           return;
@@ -1418,9 +1418,9 @@ describe('#dial', function () {
     );
   });
 
-  it('dials a SIP gateway and adds an encrypted media stream', function (done) {
+  it('dials a SIP gateway and adds an encrypted media stream', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -1449,7 +1449,7 @@ describe('#dial', function () {
       this.token,
       goodSipUri,
       { secure: true },
-      function (err, sipCall) {
+      function(err, sipCall) {
         if (err) {
           done(err);
           return;
@@ -1464,9 +1464,9 @@ describe('#dial', function () {
     );
   });
 
-  it('dials a SIP gateway and adds a from field', function (done) {
+  it('dials a SIP gateway and adds a from field', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -1495,7 +1495,7 @@ describe('#dial', function () {
       this.token,
       goodSipUri,
       { from: '15551115555' },
-      function (err, sipCall) {
+      function(err, sipCall) {
         if (err) {
           done(err);
           return;
@@ -1510,9 +1510,9 @@ describe('#dial', function () {
     );
   });
 
-  it('dials DTMF signal to every connection in the session', function (done) {
+  it('dials DTMF signal to every connection in the session', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -1539,7 +1539,7 @@ describe('#dial', function () {
         streamId: 'STREAMID'
       });
     var dialDTMFScope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -1565,7 +1565,7 @@ describe('#dial', function () {
       this.token,
       goodSipUri,
       { headers: { someKey: 'someValue' } },
-      function (err, sipCall) {
+      function(err, sipCall) {
         if (err) {
           done(err);
           return;
@@ -1575,7 +1575,7 @@ describe('#dial', function () {
         expect(sipCall.streamId).to.equal('STREAMID');
         expect(sipCall.connectionId).to.equal('CONNECTIONID');
         scope.done();
-        self.opentok.playDTMF(self.sessionId, null, '6', function (error) {
+        self.opentok.playDTMF(self.sessionId, null, '6', function(error) {
           expect(error).to.equal(null);
           dialDTMFScope.done();
           done(error);
@@ -1584,9 +1584,9 @@ describe('#dial', function () {
     );
   });
 
-  it('dials DTMF signal to specific connection', function (done) {
+  it('dials DTMF signal to specific connection', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -1613,7 +1613,7 @@ describe('#dial', function () {
         streamId: 'STREAMID'
       });
     var dialDTMFScope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -1640,7 +1640,7 @@ describe('#dial', function () {
       this.token,
       goodSipUri,
       { headers: { someKey: 'someValue' } },
-      function (err, sipCall) {
+      function(err, sipCall) {
         if (err) {
           done(err);
           return;
@@ -1654,7 +1654,7 @@ describe('#dial', function () {
           self.sessionId,
           sipCall.connectionId,
           '6',
-          function (error) {
+          function(error) {
             expect(error).to.equal(null);
             dialDTMFScope.done();
             done(error);
@@ -1664,46 +1664,46 @@ describe('#dial', function () {
     );
   });
 
-  it('complains if sessionId, token, SIP URI, or callback are missing or invalid', function () {
+  it('complains if sessionId, token, SIP URI, or callback are missing or invalid', function() {
     // Missing all params
-    expect(function () {
+    expect(function() {
       this.opentok.dial();
     }).to.throw(Error);
     // Bad sessionId
-    expect(function () {
+    expect(function() {
       this.opentok.dial('blahblahblah');
     }).to.throw(Error);
     // Missing token
-    expect(function () {
+    expect(function() {
       this.opentok.dial(this.sessionId);
     }).to.throw(Error);
     // Bad token
-    expect(function () {
+    expect(function() {
       this.opentok.dial(this.sessionId, 'blahblahblah');
     }).to.throw(Error);
     // Missing SIP URI
-    expect(function () {
+    expect(function() {
       this.opentok.dial(this.sessionId, this.token);
     }).to.throw(Error);
     // Bad SIP URI
-    expect(function () {
+    expect(function() {
       this.opentok.dial(this.sessionId, this.token, badSipUri);
     }).to.throw(Error);
     // Bad sessionId, working token and SIP URI
-    expect(function () {
+    expect(function() {
       this.opentok.dial('someWrongSessionId', this.token, goodSipUri);
     }).to.throw(Error);
     // Good sessionId, bad token and good SIP URI
-    expect(function () {
+    expect(function() {
       this.opentok.dial(this.sessionId, 'blahblahblah', goodSipUri);
     }).to.throw(Error);
     // Good sessionId, good token, good SIP URI, null options, missing callback func
-    expect(function () {
+    expect(function() {
       this.opentok.dial(this.sessionId, this.token, goodSipUri, null);
     }).to.throw(Error);
   });
 
-  it('does not modify passed in options', function () {
+  it('does not modify passed in options', function() {
     var options = { data: 'test' };
     var optionsUntouched = _.clone(options);
     this.opentok.dial(
@@ -1711,27 +1711,27 @@ describe('#dial', function () {
       this.token,
       'sip:testsipuri@tokbox.com',
       options,
-      function () {
+      function() {
         expect(options).to.deep.equal(optionsUntouched);
       }
     );
   });
 });
 
-describe('#websocketconnect', function () {
-  afterEach(function () {
+describe('#websocketconnect', function() {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  beforeEach(function () {
+  beforeEach(function() {
     this.opentok = new OpenTok(apiKey, apiSecret);
     this.sessionId = sessionId;
     this.token = this.opentok.generateToken(this.sessionId);
   });
 
-  it('sends audio from a Vonage Video API session to a WebSocket.', function (done) {
+  it('sends audio from a Vonage Video API session to a WebSocket.', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -1757,7 +1757,7 @@ describe('#websocketconnect', function () {
       this.sessionId,
       this.token,
       goodWebsocketUri,
-      function (err, connect) {
+      function(err, connect) {
         if (err) {
           done(err);
           return;
@@ -1770,9 +1770,9 @@ describe('#websocketconnect', function () {
     );
   });
 
-  it('connect to a websocket with custom headers', function (done) {
+  it('connect to a websocket with custom headers', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -1802,7 +1802,7 @@ describe('#websocketconnect', function () {
       this.token,
       goodWebsocketUri,
       { headers: { someKey: 'someValue' } },
-      function (err, connect) {
+      function(err, connect) {
         if (err) {
           done(err);
           return;
@@ -1815,9 +1815,9 @@ describe('#websocketconnect', function () {
     );
   });
 
-  it('connects to websocket and adds a stream', function (done) {
+  it('connects to websocket and adds a stream', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -1856,7 +1856,7 @@ describe('#websocketconnect', function () {
           'streamid-2'
         ]
       },
-      function (err, connect) {
+      function(err, connect) {
         if (err) {
           done(err);
           return;
@@ -1869,9 +1869,9 @@ describe('#websocketconnect', function () {
     );
   });
 
-  it('connect to a websocket with bidirectional enabled', function (done) {
+  it('connect to a websocket with bidirectional enabled', function(done) {
     var scope = nock('https://api.opentok.com:443')
-      .matchHeader('x-opentok-auth', function (value) {
+      .matchHeader('x-opentok-auth', function(value) {
         try {
           jwt.verify(value[0], apiSecret, { issuer: apiKey });
           return true;
@@ -1899,7 +1899,7 @@ describe('#websocketconnect', function () {
       this.token,
       goodWebsocketUri,
       { bidirectional: true },
-      function (err, connect) {
+      function(err, connect) {
         if (err) {
           done(err);
           return;
@@ -1912,46 +1912,109 @@ describe('#websocketconnect', function () {
     );
   });
 
-  it('complains if sessionId, token, Websocket URI, or callback are missing or invalid', function () {
+  it('connect to a websocket with with post call transcription enabled', function(done) {
+    var scope = nock('https://api.opentok.com:443')
+      .matchHeader('x-opentok-auth', function(value) {
+        try {
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
+          return true;
+        }
+        catch (error) {
+          done(error);
+          return false;
+        }
+      })
+      .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
+      .post('/v2/project/123456/connect', {
+        sessionId: this.sessionId,
+        token: this.token,
+        websocket: {
+          uri: goodWebsocketUri,
+          audioTransport: {
+            transport: 'json',
+            encoding: 'base64',
+            audio_field: 'outbound_data',
+            receive_audio_field: 'inbound_data',
+            static_fields: {
+              foo: 'bar',
+              baz: 'bat',
+            }
+          }
+        }
+      })
+      .reply(200, {
+        id: 'CONFERENCEID',
+        connectionId: 'CONNECTIONID'
+      });
+    this.opentok.websocketConnect(
+      this.sessionId,
+      this.token,
+      goodWebsocketUri,
+      {
+        audioTransport: {
+          transport: 'json',
+          encoding: 'base64',
+          audio_field: 'outbound_data',
+          receive_audio_field: 'inbound_data',
+          static_fields: {
+            foo: 'bar',
+            baz: 'bat',
+          }
+        }
+      },
+      function(err, connect) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(connect.id).to.equal('CONFERENCEID');
+        expect(connect.connectionId).to.equal('CONNECTIONID');
+        scope.done();
+        done(err);
+      }
+    );
+  });
+
+  it('complains if sessionId, token, Websocket URI, or callback are missing or invalid', function() {
     // Missing all params
-    expect(function () {
+    expect(function() {
       this.opentok.websocketConnect();
     }).to.throw(Error);
     // Bad sessionId
-    expect(function () {
+    expect(function() {
       this.opentok.websocketConnect('blahblahblah');
     }).to.throw(Error);
     // Missing token
-    expect(function () {
+    expect(function() {
       this.opentok.websocketConnect(this.sessionId);
     }).to.throw(Error);
     // Bad token
-    expect(function () {
+    expect(function() {
       this.opentok.websocketConnect(this.sessionId, 'blahblahblah');
     }).to.throw(Error);
     // Missing Websocket URI
-    expect(function () {
+    expect(function() {
       this.opentok.websocketConnect(this.sessionId, this.token);
     }).to.throw(Error);
     // Bad Websocket URI
-    expect(function () {
+    expect(function() {
       this.opentok.websocketConnect(this.sessionId, this.token, badWebsocketUri);
     }).to.throw(Error);
     // Bad sessionId, working token and Websocket URI
-    expect(function () {
+    expect(function() {
       this.opentok.websocketConnect('someWrongSessionId', this.token, goodWebsocketUri);
     }).to.throw(Error);
     // Good sessionId, bad token and good Websocket URI
-    expect(function () {
+    expect(function() {
       this.opentok.websocketConnect(this.sessionId, 'blahblahblah', goodWebsocketUri);
     }).to.throw(Error);
     // Good sessionId, good token, good Websocket URI, null options, missing callback func
-    expect(function () {
+    expect(function() {
       this.opentok.websocketConnect(this.sessionId, this.token, goodWebsocketUri, null);
     }).to.throw(Error);
   });
 
-  it('does not modify passed in options', function () {
+  it('does not modify passed in options', function() {
     var options = { data: 'test' };
     var optionsUntouched = _.clone(options);
     this.opentok.websocketConnect(
@@ -1959,14 +2022,14 @@ describe('#websocketconnect', function () {
       this.token,
       goodWebsocketUri,
       options,
-      function () {
+      function() {
         expect(options).to.deep.equal(optionsUntouched);
       }
     );
   });
 });
 
-describe('#startBroadcast', function () {
+describe('#startBroadcast', function() {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
   var SESSIONID = '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
   var options = {
@@ -1988,19 +2051,19 @@ describe('#startBroadcast', function () {
       .reply(status || 200, body || optionalBody, { 'Content-Type': 'application/json' });
   }
 
-  afterEach(function () {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  it('succeeds given valid parameters', function (done) {
+  it('succeeds given valid parameters', function(done) {
     mockStartBroadcastRequest(SESSIONID);
-    opentok.startBroadcast(SESSIONID, options, function (err, broadcast) {
+    opentok.startBroadcast(SESSIONID, options, function(err, broadcast) {
       validateBroadcastObject(broadcast, 'started');
       done();
     });
   });
 
-  it('results in error if no callback method provided', function (done) {
+  it('results in error if no callback method provided', function(done) {
     mockStartBroadcastRequest(SESSIONID);
     try {
       opentok.startBroadcast(SESSIONID, {});
@@ -2011,39 +2074,39 @@ describe('#startBroadcast', function () {
     }
   });
 
-  it('results in error if no session ID provided', function (done) {
+  it('results in error if no session ID provided', function(done) {
     mockStartBroadcastRequest(SESSIONID);
-    opentok.startBroadcast(null, options, function (err) {
+    opentok.startBroadcast(null, options, function(err) {
       expect(err.message).to.equal('No sessionId given to startBroadcast');
       done();
     });
   });
 
-  it('results in error if no options provided', function (done) {
+  it('results in error if no options provided', function(done) {
     mockStartBroadcastRequest(SESSIONID);
-    opentok.startBroadcast(SESSIONID, null, function (err) {
+    opentok.startBroadcast(SESSIONID, null, function(err) {
       expect(err.message).to.equal('No options given to startBroadcast');
       done();
     });
   });
 
-  it('results in error if both dvr and lowLatency is provided for options', function (done) {
+  it('results in error if both dvr and lowLatency is provided for options', function(done) {
     mockStartBroadcastRequest(SESSIONID);
     opentok.startBroadcast(
       SESSIONID,
       { outputs: { hls: { dvr: true, lowLatency: true } } },
-      function (err) {
+      function(err) {
         expect(err.message).to.equal('Cannot set both dvr and lowLatency on HLS');
         done();
       }
     );
   });
 
-  it('results in error a response other than 200', function (done) {
+  it('results in error a response other than 200', function(done) {
     mockStartBroadcastRequest(SESSIONID, 400, {
       error: 'remote error message'
     });
-    opentok.startBroadcast(SESSIONID, options, function (err, broadcast) {
+    opentok.startBroadcast(SESSIONID, options, function(err, broadcast) {
       expect(err.message).to.equal('Failed to start broadcast. Error: Bad session ID, token, SIP credentials, or SIP URI (sip:user@domain.tld)');
       expect(broadcast).to.be.undefined;
       done();
@@ -2051,8 +2114,8 @@ describe('#startBroadcast', function () {
   });
 });
 
-describe('#patchBroadcast', function () {
-  afterEach(function () {
+describe('#patchBroadcast', function() {
+  afterEach(function() {
     nock.cleanAll();
   });
 
@@ -2078,38 +2141,38 @@ describe('#patchBroadcast', function () {
       .reply(204 || status, optionalBody);
   }
 
-  afterEach(function () {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  it('patches broadcast given addStream', function (done) {
+  it('patches broadcast given addStream', function(done) {
     mockPatchBroadcastRequest(BROADCAST_ID, addStreamOptions);
     opentok.addBroadcastStream(
       BROADCAST_ID,
       STREAM_ID,
       broadcastOptions,
-      function (err) {
+      function(err) {
         expect(err).to.be.null;
         done();
       }
     );
   });
 
-  it('patches broadcast given removeStream', function (done) {
+  it('patches broadcast given removeStream', function(done) {
     mockPatchBroadcastRequest(BROADCAST_ID, removeStreamOptions);
-    opentok.removeBroadcastStream(BROADCAST_ID, STREAM_ID, function (err) {
+    opentok.removeBroadcastStream(BROADCAST_ID, STREAM_ID, function(err) {
       expect(err).to.be.null;
       done();
     });
   });
 
-  it('fails to patch on emtpy function call', function () {
-    opentok.addBroadcastStream(BROADCAST_ID, null, function (err) {
+  it('fails to patch on emtpy function call', function() {
+    opentok.addBroadcastStream(BROADCAST_ID, null, function(err) {
       expect(err).not.to.be.null;
     });
   });
 
-  it('fails to patch if no callback is provided', function () {
+  it('fails to patch if no callback is provided', function() {
     try {
       opentok.patchBroadcast(BROADCAST_ID, STREAM_ID);
     }
@@ -2119,7 +2182,7 @@ describe('#patchBroadcast', function () {
   });
 });
 
-describe('#stopBroadcast', function () {
+describe('#stopBroadcast', function() {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
   var BROADCAST_ID = 'BROADCAST_ID';
 
@@ -2138,40 +2201,40 @@ describe('#stopBroadcast', function () {
       .reply(status || 200, body);
   }
 
-  afterEach(function () {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  it('succeeds given valid parameters', function (done) {
+  it('succeeds given valid parameters', function(done) {
     mockStopBroadcastRequest(BROADCAST_ID, null, true);
-    opentok.stopBroadcast(BROADCAST_ID, function (err, broadcast) {
+    opentok.stopBroadcast(BROADCAST_ID, function(err, broadcast) {
       expect(err).to.be.null;
       validateBroadcastObject(broadcast);
       done();
     });
   });
 
-  it('succeeds with non-json body response', function (done) {
+  it('succeeds with non-json body response', function(done) {
     mockStopBroadcastRequest(BROADCAST_ID);
-    opentok.stopBroadcast(BROADCAST_ID, function (err, broadcast) {
+    opentok.stopBroadcast(BROADCAST_ID, function(err, broadcast) {
       expect(err).to.be.null;
       validateBroadcastObject(broadcast);
       done();
     });
   });
 
-  it('results in error if no broadcastId provided', function (done) {
+  it('results in error if no broadcastId provided', function(done) {
     mockStopBroadcastRequest();
-    opentok.stopBroadcast(null, function (err, broadcast) {
+    opentok.stopBroadcast(null, function(err, broadcast) {
       expect(err.message).to.equal('No broadcast ID given');
       expect(broadcast).to.be.undefined;
       done();
     });
   });
 
-  it('results in error a response other than 200', function (done) {
+  it('results in error a response other than 200', function(done) {
     mockStopBroadcastRequest(BROADCAST_ID, 400);
-    opentok.stopBroadcast(BROADCAST_ID, function (err, broadcast) {
+    opentok.stopBroadcast(BROADCAST_ID, function(err, broadcast) {
       expect(err).not.to.be.null;
       expect(broadcast).to.be.undefined;
       done();
@@ -2179,7 +2242,7 @@ describe('#stopBroadcast', function () {
   });
 });
 
-describe('#getBroadcast', function () {
+describe('#getBroadcast', function() {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
   var BROADCAST_ID = 'BROADCAST_ID';
 
@@ -2198,29 +2261,29 @@ describe('#getBroadcast', function () {
       .reply(status || 200, body);
   }
 
-  afterEach(function () {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  it('succeeds given valid parameters', function (done) {
+  it('succeeds given valid parameters', function(done) {
     mockGetBroadcastRequest(BROADCAST_ID);
-    opentok.stopBroadcast(BROADCAST_ID, function (err, broadcast) {
+    opentok.stopBroadcast(BROADCAST_ID, function(err, broadcast) {
       expect(err).to.be.null;
       validateBroadcastObject(broadcast);
       done();
     });
   });
 
-  it('results in error if no broadcastId provided', function (done) {
+  it('results in error if no broadcastId provided', function(done) {
     mockGetBroadcastRequest();
-    opentok.getBroadcast(null, function (err, broadcast) {
+    opentok.getBroadcast(null, function(err, broadcast) {
       expect(err.message).to.equal('No broadcast ID given');
       expect(broadcast).to.be.undefined;
       done();
     });
   });
 
-  it('results in error if no callback method provided', function (done) {
+  it('results in error if no callback method provided', function(done) {
     mockGetBroadcastRequest(BROADCAST_ID);
     try {
       opentok.getBroadcast(BROADCAST_ID);
@@ -2231,9 +2294,9 @@ describe('#getBroadcast', function () {
     }
   });
 
-  it('results in error a response other than 200', function (done) {
+  it('results in error a response other than 200', function(done) {
     mockGetBroadcastRequest(BROADCAST_ID, 400);
-    opentok.stopBroadcast(BROADCAST_ID, function (err, broadcast) {
+    opentok.stopBroadcast(BROADCAST_ID, function(err, broadcast) {
       expect(err).not.to.be.null;
       expect(broadcast).to.be.undefined;
       done();
@@ -2241,17 +2304,17 @@ describe('#getBroadcast', function () {
   });
 });
 
-describe('#listBroadcasts', function () {
+describe('#listBroadcasts', function() {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
   var options = {
     sessionId: 'SESSIONID'
   };
-  afterEach(function () {
+  afterEach(function() {
     nock.cleanAll();
   });
-  it('succeeds given valid parameters', function (done) {
+  it('succeeds given valid parameters', function(done) {
     mockListBroadcastsRequest();
-    opentok.listBroadcasts(function (err, broadcastList, totalCount) {
+    opentok.listBroadcasts(function(err, broadcastList, totalCount) {
       expect(err).to.be.null;
       validateListBroadcastsObject(broadcastList);
       validateTotalCount(totalCount);
@@ -2259,11 +2322,11 @@ describe('#listBroadcasts', function () {
     });
   });
 
-  it('succeeds given options as valid parameters', function (done) {
+  it('succeeds given options as valid parameters', function(done) {
     mockListBroadcastsRequest({
       sessionId: 'SESSIONID'
     });
-    opentok.listBroadcasts(options, function (err, broadcastList, totalCount) {
+    opentok.listBroadcasts(options, function(err, broadcastList, totalCount) {
       expect(err).to.be.null;
       validateListBroadcastsObject(broadcastList);
       validateTotalCount(totalCount);
@@ -2271,7 +2334,7 @@ describe('#listBroadcasts', function () {
     });
   });
 
-  it('results in error if no callback method provided', function (done) {
+  it('results in error if no callback method provided', function(done) {
     mockListBroadcastsRequest();
     try {
       opentok.listBroadcasts();
@@ -2282,9 +2345,9 @@ describe('#listBroadcasts', function () {
     }
   });
 
-  it('results in error a response other than 200', function (done) {
+  it('results in error a response other than 200', function(done) {
     mockListBroadcastsRequest({}, 400);
-    opentok.listBroadcasts(options, function (err, broadcastList, totalCount) {
+    opentok.listBroadcasts(options, function(err, broadcastList, totalCount) {
       expect(err).not.to.be.null;
       expect(broadcastList).to.be.undefined;
       expect(totalCount).to.be.undefined;
@@ -2293,7 +2356,7 @@ describe('#listBroadcasts', function () {
   });
 });
 
-describe('#setBroadcastLayout', function () {
+describe('#setBroadcastLayout', function() {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
   var BROADCAST_ID = 'BROADCAST_ID';
   var CUSTOM_LAYOUT_TYPE = 'custom';
@@ -2313,43 +2376,43 @@ describe('#setBroadcastLayout', function () {
       .reply(status || 200, body);
   }
 
-  afterEach(function () {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  it('succeeds given valid parameters', function (done) {
+  it('succeeds given valid parameters', function(done) {
     mockSetBroadcastLayout(BROADCAST_ID);
     opentok.setBroadcastLayout(
       BROADCAST_ID,
       BEST_FIT_LAYOUT_TYPE,
-      function (err) {
+      function(err) {
         expect(err).to.be.null;
         done();
       }
     );
   });
 
-  it('succeeds given custom layout and stylesheet', function (done) {
+  it('succeeds given custom layout and stylesheet', function(done) {
     mockSetBroadcastLayout(BROADCAST_ID);
     opentok.setBroadcastLayout(
       BROADCAST_ID,
       CUSTOM_LAYOUT_TYPE,
       STYLESHEET,
-      function (err) {
+      function(err) {
         expect(err).to.be.null;
         done();
       }
     );
   });
 
-  it('succeeds given a screenshareType', function (done) {
+  it('succeeds given a screenshareType', function(done) {
     mockSetBroadcastLayout(BROADCAST_ID);
     opentok.setBroadcastLayout(
       BROADCAST_ID,
       BEST_FIT_LAYOUT_TYPE,
       null,
       HORIZONTAL_LAYOUT_TYPE,
-      function (err) {
+      function(err) {
         expect(err).to.be.null;
         done();
       }
@@ -2357,7 +2420,7 @@ describe('#setBroadcastLayout', function () {
   });
 });
 
-describe('#setArchiveLayout', function () {
+describe('#setArchiveLayout', function() {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
   var ARCHIVE_ID = 'ARCHIVE_ID';
   var CUSTOM_LAYOUT_TYPE = 'custom';
@@ -2377,39 +2440,39 @@ describe('#setArchiveLayout', function () {
       .reply(status || 200, body);
   }
 
-  afterEach(function () {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  it('succeeds given valid parameters', function (done) {
+  it('succeeds given valid parameters', function(done) {
     mockSetArchiveLayout(ARCHIVE_ID);
-    opentok.setArchiveLayout(ARCHIVE_ID, BEST_FIT_LAYOUT_TYPE, function (err) {
+    opentok.setArchiveLayout(ARCHIVE_ID, BEST_FIT_LAYOUT_TYPE, function(err) {
       expect(err).to.be.null;
       done();
     });
   });
 
-  it('succeeds given custom layout and stylesheet', function (done) {
+  it('succeeds given custom layout and stylesheet', function(done) {
     mockSetArchiveLayout(ARCHIVE_ID);
     opentok.setArchiveLayout(
       ARCHIVE_ID,
       CUSTOM_LAYOUT_TYPE,
       STYLESHEET,
-      function (err) {
+      function(err) {
         expect(err).to.be.null;
         done();
       }
     );
   });
 
-  it('succeeds given a screenshareType', function (done) {
+  it('succeeds given a screenshareType', function(done) {
     mockSetArchiveLayout(ARCHIVE_ID);
     opentok.setArchiveLayout(
       ARCHIVE_ID,
       BEST_FIT_LAYOUT_TYPE,
       null,
       HORIZONTAL_LAYOUT_TYPE,
-      function (err) {
+      function(err) {
         expect(err).to.be.null;
         done();
       }
@@ -2417,19 +2480,19 @@ describe('#setArchiveLayout', function () {
   });
 });
 
-describe('getStream', function () {
+describe('getStream', function() {
   var opentok = new OpenTok('APIKEY', 'APISECRET');
   var SESSIONID = '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
   var STREAMID = '4072fe0f-d499-4f2f-8237-64f5a9d936f5';
 
-  afterEach(function () {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  describe('valid responses', function () {
-    it('should not get an error and get valid stream data given valid parameters', function (done) {
+  describe('valid responses', function() {
+    it('should not get an error and get valid stream data given valid parameters', function(done) {
       mockStreamRequest(SESSIONID, STREAMID);
-      opentok.getStream(SESSIONID, STREAMID, function (err, stream) {
+      opentok.getStream(SESSIONID, STREAMID, function(err, stream) {
         expect(err).to.be.null;
         expect(stream.id).to.equal('fooId');
         expect(stream.name).to.equal('fooName');
@@ -2440,27 +2503,27 @@ describe('getStream', function () {
       });
     });
 
-    it('should return an error if sessionId is null', function (done) {
+    it('should return an error if sessionId is null', function(done) {
       mockStreamRequest(SESSIONID, STREAMID);
-      opentok.getStream(null, STREAMID, function (err, stream) {
+      opentok.getStream(null, STREAMID, function(err, stream) {
         expect(err).to.not.be.null;
         expect(stream).to.be.undefined;
         done();
       });
     });
 
-    it('should return an error if streamId is null', function (done) {
+    it('should return an error if streamId is null', function(done) {
       mockStreamRequest(SESSIONID, STREAMID);
-      opentok.getStream(SESSIONID, null, function (err, stream) {
+      opentok.getStream(SESSIONID, null, function(err, stream) {
         expect(err).to.not.be.null;
         expect(stream).to.be.undefined;
         done();
       });
     });
 
-    it('should return an error if the REST method returns a 404 response code', function (done) {
+    it('should return an error if the REST method returns a 404 response code', function(done) {
       mockStreamRequest(SESSIONID, STREAMID, 400);
-      opentok.getStream(SESSIONID, STREAMID, function (err, stream) {
+      opentok.getStream(SESSIONID, STREAMID, function(err, stream) {
         expect(err).to.not.be.null;
         expect(stream).to.be.undefined;
         done();
@@ -2469,32 +2532,32 @@ describe('getStream', function () {
   });
 });
 
-describe('muteStreams', function () {
+describe('muteStreams', function() {
   var opentok = new OpenTok(apiKey, apiSecret);
   var SESSIONID = sessionId;
   var STREAMID = 'streamId';
-  describe('valid responses', function () {
-    afterEach(function () {
+  describe('valid responses', function() {
+    afterEach(function() {
       nock.cleanAll();
     });
 
-    it('should not get an error and mute the stream', function (done) {
+    it('should not get an error and mute the stream', function(done) {
       mockMuteStreamRequest(SESSIONID, STREAMID);
-      opentok.forceMuteStream(SESSIONID, STREAMID, function (err) {
+      opentok.forceMuteStream(SESSIONID, STREAMID, function(err) {
         expect(err).to.be.null;
         done();
       });
     });
-    it('should not get an error and mute all streams', function (done) {
+    it('should not get an error and mute all streams', function(done) {
       mockMuteAllStreamRequest(SESSIONID);
-      opentok.forceMuteAll(SESSIONID, function (err) {
+      opentok.forceMuteAll(SESSIONID, function(err) {
         expect(err).to.be.null;
         done();
       });
     });
-    it('should not get an error and disable force mute', function (done) {
+    it('should not get an error and disable force mute', function(done) {
       mockDisableForceMuteRequest(SESSIONID);
-      opentok.disableForceMute(SESSIONID, function (err) {
+      opentok.disableForceMute(SESSIONID, function(err) {
         expect(err).to.be.null;
         done();
       });
@@ -2502,22 +2565,22 @@ describe('muteStreams', function () {
   });
 });
 
-describe('listStreams', function () {
+describe('listStreams', function() {
   var opentok = new OpenTok('123456', 'APISECRET');
   var SESSIONID = '1_MX4xMDB-MTI3LjAuMC4xflR1ZSBKYW4gMjggMTU6NDg6NDAgUFNUIDIwMTR-MC43NjAyOTYyfg';
 
-  afterEach(function () {
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  describe('valid responses', function () {
-    afterEach(function () {
+  describe('valid responses', function() {
+    afterEach(function() {
       nock.cleanAll();
     });
 
-    it('should not get an error and get valid stream data given valid parameters', function (done) {
+    it('should not get an error and get valid stream data given valid parameters', function(done) {
       mockListStreamsRequest(SESSIONID);
-      opentok.listStreams(SESSIONID, function (err, streams) {
+      opentok.listStreams(SESSIONID, function(err, streams) {
         var stream = streams[0];
         expect(err).to.be.null;
         expect(stream.id).to.equal('fooId');
@@ -2529,29 +2592,29 @@ describe('listStreams', function () {
       });
     });
 
-    it('should not error when items is missing in response', function (done) {
+    it('should not error when items is missing in response', function(done) {
       nock('https://api.opentok.com')
         .get('/v2/project/123456/session/' + SESSIONID + '/stream')
         .reply(200, { count: 0 }, { 'Content-Type': 'application/json' });
 
-      opentok.listStreams(SESSIONID, function (err, streams) {
+      opentok.listStreams(SESSIONID, function(err, streams) {
         expect(err).to.be.null;
         expect(streams).to.empty;
         done();
       });
     });
 
-    it('should return an error if sessionId is null', function (done) {
-      opentok.listStreams(null, function (err, streams) {
+    it('should return an error if sessionId is null', function(done) {
+      opentok.listStreams(null, function(err, streams) {
         expect(err).to.not.be.null;
         expect(streams).to.be.undefined;
         done();
       });
     });
 
-    it('should return an error if the REST method returns a 404 response code', function (done) {
+    it('should return an error if the REST method returns a 404 response code', function(done) {
       mockListStreamsRequest(SESSIONID, 400);
-      opentok.listStreams(SESSIONID, function (err, streams) {
+      opentok.listStreams(SESSIONID, function(err, streams) {
         expect(err).to.not.be.null;
         expect(streams).to.be.undefined;
         done();
