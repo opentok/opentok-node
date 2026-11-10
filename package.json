@@ -67,7 +67,11 @@
   "files": [
     "lib/"
   ],
+  "resolutions": {
+    "uuid": "14.0.1"
+  },
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "lint": "eslint ./lib/ ./test/ ./sample/",
     "lint-fix": "eslint --fix",
     "mocha-coverage": "cross-env NODE_ENV=test nyc --reporter=text-lcov mocha > mocha.lcov",
@@ -78,13 +82,13 @@
     "test-no-lint": "mocha ./test/*-test.js"
   },
   "dependencies": {
-    "@vonage/jwt": "1.14.0",
+    "@vonage/jwt": "1.18.1",
     "debug": "4.4.3",
     "jsonwebtoken": "9.0.3",
     "lodash": "4.18.1",
     "node-fetch": "2.7.0",
     "opentok-token": "1.1.1",
-    "uuid": "11.0.5"
+    "uuid": "14.0.1"
   },
   "devDependencies": {
     "chai": "4.3.10",
@@ -92,9 +96,9 @@
     "eslint": "8.51.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-plugin-import": "2.32.0",
-    "mocha": "10.8.2",
+    "mocha": "12.0.3",
     "nock": "13.3.6",
-    "nyc": "15.1.0"
+    "nyc": "18.0.0"
   },
   "overrides": {
     "@vonage/jwt": {
