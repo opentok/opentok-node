@@ -1869,7 +1869,109 @@ describe('#websocketconnect', function() {
     );
   });
 
-  it('connect to a websocket with bidirectional enabled', function(done) {
+  it('connects to websocket with binary audioTransport', function (done) {
+   var scope = nock('https://api.opentok.com:443')
+      .matchHeader('x-opentok-auth', function (value) {
+        try {
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
+          return true;
+        }
+        catch (error) {
+          done(error);
+          return false;
+        }
+      })
+      .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
+      .post('/v2/project/123456/connect', {
+        sessionId: this.sessionId,
+        token: this.token,
+        websocket: {
+          uri: goodWebsocketUri,
+          audioTransport: {
+            transport: 'binary'
+          }
+        }
+      })
+      .reply(200, {
+        id: 'CONFERENCEID',
+        connectionId: 'CONNECTIONID'
+      });
+    this.opentok.websocketConnect(
+      this.sessionId,
+      this.token,
+      goodWebsocketUri,
+      { audioTransport: { transport: 'binary' } },
+      function (err, connect) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(connect.id).to.equal('CONFERENCEID');
+        expect(connect.connectionId).to.equal('CONNECTIONID');
+        scope.done();
+        done(err);
+      }
+    );
+  });
+
+  it('connects to websocket with json audioTransport', function (done) {
+    var scope = nock('https://api.opentok.com:443')
+      .matchHeader('x-opentok-auth', function (value) {
+        try {
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
+          return true;
+        }
+        catch (error) {
+          done(error);
+          return false;
+        }
+      })
+      .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
+      .post('/v2/project/123456/connect', {
+        sessionId: this.sessionId,
+        token: this.token,
+        websocket: {
+          uri: goodWebsocketUri,
+          audioTransport: {
+            transport: 'json',
+            encoding: 'base64',
+            audio_field: 'audio',
+            receive_audio_field: 'audio',
+            static_fields: { session: 'my-session' }
+          }
+        }
+      })
+      .reply(200, {
+        id: 'CONFERENCEID',
+        connectionId: 'CONNECTIONID'
+      });
+    this.opentok.websocketConnect(
+      this.sessionId,
+      this.token,
+      goodWebsocketUri,
+      {
+        audioTransport: {
+          transport: 'json',
+          encoding: 'base64',
+          audio_field: 'audio',
+          receive_audio_field: 'audio',
+          static_fields: { session: 'my-session' }
+        }
+      },
+      function (err, connect) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(connect.id).to.equal('CONFERENCEID');
+        expect(connect.connectionId).to.equal('CONNECTIONID');
+        scope.done();
+        done(err);
+      }
+    );
+  });
+
+  it('connect to a websocket with bidirectional enabled', function (done) {
     var scope = nock('https://api.opentok.com:443')
       .matchHeader('x-opentok-auth', function(value) {
         try {
@@ -2024,6 +2126,51 @@ describe('#websocketconnect', function() {
       options,
       function() {
         expect(options).to.deep.equal(optionsUntouched);
+      }
+    );
+  });
+
+  it('connect to a websocket with audioRate enabled', function(done) {
+    var scope = nock('https://api.opentok.com:443')
+      .matchHeader('x-opentok-auth', function(value) {
+        try {
+          jwt.verify(value[0], apiSecret, { issuer: apiKey });
+          return true;
+        }
+        catch (error) {
+          done(error);
+          return false;
+        }
+      })
+      .matchHeader('user-agent', new RegExp('OpenTok-Node-SDK/' + pkg.version))
+      .post('/v2/project/123456/connect', {
+        sessionId: this.sessionId,
+        token: this.token,
+        websocket: {
+          uri: goodWebsocketUri,
+          audioRate: '24000',
+        }
+      })
+      .reply(200, {
+        id: 'CONFERENCEID',
+        connectionId: 'CONNECTIONID'
+      });
+    this.opentok.websocketConnect(
+      this.sessionId,
+      this.token,
+      goodWebsocketUri,
+      {
+        audioRate: '24000',
+      },
+      function(err, connect) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(connect.id).to.equal('CONFERENCEID');
+        expect(connect.connectionId).to.equal('CONNECTIONID');
+        scope.done();
+        done(err);
       }
     );
   });
