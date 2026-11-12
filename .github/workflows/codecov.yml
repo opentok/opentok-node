@@ -8,20 +8,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [18.x]
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node }}
-    - name: Install dependencies
-      run: npm install
-    - name: Create codecov report
-      run: npm run report-coverage
-    - name: Run codecov
-      uses: codecov/codecov-action@v1
-      with:
-        files: ./mocha.lcov,./jasmine.lcov
+      - uses: actions/checkout@v2
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 22.x
+      - name: Install dependencies
+        run: npm install
+      - name: Create codecov report
+        run: npm run report-coverage
+      - name: Run codecov
+        uses: codecov/codecov-action@v1
+        with:
+          files: ./mocha.lcov,./jasmine.lcov
